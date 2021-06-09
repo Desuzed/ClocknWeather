@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/tvTopClock"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fontFamily="@font/indie_flower_regular"
+        android:text="Top Clock"
+        app:layout_constraintBottom_toTopOf="@id/tvHeader"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/teal_700"
+        android:fontFamily="@font/indie_flower_regular"
+        android:text="Header"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/watchesImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTopClock"
+        app:layout_constraintVertical_weight="1" />
+
+    <ImageView
+        android:id="@+id/watchesImage"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvBottomClock"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHeader"
+        app:layout_constraintVertical_weight="8"
+        app:srcCompat="@drawable/watches3"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tvBottomClock"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fontFamily="@font/indie_flower_regular"
+        android:text="Bottom Clock"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/linearCheckbox"
+        app:layout_constraintTop_toBottomOf="@+id/watchesImage"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_weight="1"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <LinearLayout
+        android:id="@+id/linearCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBottomClock"
+        app:layout_constraintVertical_weight="4">
+
+        <CheckBox
+            android:id="@+id/checkbox15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="15 min" />
+
+        <CheckBox
+            android:id="@+id/checkbox30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="30 min" />
+
+        <CheckBox
+            android:id="@+id/checkbox60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="60 min" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Вращает стрелку"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/arrow_seconds"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/arrow_north"
+        app:layout_constraintBottom_toBottomOf="@+id/watchesImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/watchesImage"
+        tools:ignore="MissingConstraints"
+        app:tint="@color/teal_700" />
+
+    <ImageView
+        android:id="@+id/arrow_min"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/arrow_north"
+        app:layout_constraintBottom_toBottomOf="@+id/watchesImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/watchesImage"
+        app:tint="@color/purple_200"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/arrow_hours"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/arrow_north"
+        app:layout_constraintBottom_toBottomOf="@+id/watchesImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/watchesImage"
+        app:tint="@color/black"
+        tools:ignore="MissingConstraints" />
+
+    <com.desuzed.clocknweather.CustomCircle
+        android:id="@+id/circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/watchesImage"
+        app:layout_constraintEnd_toEndOf="@+id/watchesImage"
+        app:layout_constraintStart_toStartOf="@+id/watchesImage"
+        app:layout_constraintTop_toTopOf="@+id/watchesImage"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
