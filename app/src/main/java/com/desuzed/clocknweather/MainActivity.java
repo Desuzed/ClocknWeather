@@ -17,19 +17,20 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
+    private String [] tabNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bind();
         hideStatusBar();
-
+        tabNames  = new String[]{getResources().getString(R.string.clock), getResources().getString(R.string.weather)};
         PagerAdapter adapter = new PagerAdapter(this, getFragmentsList());
         viewPager.setAdapter(adapter);
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                tab.setText(String.valueOf(position));
+                tab.setText(tabNames[position]);
             }
         }).attach();
 

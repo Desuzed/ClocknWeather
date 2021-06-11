@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Clock\'n Weather</string>
+    <string name="clock">Clock</string>
+    <string name="weather">Weather</string>
 </resources>
