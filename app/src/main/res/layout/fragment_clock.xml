@@ -69,18 +69,18 @@
         app:layout_constraintVertical_weight="4">
 
         <CheckBox
+            android:id="@+id/checkbox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1 min" />
+
+        <CheckBox
             android:id="@+id/checkbox15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="15 min" />
-
-        <CheckBox
-            android:id="@+id/checkbox30"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="30 min" />
 
         <CheckBox
             android:id="@+id/checkbox60"
@@ -101,7 +101,7 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
+    <com.desuzed.clocknweather.util.ArrowImageView
         android:id="@+id/arrow_seconds"
         android:layout_width="80dp"
         android:layout_height="0dp"
@@ -114,7 +114,7 @@
         tools:ignore="MissingConstraints"
         app:tint="@color/teal_700" />
 
-    <ImageView
+    <com.desuzed.clocknweather.util.ArrowImageView
         android:id="@+id/arrow_min"
         android:layout_width="60dp"
         android:layout_height="0dp"
@@ -129,7 +129,7 @@
         app:tint="@color/purple_200"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
+    <com.desuzed.clocknweather.util.ArrowImageView
         android:id="@+id/arrow_hours"
         android:layout_width="40dp"
         android:layout_height="0dp"
@@ -144,7 +144,7 @@
         app:tint="@color/black"
         tools:ignore="MissingConstraints" />
 
-    <com.desuzed.clocknweather.CustomCircle
+    <com.desuzed.clocknweather.util.CustomCircle
         android:id="@+id/circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

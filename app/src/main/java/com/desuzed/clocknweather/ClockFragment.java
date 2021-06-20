@@ -1,5 +1,6 @@
 package com.desuzed.clocknweather;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -8,16 +9,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.desuzed.clocknweather.mvvm.CheckBoxStates;
+import com.desuzed.clocknweather.mvvm.CheckBoxViewModel;
+import com.desuzed.clocknweather.util.ArrowImageView;
+import com.desuzed.clocknweather.util.CheckBoxManager;
+import com.desuzed.clocknweather.util.ClockApp;
+import com.desuzed.clocknweather.util.MusicPlayer;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -29,15 +37,16 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ClockFragment extends Fragment {
     public static final String TAG = "ClockFragment";
-    private ImageView watchesImage, arrowSeconds, arrowMinutes, arrowHours;
+    private ImageView watchesImage;
+    private ArrowImageView  arrowMinutes, arrowHours, arrowSeconds;
     private TextView tvTopClock, tvHeader, tvBottomClock;
+    private CheckBox checkBoxMin, checkBox15min, checkBoxHour;
     private Observable<Long> emitter;
-    //    double secondsStep = 360 / 60;
-//    double minutesStep = (double) 360 / (double) 3600;
-//    double hoursStep = (double) 360 / (double) 21600;
-    private SimpleDateFormat sdfBottomClock = new SimpleDateFormat("hh:mm:ss.S");
-    private SimpleDateFormat sdfTopClock = new SimpleDateFormat("hh:mm");
     private Observer<Long> analogClockObserver, bottomClockObserver;
+    private CheckBoxViewModel viewModel;
+    private CheckBoxManager mCheckBoxManager;
+    private ClockApp clock;
+    private MusicPlayer musicPlayer;
 
     public static ClockFragment newInstance() {
 //        Bundle b = new Bundle();
@@ -57,7 +66,15 @@ public class ClockFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bind(view);
+        init(view);
+        viewModel.getCheckBoxLiveData().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<CheckBoxStates>() {
+            @Override
+            public void onChanged(CheckBoxStates checkBoxStates) {
+                mCheckBoxManager.updateStates(checkBoxStates);
+                Log.i(TAG, "onChanged: min " + checkBoxStates.getStateMinute() + "; 15 min " + checkBoxStates.getState15min() + "; 1 hour " + checkBoxStates.getStateHour());
+            }
+        });
+
         //Листенер получения размеров вьюх, чтобы изменить шрифт текста, ибо при попытке получения размеров в onViewCreated получаешь 0
         tvHeader.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -67,40 +84,21 @@ public class ClockFragment extends Fragment {
                 tvHeader.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
                 tvBottomClock.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
                 tvTopClock.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-                Log.i(TAG, "onGlobalLayout: " + textSize);
+                //  watchesImage.setMaxWidth(watchesImage.getHeight());
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-        emitter = Observable.interval(100, TimeUnit.MILLISECONDS);
+
     }
 
     private void tikTakBottomClock() {
-        tvBottomClock.setText(sdfBottomClock.format(System.currentTimeMillis()));
-        tvTopClock.setText(sdfTopClock.format(System.currentTimeMillis()));
+        tvBottomClock.setText(clock.setTimeBottomClock());
+        tvTopClock.setText(clock.setTimeTopClock());
 
     }
 
     private void tikTakAnalogClock() {
-        GregorianCalendar calendar = new GregorianCalendar();
-        int hour = calendar.get(Calendar.HOUR);
-        int minute = calendar.get(Calendar.MINUTE);
-        int seconds = calendar.get(Calendar.SECOND);
-        arrowHours.setRotation(30 * hour);
-        arrowMinutes.setRotation(6 * minute);
-        arrowSeconds.setRotation(6 * seconds);
-
-//        double sumSecondsRot = arrowSeconds.getRotation() + secondsStep;
-//        double sumMinutesRot = arrowMinutes.getRotation() + minutesStep;
-//        double sumHoursRot = arrowHours.getRotation() + hoursStep;
-//        arrowSeconds.setRotation((float) sumSecondsRot);
-//        arrowMinutes.setRotation((float) sumMinutesRot);
-//        arrowHours.setRotation((float) sumHoursRot);
-//        if (sumSecondsRot == 360) {
-//            arrowSeconds.setRotation(0);
-//        }
-        //   tvBottomClock.setText(simpleDateFormat.format(System.currentTimeMillis()));
-        // Log.i("TAG", "onClick: sumMinRot:" + sumMinutesRot + " sumHoursRot: " + sumHoursRot);
-        //  Log.i("TAG", "onClick: sumSecRot:" + sumSecondsRot);
+        clock.rotateAnalogClock();
     }
 
     @Override
@@ -114,6 +112,7 @@ public class ClockFragment extends Fragment {
         bottomClockObserver = new Observer<Long>() {
             @Override
             public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+//                Log.i(TAG, "onSubscribe: " + Thread.currentThread().getName());
             }
 
             @Override
@@ -132,19 +131,22 @@ public class ClockFragment extends Fragment {
         };
 
 
-        Predicate<Long> filter = new Predicate<Long>() {
+        Predicate<Long> filterSeconds = new Predicate<Long>() {
             @Override
             public boolean test(Long aLong) throws Throwable {
-                return aLong.toString().endsWith("0");
+                // return aLong.toString().endsWith("0");
+                return aLong % 10 == 0;
             }
         };
         analogClockObserver = new Observer<Long>() {
             @Override
             public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+                Log.i(TAG, "onSubscribe: " + Thread.currentThread().getName());
             }
 
             @Override
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull Long aLong) {
+//                Log.i(TAG, "onNext: " + Thread.currentThread().getName());
                 tikTakAnalogClock();
             }
 
@@ -166,8 +168,10 @@ public class ClockFragment extends Fragment {
         emitter
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(filter)
+                .filter(filterSeconds)
                 .subscribe(analogClockObserver);
+
+
     }
 
     @Override
@@ -175,13 +179,24 @@ public class ClockFragment extends Fragment {
         super.onDestroy();
     }
 
-    private void bind(View view) {
+    private void init(View view) {
         tvHeader = view.findViewById(R.id.tvHeader);
+        watchesImage = view.findViewById(R.id.watchesImage);
         tvTopClock = view.findViewById(R.id.tvTopClock);
         tvBottomClock = view.findViewById(R.id.tvBottomClock);
         arrowSeconds = view.findViewById(R.id.arrow_seconds);
         arrowMinutes = view.findViewById(R.id.arrow_min);
         arrowHours = view.findViewById(R.id.arrow_hours);
+        checkBoxMin = view.findViewById(R.id.checkbox1);
+        checkBox15min = view.findViewById(R.id.checkbox15);
+        checkBoxHour = view.findViewById(R.id.checkbox60);
+        viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())).get(CheckBoxViewModel.class);
+        mCheckBoxManager = new CheckBoxManager(checkBoxMin, checkBox15min, checkBoxHour);
+        mCheckBoxManager.setOnCheckedChangeListeners(viewModel);
+        emitter = Observable.interval(100, TimeUnit.MILLISECONDS);
+        musicPlayer = new MusicPlayer(mCheckBoxManager);
+        clock = new ClockApp(arrowSeconds, arrowMinutes, arrowHours, musicPlayer);
+
         Button btn = view.findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

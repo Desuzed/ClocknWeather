@@ -1,4 +1,4 @@
-package com.desuzed.clocknweather;
+package com.desuzed.clocknweather.util;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

@@ -1,4 +1,4 @@
-package com.desuzed.clocknweather;
+package com.desuzed.clocknweather.util;
 
 import android.content.Context;
 import android.graphics.Canvas;
