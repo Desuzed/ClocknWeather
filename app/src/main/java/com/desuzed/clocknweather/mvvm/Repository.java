@@ -12,7 +12,7 @@ public class Repository {
     public static final String STATE_HOUR = "STATE_HOUR";
     public static final String S_PREF_NAME = "SP";
     private MutableLiveData<CheckBoxStates> checkBoxLiveData;
-    private Application app;
+    private final Application app;
 
 
     public Repository(Application app) {
@@ -21,7 +21,7 @@ public class Repository {
 
     public LiveData<CheckBoxStates> getCheckBoxLiveData() {
         if (checkBoxLiveData == null) {
-            checkBoxLiveData = new MutableLiveData<CheckBoxStates>();
+            checkBoxLiveData = new MutableLiveData<>();
             boolean stateMin = app.getSharedPreferences(S_PREF_NAME, Context.MODE_PRIVATE).getBoolean(STATE_MIN, false);
             boolean state15Min = app.getSharedPreferences(S_PREF_NAME, Context.MODE_PRIVATE).getBoolean(STATE_15_MIN, false);
             boolean stateHour = app.getSharedPreferences(S_PREF_NAME, Context.MODE_PRIVATE).getBoolean(STATE_HOUR, false);

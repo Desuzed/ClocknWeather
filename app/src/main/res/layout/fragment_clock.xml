@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TextView
         android:id="@+id/tvTopClock"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fontFamily="@font/indie_flower_regular"
-        android:text="Top Clock"
+        android:text="@string/top_clock"
         app:layout_constraintBottom_toTopOf="@id/tvHeader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +21,6 @@
         android:id="@+id/tvHeader"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/teal_700"
         android:fontFamily="@font/indie_flower_regular"
         android:text="@string/app_name"
         android:textAlignment="center"
@@ -42,14 +40,15 @@
         app:layout_constraintTop_toBottomOf="@+id/tvHeader"
         app:layout_constraintVertical_weight="8"
         app:srcCompat="@drawable/watches3"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        android:contentDescription="@string/watches" />
 
     <TextView
         android:id="@+id/tvBottomClock"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fontFamily="@font/indie_flower_regular"
-        android:text="Bottom Clock"
+        android:text="@string/bottom_clock"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/linearCheckbox"
         app:layout_constraintTop_toBottomOf="@+id/watchesImage"
@@ -69,37 +68,27 @@
         app:layout_constraintVertical_weight="4">
 
         <CheckBox
-            android:id="@+id/checkbox1"
+            android:id="@+id/checkboxMin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="1 min" />
+            android:text="@string/one_min" />
 
         <CheckBox
-            android:id="@+id/checkbox15"
+            android:id="@+id/checkbox15min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="15 min" />
+            android:text="@string/fifteen_min" />
 
         <CheckBox
-            android:id="@+id/checkbox60"
+            android:id="@+id/checkboxHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="60 min" />
+            android:text="@string/hour" />
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Вращает стрелку"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
 
     <com.desuzed.clocknweather.util.ArrowImageView
         android:id="@+id/arrow_seconds"
@@ -116,10 +105,10 @@
 
     <com.desuzed.clocknweather.util.ArrowImageView
         android:id="@+id/arrow_min"
-        android:layout_width="60dp"
+        android:layout_width="70dp"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
         android:scaleType="fitXY"
         android:src="@drawable/arrow_north"
         app:layout_constraintBottom_toBottomOf="@+id/watchesImage"
@@ -131,7 +120,7 @@
 
     <com.desuzed.clocknweather.util.ArrowImageView
         android:id="@+id/arrow_hours"
-        android:layout_width="40dp"
+        android:layout_width="30dp"
         android:layout_height="0dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"
@@ -152,6 +141,16 @@
         app:layout_constraintEnd_toEndOf="@+id/watchesImage"
         app:layout_constraintStart_toStartOf="@+id/watchesImage"
         app:layout_constraintTop_toTopOf="@+id/watchesImage"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/test_crash"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

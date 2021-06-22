@@ -2,4 +2,11 @@
     <string name="app_name">Clock\'n Weather</string>
     <string name="clock">Clock</string>
     <string name="weather">Weather</string>
+    <string name="top_clock">Top Clock</string>
+    <string name="bottom_clock">Bottom Clock</string>
+    <string name="one_min">1 min</string>
+    <string name="fifteen_min">15 min</string>
+    <string name="hour">Hour</string>
+    <string name="watches">watches</string>
+    <string name="test_crash">test crash</string>
 </resources>

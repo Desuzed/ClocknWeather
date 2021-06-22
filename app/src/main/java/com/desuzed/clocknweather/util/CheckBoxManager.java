@@ -9,7 +9,7 @@ import com.desuzed.clocknweather.mvvm.CheckBoxViewModel;
 
 public class CheckBoxManager {
     private CheckBoxStates mCheckBoxStates = new CheckBoxStates();
-    private CheckBox checkBoxMin, checkBox15min, checkBoxHour;
+    private final CheckBox checkBoxMin, checkBox15min, checkBoxHour;
 
     public CheckBoxManager(CheckBox checkBoxMin, CheckBox checkBox15min, CheckBox checkBoxHour) {
         this.checkBoxMin = checkBoxMin;
@@ -22,37 +22,22 @@ public class CheckBoxManager {
         checkBoxMin.setChecked(checkBoxStates.getStateMinute());
         checkBox15min.setChecked(checkBoxStates.getState15min());
         checkBoxHour.setChecked(checkBoxStates.getStateHour());
-
-       // mCheckBoxStates.setStates(checkBoxStates.getStateMinute(), checkBoxStates.getState15min(), checkBoxStates.getStateHour());
     }
 
     public void setOnCheckedChangeListeners (CheckBoxViewModel viewModel){
-        checkBoxMin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mCheckBoxStates.setStateMinute(b);
-                viewModel.setState(mCheckBoxStates);
-
-                Log.i("TAG", "onCheckedChanged: min:" + b);
-            }
+        checkBoxMin.setOnCheckedChangeListener((compoundButton, b) -> {
+            mCheckBoxStates.setStateMinute(b);
+            viewModel.setState(mCheckBoxStates);
         });
 
-        checkBox15min.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mCheckBoxStates.setState15min(b);
-                viewModel.setState(mCheckBoxStates);
-                Log.i("TAG", "onCheckedChanged: 15min:" + b);
-            }
+        checkBox15min.setOnCheckedChangeListener((compoundButton, b) -> {
+            mCheckBoxStates.setState15min(b);
+            viewModel.setState(mCheckBoxStates);
         });
 
-        checkBoxHour.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mCheckBoxStates.setStateHour(b);
-                viewModel.setState(mCheckBoxStates);
-                Log.i("TAG", "onCheckedChanged: hour:" + b);
-            }
+        checkBoxHour.setOnCheckedChangeListener((compoundButton, b) -> {
+            mCheckBoxStates.setStateHour(b);
+            viewModel.setState(mCheckBoxStates);
         });
     }
 

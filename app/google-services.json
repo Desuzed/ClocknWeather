@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "365224810687",
+    "project_id": "clock-n-weather",
+    "storage_bucket": "clock-n-weather.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365224810687:android:1c4f1584fcf97c9dbd4e0a",
+        "android_client_info": {
+          "package_name": "com.desuzed.clocknweather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "365224810687-h446s7425g65lhsd30v69sji3b94cjqi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZD8L4o1AM5lns8Rg9Ytdb-9ANAmPZDsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "365224810687-h446s7425g65lhsd30v69sji3b94cjqi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

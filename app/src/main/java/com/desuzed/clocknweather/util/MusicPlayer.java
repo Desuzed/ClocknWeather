@@ -1,27 +1,44 @@
 package com.desuzed.clocknweather.util;
 
+import android.content.Context;
+import android.media.MediaPlayer;
 import android.util.Log;
 
-public class MusicPlayer {
-    private CheckBoxManager checkBoxManager;
-    public static final int MUSIC_MIN = 1;
-    public static final int MUSIC_15_MIN = 2;
-    public static final int MUSIC_HOUR = 3;
+import com.desuzed.clocknweather.R;
 
-    public MusicPlayer(CheckBoxManager checkBoxManager) {
+public class MusicPlayer {
+    private final CheckBoxManager checkBoxManager;
+    public static boolean ONLY_HOUR_MUSIC = false;
+    private final Context context;
+
+    public MusicPlayer(CheckBoxManager checkBoxManager, Context context) {
         this.checkBoxManager = checkBoxManager;
+        this.context = context;
     }
 
-    public void playMusic(int musicState, boolean onlyHourMusic){
-        if (musicState==MUSIC_HOUR && checkBoxManager.getCheckBoxStates().getStateHour() && onlyHourMusic){
-            Log.i("MusicPlayer", "playHOURMusic: ");
-        }else if (musicState==MUSIC_15_MIN && checkBoxManager.getCheckBoxStates().getState15min() ){
-            Log.i("MusicPlayer", "play15MinMusic: ");
-        }else if (musicState==MUSIC_MIN && checkBoxManager.getCheckBoxStates().getStateMinute()){
+    public void playMinMusic() {
+        if (checkBoxManager.getCheckBoxStates().getStateMinute() && !ONLY_HOUR_MUSIC) {
+            MediaPlayer mpMin = MediaPlayer.create(context, R.raw.woody);
+            mpMin.start();
             Log.i("MusicPlayer", "playMinMusic: ");
         }
-//        if (checkBoxManager.getCheckBoxStates().getStateMinute()){
-//
-//        }
+    }
+
+    public void playHourMusic() {
+        if (checkBoxManager.getCheckBoxStates().getStateHour()) {
+            ONLY_HOUR_MUSIC = true;
+            MediaPlayer mpHour = MediaPlayer.create(context, R.raw.sound2);
+            mpHour.start();
+            Log.i("MusicPlayer", "playHOURMusic: ");
+        }
+
+    }
+
+    public void play15MinMusic() {
+        if (checkBoxManager.getCheckBoxStates().getState15min() && !ONLY_HOUR_MUSIC) {
+            MediaPlayer mp15min = MediaPlayer.create(context, R.raw.icq);
+            mp15min.start();
+            Log.i("MusicPlayer", "play15MinMusic: ");
+        }
     }
 }

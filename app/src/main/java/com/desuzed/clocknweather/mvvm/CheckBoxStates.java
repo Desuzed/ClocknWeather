@@ -14,11 +14,6 @@ public class CheckBoxStates {
         this.stateHour = stateHour;
     }
 
-    public void setStates (boolean stateMin, boolean state15Min, boolean stateHour){
-        this.stateMinute = stateMin;
-        this.state15min = state15Min;
-        this.stateHour = stateHour;
-    }
 
     public boolean getStateHour() {
         return stateHour;
@@ -44,7 +39,4 @@ public class CheckBoxStates {
         this.stateMinute = stateMinute;
     }
 
-    public static interface OnCheckBoxStateChanged {
-        void onStateChanged ();
-    }
 }
