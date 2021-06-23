@@ -96,12 +96,12 @@
         android:layout_height="0dp"
         android:scaleType="fitXY"
         android:src="@drawable/arrow_north"
+        android:tint="@color/teal_700"
         app:layout_constraintBottom_toBottomOf="@+id/watchesImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/watchesImage"
-        tools:ignore="MissingConstraints"
-        app:tint="@color/teal_700" />
+        tools:ignore="MissingConstraints" />
 
     <com.desuzed.clocknweather.util.ArrowImageView
         android:id="@+id/arrow_min"
@@ -111,11 +111,11 @@
         android:layout_marginBottom="40dp"
         android:scaleType="fitXY"
         android:src="@drawable/arrow_north"
+        android:tint="@color/purple_200"
         app:layout_constraintBottom_toBottomOf="@+id/watchesImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/watchesImage"
-        app:tint="@color/purple_200"
         tools:ignore="MissingConstraints" />
 
     <com.desuzed.clocknweather.util.ArrowImageView

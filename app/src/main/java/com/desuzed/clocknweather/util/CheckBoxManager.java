@@ -1,8 +1,6 @@
 package com.desuzed.clocknweather.util;
 
-import android.util.Log;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.desuzed.clocknweather.mvvm.CheckBoxStates;
 import com.desuzed.clocknweather.mvvm.CheckBoxViewModel;
