@@ -3,7 +3,7 @@ package com.desuzed.clocknweather.util;
 import android.widget.CheckBox;
 
 import com.desuzed.clocknweather.mvvm.CheckBoxStates;
-import com.desuzed.clocknweather.mvvm.CheckBoxViewModel;
+import com.desuzed.clocknweather.mvvm.ClockViewModel;
 
 public class CheckBoxManager {
     private CheckBoxStates mCheckBoxStates = new CheckBoxStates();
@@ -22,7 +22,7 @@ public class CheckBoxManager {
         checkBoxHour.setChecked(checkBoxStates.getStateHour());
     }
 
-    public void setOnCheckedChangeListeners (CheckBoxViewModel viewModel){
+    public void setOnCheckedChangeListeners (ClockViewModel viewModel){
         checkBoxMin.setOnCheckedChangeListener((compoundButton, b) -> {
             mCheckBoxStates.setStateMinute(b);
             viewModel.setState(mCheckBoxStates);

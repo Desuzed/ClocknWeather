@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.desuzed.clocknweather.databinding.FragmentClockBinding;
-import com.desuzed.clocknweather.mvvm.CheckBoxViewModel;
+import com.desuzed.clocknweather.mvvm.ClockViewModel;
 import com.desuzed.clocknweather.rx.AnalogClockObserver;
 import com.desuzed.clocknweather.rx.BottomClockObserver;
 import com.desuzed.clocknweather.util.ArrowImageView;
@@ -36,7 +36,7 @@ public class ClockFragment extends Fragment {
     public static final String TAG = "ClockFragment";
     private ImageView watchesImage;
     private TextView tvTopClock, tvHeader, tvBottomClock;
-    private CheckBoxViewModel viewModel;
+    private ClockViewModel viewModel;
     private CheckBoxManager mCheckBoxManager;
     private ClockApp clock;
     private FragmentClockBinding fragmentClockBinding;
@@ -83,36 +83,6 @@ public class ClockFragment extends Fragment {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        initObservers();
-    }
-
-    private void initObservers() {
-        Observable<Long> emitter = Observable.interval(100, TimeUnit.MILLISECONDS);
-        Predicate<Long> filterSeconds = aLong -> {
-            // return aLong.toString().endsWith("0");
-            return aLong % 10 == 0;
-        };
-        AnalogClockObserver analogClockObserver = new AnalogClockObserver(clock);
-        BottomClockObserver bottomClockObserver = new BottomClockObserver(tvBottomClock, tvTopClock, clock);
-        emitter
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bottomClockObserver);
-        emitter
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter(filterSeconds)
-                .subscribe(analogClockObserver);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     private void init(View view) {
         Button b = fragmentClockBinding.button;
         b.setOnClickListener(view1 -> {
@@ -122,17 +92,58 @@ public class ClockFragment extends Fragment {
         watchesImage = fragmentClockBinding.watchesImage;
         tvTopClock = fragmentClockBinding.tvTopClock;
         tvBottomClock = fragmentClockBinding.tvBottomClock;
-        tvBottomClock = view.findViewById(R.id.tvBottomClock);
         ArrowImageView arrowSeconds = fragmentClockBinding.arrowSeconds;
         ArrowImageView arrowMin = fragmentClockBinding.arrowMin;
         ArrowImageView arrowHours = fragmentClockBinding.arrowHours;
         CheckBox checkBoxMin = fragmentClockBinding.checkboxMin;
         CheckBox checkBox15min = fragmentClockBinding.checkbox15min;
         CheckBox checkBoxHour = fragmentClockBinding.checkboxHour;
-        viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication())).get(CheckBoxViewModel.class);
+        viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication())).get(ClockViewModel.class);
         mCheckBoxManager = new CheckBoxManager(checkBoxMin, checkBox15min, checkBoxHour);
         mCheckBoxManager.setOnCheckedChangeListeners(viewModel);
         MusicPlayer musicPlayer = new MusicPlayer(mCheckBoxManager, getContext());
-        clock = new ClockApp(arrowSeconds, arrowMin, arrowHours, musicPlayer);
+        clock = new ClockApp(arrowSeconds, arrowMin, arrowHours, musicPlayer, viewModel);
+        initObservers();
+    }
+
+    private void initObservers() {
+        AnalogClockObserver analogClockObserver = new AnalogClockObserver(clock);
+        BottomClockObserver bottomClockObserver = new BottomClockObserver(tvBottomClock, tvTopClock, clock);
+
+        viewModel.getEmitter()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bottomClockObserver);
+        viewModel.getEmitter()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(viewModel.getFilterSeconds())
+                .subscribe(analogClockObserver);
+        /* todo
+        Правильный MVVM делается так:
+        1. Модель не имеет связи с фрагментом, фрагмент имеет на нее ссылку
+        2. Модель генерит события, которые меняют (через post|set) находящую в
+        ней мьютэбл лайфлдату. В данном случае повороты стрелок, изменения текста в часах
+        3. Фрагмент это обсервит и показывает (лайфдату получаем геттером, или просто как поле)
+        4. При клике по элементам управления фрагмент ничего с этим не делает
+        - только передает новое состояние в в.модель вызовом ее метода
+        5. ВМ  это отрабатывает и хранит локально
+        6. Хранение постоянных изменений делается путем вызова метода модели. Модель же
+        делает вызов методов в.модели через коллбэк если что случилось с данными
+         и надо это обобразить - ну скажем данные с датчика пришли или с сети.
+        То есть у нас обсервейбл  с фильтрами - в ВМ, обсерверы во фрагменте.
+        Состояние чекбоксов - в модели, локальная копия в ВМ ( нужна для ее логики)
+        там же они запрашиваются при перезапуске фрагмента и передаются по цепочке начальные
+        7. музыка  - работа с аппаратурой, то есть код ее проигрывания  (сам плеер
+        предъявленного ему звука)в модели, а когда играть и какую решает ВМ
+        8. Рх пакет при этом не нужен, он пустой все одно почти
+
+         */
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        fragmentClockBinding=null;
     }
 }

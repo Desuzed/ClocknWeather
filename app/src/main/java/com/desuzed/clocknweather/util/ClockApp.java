@@ -1,5 +1,7 @@
 package com.desuzed.clocknweather.util;
 
+import com.desuzed.clocknweather.mvvm.ClockViewModel;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -11,12 +13,14 @@ public class ClockApp implements ArrowImageView.OnRotationChangedListener {
     private final MusicPlayer musicPlayer;
     private final SimpleDateFormat sdfBottomClock = new SimpleDateFormat("hh:mm:ss.S");
     private final SimpleDateFormat sdfTopClock = new SimpleDateFormat("hh:mm");
+    private ClockViewModel viewModel;
 
-    public ClockApp(ArrowImageView arrowSeconds, ArrowImageView arrowMinutes, ArrowImageView arrowHours, MusicPlayer musicPlayer) {
+    public ClockApp(ArrowImageView arrowSeconds, ArrowImageView arrowMinutes, ArrowImageView arrowHours, MusicPlayer musicPlayer, ClockViewModel viewModel) {
         this.arrowSeconds = arrowSeconds;
         this.arrowMinutes = arrowMinutes;
         this.arrowHours = arrowHours;
         this.musicPlayer = musicPlayer;
+        this.viewModel = viewModel;
         setListeners();
         initRotations();
     }
@@ -29,6 +33,7 @@ public class ClockApp implements ArrowImageView.OnRotationChangedListener {
         arrowHours.setRotation(30 * hour, ARROW_HOUR);
         arrowSeconds.setRotation(6 * seconds);
         arrowMinutes.setRotation(6 * minute, ARROW_MIN);
+
 
     }
 
@@ -43,9 +48,18 @@ public class ClockApp implements ArrowImageView.OnRotationChangedListener {
         int hour = calendar.get(Calendar.HOUR);
         int minute = calendar.get(Calendar.MINUTE);
         int seconds = calendar.get(Calendar.SECOND);
+        // todo - это надо бить на неск.методов - получение секунд, минут и часов тек.времени,
+        //  они пригодятся, надо переиспользовать.
+        //  или рядом с часовым фрагментом лучше/ его ВМ, его никто больше не использует.
+        //  Фрагменты  (и активности) в ui пакете, если фрагментов много - их суют в отд.пакет,
+        //   как и ВМ тоже. Но это если много.
         arrowHours.setRotation(30 * hour);
         arrowMinutes.setRotation(6 * minute);
         arrowSeconds.setRotation(6 * seconds);
+        //  todo  поворот стрелки логичнее держать во фрагменте. Типа turnHourArrow(value)
+        //   а данные придут в лайфдату из ВМ готовые. То же с часами - придет готовый текст
+        //   кто сильно умный может прислать один текст для всех и для минутных обрезать
+        //   лишнее с конца уже во фрагменте, что бы не плодить обсерверы
     }
 
     public String setTimeTopClock() {

@@ -12,6 +12,7 @@ public class Repository {
     public static final String STATE_HOUR = "STATE_HOUR";
     public static final String S_PREF_NAME = "SP";
     private MutableLiveData<CheckBoxStates> checkBoxLiveData;
+
     private final Application app;
 
 
@@ -29,6 +30,7 @@ public class Repository {
         }
         return checkBoxLiveData;
     }
+
 
     public void setState(CheckBoxStates checkBoxStates) {
         checkBoxLiveData.setValue(checkBoxStates);
