@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.util.Log;
 
 import com.desuzed.clocknweather.R;
+import com.desuzed.clocknweather.mvvm.ClockViewModel;
 
 public class MusicPlayer {
     private final CheckBoxManager checkBoxManager;
@@ -18,8 +19,9 @@ public class MusicPlayer {
 
     public void playMinMusic() {
         if (checkBoxManager.getCheckBoxStates().getStateMinute() && !ONLY_HOUR_MUSIC) {
-            MediaPlayer mpMin = MediaPlayer.create(context, R.raw.woody);
-            mpMin.start();
+            MediaPlayer
+                    .create(context, R.raw.woody)
+                    .start();
             Log.i("MusicPlayer", "playMinMusic: ");
         }
     }
@@ -27,8 +29,9 @@ public class MusicPlayer {
     public void playHourMusic() {
         if (checkBoxManager.getCheckBoxStates().getStateHour()) {
             ONLY_HOUR_MUSIC = true;
-            MediaPlayer mpHour = MediaPlayer.create(context, R.raw.sound2);
-            mpHour.start();
+            MediaPlayer
+                    .create(context, R.raw.sound2)
+                    .start();
             Log.i("MusicPlayer", "playHOURMusic: ");
         }
 
@@ -36,8 +39,9 @@ public class MusicPlayer {
 
     public void play15MinMusic() {
         if (checkBoxManager.getCheckBoxStates().getState15min() && !ONLY_HOUR_MUSIC) {
-            MediaPlayer mp15min = MediaPlayer.create(context, R.raw.icq);
-            mp15min.start();
+            MediaPlayer
+                    .create(context, R.raw.icq)
+                    .start();
             Log.i("MusicPlayer", "play15MinMusic: ");
         }
     }

@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import org.jetbrains.annotations.NotNull;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -39,12 +41,7 @@ public class WeatherFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         textView = view.findViewById(R.id.textView);
         Button b = view.findViewById(R.id.btn);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getWeather();
-            }
-        });
+        b.setOnClickListener(view1 -> getWeather());
     }
 
     private void getWeather() {
@@ -65,9 +62,10 @@ public class WeatherFragment extends Fragment {
         Call<WeatherResponse> call = service.getCurrentWeatherData("44.04339", "131.7679", appId);
         call.enqueue(new Callback<WeatherResponse>() {
             @Override
-            public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
+            public void onResponse(@NotNull Call<WeatherResponse> call, @NotNull Response<WeatherResponse> response) {
                 if (response.code() == 200) {
                     WeatherResponse wResponse = response.body();
+                    assert wResponse != null;
                     float temp = Float.parseFloat(String.valueOf(wResponse.main.temp)) - 273;
                     String stringBuilder = "Country: " +
                             wResponse.sys.country +
@@ -94,7 +92,7 @@ public class WeatherFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<WeatherResponse> call, Throwable t) {
+            public void onFailure(@NotNull Call<WeatherResponse> call, @NotNull Throwable t) {
 
             }
         });

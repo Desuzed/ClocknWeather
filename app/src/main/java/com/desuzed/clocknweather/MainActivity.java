@@ -1,12 +1,11 @@
 package com.desuzed.clocknweather;
 
-import androidx.annotation.NonNull;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
-
-import android.os.Bundle;
-import android.view.View;
 
 import com.desuzed.clocknweather.databinding.ActivityMainBinding;
 import com.desuzed.clocknweather.util.PagerAdapter;
@@ -20,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
     private String [] tabNames;
-    private ActivityMainBinding amb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bind (){
-        amb = ActivityMainBinding.inflate(getLayoutInflater());
+        com.desuzed.clocknweather.databinding.ActivityMainBinding amb = ActivityMainBinding.inflate(getLayoutInflater());
         View view = amb.getRoot();
         setContentView(view);
         viewPager = amb.viewPager;

@@ -1,28 +1,29 @@
 package com.desuzed.clocknweather.mvvm;
 
 import android.app.Application;
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.desuzed.clocknweather.R;
+import com.desuzed.clocknweather.rx.HourObserver;
+import com.desuzed.clocknweather.rx.MSecObserver;
+import com.desuzed.clocknweather.rx.SecObserver;
+import com.desuzed.clocknweather.rx.MinuteObserver;
 import com.desuzed.clocknweather.util.MusicPlayer;
+import com.desuzed.clocknweather.util.TimeGetter;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.functions.Predicate;
 
 public class ClockViewModel extends AndroidViewModel {
-    private Repository repo;
+    private final Repository repo;
     private final Observable<Long> emitter;
     private final Predicate<Long> filterSeconds;
-    private CheckBoxStates mCheckBoxStates;
-    private MutableLiveData <ClockModel> clockModelLiveData;
 
     public ClockViewModel(Application app) {
         super(app);
@@ -33,12 +34,92 @@ public class ClockViewModel extends AndroidViewModel {
             return aLong % 10 == 0;
         };
     }
-
-    public LiveData<ClockModel> getClockModelLiveData() {
-        if (clockModelLiveData == null) {
-            clockModelLiveData = new MutableLiveData<>();
+    public static final int ARROW_MIN = 10;
+    public static final int ARROW_HOUR = 20;
+    public void playMusic ( float rotation,int arrowIndex, MusicPlayer mp){
+        switch (arrowIndex){
+            case ARROW_HOUR:
+                mp.playHourMusic();
+                break;
+            case ARROW_MIN:
+                if (rotation == 90 || rotation == 180 || rotation == 270  || rotation == 0) {
+                    mp.play15MinMusic();
+                } else {
+                    mp.playMinMusic();
+                }
+                MusicPlayer.ONLY_HOUR_MUSIC=false;
+                break;
         }
-        return clockModelLiveData;
+    }
+
+    private HourObserver hourObserver;
+    private MinuteObserver minuteObserver;
+    private SecObserver secObserver;
+    private MSecObserver mSecObserver;
+
+    public HourObserver getHourObserver() {
+        if (hourObserver == null) {
+            hourObserver = new HourObserver(getHourLiveData());
+        }
+        return hourObserver;
+    }
+
+    public MSecObserver getMSecObserver() {
+        if (mSecObserver == null) {
+            mSecObserver = new MSecObserver(getMSecLiveData());
+        }
+        return mSecObserver;
+    }
+
+    public MinuteObserver getMinuteObserver() {
+        if (minuteObserver == null) {
+            minuteObserver = new MinuteObserver(getMinLiveData());
+        }
+        return minuteObserver;
+    }
+
+    public SecObserver getSecObserver() {
+        if (secObserver == null) {
+            secObserver = new SecObserver(getSecLiveData());
+        }
+        return secObserver;
+    }
+
+    private MutableLiveData<Integer> hourLiveData;
+    private MutableLiveData<Integer> minLiveData;
+    private MutableLiveData<Integer> secLiveData;
+    private MutableLiveData<Integer> mSecLiveData;
+
+    public MutableLiveData<Integer> getHourLiveData() {
+        if (hourLiveData == null) {
+            hourLiveData = new MutableLiveData<>();
+            hourLiveData.setValue(new TimeGetter().getHour());
+        }
+        return hourLiveData;
+    }
+
+
+    public MutableLiveData<Integer> getMinLiveData() {
+        if (minLiveData == null) {
+            minLiveData = new MutableLiveData<>();
+            minLiveData.setValue(new TimeGetter().getMinute());
+        }
+        return minLiveData;
+    }
+
+    public MutableLiveData<Integer> getSecLiveData() {
+        if (secLiveData == null) {
+            secLiveData = new MutableLiveData<>();
+            secLiveData.setValue(new TimeGetter().getSec());
+        }
+        return secLiveData;
+    }
+    public MutableLiveData<Integer> getMSecLiveData() {
+        if (mSecLiveData == null) {
+            mSecLiveData = new MutableLiveData<>();
+            mSecLiveData.setValue(new TimeGetter().getMSec());
+        }
+        return mSecLiveData;
     }
 
     public Observable<Long> getEmitter() {
@@ -49,7 +130,7 @@ public class ClockViewModel extends AndroidViewModel {
         return filterSeconds;
     }
 
-    public void setState (CheckBoxStates checkBoxStates){
+    public void setState(CheckBoxStates checkBoxStates) {
         repo.setState(checkBoxStates);
     }
 
@@ -58,46 +139,4 @@ public class ClockViewModel extends AndroidViewModel {
     }
 
 
-//    @Override
-//    public void rotationChanged(float rotation, int arrowIndex) {
-//        switch (arrowIndex){
-//            case ARROW_HOUR:
-//                musicPlayer.playHourMusic();
-//                break;
-//            case ARROW_MIN:
-//                if (rotation == 90 || rotation == 180 || rotation == 270  || rotation == 0) {
-//                    musicPlayer.play15MinMusic();
-//                } else {
-//                    musicPlayer.playMinMusic();
-//                }
-//                MusicPlayer.ONLY_HOUR_MUSIC=false;
-//                break;
-//        }
-//    }
-
-//    public void playMinMusic() {
-//        if (checkBoxManager.getCheckBoxStates().getStateMinute() && !ONLY_HOUR_MUSIC) {
-//            MediaPlayer mpMin = MediaPlayer.create(context, R.raw.woody);
-//            mpMin.start();
-//            Log.i("MusicPlayer", "playMinMusic: ");
-//        }
-//    }
-//
-//    public void playHourMusic() {
-//        if (checkBoxManager.getCheckBoxStates().getStateHour()) {
-//            ONLY_HOUR_MUSIC = true;
-//            MediaPlayer mpHour = MediaPlayer.create(context, R.raw.sound2);
-//            mpHour.start();
-//            Log.i("MusicPlayer", "playHOURMusic: ");
-//        }
-//
-//    }
-//
-//    public void play15MinMusic() {
-//        if (checkBoxManager.getCheckBoxStates().getState15min() && !ONLY_HOUR_MUSIC) {
-//            MediaPlayer mp15min = MediaPlayer.create(context, R.raw.icq);
-//            mp15min.start();
-//            Log.i("MusicPlayer", "play15MinMusic: ");
-//        }
-//    }
 }
