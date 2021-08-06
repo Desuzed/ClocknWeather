@@ -9,4 +9,6 @@
     <string name="hour">Hour</string>
     <string name="watches">watches</string>
     <string name="test_crash">test crash</string>
+    <string name="btnGetWeather">find</string>
+    <string name="btnGpsWeather">gps weather</string>
 </resources>
