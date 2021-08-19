@@ -6,10 +6,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.desuzed.clocknweather.mvvm.WeatherViewModel
+import com.desuzed.clocknweather.util.DailyAdapter
+import com.desuzed.clocknweather.util.HourlyAdapter
 
 class WeatherFragment : Fragment() {
     override fun onCreateView(
@@ -26,72 +29,43 @@ class WeatherFragment : Fragment() {
             ViewModelProvider
                 .AndroidViewModelFactory.getInstance(requireActivity().application))
             .get(WeatherViewModel::class.java)
-
-        val textView = view.findViewById <TextView>(R.id.tvWeather)
+        val tvCommonInfo = view.findViewById <TextView>(R.id.tvCommonInfo)
+        val tvCurrentWeather = view.findViewById <TextView>(R.id.tvCurrentWeather)
         val etCity = view.findViewById<EditText>(R.id.etCity)
         val btnGetCityWeather = view.findViewById<Button>(R.id.bthGetWeather)
-        btnGetCityWeather.setOnClickListener {
+        val btnGpsWeather = view.findViewById<Button>(R.id.btnGpsWeather)
+        btnGpsWeather.setOnClickListener {
 //            if (etCity.text.toString().trim() == "") {
 //                Toast.makeText(requireContext(), "Пустое поле", Toast.LENGTH_SHORT)
 //            } else {
 //                val city = etCity.text.toString().trim()
 //                weatherViewModel.setCurrentWeatherByCity(city)
 //            }
-            weatherViewModel.getForecastOnecall("55.751244", "37.618423")
+            weatherViewModel.getForecastOnecall("43.119809", "131.886924")
         }
 
+        val rvDaily = view.findViewById<RecyclerView>(R.id.rvDaily)
+        val rvHourly = view.findViewById<RecyclerView>(R.id.rvHourly)
+        val lmDaily = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val lmHourly = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        rvDaily.layoutManager = lmDaily
+        rvHourly.layoutManager = lmHourly
+        val hourlyAdapter = HourlyAdapter(ArrayList(), requireContext())
+        val dailyAdapter = DailyAdapter(ArrayList(), requireContext())
+        rvHourly.adapter = hourlyAdapter
+        rvDaily.adapter = dailyAdapter
+
         weatherViewModel.weatherLiveData.observe(viewLifecycleOwner, {
-            textView.text = it
+           // textView.text = it
+            tvCommonInfo.text = it.toString()
+            tvCurrentWeather.text = it.current.toString()
+            dailyAdapter.updateList(it.daily!!, it)
+            hourlyAdapter.updateList(it.hourly!!, it)
+
         })
 
     }
 //
-//    private fun getWeather(city: String) {
-//        val interceptor = HttpLoggingInterceptor()
-//        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
-//        val client = OkHttpClient.Builder()
-//            .addInterceptor(interceptor)
-//            .build()
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl(baseUrl)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .client(client)
-//            .build()
-//        val wService = retrofit.create(WeatherService::class.java)
-//        val call = wService.getCurrentWeatherDataByCity(city, appId, "metric", "ru")
-//
-//
-//        call.enqueue(object : Callback<WeatherResponse?> {
-//            override fun onResponse(
-//                call: Call<WeatherResponse?>,
-//                response: Response<WeatherResponse?>
-//            ) {
-//                var text: String = ""
-//                if (response.code() == 200) {
-//                    val weatherResponse = response.body()
-//                    if (weatherResponse != null) {
-//                        //        val temp = weatherResponse.main.temp - 273
-//                        text = "Страна: ${weatherResponse.sys.country}\n" +
-//                                "Температура: ${weatherResponse.main.temp}\n" +
-//                                "Влажность: ${weatherResponse.main.humidity}\n" +
-//                                "Давление: ${weatherResponse.main.pressure}\n" +
-//                                "Место: ${weatherResponse.name}\n" +
-//                                "Sunrise: ${SimpleDateFormat("hh:mm:ss").format(weatherResponse.sys.sunrise)}\n" +
-//                                "Sunset: ${SimpleDateFormat("hh:mm:ss").format(weatherResponse.sys.sunset)}\n"
-//                        // val date = SimpleDateFormat("hh:mm:ss").format(weatherResponse.sys.sunrise)
-//
-//                    }
-//
-//                }
-//                textView?.text = text
-//            }
-//
-//            override fun onFailure(call: Call<WeatherResponse?>, t: Throwable) {
-//                TODO("Not yet implemented")
-//            }
-//        })
-//
-//    }
     companion object {
         fun newInstance(): WeatherFragment {
             return WeatherFragment()

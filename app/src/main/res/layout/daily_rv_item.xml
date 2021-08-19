@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+        android:id="@+id/dDateHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="08.09.2021"
+        app:layout_constraintStart_toStartOf="@id/dDateHeader"
+        app:layout_constraintTop_toBottomOf="@id/dDateHeader" />
+
+    <TextView
+        android:id="@+id/dTempHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temp:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/dDate"
+        app:layout_constraintTop_toBottomOf="@id/dDate" />
+
+    <TextView
+        android:id="@+id/dTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="100"
+        app:layout_constraintStart_toStartOf="@id/dTempHeader"
+        app:layout_constraintTop_toBottomOf="@id/dTempHeader" />
+
+    <TextView
+        android:id="@+id/dFeelsLikeHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Feels Like:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/dTemp"
+        app:layout_constraintTop_toBottomOf="@id/dTemp" />
+
+    <TextView
+        android:id="@+id/dFeelsLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/dFeelsLikeHeader"
+        app:layout_constraintTop_toBottomOf="@id/dFeelsLikeHeader"
+        tools:text="200" />
+
+    <TextView
+        android:id="@+id/dPressureHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pressure:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/dFeelsLike"
+        app:layout_constraintTop_toBottomOf="@id/dFeelsLike" />
+
+    <TextView
+        android:id="@+id/dPressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/dPressureHeader"
+        app:layout_constraintTop_toBottomOf="@id/dPressureHeader"
+        tools:text="90" />
+
+    <TextView
+        android:id="@+id/dHumidityHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Humidity:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/dPressure"
+        app:layout_constraintTop_toBottomOf="@id/dPressure" />
+
+    <TextView
+        android:id="@+id/dHumidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/dHumidityHeader"
+        app:layout_constraintTop_toBottomOf="@id/dHumidityHeader"
+        tools:text="77" />
+
+    <TextView
+        android:id="@+id/dWindSpeedHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wind Speed:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/dHumidity"
+        app:layout_constraintTop_toBottomOf="@id/dHumidity" />
+
+    <TextView
+        android:id="@+id/dWindSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/dWindSpeedHeader"
+        app:layout_constraintTop_toBottomOf="@id/dWindSpeedHeader"
+        tools:text="33" />
+
+    <TextView
+        android:id="@+id/dSunriseHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sunrise:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/dWindSpeed"
+        app:layout_constraintTop_toBottomOf="@id/dWindSpeed" />
+
+    <TextView
+        android:id="@+id/dSunrise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/dSunriseHeader"
+        app:layout_constraintTop_toBottomOf="@id/dSunriseHeader"
+        tools:text="09.09.2020" />
+
+    <TextView
+        android:id="@+id/dSunsetHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sunset:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/dSunrise"
+        app:layout_constraintTop_toBottomOf="@id/dSunrise" />
+
+    <TextView
+        android:id="@+id/dSunset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/dSunsetHeader"
+        app:layout_constraintTop_toBottomOf="@id/dSunsetHeader"
+        tools:text="09.09.2020" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/dMoonriseHeader"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Moonrise:"-->
+<!--        app:layout_constraintStart_toStartOf="@id/dSunset"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/dSunset" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/dMoonrise"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="@id/dMoonriseHeader"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/dMoonriseHeader"-->
+<!--        tools:text="09.09.2020" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/dMoonsetHeader"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Moonset:"-->
+<!--        app:layout_constraintStart_toStartOf="@id/dMoonrise"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/dMoonrise" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/dMoonset"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="@id/dMoonset"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/dMoonset"-->
+<!--        tools:text="09.09.2020" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

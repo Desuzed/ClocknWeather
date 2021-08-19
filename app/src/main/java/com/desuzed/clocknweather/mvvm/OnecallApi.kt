@@ -1,6 +1,7 @@
 package com.desuzed.clocknweather.mvvm
 
 import com.google.gson.annotations.SerializedName
+import java.text.SimpleDateFormat
 import java.util.*
 
 class OnecallApi {
@@ -28,6 +29,11 @@ class OnecallApi {
     @SerializedName("daily")
     var daily: ArrayList<Daily>? = null
 
+    override fun toString(): String {
+        return "lat=$lat,\nlon=$lon,\ntimezone=$timezone"
+    }
+
+
     class Weather {
         @SerializedName("id")
         var id = 0
@@ -40,6 +46,9 @@ class OnecallApi {
 
         @SerializedName("icon")
         var icon: String? = null
+        override fun toString(): String {
+            return "main=$main\ndescription=$description"
+        }
     }
 
 
@@ -88,6 +97,14 @@ class OnecallApi {
 
         @SerializedName("weather")
         var weather: ArrayList<Weather>? = null
+        override fun toString(): String {
+            val sdf = SimpleDateFormat("dd.MM.yyyy ; HH:mm:ss")
+            return "temp=$temp\nfeels_like=$feels_like\n" +
+                    "pressure=$pressure\nhumidity=$humidity\nclouds=$clouds\n" +
+                    "visibility=$visibility\nwind_speed=$wind_speed\nwind_deg=$wind_deg\nwind_gust=$wind_gust\nweather=$weather"
+        }
+
+
     }
 
     class Hourly {
@@ -202,6 +219,11 @@ class OnecallApi {
 
         @SerializedName("morn")
         var morn = 0f
+        override fun toString(): String {
+            return "day=$day,\nmin=$min,\nmax=$max,\nnight=$night,\neve=$eve,\nmorn=$morn"
+        }
+
+
     }
 
     class FeelsLike {
@@ -216,6 +238,13 @@ class OnecallApi {
 
         @SerializedName("morn")
         var morn = 0f
+        override fun toString(): String {
+            return "day=$day,\nnight=$night,\neve=$eve,\nmorn=$morn"
+        }
+
+
     }
+
+
 }
 
