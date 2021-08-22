@@ -1,4 +1,4 @@
-package com.desuzed.clocknweather.util
+package com.desuzed.clocknweather.util.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.desuzed.clocknweather.R
-import com.desuzed.clocknweather.mvvm.OnecallApi
+import com.desuzed.clocknweather.retrofit.OnecallApi
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList

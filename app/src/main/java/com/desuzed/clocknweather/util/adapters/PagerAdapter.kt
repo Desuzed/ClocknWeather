@@ -1,4 +1,4 @@
-package com.desuzed.clocknweather.util
+package com.desuzed.clocknweather.util.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

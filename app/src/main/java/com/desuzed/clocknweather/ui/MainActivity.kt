@@ -1,13 +1,14 @@
-package com.desuzed.clocknweather
+package com.desuzed.clocknweather.ui
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.desuzed.clocknweather.ClockFragment.Companion.newInstance
+import com.desuzed.clocknweather.ui.ClockFragment.Companion.newInstance
+import com.desuzed.clocknweather.R
 import com.desuzed.clocknweather.databinding.ActivityMainBinding
-import com.desuzed.clocknweather.util.PagerAdapter
+import com.desuzed.clocknweather.util.adapters.PagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.*

@@ -1,4 +1,4 @@
-package com.desuzed.clocknweather.mvvm;
+package com.desuzed.clocknweather.retrofit;
 
 import com.google.gson.annotations.SerializedName;
 

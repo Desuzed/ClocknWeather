@@ -1,4 +1,4 @@
-package com.desuzed.clocknweather
+package com.desuzed.clocknweather.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle

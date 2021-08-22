@@ -1,4 +1,4 @@
-package com.desuzed.clocknweather.mvvm
+package com.desuzed.clocknweather.retrofit
 
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
@@ -33,7 +33,6 @@ class OnecallApi {
         return "lat=$lat,\nlon=$lon,\ntimezone=$timezone"
     }
 
-
     class Weather {
         @SerializedName("id")
         var id = 0
@@ -50,7 +49,6 @@ class OnecallApi {
             return "main=$main\ndescription=$description"
         }
     }
-
 
     class Current {
         @SerializedName("dt")
@@ -103,8 +101,6 @@ class OnecallApi {
                     "pressure=$pressure\nhumidity=$humidity\nclouds=$clouds\n" +
                     "visibility=$visibility\nwind_speed=$wind_speed\nwind_deg=$wind_deg\nwind_gust=$wind_gust\nweather=$weather"
         }
-
-
     }
 
     class Hourly {
@@ -222,8 +218,6 @@ class OnecallApi {
         override fun toString(): String {
             return "day=$day,\nmin=$min,\nmax=$max,\nnight=$night,\neve=$eve,\nmorn=$morn"
         }
-
-
     }
 
     class FeelsLike {
@@ -241,10 +235,6 @@ class OnecallApi {
         override fun toString(): String {
             return "day=$day,\nnight=$night,\neve=$eve,\nmorn=$morn"
         }
-
-
     }
-
-
 }
 
