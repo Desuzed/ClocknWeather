@@ -62,9 +62,6 @@ class DailyAdapter(
             dWindSpeed.text = dailyItem.wind_speed.toString()
             dSunrise.text = sdfSun.format(dailyItem.sunrise*1000)
             dSunset.text = sdfSun.format(dailyItem.sunset*1000)
-//            dMoonrise.text =  sdf.format(dailyItem.moonrise*1000)
-//            dMoonset.text = sdf.format(dailyItem.moonset*1000)
-
         }
     }
 }

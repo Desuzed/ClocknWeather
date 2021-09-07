@@ -9,16 +9,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.desuzed.clocknweather.R
+import com.desuzed.clocknweather.databinding.FragmentWeatherBinding
+import com.desuzed.clocknweather.mvvm.AppViewModelFactory
+import com.desuzed.clocknweather.mvvm.Repository
 import com.desuzed.clocknweather.mvvm.WeatherViewModel
 import com.desuzed.clocknweather.util.adapters.DailyAdapter
 import com.desuzed.clocknweather.util.adapters.HourlyAdapter
@@ -30,96 +31,116 @@ class WeatherFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_weather, container, false)
+    ): View {
+        fragmentWeatherBinding = FragmentWeatherBinding.inflate(inflater, container, false)
+        return fragmentWeatherBinding.root
     }
-
     val requestCode: Int = 100
     lateinit var fusedLocationClient: FusedLocationProviderClient
+    lateinit var fragmentWeatherBinding: FragmentWeatherBinding
+    private lateinit var tvCache: TextView
+    private lateinit var tvCommonInfo: TextView
+    private lateinit var tvCurrentWeather: TextView
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        val weatherViewModel: WeatherViewModel = ViewModelProvider(
+    private val weatherViewModel: WeatherViewModel by lazy {
+        ViewModelProvider(
             this,
-            ViewModelProvider
-                .AndroidViewModelFactory.getInstance(requireActivity().application)
+            AppViewModelFactory(Repository(requireActivity().application))
         )
             .get(WeatherViewModel::class.java)
-        val tvCommonInfo = view.findViewById<TextView>(R.id.tvCommonInfo)
-        val tvCurrentWeather = view.findViewById<TextView>(R.id.tvCurrentWeather)
-        val etCity = view.findViewById<EditText>(R.id.etCity)
-        val btnGetCityWeather = view.findViewById<Button>(R.id.bthGetWeather)
-        val btnGpsWeather = view.findViewById<Button>(R.id.btnGpsWeather)
-        btnGpsWeather.setOnClickListener {
-            getCurrentLocation(weatherViewModel)
-        }
-        val rvDaily = view.findViewById<RecyclerView>(R.id.rvDaily)
-        val rvHourly = view.findViewById<RecyclerView>(R.id.rvHourly)
+    }
+
+    private fun initRecyclers(hourlyAdapter: HourlyAdapter, dailyAdapter: DailyAdapter) {
+        val rvDaily = fragmentWeatherBinding.rvDaily
+        val rvHourly = fragmentWeatherBinding.rvHourly
         val lmDaily = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         val lmHourly = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rvDaily.layoutManager = lmDaily
         rvHourly.layoutManager = lmHourly
-        val hourlyAdapter = HourlyAdapter(ArrayList(), requireContext())
-        val dailyAdapter = DailyAdapter(ArrayList(), requireContext())
+
         rvHourly.adapter = hourlyAdapter
         rvDaily.adapter = dailyAdapter
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bind()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        val hourlyAdapter = HourlyAdapter(ArrayList(), requireContext())
+        val dailyAdapter = DailyAdapter(ArrayList(), requireContext())
+        initRecyclers(hourlyAdapter, dailyAdapter)
         requestPermissions()
+        observeLiveData(dailyAdapter, hourlyAdapter)
+    }
 
-
+    private fun observeLiveData(dailyAdapter: DailyAdapter, hourlyAdapter: HourlyAdapter) {
         weatherViewModel.weatherLiveData.observe(viewLifecycleOwner, {
-            tvCommonInfo.text = it.toString()
-            tvCurrentWeather.text = it.current.toString()
-            dailyAdapter.updateList(it.daily!!, it)
-            hourlyAdapter.updateList(it.hourly!!, it)
-
+            if (it != null) {
+                tvCommonInfo.text = it.toString()
+                tvCurrentWeather.text = it.current.toString()
+                dailyAdapter.updateList(it.daily!!, it)
+                hourlyAdapter.updateList(it.hourly!!, it)
+            }
         })
+        // getCurrentLocation(weatherViewModel)
+        weatherViewModel.getCachedForecast()
+        weatherViewModel.errorMessage.observe(viewLifecycleOwner, {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        })
+        weatherViewModel.loadMessage.observe(viewLifecycleOwner, {
+            tvCache.text = it
+        })
+        weatherViewModel.location.observe(viewLifecycleOwner, {
+            weatherViewModel.getOnecallForecast(it)
+        })
+    }
 
+    private fun bind() {
+        tvCommonInfo = fragmentWeatherBinding.tvCommonInfo
+        tvCurrentWeather = fragmentWeatherBinding.tvCurrentWeather
+        tvCache = fragmentWeatherBinding.tvCache
+        val btnGpsWeather = fragmentWeatherBinding.btnGpsWeather
+        btnGpsWeather.setOnClickListener {
+            getCurrentLocation()
+        }
     }
 
     @SuppressLint("ShowToast")
-    private fun getCurrentLocation(weatherViewModel: WeatherViewModel) {
+    private fun getCurrentLocation() {
         val request = LocationRequest.create().apply {
-            interval = 100000
-            fastestInterval = 5000
+            interval = 30 * 60 * 1000
+            fastestInterval = 5 * 60 * 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
-        val permission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        val permission = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
         if (permission == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(request, object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult) {
                     val location: Location? = locationResult.lastLocation
                     if (location != null) {
-                        Log.i("TAG", "callForLocation: lat: ${location.latitude} ; lon: ${location.longitude}")
-                        weatherViewModel.getOnecallForecast(location.latitude, location.longitude)
+                        Log.i(
+                            "TAG",
+                            "getCurrentLocation: lat: ${location.latitude} ; lon: ${location.longitude}"
+                        )
+                        weatherViewModel.location.postValue(location)
                     }
                 }
             }, null)
-        }else {
-            val snackbar = Snackbar.make(requireView(), "Требуется разрешение на местоположение", Snackbar.LENGTH_LONG)
+        } else {
+            val snackbar = Snackbar.make(
+                requireView(),
+                "Требуется разрешение на местоположение",
+                Snackbar.LENGTH_LONG
+            )
             snackbar.setAction("Запросить") {
                 requestPermissions()
             }
             snackbar.show()
         }
-
     }
-
-//    private fun isPermissionGranted(): Boolean {
-//        if (ContextCompat.checkSelfPermission(
-//                requireContext(),
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) == PackageManager.PERMISSION_GRANTED &&
-//            ContextCompat.checkSelfPermission(
-//                requireContext(),
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) == PackageManager.PERMISSION_GRANTED
-//        ) {
-//            return true
-//        }
-//        return false
-//    }
 
     private fun requestPermissions() {
         ActivityCompat
