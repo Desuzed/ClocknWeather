@@ -1,7 +1,6 @@
 package com.desuzed.clocknweather.ui
 
-import android.Manifest
-import android.annotation.SuppressLint
+import  android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -16,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.desuzed.clocknweather.databinding.FragmentWeatherBinding
 import com.desuzed.clocknweather.mvvm.AppViewModelFactory
 import com.desuzed.clocknweather.mvvm.Repository
@@ -35,6 +33,7 @@ class WeatherFragment : Fragment() {
         fragmentWeatherBinding = FragmentWeatherBinding.inflate(inflater, container, false)
         return fragmentWeatherBinding.root
     }
+
     val requestCode: Int = 100
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var fragmentWeatherBinding: FragmentWeatherBinding
@@ -57,10 +56,10 @@ class WeatherFragment : Fragment() {
         val lmHourly = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rvDaily.layoutManager = lmDaily
         rvHourly.layoutManager = lmHourly
-
         rvHourly.adapter = hourlyAdapter
         rvDaily.adapter = dailyAdapter
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,10 +70,11 @@ class WeatherFragment : Fragment() {
         initRecyclers(hourlyAdapter, dailyAdapter)
         requestPermissions()
         observeLiveData(dailyAdapter, hourlyAdapter)
+        initLocation()
     }
 
     private fun observeLiveData(dailyAdapter: DailyAdapter, hourlyAdapter: HourlyAdapter) {
-        weatherViewModel.weatherLiveData.observe(viewLifecycleOwner, {
+        weatherViewModel.oneCallLiveData.observe(viewLifecycleOwner, {
             if (it != null) {
                 tvCommonInfo.text = it.toString()
                 tvCurrentWeather.text = it.current.toString()
@@ -83,33 +83,43 @@ class WeatherFragment : Fragment() {
             }
         })
         // getCurrentLocation(weatherViewModel)
-        weatherViewModel.getCachedForecast()
         weatherViewModel.errorMessage.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         })
         weatherViewModel.loadMessage.observe(viewLifecycleOwner, {
             tvCache.text = it
         })
-        weatherViewModel.location.observe(viewLifecycleOwner, {
-            weatherViewModel.getOnecallForecast(it)
+
+        weatherViewModel.fiveDayForecastLiveData.observe(viewLifecycleOwner, {
+            Log.i("TAG", "observeLiveData: success ")
         })
+//        weatherViewModel.location.observe(viewLifecycleOwner, {
+//            weatherViewModel.getOnecallForecast(it)
+//        })
+        weatherViewModel.getCachedForecast()
     }
 
-    private fun bind() {
+     private fun bind() {
         tvCommonInfo = fragmentWeatherBinding.tvCommonInfo
         tvCurrentWeather = fragmentWeatherBinding.tvCurrentWeather
         tvCache = fragmentWeatherBinding.tvCache
         val btnGpsWeather = fragmentWeatherBinding.btnGpsWeather
         btnGpsWeather.setOnClickListener {
-            getCurrentLocation()
+            getOnecallForecast()
+        }
+        val etCity = fragmentWeatherBinding.etCity
+        val btnGetFiveDayForecast = fragmentWeatherBinding.btnGetFiveDayForecast
+
+        btnGetFiveDayForecast.setOnClickListener {
+            val city = etCity.text.toString()
+            weatherViewModel.getFiveDayForecast(city)
         }
     }
 
-    @SuppressLint("ShowToast")
-    private fun getCurrentLocation() {
+    private fun initLocation() {
         val request = LocationRequest.create().apply {
-            interval = 30 * 60 * 1000
-            fastestInterval = 5 * 60 * 1000
+            interval =10*1000
+            fastestInterval = 5*1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         val permission = ContextCompat.checkSelfPermission(
@@ -125,6 +135,11 @@ class WeatherFragment : Fragment() {
                             "TAG",
                             "getCurrentLocation: lat: ${location.latitude} ; lon: ${location.longitude}"
                         )
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "lat: ${location.latitude} ; lon: ${location.longitude}",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                         weatherViewModel.location.postValue(location)
                     }
                 }
@@ -140,6 +155,10 @@ class WeatherFragment : Fragment() {
             }
             snackbar.show()
         }
+    }
+
+    private fun getOnecallForecast() {
+        weatherViewModel.getOnecallForecast(weatherViewModel.location.value!!)
     }
 
     private fun requestPermissions() {

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.desuzed.clocknweather.retrofit.FiveDayForecast
 import com.desuzed.clocknweather.retrofit.OnecallApi
 import com.desuzed.clocknweather.retrofit.WeatherService
 import com.google.gson.Gson
@@ -62,6 +63,12 @@ class Repository(val app: Application) {
         return WeatherService
             .getInstance()
             .getForecastOnecall(lat.toString(), lon.toString())
+    }
+
+    suspend fun getFiveDayForecast (city: String): Response<FiveDayForecast> {
+        return WeatherService
+            .getInstance()
+            .getFiveDayForecast(city)
     }
 
     companion object {

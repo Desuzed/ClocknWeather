@@ -1,7 +1,6 @@
 package com.desuzed.clocknweather.ui
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -23,8 +22,6 @@ import com.desuzed.clocknweather.util.ArrowImageView
 import com.desuzed.clocknweather.util.CheckBoxManager
 import com.desuzed.clocknweather.util.MusicPlayer
 import com.desuzed.clocknweather.util.TimeGetter
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn

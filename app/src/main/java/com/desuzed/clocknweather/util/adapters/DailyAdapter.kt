@@ -44,14 +44,13 @@ class DailyAdapter(
         val dWindSpeed: TextView = itemView.findViewById(R.id.dWindSpeed)
         val dSunrise: TextView = itemView.findViewById(R.id.dSunrise)
         val dSunset: TextView = itemView.findViewById(R.id.dSunset)
-//        val dMoonrise: TextView = itemView.findViewById(R.id.dMoonrise)
-//        val dMoonset: TextView = itemView.findViewById(R.id.dMoonset)     Added recycler view fulfilled with hourly and daily forecast
+
 
         @SuppressLint("SetTextI18n", "SimpleDateFormat")
         fun bind (dailyItem : OnecallApi.Daily, onecall: OnecallApi){
             val sdfDate = SimpleDateFormat("dd/MM/yy")
             val sdfSun = SimpleDateFormat("HH:mm")
-            var timezone = TimeZone.getTimeZone(onecall.timezone)
+            val timezone = TimeZone.getTimeZone(onecall.timezone)
             sdfDate.timeZone = timezone
             sdfSun.timeZone = timezone
             dDate.text =  sdfDate.format(dailyItem.date*1000)

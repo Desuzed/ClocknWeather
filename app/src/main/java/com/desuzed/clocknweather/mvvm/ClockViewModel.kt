@@ -1,24 +1,15 @@
 package com.desuzed.clocknweather.mvvm
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.desuzed.clocknweather.rx.HourObserver
-import com.desuzed.clocknweather.rx.MSecObserver
-import com.desuzed.clocknweather.rx.MinuteObserver
-import com.desuzed.clocknweather.rx.SecObserver
 import com.desuzed.clocknweather.util.MusicPlayer
 import com.desuzed.clocknweather.util.TimeGetter
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.functions.Predicate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 
-import java.util.concurrent.TimeUnit
 
 class ClockViewModel(private val repo: Repository) : ViewModel(){
     val hourLiveData = MutableLiveData<Int>()
