@@ -1,5 +1,6 @@
 package com.desuzed.clocknweather.retrofit
 
+import com.desuzed.clocknweather.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -8,23 +9,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface WeatherService {
-//data/2.5/forecast?q={city name}&appid={API key}
-    @GET("data/2.5/weather?&lang=ru&units=metric&APPID=$appId")
-    suspend  fun getFiveDayForecast(@Query("q") city: String): Response<FiveDayForecast>
-
-    @GET("data/2.5/onecall?&lang=ru&units=metric&APPID=$appId")
-    suspend fun getForecastOnecall(
-        @Query("lat") lat: String,
-        @Query("lon") lon: String
-    ): Response<OnecallApi>
+interface WeatherApiService {
+    @GET("forecast.json?key=${BuildConfig.WEATHER_API_KEY}&days=7&lang=ru")
+    suspend fun getForecast(
+        @Query("q") query: String
+    ): Response<WeatherApi>
 
     companion object{
-        private val baseUrl = "https://api.openweathermap.org/"
-        private const val appId = "9154a207f4437c78b9bbfbffeeb98e1a"
-        var weatherService : WeatherService? = null
-        fun getInstance() : WeatherService {
-            if (weatherService == null){
+        private const val baseUrl = "https://api.weatherapi.com/v1/"
+        private var weatherApiService : WeatherApiService? = null
+        fun getInstance() : WeatherApiService {
+            if (weatherApiService == null){
                 val interceptor = HttpLoggingInterceptor()
                 interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
                 val client = OkHttpClient.Builder()
@@ -35,9 +30,9 @@ interface WeatherService {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build()
-                weatherService = retrofit.create(WeatherService::class.java)
+                weatherApiService = retrofit.create(WeatherApiService::class.java)
             }
-            return weatherService!!
+            return weatherApiService!!
         }
     }
 }

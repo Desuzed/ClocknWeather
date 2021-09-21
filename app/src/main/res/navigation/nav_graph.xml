@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/clockFragment">
+    app:startDestination="@id/weatherFragment">
 
-    <fragment
-        android:id="@+id/clockFragment"
-        android:name="com.desuzed.clocknweather.ui.ClockFragment"
-        android:label="ClockFragment" />
+
     <fragment
         android:id="@+id/weatherFragment"
         android:name="com.desuzed.clocknweather.ui.WeatherFragment"
-        android:label="WeatherFragment" />
+        android:label="WeatherFragment"
+        tools:layout="@layout/fragment_weather" />
+    <fragment
+        android:id="@+id/tenDaysFragment"
+        android:name="com.desuzed.clocknweather.ui.TenDaysWeatherFragment"
+        android:label="fragment_ten_days_weather"
+        tools:layout="@layout/fragment_ten_days_weather" />
+
 </navigation>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:id="@+id/container_main"
+    >
+
+
+    <TextView
+        android:id="@+id/tvHumidityMainHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Humidity" />
+
+    <TextView
+        android:id="@+id/tvHumidityMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textStart"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tvHumidityMainHeader"
+        app:layout_constraintTop_toBottomOf="@id/tvHumidityMainHeader"
+        tools:text="78%" />
+
+
+    <TextView
+        android:id="@+id/tvPressureMainHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/tvHumidityMain"
+        app:layout_constraintTop_toBottomOf="@id/tvHumidityMain"
+       android:text="Pressure" />
+
+    <TextView
+        android:id="@+id/tvPressureMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textStart"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tvPressureMainHeader"
+        app:layout_constraintTop_toBottomOf="@id/tvPressureMainHeader"
+        tools:text="763 mmHg" />
+
+    <TextView
+        android:id="@+id/tvSunMainHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/tvPressureMain"
+        app:layout_constraintTop_toBottomOf="@id/tvPressureMain"
+        android:text="Sunrise/sunset" />
+
+    <TextView
+        android:id="@+id/tvSunMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:textAlignment="textStart"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tvSunMainHeader"
+        app:layout_constraintTop_toBottomOf="@id/tvSunMainHeader"
+        tools:text="06:20 AM\n20:32 PM" />
+
+    <TextView
+        android:id="@+id/tvPopMainHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textEnd"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Probability of precipitation" />
+
+    <TextView
+        android:id="@+id/tvPopMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textEnd"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/tvPopMainHeader"
+        app:layout_constraintTop_toBottomOf="@id/tvPopMainHeader"
+        tools:text="50%" />
+
+    <TextView
+        android:id="@+id/tvWindMainHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textEnd"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/tvPopMain"
+        app:layout_constraintTop_toBottomOf="@id/tvPopMain"
+        android:text="Wind" />
+
+    <TextView
+        android:id="@+id/tvWindMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textEnd"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/tvWindMainHeader"
+        app:layout_constraintTop_toBottomOf="@id/tvWindMainHeader"
+        tools:text="50%" />
+
+    <TextView
+        android:id="@+id/tvMoonMainHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAlignment="textEnd"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/tvWindMain"
+        app:layout_constraintTop_toBottomOf="@id/tvWindMain"
+        android:text="Moonrise/Moonset" />
+
+    <TextView
+        android:id="@+id/tvMoonMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:textAlignment="textEnd"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/tvMoonMainHeader"
+        app:layout_constraintTop_toBottomOf="@id/tvMoonMainHeader"
+        tools:text="06:20 AM\n20:32 PM" />
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

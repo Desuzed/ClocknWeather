@@ -1,28 +1,28 @@
 package com.desuzed.clocknweather.ui
 
-import  android.Manifest
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.desuzed.clocknweather.R
 import com.desuzed.clocknweather.databinding.FragmentWeatherBinding
 import com.desuzed.clocknweather.mvvm.AppViewModelFactory
-import com.desuzed.clocknweather.mvvm.Repository
 import com.desuzed.clocknweather.mvvm.WeatherViewModel
-import com.desuzed.clocknweather.util.adapters.DailyAdapter
-import com.desuzed.clocknweather.util.adapters.HourlyAdapter
-import com.google.android.gms.location.*
-import com.google.android.material.snackbar.Snackbar
+import com.desuzed.clocknweather.util.adapters.HourAdapter
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.math.roundToInt
 
 class WeatherFragment : Fragment() {
     override fun onCreateView(
@@ -34,149 +34,129 @@ class WeatherFragment : Fragment() {
         return fragmentWeatherBinding.root
     }
 
-    val requestCode: Int = 100
-    lateinit var fusedLocationClient: FusedLocationProviderClient
-    lateinit var fragmentWeatherBinding: FragmentWeatherBinding
-    private lateinit var tvCache: TextView
-    private lateinit var tvCommonInfo: TextView
-    private lateinit var tvCurrentWeather: TextView
+    private lateinit var fragmentWeatherBinding: FragmentWeatherBinding
+    private lateinit var tvFeelsLike: TextView
+    private lateinit var tvDate: TextView
+    private lateinit var tvPlace: TextView
+    private lateinit var tvCurrentTemp: TextView
+    private lateinit var tvDescription: TextView
+
+    private lateinit var tvHumidity: TextView
+    private lateinit var tvPressure: TextView
+    private lateinit var tvSun: TextView
+    private lateinit var tvPop: TextView
+    private lateinit var tvWind: TextView
+    private lateinit var tvMoon: TextView
+
+    private lateinit var ivIcon: ImageView
 
     private val weatherViewModel: WeatherViewModel by lazy {
         ViewModelProvider(
-            this,
-            AppViewModelFactory(Repository(requireActivity().application))
+            requireActivity(),
+            AppViewModelFactory(requireActivity().application)
         )
             .get(WeatherViewModel::class.java)
     }
 
-    private fun initRecyclers(hourlyAdapter: HourlyAdapter, dailyAdapter: DailyAdapter) {
-        val rvDaily = fragmentWeatherBinding.rvDaily
-        val rvHourly = fragmentWeatherBinding.rvHourly
-        val lmDaily = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val lmHourly = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        rvDaily.layoutManager = lmDaily
-        rvHourly.layoutManager = lmHourly
-        rvHourly.adapter = hourlyAdapter
-        rvDaily.adapter = dailyAdapter
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bind()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        val hourlyAdapter = HourlyAdapter(ArrayList(), requireContext())
-        val dailyAdapter = DailyAdapter(ArrayList(), requireContext())
-        initRecyclers(hourlyAdapter, dailyAdapter)
-        requestPermissions()
-        observeLiveData(dailyAdapter, hourlyAdapter)
-        initLocation()
-    }
-
-    private fun observeLiveData(dailyAdapter: DailyAdapter, hourlyAdapter: HourlyAdapter) {
-        weatherViewModel.oneCallLiveData.observe(viewLifecycleOwner, {
-            if (it != null) {
-                tvCommonInfo.text = it.toString()
-                tvCurrentWeather.text = it.current.toString()
-                dailyAdapter.updateList(it.daily!!, it)
-                hourlyAdapter.updateList(it.hourly!!, it)
-            }
-        })
-        // getCurrentLocation(weatherViewModel)
-        weatherViewModel.errorMessage.observe(viewLifecycleOwner, {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-        })
-        weatherViewModel.loadMessage.observe(viewLifecycleOwner, {
-            tvCache.text = it
-        })
-
-        weatherViewModel.fiveDayForecastLiveData.observe(viewLifecycleOwner, {
-            Log.i("TAG", "observeLiveData: success ")
-        })
-//        weatherViewModel.location.observe(viewLifecycleOwner, {
-//            weatherViewModel.getOnecallForecast(it)
-//        })
+        val hourAdapter = HourAdapter(requireContext())
+        initRecycler(hourAdapter)
+        observeLiveData(hourAdapter)
         weatherViewModel.getCachedForecast()
     }
 
-     private fun bind() {
-        tvCommonInfo = fragmentWeatherBinding.tvCommonInfo
-        tvCurrentWeather = fragmentWeatherBinding.tvCurrentWeather
-        tvCache = fragmentWeatherBinding.tvCache
+    @SuppressLint("SimpleDateFormat")
+    val sdf = SimpleDateFormat("dd.MM.yy\nHH:mm")
+
+    @SuppressLint("SetTextI18n")
+    private fun observeLiveData(hourAdapter: HourAdapter) {
+        //TODO refactoring
+        weatherViewModel.weatherApiLiveData.observe(viewLifecycleOwner, {
+            if (it != null) {
+                val date = it.location?.localtime_epoch?.times(1000)
+                val timeZone = it.location?.tzId.toString()
+                val current = it.current
+                val forecastDay = it.forecast?.forecastday!![0]
+                sdf.timeZone = TimeZone.getTimeZone(timeZone)
+                Glide.with(this).load("https:${current?.condition?.icon}").into(ivIcon)
+                hourAdapter.updateList(
+                    weatherViewModel.generateList(date, it, timeZone),
+                    timeZone
+                )
+                tvDate.text = sdf.format(date)
+                tvPlace.text =
+                    "${it.location?.name}, ${it.location?.region}"
+                tvCurrentTemp.text =
+                    current?.temp?.roundToInt().toString() + resources.getString(R.string.celsius)
+                tvDescription.text = current?.condition?.text
+                tvFeelsLike.text =
+                    "Fells like:${current?.feelsLike?.roundToInt()}" + resources.getString(R.string.celsius)
+                tvHumidity.text = "${current?.humidity.toString()}%"
+                tvPressure.text = "${current?.pressureMb.toString()} mb"
+                tvPop.text = "${forecastDay.day?.popRain.toString()}%, ${current?.precipMm} mm" //TODO обработать снежные осадки
+                tvWind.text = "${current?.windSpeed} km/h, ${current?.windDir}"
+                tvSun.text = "${forecastDay.astro?.sunrise}\n${forecastDay.astro?.sunset}"
+                tvMoon.text = "${forecastDay.astro?.moonrise}\n${forecastDay.astro?.moonset}"
+            }
+        })
+
+        weatherViewModel.errorMessage.observe(viewLifecycleOwner, {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        })
+    }
+
+    private fun initRecycler(hourlyAdapter: HourAdapter) {
+        val rvHour = fragmentWeatherBinding.rvHourly
+        val lvHour = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        rvHour.layoutManager = lvHour
+        rvHour.adapter = hourlyAdapter
+    }
+
+    private fun bind() {
+        tvDate = fragmentWeatherBinding.tvDate
+        tvPlace = fragmentWeatherBinding.tvPlace
+        tvCurrentTemp = fragmentWeatherBinding.tvCurrentTemp
+        tvDescription = fragmentWeatherBinding.tvDescription
+        tvFeelsLike = fragmentWeatherBinding.tvFeelsLike
+        tvHumidity = fragmentWeatherBinding.includedContainer.tvHumidityMain
+        tvPressure = fragmentWeatherBinding.includedContainer.tvPressureMain
+        tvSun = fragmentWeatherBinding.includedContainer.tvSunMain
+        tvPop = fragmentWeatherBinding.includedContainer.tvPopMain
+        tvWind = fragmentWeatherBinding.includedContainer.tvWindMain
+        tvMoon = fragmentWeatherBinding.includedContainer.tvMoonMain
+        ivIcon = fragmentWeatherBinding.imgIcon
+
         val btnGpsWeather = fragmentWeatherBinding.btnGpsWeather
         btnGpsWeather.setOnClickListener {
-            getOnecallForecast()
+            getGpsForecast()
         }
-        val etCity = fragmentWeatherBinding.etCity
-        val btnGetFiveDayForecast = fragmentWeatherBinding.btnGetFiveDayForecast
-
-        btnGetFiveDayForecast.setOnClickListener {
-            val city = etCity.text.toString()
-            weatherViewModel.getFiveDayForecast(city)
+        val etQuery = fragmentWeatherBinding.etQuery
+        val btnGetForecast = fragmentWeatherBinding.btnGetForecast
+        btnGetForecast.setOnClickListener {
+            val city = etQuery.text.toString()
+            weatherViewModel.getForecast(city)
         }
     }
 
-    private fun initLocation() {
-        val request = LocationRequest.create().apply {
-            interval =10*1000
-            fastestInterval = 5*1000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
+
+    private fun getGpsForecast() {
         val permission = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         )
         if (permission == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.requestLocationUpdates(request, object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    val location: Location? = locationResult.lastLocation
-                    if (location != null) {
-                        Log.i(
-                            "TAG",
-                            "getCurrentLocation: lat: ${location.latitude} ; lon: ${location.longitude}"
-                        )
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "lat: ${location.latitude} ; lon: ${location.longitude}",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-                        weatherViewModel.location.postValue(location)
-                    }
-                }
-            }, null)
+            weatherViewModel.getForecast("${weatherViewModel.location.value}")
         } else {
-            val snackbar = Snackbar.make(
-                requireView(),
+            Toast.makeText(
+                requireContext(),
                 "Требуется разрешение на местоположение",
-                Snackbar.LENGTH_LONG
+                Toast.LENGTH_LONG
             )
-            snackbar.setAction("Запросить") {
-                requestPermissions()
-            }
-            snackbar.show()
+                .show()
+            (activity as MainActivity).requestPermissions()
         }
-    }
 
-    private fun getOnecallForecast() {
-        weatherViewModel.getOnecallForecast(weatherViewModel.location.value!!)
-    }
-
-    private fun requestPermissions() {
-        ActivityCompat
-            .requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                requestCode
-            )
-    }
-
-    //
-    companion object {
-        fun newInstance(): WeatherFragment {
-            return WeatherFragment()
-        }
     }
 }
