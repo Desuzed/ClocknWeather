@@ -8,13 +8,35 @@
 
     <fragment
         android:id="@+id/weatherFragment"
-        android:name="com.desuzed.clocknweather.ui.WeatherFragment"
+        android:name="com.desuzed.clocknweather.ui.fragments.WeatherMainFragment"
         android:label="WeatherFragment"
-        tools:layout="@layout/fragment_weather" />
+        tools:layout="@layout/fragment_weather_main" />
+<!--    <fragment-->
+<!--        android:id="@+id/tenDaysFragment"-->
+<!--        android:name="com.desuzed.clocknweather.ui.fragments.TenDaysWeatherFragment"-->
+<!--        android:label="fragment_ten_days_weather"-->
+<!--        tools:layout="@layout/fragment_ten_days_weather" />-->
+    <dialog
+        android:id="@+id/mapBottomSheetFragment"
+        android:name="com.desuzed.clocknweather.ui.fragments.MapBottomSheetFragment"
+        tools:layout="@layout/frag_map_bottom_sheet"
+        android:label="MapBottomSheetFragment" >
+        <action
+            android:id="@+id/action_mapBottomSheetFragment_to_weatherFragment"
+            app:destination="@id/weatherFragment" />
+    </dialog>
     <fragment
-        android:id="@+id/tenDaysFragment"
-        android:name="com.desuzed.clocknweather.ui.TenDaysWeatherFragment"
-        android:label="fragment_ten_days_weather"
-        tools:layout="@layout/fragment_ten_days_weather" />
+        android:id="@+id/locationFragment"
+        android:name="com.desuzed.clocknweather.ui.fragments.LocationFragment"
+        android:label="fragment_location"
+        tools:layout="@layout/fragment_location" >
+        <action
+            android:id="@+id/action_locationFragment_to_mapBottomSheetFragment"
+            app:destination="@id/mapBottomSheetFragment" />
+        <action
+            android:id="@+id/action_locationFragment_to_weatherFragment"
+            app:destination="@id/weatherFragment" />
+    </fragment>
+
 
 </navigation>

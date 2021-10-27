@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_search"
-        android:orderInCategory="300"
-        android:title="Search"
-        android:icon="@drawable/ic_search"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="android.widget.SearchView" />
+
+<!--    <item-->
+<!--        android:id="@+id/action_map"-->
+<!--        android:orderInCategory="200"-->
+<!--        android:title="Map"-->
+<!--        android:icon="@drawable/ic_map"-->
+<!--        app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/action_location"
-        android:orderInCategory="300"
+        android:orderInCategory="100"
         android:title="Location"
         android:icon="@drawable/ic_location"
         app:showAsAction="always" />

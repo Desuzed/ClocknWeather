@@ -4,7 +4,14 @@
     <item android:title="@string/weather"
         android:id="@+id/weatherFragment"
         android:icon="@drawable/ic_weather"/>
-    <item android:title="10 days weather"
-        android:id="@+id/tenDaysFragment"
-        android:icon="@drawable/ic_weather"/>
+
+    <item android:title="My Locations"
+        android:id="@+id/locationFragment"
+        android:icon="@drawable/ic_location"/>
+
+<!--    <item android:title="10 days weather"-->
+<!--        android:id="@+id/tenDaysFragment"-->
+<!--        android:icon="@drawable/ic_weather"/>-->
+
+
 </menu>
