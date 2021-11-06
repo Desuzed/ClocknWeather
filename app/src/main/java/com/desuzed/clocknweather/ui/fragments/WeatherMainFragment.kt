@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.desuzed.clocknweather.App
@@ -21,6 +23,7 @@ import com.desuzed.clocknweather.mvvm.room.model.FavoriteLocationDto
 import com.desuzed.clocknweather.mvvm.vm.AppViewModelFactory
 import com.desuzed.clocknweather.mvvm.vm.LocationViewModel
 import com.desuzed.clocknweather.mvvm.vm.NetworkViewModel
+import com.desuzed.clocknweather.mvvm.vm.SharedViewModel
 import com.desuzed.clocknweather.network.dto.WeatherApi
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -38,7 +41,7 @@ class WeatherMainFragment : Fragment() {
         return fragmentWeatherBinding.root
     }
 
-    private val tenAdapter by lazy { TenDaysRvAdapter() }
+    //private val tenAdapter by lazy { TenDaysRvAdapter() }
     private val hourAdapter by lazy { HourAdapter() }
     private val networkViewModel: NetworkViewModel by lazy {
         ViewModelProvider(
@@ -47,6 +50,8 @@ class WeatherMainFragment : Fragment() {
         )
             .get(NetworkViewModel::class.java)
     }
+    private val sharedViewModel by activityViewModels<SharedViewModel>()
+
     private val locationViewModel: LocationViewModel by lazy {
         ViewModelProvider(
             requireActivity(),
@@ -58,9 +63,13 @@ class WeatherMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // bind()
         initRecyclers()
         observeLiveData()
+        tvNextDays.setOnClickListener {
+            findNavController().navigate(R.id.action_weatherFragment_to_nextDaysBottomSheet)
+
+        }
+
     }
 
 
@@ -70,12 +79,7 @@ class WeatherMainFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun observeLiveData() {
         networkViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
-        locationViewModel.saveLocationVisibility.observe(viewLifecycleOwner, {
-            when (it) {
-                true -> tvSaveLocation.visibility = View.VISIBLE
-                false -> tvSaveLocation.visibility = View.GONE
-            }
-        })
+        sharedViewModel.saveLocationVisibility.observe(viewLifecycleOwner, saveLocationObserver)
     }
 
     private val weatherObserver = Observer<WeatherApi?> { response ->
@@ -83,6 +87,13 @@ class WeatherMainFragment : Fragment() {
             return@Observer
         }
         updateUi(response)
+    }
+
+    private val saveLocationObserver = Observer<Boolean> {
+        when (it) {
+            true -> tvSaveLocation.visibility = View.VISIBLE
+            false -> tvSaveLocation.visibility = View.GONE
+        }
     }
 
 
@@ -104,7 +115,7 @@ class WeatherMainFragment : Fragment() {
         )
         tvSaveLocation.setOnClickListener {
             locationViewModel.insert(favoriteLocation)
-            locationViewModel.saveLocationVisibility.postValue(false)
+            sharedViewModel.toggleSaveButton(false)
         }
 
         val date = response.locationDto?.localtime_epoch?.times(1000)
@@ -117,10 +128,10 @@ class WeatherMainFragment : Fragment() {
             networkViewModel.generateList(date, response, timeZone),
             timeZone
         )
-        tenAdapter.updateList(
-            response.forecast?.forecastday!!,
-            response.locationDto?.tzId.toString()
-        )
+//        tenAdapter.updateList(
+//            response.forecast?.forecastday!!,
+//            response.locationDto?.tzId.toString()
+//        )
         tvDate.text = sdf.format(date)
         //TODO Есть места у которых нет региона и тогда будет запятая с пробелом после города
         tvPlace.text =
@@ -144,10 +155,10 @@ class WeatherMainFragment : Fragment() {
     private fun initRecyclers() {
         val rvHour = fragmentWeatherBinding.rvHourly
         val lvHour = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val rvTen = fragmentWeatherBinding.rvTenDaysMain
-        rvTen.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        rvTen.adapter = tenAdapter
+//        val rvTen = fragmentWeatherBinding.rvTenDaysMain
+//        rvTen.layoutManager =
+//            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+//        rvTen.adapter = tenAdapter
         rvHour.layoutManager = lvHour
         rvHour.adapter = hourAdapter
     }
@@ -165,28 +176,14 @@ class WeatherMainFragment : Fragment() {
     private val tvPop: TextView by lazy { fragmentWeatherBinding.includedContainer.tvPopMain }
     private val tvWind: TextView by lazy { fragmentWeatherBinding.includedContainer.tvWindMain }
     private val tvMoon: TextView by lazy { fragmentWeatherBinding.includedContainer.tvMoonMain }
+    private val tvNextDays: TextView by lazy { fragmentWeatherBinding.tvNextDaysHeader }
     private val ivIcon: ImageView by lazy { fragmentWeatherBinding.imgIcon }
-
-//    private fun bind() {
-//       // tvDate = fragmentWeatherBinding.tvDate
-//      //  tvPlace = fragmentWeatherBinding.tvPlace
-//      //  tvCurrentTemp = fragmentWeatherBinding.tvCurrentTemp
-//      //  tvDescription = fragmentWeatherBinding.tvDescription
-//      //  tvFeelsLike = fragmentWeatherBinding.tvFeelsLike
-//       // tvSaveLocation = fragmentWeatherBinding.tvSaveLocation
-//      //  tvHumidity = fragmentWeatherBinding.includedContainer.tvHumidityMain
-//        tvPressure = fragmentWeatherBinding.includedContainer.tvPressureMain
-//        tvSun = fragmentWeatherBinding.includedContainer.tvSunMain
-//        tvPop = fragmentWeatherBinding.includedContainer.tvPopMain
-//        tvWind = fragmentWeatherBinding.includedContainer.tvWindMain
-//        tvMoon = fragmentWeatherBinding.includedContainer.tvMoonMain
-//        //ivIcon = fragmentWeatherBinding.imgIcon
-//    }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
         networkViewModel.weatherApiLiveData.removeObserver(weatherObserver)
+        sharedViewModel.saveLocationVisibility.removeObserver(saveLocationObserver)
     }
 
 }

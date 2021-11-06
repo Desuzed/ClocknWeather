@@ -1,4 +1,4 @@
-package com.desuzed.clocknweather.network
+package com.desuzed.clocknweather.network.retrofit
 
 import java.io.IOException
 
@@ -9,5 +9,5 @@ sealed class NetworkResponse<out T : Any, out U : Any> {
 
     data class NetworkError(val error: IOException) : NetworkResponse<Nothing, Nothing>()
 
-    data class UnknownError(val error: Throwable) : NetworkResponse<Nothing, Nothing>()
+    data class UnknownError(val error: Throwable?) : NetworkResponse<Nothing, Nothing>()
 }

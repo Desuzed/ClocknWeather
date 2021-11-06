@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 class Forecast {
     @SerializedName("forecastday")
-    var forecastday: ArrayList<ForecastDay>? = null
+    var forecastday: ArrayList<ForecastDayDto>? = null
 }

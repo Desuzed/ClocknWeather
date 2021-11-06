@@ -2,7 +2,7 @@ package com.desuzed.clocknweather.network.dto
 
 import com.google.gson.annotations.SerializedName
 
-class ForecastDay {
+class ForecastDayDto {
     @SerializedName("date")
     var date: String? = null
 

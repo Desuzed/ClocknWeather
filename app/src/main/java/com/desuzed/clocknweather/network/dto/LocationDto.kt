@@ -30,5 +30,8 @@ class LocationDto {
         return "Location(name=$name, \nregion=$region, \ncountry=$country, \nlat=$lat, \nlon=$lon, \ntz_id=$tzId, \nlocaltime_epoch=$localtime_epoch, \nlocaltime=$localtime)"
     }
 
+    fun toStringLatLon (): String{
+        return "$lat,$lon"
+    }
 
 }

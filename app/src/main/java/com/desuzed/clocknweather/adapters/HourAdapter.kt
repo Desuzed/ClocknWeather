@@ -3,7 +3,6 @@ package com.desuzed.clocknweather.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.desuzed.clocknweather.R
 import com.desuzed.clocknweather.databinding.HourItemBinding
-import com.desuzed.clocknweather.databinding.TenDayItemBinding
 import com.desuzed.clocknweather.network.dto.Hour
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,6 +36,7 @@ class HourAdapter : RecyclerView.Adapter<HourAdapter.HourVH>() {
     override fun getItemCount(): Int {
         return list.size
     }
+    @SuppressLint("NotifyDataSetChanged")
     fun updateList (newList : ArrayList <Hour>, timeZone: String){
         list = newList
         mTimeZone = timeZone

@@ -17,4 +17,9 @@ class FavoriteLocationRepository(private val favoriteLocationDAO: FavoriteLocati
     suspend fun deleteItem(favoriteLocationDto: FavoriteLocationDto) {
         favoriteLocationDAO.deleteItem(favoriteLocationDto)
     }
+
+    @WorkerThread
+    suspend fun containsPrimaryKey(latLon : String) : Boolean{
+        return favoriteLocationDAO.containsPrimaryKey(latLon)
+    }
 }

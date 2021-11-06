@@ -10,7 +10,11 @@
         android:id="@+id/weatherFragment"
         android:name="com.desuzed.clocknweather.ui.fragments.WeatherMainFragment"
         android:label="WeatherFragment"
-        tools:layout="@layout/fragment_weather_main" />
+        tools:layout="@layout/fragment_weather_main" >
+        <action
+            android:id="@+id/action_weatherFragment_to_nextDaysBottomSheet"
+            app:destination="@id/nextDaysBottomSheet" />
+    </fragment>
 <!--    <fragment-->
 <!--        android:id="@+id/tenDaysFragment"-->
 <!--        android:name="com.desuzed.clocknweather.ui.fragments.TenDaysWeatherFragment"-->
@@ -37,6 +41,10 @@
             android:id="@+id/action_locationFragment_to_weatherFragment"
             app:destination="@id/weatherFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/nextDaysBottomSheet"
+        android:name="com.desuzed.clocknweather.ui.fragments.NextDaysBottomSheet"
+        android:label="NextDaysBottomSheet" />
 
 
 </navigation>

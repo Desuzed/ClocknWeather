@@ -41,11 +41,9 @@ class NetworkLiveData(val context: Context) : LiveData<Boolean>(true) {
     private fun createNetworkCallback() = object : ConnectivityManager.NetworkCallback() {
         @SuppressLint("MissingPermission")
         override fun onAvailable(network: Network) {
-            Log.i(TAG, "onAvailable: $network")
             val networkCapabilities = networkManager.getNetworkCapabilities(network)
             val isInternet =
                 networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            Log.i(TAG, "onAvailable: $network \n $isInternet")
             if (isInternet == true) {
                 validNetworks.add(network)
             }
@@ -54,7 +52,6 @@ class NetworkLiveData(val context: Context) : LiveData<Boolean>(true) {
         }
 
         override fun onLost(network: Network) {
-            Log.i(TAG, "onLost: $network")
             validNetworks.remove(network)
             checkValidNetworks()
         }

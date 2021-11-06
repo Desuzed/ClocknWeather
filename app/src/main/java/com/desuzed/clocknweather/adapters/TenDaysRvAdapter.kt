@@ -13,14 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.desuzed.clocknweather.R
 import com.desuzed.clocknweather.databinding.TenDayItemBinding
-import com.desuzed.clocknweather.network.dto.ForecastDay
+import com.desuzed.clocknweather.network.dto.ForecastDayDto
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class TenDaysRvAdapter : RecyclerView.Adapter<TenDaysRvAdapter.TenDaysVH>() {
-    private var list: ArrayList<ForecastDay> = ArrayList()
+    private var list: ArrayList<ForecastDayDto> = ArrayList()
     private var mTimeZone: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TenDaysVH {
@@ -48,7 +48,7 @@ class TenDaysRvAdapter : RecyclerView.Adapter<TenDaysRvAdapter.TenDaysVH>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateList(newList: ArrayList<ForecastDay>, timeZone: String) {
+    fun updateList(newList: ArrayList<ForecastDayDto>, timeZone: String) {
         list = newList
         mTimeZone = timeZone
         notifyDataSetChanged()
@@ -68,22 +68,22 @@ class TenDaysRvAdapter : RecyclerView.Adapter<TenDaysRvAdapter.TenDaysVH>() {
         private val tvMoonTen: TextView = binding.tvMoonTen
         private val rvTenHourly: RecyclerView = binding.rvTenHourly
         private val tenIcon: ImageView = binding.tenIcon
-        val ivArrow: ImageView = binding.ivArrow
-        val expandableContainer: ConstraintLayout =
+        private val ivArrow: ImageView = binding.ivArrow
+        private val expandableContainer: ConstraintLayout =
             binding.expandableContainer
         val clTenDays: ConstraintLayout = binding.clTenDays
 
         //TODO refactor  to mapper
         @SuppressLint("SetTextI18n", "SimpleDateFormat")
-        fun bind(forecastDay: ForecastDay, timeZone: String) {
+        fun bind(forecastDayDto: ForecastDayDto, timeZone: String) {
             val sdf = SimpleDateFormat("dd.MM.yy")
-            val day = forecastDay.day
+            val day = forecastDayDto.day
             Glide
                 .with(context)
-                .load("https:${forecastDay.day?.condition?.icon}")
+                .load("https:${forecastDayDto.day?.condition?.icon}")
                 .into(tenIcon)
             sdf.timeZone = TimeZone.getTimeZone(timeZone)
-            tvTenDate.text = sdf.format(forecastDay.dateEpoch * 1000)
+            tvTenDate.text = sdf.format(forecastDayDto.dateEpoch * 1000)
             tvTenText.text = day?.condition?.text.toString()
             tvTenMaxTemp.text = day?.maxTemp?.roundToInt().toString() + context.resources.getString(
                 R.string.celsius
@@ -92,17 +92,17 @@ class TenDaysRvAdapter : RecyclerView.Adapter<TenDaysRvAdapter.TenDaysVH>() {
                 R.string.celsius
             )
             tvWindTen.text = "${day?.maxWind} km/h"
-            tvPressureTen.text = "${forecastDay.hour!![0].pressureMb} mb"
+            tvPressureTen.text = "${forecastDayDto.hour!![0].pressureMb} mb"
             tvHumidityTen.text = "${day?.avgHumidity.toString()}%"
             tvPopTen.text = "${day?.popRain.toString()}%, ${day?.totalPrecip.toString()} mm"
-            tvSunTen.text = "${forecastDay.astro?.sunrise}\n${forecastDay.astro?.sunset}"
-            tvMoonTen.text = "${forecastDay.astro?.moonrise}\n${forecastDay.astro?.moonset}"
+            tvSunTen.text = "${forecastDayDto.astro?.sunrise}\n${forecastDayDto.astro?.sunset}"
+            tvMoonTen.text = "${forecastDayDto.astro?.moonrise}\n${forecastDayDto.astro?.moonset}"
             rvTenHourly.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             val rvAdapter = HourAdapter()
-            rvAdapter.updateList(forecastDay.hour!!, timeZone)
+            rvAdapter.updateList(forecastDayDto.hour!!, timeZone)
             rvTenHourly.adapter = rvAdapter
-            val isExpanded = forecastDay.isExpanded
+            val isExpanded = forecastDayDto.isExpanded
             expandCollapse(isExpanded)
 
         }

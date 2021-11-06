@@ -3,12 +3,11 @@ package com.desuzed.clocknweather.util
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.desuzed.clocknweather.mvvm.LocationApp
 import com.desuzed.clocknweather.mvvm.vm.LocationViewModel
-import com.desuzed.clocknweather.network.dto.LatLon
+import com.desuzed.clocknweather.ui.StateRequest
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -20,22 +19,27 @@ class LocationHandler(
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(activity)
 
-
+//TODO refactor
     fun postCurrentLocation() {
         if (permissionsGranted()) {
-            fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
+            fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null)
                 .addOnSuccessListener {
+                    locationViewModel.stateLiveData.postValue(StateRequest.Loading())
                     if (it != null) {
                         val locationApp = LocationApp (it.latitude.toFloat(), it.longitude.toFloat())
                         locationViewModel.location.postValue(locationApp)
+                        locationViewModel.stateLiveData.postValue(StateRequest.Success())
+
                     }else{
-                        checkLocationToast.show()
+                      //  checkLocationToast.show()
+                        onError("Проверьте настройки местоположения")
+
                     }
-                    Log.i("TAG", "postCurrentLocation: $it")
 
                 }
         } else {
-            checkLocationToast.show()
+            onError("Проверьте настройки местоположения")
+           // checkLocationToast.show()
         }
     }
 
@@ -53,6 +57,11 @@ class LocationHandler(
 //            checkLocationToast.show()
 //        }
 //    }
+
+    fun onError(message: String) {
+        locationViewModel.stateLiveData.postValue(StateRequest.Error(message))
+    }
+
 
     private val checkLocationToast = Toast.makeText(
         activity,

@@ -183,34 +183,25 @@
             <!--                    app:maxImageSize="28dp" />-->
 
             <TextView
-                android:id="@+id/tvThreeDaysHeader"
+                android:id="@+id/tvNextDaysHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cvMain"
                 android:layout_marginTop="4dp"
-                android:text="Three Days forecast"
+                android:text="@string/next_days_forecast"
                 android:gravity="center"
                 android:textSize="18dp"
                 />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTenDaysMain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvThreeDaysHeader" />
-
-            <!--                <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-            <!--                    android:id="@+id/fabAddToFavorite"-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:src="@drawable/ic_location"-->
-            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                    app:layout_constraintEnd_toEndOf="parent" />-->
+<!--                            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                                android:id="@+id/fabTest"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:src="@drawable/ic_location"-->
+<!--                                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                                app:layout_constraintEnd_toEndOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

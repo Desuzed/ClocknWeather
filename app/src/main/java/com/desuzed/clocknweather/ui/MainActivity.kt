@@ -2,24 +2,17 @@ package com.desuzed.clocknweather.ui
 
 
 import android.Manifest
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.clocknweather.App
-import com.desuzed.clocknweather.R
 import com.desuzed.clocknweather.databinding.ActivityMainBinding
 import com.desuzed.clocknweather.mvvm.vm.AppViewModelFactory
 import com.desuzed.clocknweather.mvvm.vm.LocationViewModel
-import com.desuzed.clocknweather.mvvm.vm.NetworkViewModel
 import com.desuzed.clocknweather.util.LocationHandler
+
 class MainActivity : AppCompatActivity() {
     val locationHandler by lazy { LocationHandler(this, locationViewModel) }
     private val locationCode = 100
@@ -35,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind()
-        //TODO initialize networkLiveData
         requestLocationPermissions()
       //  locationHandler.postLastLocation()
     }

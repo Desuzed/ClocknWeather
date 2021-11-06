@@ -2,19 +2,16 @@ package com.desuzed.clocknweather.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.desuzed.clocknweather.R
 import com.desuzed.clocknweather.databinding.FavoriteLocationItemBinding
-import com.desuzed.clocknweather.databinding.TenDayItemBinding
 import com.desuzed.clocknweather.mvvm.room.model.FavoriteLocationDto
 
 class FavoriteLocationAdapter(
-    val onItemClickListener: OnItemClickListener,
+    private val onItemClickListener: OnItemClickListener,
 ) :
     ListAdapter<FavoriteLocationDto, FavoriteLocationAdapter.FavoriteLocationVH>(LocationsComparator()) {
 
@@ -80,7 +77,7 @@ class FavoriteLocationAdapter(
         }
 
     }
-//todo Refactor to high orer func
+//todo Refactor to high order func
     interface OnItemClickListener {
         fun onClick(favoriteLocationDto: FavoriteLocationDto)
         fun onLongClick(favoriteLocationDto: FavoriteLocationDto)

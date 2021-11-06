@@ -10,7 +10,11 @@ class LocationApp (val lat : Float, val lon : Float) {
     var region : String = ""
     var country : String = ""
     override fun toString(): String {
-        return "$lat,$lon"
+        return "$lat, $lon"
+    }
+
+    fun toStringInfoFields(): String {
+        return "$cityName, $region, $country"
     }
     fun hasLocationInfo () : Boolean = cityName.isNotEmpty() && region.isNotEmpty() && country.isNotEmpty()
 

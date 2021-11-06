@@ -18,4 +18,7 @@ interface FavoriteLocationDAO {
 
     @Query("DELETE FROM favorite_location_table")
     suspend fun deleteAll()
+
+    @Query("SELECT count(*)!=0 FROM favorite_location_table WHERE lat_lon = :latLon ")
+    suspend fun containsPrimaryKey(latLon: String): Boolean
 }

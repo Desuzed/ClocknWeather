@@ -13,14 +13,17 @@ import com.desuzed.clocknweather.mvvm.LocationApp
 import com.desuzed.clocknweather.mvvm.vm.AppViewModelFactory
 import com.desuzed.clocknweather.mvvm.vm.LocationViewModel
 import com.desuzed.clocknweather.mvvm.vm.NetworkViewModel
-import com.desuzed.clocknweather.network.dto.LatLon
-import com.google.android.gms.maps.*
+import com.desuzed.clocknweather.ui.StateRequest
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.*
-
+//TODO Передавать первичные координаты с навигацией
 class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var job: Job? = null
     private val locationViewModel: LocationViewModel by lazy {
@@ -71,7 +74,6 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
             googleMap.setOnMapClickListener { latLng ->
                 showAlertDialog(latLng, googleMap, oldMarker)
             }
-            postLocationVisibility(false)
         }
     }
 
@@ -92,9 +94,9 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                         delay(1000)
                         //TODO delegate to mapper
                         val locationApp = LocationApp(latLng.latitude.toFloat(), latLng.longitude.toFloat())
-                        locationViewModel.location.postValue(locationApp)
+                      //  locationViewModel.location.postValue(locationApp)
+                        locationViewModel.stateLiveData.postValue(StateRequest.Loading(locationApp.toString()))
                         dismiss()
-                        postLocationVisibility(true)
                         navigateToMainFragment()
                     }
                 }
@@ -107,9 +109,9 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         alertDialog.show()
     }
 
-    private fun postLocationVisibility(state : Boolean){
-        locationViewModel.postLocationVisibility(state)
-    }
+//    private fun postLocationVisibility(state : Boolean){
+//        locationViewModel.toggleSaveButton(state)
+//    }
 
     private fun navigateToMainFragment (){
         findNavController().navigate(R.id.action_mapBottomSheetFragment_to_weatherFragment)

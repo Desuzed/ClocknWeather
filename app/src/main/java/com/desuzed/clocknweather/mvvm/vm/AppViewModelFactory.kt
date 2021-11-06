@@ -15,6 +15,9 @@ class AppViewModelFactory(val application: App) : ViewModelProvider.Factory {
             modelClass.isAssignableFrom(LocationViewModel::class.java) -> {
                 LocationViewModel(application.favoriteLocationRepository) as T
             }
+            modelClass.isAssignableFrom(SharedViewModel::class.java) -> {
+                SharedViewModel() as T
+            }
 
             else -> {
                 throw IllegalArgumentException("ViewModel Not Found")

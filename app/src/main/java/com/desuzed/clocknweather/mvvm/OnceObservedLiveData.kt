@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 class OnceObservedLiveData<T>: MutableLiveData<T>() {
-    var isObserved = false
+    private var isObserved = false
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
         super.observe(owner, observer)
     }

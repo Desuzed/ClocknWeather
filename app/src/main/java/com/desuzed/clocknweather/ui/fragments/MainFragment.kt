@@ -1,12 +1,14 @@
 package com.desuzed.clocknweather.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
@@ -19,9 +21,13 @@ import com.desuzed.clocknweather.mvvm.LocationApp
 import com.desuzed.clocknweather.mvvm.vm.AppViewModelFactory
 import com.desuzed.clocknweather.mvvm.vm.LocationViewModel
 import com.desuzed.clocknweather.mvvm.vm.NetworkViewModel
+import com.desuzed.clocknweather.mvvm.vm.SharedViewModel
+import com.desuzed.clocknweather.network.model.Query
+import com.desuzed.clocknweather.ui.StateRequest
 
 
 class MainFragment : Fragment() {
+    //todo by lazy
     private lateinit var fragmentMainBinding: FragmentMainBinding
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var tvInternetConnection: TextView
@@ -40,6 +46,7 @@ class MainFragment : Fragment() {
             .get(LocationViewModel::class.java)
     }
 
+    private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,12 +60,10 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bind()
         observeLiveData()
-//        weatherViewModel.testLiveData.observe(requireActivity(), {
-//            Log.i("TAG", "bind: $it")
-//        })
+
         //TODO nonnull
         swipeRefresh.setOnRefreshListener {
-            networkViewModel.queryLiveData.value?.let { networkViewModel.postForecast(it) }
+            networkViewModel.queryLiveData.value?.let { getQueryForecast(it) }
         }
 
     }
@@ -74,26 +79,28 @@ class MainFragment : Fragment() {
 
     private fun observeLiveData() {
         networkViewModel.getCachedForecast()
-        networkViewModel.queryLiveData.observe(requireActivity(), queryObserver)
-        locationViewModel.location.observe(requireActivity(), locationObserver)
-        networkViewModel.getNetworkLiveData().observe(requireActivity(), networkObserver)
-        networkViewModel.refreshLiveData.observe(requireActivity(), refreshObserver)
-//        weatherViewModel.errorMessage.observe(viewLifecycleOwner, {
-//            if (weatherViewModel.errorMessage.isObserved){
-//                return@observe
-//            }
-//            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-//            weatherViewModel.errorMessage.isObserved = true
-//        })
+        networkViewModel.loadCachedQuery()
+        networkViewModel.stateLiveData.observe(viewLifecycleOwner, networkStateObserver)
+        locationViewModel.stateLiveData.observe(viewLifecycleOwner, locationStateObserver)
+        sharedViewModel.stateLiveData.observe(viewLifecycleOwner, stateObserver)
+        networkViewModel.queryLiveData.observe(viewLifecycleOwner, queryObserver)
+        locationViewModel.location.observe(viewLifecycleOwner, locationObserver)
+        networkViewModel.getNetworkLiveData().observe(viewLifecycleOwner, networkObserver)
+
 
     }
 
+    private val networkStateObserver = Observer<StateRequest> {
+        sharedViewModel.stateLiveData.postValue(it)
+    }
 
+    private val locationStateObserver = Observer<StateRequest> {
+        sharedViewModel.stateLiveData.postValue(it)
+    }
 
-
-    private fun getQueryForecast(query: String) {
+    private fun getQueryForecast(query: Query) {
         //todo нужны ли здесь разрешения
-        networkViewModel.postForecast(query)
+        networkViewModel.getForecast(query)
         //  Log.i("onceObserved", ": true")
         //   locationViewModel.getLocationLiveData().isObserved = true
 //        Toast.makeText(
@@ -105,18 +112,52 @@ class MainFragment : Fragment() {
 //        requestLocationPermissions()
     }
 
-    private val queryObserver = Observer<String?> {
-        if (it != null) {
-            getQueryForecast(it)
-        } else {
-            //TODO handle error
-            Toast.makeText(
-                requireContext(),
-                "$it",
-                Toast.LENGTH_LONG
-            )
-                .show()
+
+    fun launchRefresh(state: Boolean) {
+        swipeRefresh.isRefreshing = state
+    }
+
+    private val stateObserver = Observer<StateRequest> {
+        when (it) {
+            is StateRequest.Loading -> {
+                Log.d("StateUi", ":Loading ")
+                launchRefresh(true)
+                if (it.hasQuery()) {
+                    postQuery(Query(it.query, true))
+                }
+            }
+            is StateRequest.Success -> {
+                Log.d("StateUi", ": Success : ${it.successData}")
+                if (it.hasData()) {
+                    val saved = locationViewModel.isSaved(it.successData)
+                    if (saved){
+                        sharedViewModel.toggleSaveButton(false) //TODO refactor
+                    }else {
+                        sharedViewModel.toggleSaveButton(true) //TODO refactor
+                    }
+                }
+                launchRefresh(false)
+            }
+            is StateRequest.Error -> {
+                Log.d("StateUi", ": Error")
+                launchRefresh(false)
+                sharedViewModel.toggleSaveButton(false) //TODO refactor
+                Toast.makeText(
+                    requireContext(),
+                    it.message,
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            }
+            is StateRequest.NoData -> Log.d(
+                "StateUi",
+                ": NoData"
+            ) //TODO empty fragment with message no information
         }
+    }
+
+    private val queryObserver = Observer<Query> {
+        getQueryForecast(it)
     }
 
     private val networkObserver = Observer<Boolean> {
@@ -132,25 +173,16 @@ class MainFragment : Fragment() {
 
     private val locationObserver = Observer<LocationApp> {
         if (it != null) {
-            if  (it.hasLocationInfo()){
-                val query = "${it.cityName}, ${it.region}, ${it.country}"
-                networkViewModel.queryLiveData.postValue(query)
-                return@Observer
-            }
-            networkViewModel.queryLiveData.postValue(it.toString())
-        } else {
-            //TODO handle error
-            Toast.makeText(
-                requireContext(),
-                "$it",
-                Toast.LENGTH_LONG
-            )
-                .show()
+//            if (it.hasLocationInfo()) {               //TODO выдает арсеньев вместо владивостока, если искать по полям
+//                postQuery(Query(it.toStringInfoFields()))
+//                return@Observer
+//            }
+            postQuery(Query(it.toString()))
         }
     }
 
-    private val refreshObserver = Observer<Boolean> {
-        swipeRefresh.isRefreshing = it
+    private fun postQuery(query: Query) {
+        networkViewModel.postQuery(query)
     }
 
     override fun onDestroy() {
@@ -158,7 +190,9 @@ class MainFragment : Fragment() {
         locationViewModel.location.removeObserver(locationObserver)
         networkViewModel.queryLiveData.removeObserver(queryObserver)
         networkViewModel.getNetworkLiveData().removeObserver(networkObserver)
-        networkViewModel.refreshLiveData.removeObserver(refreshObserver)
+        networkViewModel.stateLiveData.removeObserver(networkStateObserver)
+        sharedViewModel.stateLiveData.removeObserver(stateObserver)
+        locationViewModel.stateLiveData.removeObserver(locationStateObserver)
 
     }
 
