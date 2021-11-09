@@ -15,11 +15,6 @@
             android:id="@+id/action_weatherFragment_to_nextDaysBottomSheet"
             app:destination="@id/nextDaysBottomSheet" />
     </fragment>
-<!--    <fragment-->
-<!--        android:id="@+id/tenDaysFragment"-->
-<!--        android:name="com.desuzed.clocknweather.ui.fragments.TenDaysWeatherFragment"-->
-<!--        android:label="fragment_ten_days_weather"-->
-<!--        tools:layout="@layout/fragment_ten_days_weather" />-->
     <dialog
         android:id="@+id/mapBottomSheetFragment"
         android:name="com.desuzed.clocknweather.ui.fragments.MapBottomSheetFragment"
@@ -39,12 +34,21 @@
             app:destination="@id/mapBottomSheetFragment" />
         <action
             android:id="@+id/action_locationFragment_to_weatherFragment"
-            app:destination="@id/weatherFragment" />
+            app:destination="@id/weatherFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+           />
     </fragment>
     <dialog
         android:id="@+id/nextDaysBottomSheet"
         android:name="com.desuzed.clocknweather.ui.fragments.NextDaysBottomSheet"
-        android:label="NextDaysBottomSheet" />
+        android:label="NextDaysBottomSheet"
+        tools:layout="@layout/fragment_next_days_bot_sheet"
+        />
 
-
+<!--    app:enterAnim="@anim/slide_in_right"-->
+<!--    app:popEnterAnim="@anim/slide_in_left"-->
+<!--    app:popExitAnim="@anim/slide_out_right"-->
 </navigation>

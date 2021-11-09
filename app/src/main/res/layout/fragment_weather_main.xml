@@ -5,6 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tvWeatherData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_weather_data_is_loaded"
+        android:visibility="gone"
+        tools:visibility="visible" />
     <!--    <com.google.android.material.appbar.AppBarLayout-->
     <!--        android:id="@+id/appBarLayout"-->
     <!--        android:layout_width="match_parent"-->
@@ -35,6 +43,7 @@
     <!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollViewWeather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <!--            app:layout_anchor="@id/appBarLayout"-->
@@ -42,11 +51,9 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearWeather"
+            android:id="@+id/clMainWeather"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:ignore="ExtraText">
+            android:layout_height="wrap_content">
 
 
             <TextView
@@ -186,22 +193,32 @@
                 android:id="@+id/tvNextDaysHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cvMain"
                 android:layout_marginTop="4dp"
-                android:text="@string/next_days_forecast"
                 android:gravity="center"
+                android:text="@string/next_days_forecast"
                 android:textSize="18dp"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cvMain" />
 
-<!--                            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                                android:id="@+id/fabTest"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:src="@drawable/ic_location"-->
-<!--                                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                                app:layout_constraintEnd_toEndOf="parent" />-->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/powered_by"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvNextDaysHeader" />
+
+
+            <!--                            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+            <!--                                android:id="@+id/fabTest"-->
+            <!--                                android:layout_width="wrap_content"-->
+            <!--                                android:layout_height="wrap_content"-->
+            <!--                                android:src="@drawable/ic_location"-->
+            <!--                                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                                app:layout_constraintEnd_toEndOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

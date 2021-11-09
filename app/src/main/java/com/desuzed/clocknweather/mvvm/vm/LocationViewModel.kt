@@ -2,16 +2,15 @@ package com.desuzed.clocknweather.mvvm.vm
 
 import androidx.lifecycle.*
 import com.desuzed.clocknweather.mvvm.LocationApp
-import com.desuzed.clocknweather.mvvm.repository.FavoriteLocationRepository
+import com.desuzed.clocknweather.mvvm.repository.RepositoryApp
 import com.desuzed.clocknweather.mvvm.room.model.FavoriteLocationDto
 import com.desuzed.clocknweather.ui.StateRequest
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class LocationViewModel(private val repo: FavoriteLocationRepository) : ViewModel() {
+class LocationViewModel(private val repo: RepositoryApp) : ViewModel() {
     val location = MutableLiveData<LocationApp>()
-    val allLocations: LiveData<List<FavoriteLocationDto>> = repo.allLocations.asLiveData()
+    val allLocations: LiveData<List<FavoriteLocationDto>> = repo.getAllLocations()
     val stateLiveData = MutableLiveData<StateRequest>()
 
 
@@ -26,8 +25,6 @@ class LocationViewModel(private val repo: FavoriteLocationRepository) : ViewMode
     fun onError(message: String) {
         stateLiveData.postValue(StateRequest.Error(message))
     }
-
-//TODO проверять есть ли элемент по ключу или нет
 
     fun isSaved (latLon : String) : Boolean  = runBlocking {
              repo.containsPrimaryKey(latLon)

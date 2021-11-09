@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.desuzed.clocknweather.mvvm.NetworkLiveData
-import com.desuzed.clocknweather.mvvm.repository.NetworkRepository
+import com.desuzed.clocknweather.mvvm.repository.RepositoryApp
 import com.desuzed.clocknweather.network.retrofit.NetworkResponse
 import com.desuzed.clocknweather.network.dto.WeatherApi
 import com.desuzed.clocknweather.network.dto.Hour
@@ -17,7 +17,7 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NetworkViewModel(private val repo: NetworkRepository) : ViewModel() {
+class NetworkViewModel(private val repo: RepositoryApp) : ViewModel() {
     val stateLiveData = MutableLiveData<StateRequest>()
     val weatherApiLiveData = MutableLiveData<WeatherApi?>()
     val queryLiveData = MutableLiveData<Query>()
@@ -57,35 +57,17 @@ class NetworkViewModel(private val repo: NetworkRepository) : ViewModel() {
         queryLiveData.postValue(query)
     }
 
-
-//    fun postForecast(query: String) {
-//        repo.saveQuery(query)
-//        job = CoroutineScope(Dispatchers.Main + exceptionHandler).launch {
-//            launchRefresh(true)
-//            val response = repo.getForecast(query)
-//            if (response.isSuccessful) {
-//                weatherApiLiveData.postValue(response.body())
-//                repo.saveForecast(response.body())
-//                launchRefresh(false)
-//            } else {
-//                onError("Error : ${response.message()} ")
-//                launchRefresh(false)
-//            }
-//        }
-//    }
-
-
-    //TODO rename method
+    //TODO refactor to mapper
     @SuppressLint("SimpleDateFormat")
-    fun generateList(date: Long?, weatherApi: WeatherApi, timeZone: String): ArrayList<Hour> {
+    fun generateCurrentDayList(date: Long?, weatherApi: WeatherApi, timeZone: String): ArrayList<Hour> {
         val sdf = SimpleDateFormat("H")
         sdf.timeZone = TimeZone.getTimeZone(timeZone)
         val hour = sdf.format(date).toInt()
         val forecastDay = weatherApi.forecast?.forecastday
-        val resultList: List<Hour> = forecastDay?.get(0)?.hour!!
+        val currentDayList: List<Hour> = forecastDay?.get(0)?.hour!!
             .drop(hour)
             .plus(forecastDay[1].hour!!.take(hour))
-        return resultList as ArrayList<Hour>
+        return currentDayList as ArrayList<Hour>
     }
 
     fun getCachedForecast() {
@@ -104,7 +86,6 @@ class NetworkViewModel(private val repo: NetworkRepository) : ViewModel() {
 
     }
 
-    //TODO doesnt stop refreshing when cant find location
     fun onError(message: String) {
         stateLiveData.postValue(StateRequest.Error(message))
     }

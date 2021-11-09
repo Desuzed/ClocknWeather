@@ -72,18 +72,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvMyCities" />
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCities"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/containerLocation"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/margin_8"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etCity"
-        tools:listitem="@layout/favorite_location_item" />
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCities"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_8"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/favorite_location_item" />
+
+        <TextView
+            android:id="@+id/tvEmptyList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/your_saved_cities_list_is_empty"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
+    </FrameLayout>
+
+
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabMapLocation"

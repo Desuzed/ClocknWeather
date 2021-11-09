@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -17,7 +18,6 @@ import com.bumptech.glide.Glide
 import com.desuzed.clocknweather.App
 import com.desuzed.clocknweather.R
 import com.desuzed.clocknweather.adapters.HourAdapter
-import com.desuzed.clocknweather.adapters.TenDaysRvAdapter
 import com.desuzed.clocknweather.databinding.FragmentWeatherMainBinding
 import com.desuzed.clocknweather.mvvm.room.model.FavoriteLocationDto
 import com.desuzed.clocknweather.mvvm.vm.AppViewModelFactory
@@ -84,9 +84,12 @@ class WeatherMainFragment : Fragment() {
 
     private val weatherObserver = Observer<WeatherApi?> { response ->
         if (response == null) {
+            toggleEmptyWeatherData(true)
             return@Observer
+        }else{
+            toggleEmptyWeatherData(false)
+            updateUi(response)
         }
-        updateUi(response)
     }
 
     private val saveLocationObserver = Observer<Boolean> {
@@ -125,7 +128,7 @@ class WeatherMainFragment : Fragment() {
         sdf.timeZone = TimeZone.getTimeZone(timeZone)
         Glide.with(this).load("https:${current?.condition?.icon}").into(ivIcon)
         hourAdapter.updateList(
-            networkViewModel.generateList(date, response, timeZone),
+            networkViewModel.generateCurrentDayList(date, response, timeZone),
             timeZone
         )
 //        tenAdapter.updateList(
@@ -155,10 +158,6 @@ class WeatherMainFragment : Fragment() {
     private fun initRecyclers() {
         val rvHour = fragmentWeatherBinding.rvHourly
         val lvHour = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-//        val rvTen = fragmentWeatherBinding.rvTenDaysMain
-//        rvTen.layoutManager =
-//            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//        rvTen.adapter = tenAdapter
         rvHour.layoutManager = lvHour
         rvHour.adapter = hourAdapter
     }
@@ -177,7 +176,23 @@ class WeatherMainFragment : Fragment() {
     private val tvWind: TextView by lazy { fragmentWeatherBinding.includedContainer.tvWindMain }
     private val tvMoon: TextView by lazy { fragmentWeatherBinding.includedContainer.tvMoonMain }
     private val tvNextDays: TextView by lazy { fragmentWeatherBinding.tvNextDaysHeader }
+    private val tvWeatherData: TextView by lazy { fragmentWeatherBinding.tvWeatherData }
+    private val scrollViewWeather: NestedScrollView by lazy { fragmentWeatherBinding.scrollViewWeather }
     private val ivIcon: ImageView by lazy { fragmentWeatherBinding.imgIcon }
+
+
+    private fun toggleEmptyWeatherData (isWeatherDataEmpty : Boolean){
+        when (isWeatherDataEmpty){
+            true ->{
+                scrollViewWeather.visibility = View.GONE
+                tvWeatherData.visibility = View.VISIBLE
+            }
+            false ->{
+                scrollViewWeather.visibility = View.VISIBLE
+                tvWeatherData.visibility = View.GONE
+            }
+        }
+    }
 
 
     override fun onDestroyView() {

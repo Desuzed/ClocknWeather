@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.desuzed.clocknweather.R
 import com.desuzed.clocknweather.mvvm.LocationApp
 import com.desuzed.clocknweather.mvvm.vm.LocationViewModel
 import com.desuzed.clocknweather.ui.StateRequest
@@ -21,6 +22,7 @@ class LocationHandler(
 
 //TODO refactor
     fun postCurrentLocation() {
+    locationViewModel.stateLiveData.postValue(StateRequest.Loading())
         if (permissionsGranted()) {
             fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null)
                 .addOnSuccessListener {
@@ -29,46 +31,36 @@ class LocationHandler(
                         val locationApp = LocationApp (it.latitude.toFloat(), it.longitude.toFloat())
                         locationViewModel.location.postValue(locationApp)
                         locationViewModel.stateLiveData.postValue(StateRequest.Success())
-
                     }else{
-                      //  checkLocationToast.show()
                         onError("Проверьте настройки местоположения")
-
                     }
 
                 }
         } else {
-            onError("Проверьте настройки местоположения")
-           // checkLocationToast.show()
+           postLastLocation()
         }
     }
 
-//    fun postLastLocation() {
-//        if (permissionsGranted()) {
-//            fusedLocationClient.lastLocation.addOnSuccessListener {
-//                Log.i("TAG", "getLastLocation: $it")
-//                if (it != null) {
-//                    val locationApp = LocationApp (it.latitude.toFloat(), it.longitude.toFloat())
-//                 //   val latLon = LatLon(it.latitude, it.longitude)
-//                    locationViewModel.location.postValue(locationApp)
-//                }
-//            }
-//        } else {
-//            checkLocationToast.show()
-//        }
-//    }
+    fun postLastLocation() {
+        if (permissionsGranted()) {
+            locationViewModel.stateLiveData.postValue(StateRequest.Loading())
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if (it != null) {
+                    val locationApp = LocationApp (it.latitude.toFloat(), it.longitude.toFloat())
+                 //   val latLon = LatLon(it.latitude, it.longitude)
+                    locationViewModel.location.postValue(locationApp)
+                    locationViewModel.stateLiveData.postValue(StateRequest.Success())
+
+                }
+            }
+        } else {
+            onError(activity.resources.getString(R.string.location_permissions_are_not_granted))
+        }
+    }
 
     fun onError(message: String) {
         locationViewModel.stateLiveData.postValue(StateRequest.Error(message))
     }
-
-
-    private val checkLocationToast = Toast.makeText(
-        activity,
-        "Проверьте настройки местоположения",
-        Toast.LENGTH_LONG
-    )
-
 
     fun permissionsGranted(): Boolean {
         val permissionFine = ContextCompat.checkSelfPermission(
