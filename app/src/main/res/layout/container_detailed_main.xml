@@ -18,7 +18,7 @@
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Humidity" />
+        android:text="@string/humidity" />
 
     <TextView
         android:id="@+id/tvHumidityMain"
@@ -42,7 +42,7 @@
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@id/tvHumidityMain"
         app:layout_constraintTop_toBottomOf="@id/tvHumidityMain"
-       android:text="Pressure" />
+       android:text="@string/pressure" />
 
     <TextView
         android:id="@+id/tvPressureMain"
@@ -65,7 +65,7 @@
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@id/tvPressureMain"
         app:layout_constraintTop_toBottomOf="@id/tvPressureMain"
-        android:text="Sunrise/sunset" />
+        android:text="@string/sunrise_sunset" />
 
     <TextView
         android:id="@+id/tvSunMain"
@@ -88,7 +88,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Probability of precipitation" />
+        android:text="@string/probability_of_precipitation" />
 
     <TextView
         android:id="@+id/tvPopMain"
@@ -111,7 +111,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@id/tvPopMain"
         app:layout_constraintTop_toBottomOf="@id/tvPopMain"
-        android:text="Wind" />
+        android:text="@string/wind" />
 
     <TextView
         android:id="@+id/tvWindMain"
@@ -134,7 +134,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@id/tvWindMain"
         app:layout_constraintTop_toBottomOf="@id/tvWindMain"
-        android:text="Moonrise/Moonset" />
+        android:text="@string/moonrise_moonset" />
 
     <TextView
         android:id="@+id/tvMoonMain"

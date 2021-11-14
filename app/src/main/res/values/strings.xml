@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">Clock\'n Weather</string>
-    <string name="clock">Clock</string>
+    <string name="app_name" translatable="false">Everyweather</string>
     <string name="weather">Weather</string>
-    <string name="celsius">°</string>
+    <string name="celsius" translatable="false">°</string>
     <string name="current_location">Current location</string>
     <string name="search_hint">Search</string>
     <string name="select_location_for_getting_forecast">Select location for getting forecast</string>
@@ -10,12 +9,12 @@
     <string name="cancel">Cancel</string>
     <string name="set_new_location">Set new location?</string>
     <string name="no_internet_connection">No internet connection</string>
-    <string name="my_cities">My cities</string>
+    <string name="my_cities">My saved cities</string>
     <string name="feels_like">Fells like: </string>
     <string name="enter_location_name">Enter location name</string>
     <string name="your_current_location_not_found">Your current location not found</string>
-    <string name="powered_by">Powered by: <a href="https://www.weatherapi.com/">Weather API</a></string>
-
+<!--    <string name="powered_by">Powered by: <a href="https://www.weatherapi.com/">Weather API</a></string>-->
+    <string name="powered_by" translatable="false">Powered by: <![CDATA[<a href="https://www.weatherapi.com/">Weather API</a>]]></string>
 
     <string name="api_key_error">Sorry, developer has problems with weather information provider. Retry later.</string>
     <string name="q_not_provided">You must have typed wrong location. It must not be empty.</string>
@@ -23,9 +22,9 @@
     <string name="api_request_is_invalid">Weather provider request url is invalid.</string>
     <string name="internal_app_error">Sorry, something went wrong. Internal application error.</string>
     <string name="unknown_app_error">Sorry, something went wrong. Unknown application error.</string>
-    <string name="check_internet_connection">Please, check internet connection.</string>
+    <string name="check_internet_connection">Сheck internet connection.</string>
     <string name="field_must_not_be_empty">Field must not be empty.</string>
-    <string name="next_days_forecast">Next days forecast.</string>
+    <string name="next_days_forecast">Show next days forecast</string>
     <string name="no_data_to_load">No data to load.</string>
     <string name="location_permissions_are_not_granted">Location permissions are not granted.</string>
     <string name="your_saved_cities_list_is_empty">Your saved cities list is empty. Load weather data and add your location from weather screen.</string>
@@ -34,5 +33,19 @@
         \n\t-Check location permission settings (it is needed for loading weather at your location)
         \n\t-Navigate to "Location" screen and enter desired city name
     </string>
+    <string name="humidity">Humidity</string>
+    <string name="pressure">Pressure</string>
+    <string name="sunrise_sunset">Sunrise/sunset</string>
+    <string name="probability_of_precipitation">Probability of precipitation</string>
+    <string name="max_wind">Max wind</string>
+    <string name="moonrise_moonset">Moonrise/Moonset</string>
+    <string name="wind">Wind</string>
+    <string name="save_location">Save location</string>
+
+    <!--    <string name="no_weather_data_is_loaded">No weather data is loaded. Please, try following:-->
+<!--        \n\t-Проверьте интернет соединение-->
+<!--        \n\t-Проверьте разрешение на местоположение. (Это нужно для загрузки погоды Вашего местоположения)-->
+<!--        \n\t-Перейдите на экран "Местоположения" и введите название города-->
+<!--    </string>-->
 
 </resources>

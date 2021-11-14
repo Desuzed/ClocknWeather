@@ -24,7 +24,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.desuzed.clocknweather"
+        applicationId "com.desuzed.everyweather"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1

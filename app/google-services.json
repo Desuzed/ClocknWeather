@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "365224810687",
-    "project_id": "clock-n-weather",
-    "storage_bucket": "clock-n-weather.appspot.com"
+    "project_id": "everyweather",
+    "storage_bucket": "everyweather.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:365224810687:android:1c4f1584fcf97c9dbd4e0a",
         "android_client_info": {
-          "package_name": "com.desuzed.clocknweather"
+          "package_name": "com.desuzed.everyweather"
         }
       },
       "oauth_client": [
