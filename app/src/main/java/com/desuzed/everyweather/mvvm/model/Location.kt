@@ -16,4 +16,13 @@ class Location(
     val localtime_epoch: Long,
 
     val localtime: String
-)
+){
+    /**
+     * toString made for showing correct text
+     */
+    override fun toString(): String {
+        return if (region.isNotEmpty()) {
+            "$name, $region"
+        } else name
+    }
+}

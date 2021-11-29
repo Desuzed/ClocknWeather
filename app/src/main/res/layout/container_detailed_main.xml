@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="24dp"
+    android:padding="@dimen/margin_20dp"
     android:id="@+id/container_main"
     >
 
@@ -13,9 +13,8 @@
         android:id="@+id/tvHumidityMainHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
         android:textAlignment="textStart"
-        android:textSize="12sp"
+        style="@style/TextViewStyle.TextNormal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="@string/humidity" />
@@ -24,10 +23,9 @@
         android:id="@+id/tvHumidityMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
         android:textAlignment="textStart"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        android:layout_marginTop="2dp"
+        style="@style/TextViewStyle.TextBold"
         app:layout_constraintStart_toStartOf="@id/tvHumidityMainHeader"
         app:layout_constraintTop_toBottomOf="@id/tvHumidityMainHeader"
         tools:text="78%" />
@@ -37,9 +35,9 @@
         android:id="@+id/tvPressureMainHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
         android:textAlignment="textStart"
-        android:textSize="12sp"
+        android:layout_marginTop="8dp"
+        style="@style/TextViewStyle.TextNormal"
         app:layout_constraintStart_toStartOf="@id/tvHumidityMain"
         app:layout_constraintTop_toBottomOf="@id/tvHumidityMain"
        android:text="@string/pressure" />
@@ -48,10 +46,10 @@
         android:id="@+id/tvPressureMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
         android:textAlignment="textStart"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        android:layout_marginTop="2dp"
+
+        style="@style/TextViewStyle.TextBold"
         app:layout_constraintStart_toStartOf="@id/tvPressureMainHeader"
         app:layout_constraintTop_toBottomOf="@id/tvPressureMainHeader"
         tools:text="763 mmHg" />
@@ -62,7 +60,9 @@
         android:layout_height="wrap_content"
         android:lines="1"
         android:textAlignment="textStart"
-        android:textSize="12sp"
+        android:layout_marginTop="8dp"
+
+        style="@style/TextViewStyle.TextNormal"
         app:layout_constraintStart_toStartOf="@id/tvPressureMain"
         app:layout_constraintTop_toBottomOf="@id/tvPressureMain"
         android:text="@string/sunrise_sunset" />
@@ -71,10 +71,10 @@
         android:id="@+id/tvSunMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="2"
         android:textAlignment="textStart"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        style="@style/TextViewStyle.TextBold"
+        android:layout_marginTop="2dp"
+
         app:layout_constraintStart_toStartOf="@id/tvSunMainHeader"
         app:layout_constraintTop_toBottomOf="@id/tvSunMainHeader"
         tools:text="06:20 AM\n20:32 PM" />
@@ -83,9 +83,8 @@
         android:id="@+id/tvPopMainHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
         android:textAlignment="textEnd"
-        android:textSize="12sp"
+        style="@style/TextViewStyle.TextNormal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="@string/probability_of_precipitation" />
@@ -94,10 +93,10 @@
         android:id="@+id/tvPopMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
         android:textAlignment="textEnd"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        android:layout_marginTop="2dp"
+
+        style="@style/TextViewStyle.TextBold"
         app:layout_constraintEnd_toEndOf="@id/tvPopMainHeader"
         app:layout_constraintTop_toBottomOf="@id/tvPopMainHeader"
         tools:text="50%" />
@@ -106,9 +105,10 @@
         android:id="@+id/tvWindMainHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
         android:textAlignment="textEnd"
-        android:textSize="12sp"
+        android:layout_marginTop="8dp"
+
+        style="@style/TextViewStyle.TextNormal"
         app:layout_constraintEnd_toEndOf="@id/tvPopMain"
         app:layout_constraintTop_toBottomOf="@id/tvPopMain"
         android:text="@string/wind" />
@@ -117,10 +117,10 @@
         android:id="@+id/tvWindMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
         android:textAlignment="textEnd"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        android:layout_marginTop="2dp"
+
+        style="@style/TextViewStyle.TextBold"
         app:layout_constraintEnd_toEndOf="@id/tvWindMainHeader"
         app:layout_constraintTop_toBottomOf="@id/tvWindMainHeader"
         tools:text="50%" />
@@ -130,27 +130,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lines="1"
+        android:layout_marginTop="8dp"
+
         android:textAlignment="textEnd"
-        android:textSize="12sp"
+        style="@style/TextViewStyle.TextNormal"
         app:layout_constraintEnd_toEndOf="@id/tvWindMain"
         app:layout_constraintTop_toBottomOf="@id/tvWindMain"
         android:text="@string/moonrise_moonset" />
 
     <TextView
         android:id="@+id/tvMoonMain"
+        style="@style/TextViewStyle.TextBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="2"
         android:textAlignment="textEnd"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        android:layout_marginTop="2dp"
+
         app:layout_constraintEnd_toEndOf="@id/tvMoonMainHeader"
         app:layout_constraintTop_toBottomOf="@id/tvMoonMainHeader"
         tools:text="06:20 AM\n20:32 PM" />
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

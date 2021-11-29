@@ -1,68 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingEnd="10dp"
+    >
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="#94454545"
-        />
-    <TextView
-        android:layout_marginTop="2dp"
-        android:id="@+id/hTime"
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="12:00"
-        android:textSize="12sp"
-        />
+        android:backgroundTint="?attr/backgroundDetail"
+        app:cardCornerRadius="16dp"
+        android:layout_margin="4dp"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            >
+            <View
+                style="@style/SeparatorView"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/hTempC"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/hTime"
-        app:layout_constraintStart_toStartOf="@+id/hTime"
-        app:layout_constraintTop_toBottomOf="@id/hTime"
-        tools:text="18" />
+            <TextView
+                android:id="@+id/hTime"
+                style="@style/TextViewStyle.TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/hWind"
+                app:layout_constraintStart_toStartOf="@+id/hWindDegree"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="12:00" />
 
-    <ImageView
-        android:id="@+id/hIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hTempC" />
+            <TextView
+                android:id="@+id/hTempC"
+                style="@style/TextViewStyle.TextBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/hWind"
+                app:layout_constraintStart_toStartOf="@+id/hWindDegree"
+                app:layout_constraintTop_toBottomOf="@id/hTime"
+                tools:text="18" />
 
-    <TextView
-        android:id="@+id/hWind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:layout_marginEnd="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hIcon"
-        tools:text="18 km/h" />
+            <ImageView
+                android:id="@+id/hIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintEnd_toEndOf="@+id/hWind"
+                app:layout_constraintStart_toStartOf="@+id/hWindDegree"
+                app:layout_constraintTop_toBottomOf="@id/hTempC" />
 
-    <ImageView
-        android:id="@+id/hWindDegree"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginStart="2dp"
-        android:src="@drawable/ic_wind_direction"
-        app:layout_constraintBottom_toBottomOf="@id/hWind"
-        app:layout_constraintEnd_toStartOf="@+id/hWind"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hIcon" />
+            <TextView
+                android:id="@+id/hWind"
+                style="@style/TextViewStyle.TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/hWindDegree"
+                app:layout_constraintTop_toBottomOf="@id/hIcon"
+                tools:text="18 km/h" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/hWindDegree"
+                android:layout_width="12dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_wind_direction"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/hWind"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/hWind" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

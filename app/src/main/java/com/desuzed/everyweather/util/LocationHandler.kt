@@ -19,7 +19,6 @@ class LocationHandler(
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(activity)
 
-//TODO refactor
     fun postCurrentLocation() {
     sharedViewModel.stateLiveData.postValue(StateRequest.Loading())
         if (permissionsGranted()) {

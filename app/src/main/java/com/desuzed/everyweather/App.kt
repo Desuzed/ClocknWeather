@@ -15,6 +15,10 @@ class App : Application() {
     private val remoteDataSource by lazy { RemoteDataSourceImpl() }
     val repositoryApp by lazy { RepositoryApp(localDataSource, remoteDataSource) }
 
+    fun setLang (lang : String){
+        remoteDataSource.lang = lang
+    }
+
     override fun onCreate() {
         super.onCreate()
         instance = this

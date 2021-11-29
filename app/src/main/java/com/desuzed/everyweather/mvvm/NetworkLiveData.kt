@@ -20,7 +20,7 @@ class NetworkLiveData(val context: Context) : LiveData<Boolean>(true) {
         postValue(validNetworks.size > 0)
     }
 
-
+//TODO Problems with permissions and android studio bug
     override fun onActive() {
         networkCallback = createNetworkCallback()
         val networkRequest = NetworkRequest.Builder()
@@ -32,7 +32,6 @@ class NetworkLiveData(val context: Context) : LiveData<Boolean>(true) {
 
 
     override fun onInactive() {
-
         networkManager.unregisterNetworkCallback(networkCallback)
     }
 

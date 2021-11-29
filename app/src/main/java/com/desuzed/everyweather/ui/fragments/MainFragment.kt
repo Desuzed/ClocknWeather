@@ -19,24 +19,9 @@ import com.desuzed.everyweather.ui.StateRequest
 
 
 class MainFragment : Fragment() {
-    //todo by lazy
     private lateinit var fragmentMainBinding: FragmentMainBinding
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var tvInternetConnection: TextView
-//    private val networkViewModel: NetworkViewModel by lazy {
-//        ViewModelProvider(
-//            requireActivity(),
-//            AppViewModelFactory(App.instance)
-//        )
-//            .get(NetworkViewModel::class.java)
-//    }
-//    private val locationViewModel: LocationViewModel by lazy {
-//        ViewModelProvider(
-//            requireActivity(),
-//            AppViewModelFactory(App.instance)
-//        )
-//            .get(LocationViewModel::class.java)
-//    }
 
     private val sharedViewModel: SharedViewModel by lazy {
         ViewModelProvider(
@@ -58,8 +43,6 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bind()
         observeLiveData()
-
-        //TODO nonnull
         swipeRefresh.setOnRefreshListener {
             sharedViewModel.queryLiveData.value?.let { getQueryForecast(it) }
         }
@@ -69,10 +52,6 @@ class MainFragment : Fragment() {
     private fun bind() {
         tvInternetConnection = fragmentMainBinding.tvInternetConnection
         swipeRefresh = fragmentMainBinding.swipeRefresh
-//        val bottomNavigationView = fragmentMainBinding.bottomNavigationView
-//        val navController =
-//            (childFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
-//        NavigationUI.setupWithNavController(bottomNavigationView, navController)
     }
 
     private fun observeLiveData() {
@@ -142,10 +121,6 @@ class MainFragment : Fragment() {
 
     private val locationObserver = Observer<LocationApp> {
         if (it != null) {
-//            if (it.hasLocationInfo()) {               //TODO выдает арсеньев вместо владивостока, если искать по полям
-//                postQuery(Query(it.toStringInfoFields()))
-//                return@Observer
-//            }
             postQuery(it.toString())
         }
     }
@@ -164,10 +139,7 @@ class MainFragment : Fragment() {
         sharedViewModel.location.removeObserver(locationObserver)
         sharedViewModel.queryLiveData.removeObserver(queryObserver)
         sharedViewModel.getNetworkLiveData().removeObserver(networkObserver)
-//        networkViewModel.stateLiveData.removeObserver(networkStateObserver)
         sharedViewModel.stateLiveData.removeObserver(stateObserver)
-//        locationViewModel.stateLiveData.removeObserver(locationStateObserver)
-
     }
 
 

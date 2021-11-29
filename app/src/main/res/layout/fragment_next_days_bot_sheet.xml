@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:nestedScrollingEnabled="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -10,7 +9,10 @@
         android:id="@+id/rvTenDaysMain"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:layout_marginTop="@dimen/margin_8"
+        android:layoutAnimation="@anim/location_recycler_anim"
+        android:paddingStart="@dimen/margin_8"
+        android:paddingEnd="@dimen/margin_8"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="@dimen/margin_8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

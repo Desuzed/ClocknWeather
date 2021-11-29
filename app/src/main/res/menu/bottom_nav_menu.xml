@@ -7,7 +7,7 @@
 
     <item android:title="My Locations"
         android:id="@+id/locationFragment"
-        android:icon="@drawable/ic_location"/>
+        android:icon="@drawable/ic_my_location"/>
 
 <!--    <item android:title="10 days weather"-->
 <!--        android:id="@+id/tenDaysFragment"-->

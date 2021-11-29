@@ -5,8 +5,8 @@ import androidx.annotation.WorkerThread
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.mvvm.NetworkLiveData
 import com.desuzed.everyweather.mvvm.model.WeatherResponse
-import com.desuzed.everyweather.mvvm.room.model.FavoriteLocationDto
 import com.desuzed.everyweather.mvvm.room.FavoriteLocationDAO
+import com.desuzed.everyweather.mvvm.room.model.FavoriteLocationDto
 import com.desuzed.everyweather.network.ErrorHandler
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
@@ -40,9 +40,7 @@ class LocalDataSourceImpl(private val favoriteLocationDAO: FavoriteLocationDAO, 
     }
 
     override fun loadForecast(): WeatherResponse? {
-        val savedForecast =
-            sp
-                .getString(WEATHER_API, null)
+        val savedForecast = sp.getString(WEATHER_API, null)
         return Gson().fromJson(savedForecast, WeatherResponse::class.java)
     }
 
@@ -51,25 +49,12 @@ class LocalDataSourceImpl(private val favoriteLocationDAO: FavoriteLocationDAO, 
             .edit()
             .putString(QUERY, query)
             .apply()
-
-//        val gson = Gson().toJson(query)
-//        sp
-//            .edit()
-//            .putString(QUERY, gson)
-//            .apply()
     }
 
     override fun loadQuery(): String  = sp.getString(QUERY, "").toString()
 
-
-//        val savedQuery = sp.getString(QUERY, "")
-//        return Gson().fromJson(savedQuery, Query::class.java) ?: Query("")
-
-
-
     private val networkLiveData = NetworkLiveData(app.applicationContext)
 
-    //todo refactor to sharedViewModel
     override fun getNetworkLiveData(): NetworkLiveData {
         return networkLiveData
     }

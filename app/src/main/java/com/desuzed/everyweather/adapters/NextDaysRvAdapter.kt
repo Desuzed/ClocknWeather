@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -69,14 +71,15 @@ class NextDaysRvAdapter : RecyclerView.Adapter<NextDaysRvAdapter.NextDaysVH>() {
         private val rvNextHourly: RecyclerView = binding.rvNextHourly
         private val nextIcon: ImageView = binding.nextIcon
         private val ivArrow: ImageView = binding.ivArrow
-        private val expandableContainer: ConstraintLayout =
+        private val expandableContainer: LinearLayout =
             binding.expandableContainer
-        val clNextDays: ConstraintLayout = binding.clNextDays
+        val clNextDays: CardView = binding.clNextDays
 
         //TODO refactor  to mapper
         @SuppressLint("SetTextI18n", "SimpleDateFormat")
         fun bind(forecastDay: ForecastDay, timeZone: String) {
-            val sdf = SimpleDateFormat("dd.MM.yy")
+            val sdf = SimpleDateFormat("E. dd/MM", Locale.getDefault())
+
             val day = forecastDay.day
             Glide
                 .with(context)
@@ -91,10 +94,10 @@ class NextDaysRvAdapter : RecyclerView.Adapter<NextDaysRvAdapter.NextDaysVH>() {
             tvNextMinTemp.text = day.minTemp.roundToInt().toString() + context.resources.getString(
                 R.string.celsius
             )
-            tvNextWind.text = "${day.maxWind} km/h"
+            tvNextWind.text = "${day.maxWind} " + context.resources.getString(R.string.kmh)
             tvNextPressure.text = "${forecastDay.hourForecast[0].pressureMb} mb"
             tvNextHumidity.text = "${day.avgHumidity}%"
-            tvNextPop.text = "${day.popRain}%, ${day.totalPrecip} mm"
+            tvNextPop.text = "${day.popRain}%, ${day.totalPrecip} "+ context.resources.getString(R.string.mm)
             tvNextSun.text = "${forecastDay.astro.sunrise}\n${forecastDay.astro.sunset}"
             tvNextMoon.text = "${forecastDay.astro.moonrise}\n${forecastDay.astro.moonset}"
             rvNextHourly.layoutManager =
@@ -111,13 +114,11 @@ class NextDaysRvAdapter : RecyclerView.Adapter<NextDaysRvAdapter.NextDaysVH>() {
             when (isExpanded) {
                 true -> {
                     expandableContainer.visibility = View.VISIBLE
-                    //  ivArrow.animate().rotation(0f).duration = 400
                     ivArrow.rotation = 0f
                 }
                 false -> {
                     expandableContainer.visibility = View.GONE
                     ivArrow.rotation = 180f
-                    //  ivArrow.animate().rotation(180f).duration = 400
                 }
             }
         }

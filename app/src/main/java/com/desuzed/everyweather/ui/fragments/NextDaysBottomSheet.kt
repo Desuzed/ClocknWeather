@@ -17,6 +17,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.*
 
 class NextDaysBottomSheet : BottomSheetDialogFragment() {
+    private val tenAdapter by lazy { NextDaysRvAdapter() }
+    private lateinit var binding: FragmentNextDaysBotSheetBinding
     private val sharedViewModel: SharedViewModel by lazy {
         ViewModelProvider(
             requireActivity(),
@@ -24,17 +26,6 @@ class NextDaysBottomSheet : BottomSheetDialogFragment() {
         )
             .get(SharedViewModel::class.java)
     }
-
-//    private val networkViewModel: NetworkViewModel by lazy {
-//        ViewModelProvider(
-//            requireActivity(),
-//            AppViewModelFactory(App.instance)
-//        )
-//            .get(NetworkViewModel::class.java)
-//    }
-    private val tenAdapter by lazy { NextDaysRvAdapter() }
-    private lateinit var binding: FragmentNextDaysBotSheetBinding
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,6 +57,4 @@ class NextDaysBottomSheet : BottomSheetDialogFragment() {
             response.location.tzId
         )
     }
-
-
 }

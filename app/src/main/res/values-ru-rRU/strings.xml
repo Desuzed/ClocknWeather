@@ -3,14 +3,14 @@
     <string name="weather">Погода</string>
     <string name="current_location">Текущее местоположение</string>
     <string name="search_hint">Поиск</string>
-    <string name="select_location_for_getting_forecast">Выберите точку для получения прогноза погоды</string>
+    <string name="set_place_on_map">Установите точку на карте</string>
     <string name="ok">Ок</string>
     <string name="cancel">Отмена</string>
-    <string name="set_new_location">Установить новое местоположение?</string>
+    <string name="load_weather_of_this_location">Загрузить погоду этого места?</string>
     <string name="no_internet_connection">Нет интернет соединения</string>
-    <string name="my_cities">Мои сохраненные города</string>
+    <string name="saved_locations">Сохраненные места</string>
     <string name="feels_like">Ощущается:</string>
-    <string name="enter_location_name">Введите название местоположения:</string>
+    <string name="enter_location_name">Введите название местоположения</string>
     <string name="your_current_location_not_found">Ваше текущее местоположение не найдено</string>
     <string name="api_key_error">Извините, разработчик имеет трудности с поставщиком информации о погоде. Повторите попытку позже.</string>
     <string name="q_not_provided">Возможно, Вы написали неверное местоположение. Оно не должно быть пустым.</string>
@@ -24,7 +24,8 @@
     <string name="no_data_to_load">Нет информации для загрузки.</string>
     <string name="location_permissions_are_not_granted">Нет разрешений на доступ к Вашему местоположению.</string>
     <string name="your_saved_cities_list_is_empty">Ваш список сохраненных местоположений пуст. Загрузите погоду и сохраните место с экрана погоды.</string>
-    <string name="no_weather_data_is_loaded">Нет загруженной погоды. Пожалуйста, попробуйте следующее:\n\t-Проверьте интернет соединение\n\t-Проверьте разрешение на местоположение. (Это нужно для загрузки погоды Вашего местоположения)\n\t-Перейдите на экран \"Местоположения\" и введите название города</string>
+    <string name="no_weather_data_is_loaded_header">Нет загруженной погоды. \nПожалуйста, попробуйте следующее:</string>
+    <string name="no_weather_data_is_loaded">\t-Проверьте интернет соединение\n\t-Проверьте разрешение на местоположение. (Это нужно для загрузки погоды Вашего местоположения)\n\t-Перейдите на экран \"Местоположения\" и введите название города</string>
     <string name="humidity">Влажность</string>
     <string name="pressure">Давление</string>
     <string name="sunrise_sunset">Восход/закат солнца</string>
@@ -32,4 +33,10 @@
     <string name="max_wind">Макс. ветер</string>
     <string name="moonrise_moonset">Восход/заход луны</string>
     <string name="wind">Ветер</string>
+    <string name="save_location">Сохранить место</string>
+    <string name="choose_location">Выбрать место</string>
+    <string name="find_on_map">Найти на карте</string>
+    <string name="kmh">км/ч</string>
+    <string name="mm">мм</string>
+
 </resources>

@@ -124,8 +124,9 @@ class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
         repo.deleteItem(favoriteLocationDto)
     }
 
-
-
+    /**
+     * Method checks if database contains place with that coordinates
+     */
     fun isLocationSaved (response:  WeatherResponse) : Boolean  = runBlocking {
         //todo refactor
         val lat = response.location.lat

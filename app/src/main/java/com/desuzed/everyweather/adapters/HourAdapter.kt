@@ -55,7 +55,7 @@ class HourAdapter : RecyclerView.Adapter<HourAdapter.HourVH>() {
             sdf.timeZone = TimeZone.getTimeZone(timeZone)
             hTime.text =  sdf.format(hour.timeEpoch*1000)
             hTempC.text = hour.temp.roundToInt().toString() + context.resources.getString(R.string.celsius)
-            hWind.text = "${hour.windSpeed.toInt()} km/h"
+            hWind.text = "${hour.windSpeed.toInt()} " + context.resources.getString(R.string.kmh)
             hWindDegree.rotation = hour.windDegree.toFloat() - 180
             Glide
                 .with(context)

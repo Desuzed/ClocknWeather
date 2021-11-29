@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "365224810687",
-    "project_id": "everyweather",
-    "storage_bucket": "everyweather.appspot.com"
+    "project_number": "454593026360",
+    "project_id": "everyweather-f6bdd",
+    "storage_bucket": "everyweather-f6bdd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:365224810687:android:1c4f1584fcf97c9dbd4e0a",
+        "mobilesdk_app_id": "1:454593026360:android:ce31b79e17bb68c6d289cd",
         "android_client_info": {
           "package_name": "com.desuzed.everyweather"
         }
       },
       "oauth_client": [
         {
-          "client_id": "365224810687-h446s7425g65lhsd30v69sji3b94cjqi.apps.googleusercontent.com",
+          "client_id": "454593026360-v0r375691js784clq6dibnkgrvbqekvo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCZD8L4o1AM5lns8Rg9Ytdb-9ANAmPZDsI"
+          "current_key": "AIzaSyCzpxXEELgFcqMSj8lWit1uFcLv53-fviI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "365224810687-h446s7425g65lhsd30v69sji3b94cjqi.apps.googleusercontent.com",
+              "client_id": "454593026360-v0r375691js784clq6dibnkgrvbqekvo.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

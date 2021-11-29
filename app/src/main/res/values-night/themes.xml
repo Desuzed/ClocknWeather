@@ -1,16 +1,79 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.ClocknWeather" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+<resources>
+
+    <style name="Theme.Everyweather" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/button_color_night</item>
+        <item name="colorAccent">@color/gradientLightEnd</item>
+        <item name="android:textColorPrimary">@color/textNight</item>
+        <item name="textColorSecondary">@color/textNight</item>
+        <item name="backgroundError">@color/errorNight</item>
+        <item name="backgroundDetail">@color/bgDetailNight</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="bgRvItem">@color/bgRvItemNight</item>
+        <item name="bgPrimary">@drawable/main_background_night</item>
+        <item name="bgSecondary">@drawable/secondary_background_night</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="android:statusBarColor">@color/gradientNightEnd</item>
+
+
+        <!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
+        <!--                <item name="android:statusBarColor">@color/transparent</item>-->
+        <!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <!--        <item name="android:windowTranslucentNavigation">true</item>-->
     </style>
+
+    <style name="TextViewStyle.White">
+        <item name="android:textColorPrimary">@color/textNight</item>
+    </style>
+
+
+    <!--Bottom Sheet Dialog Theme-->
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_bg_bottom_sheet_night</item>
+    </style>
+
+
+    <!--Alert dialog themes-->
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="alertDialogStyle">@style/DialogStyle</item>
+    </style>
+
+    <style name="DialogStyle" parent="Widget.AppCompat.ButtonBar.AlertDialog">
+        <item name="android:background">@drawable/dialog_bg_night</item>
+    </style>
+
+    <!--Button themes-->
+
+    <style name="CustomButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="fontFamily">@font/montserrat_regular_ru</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/textNight</item>
+    </style>
+
+
+    <style name="Fab" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">?colorPrimary</item>
+        <item name="fontFamily">@font/montserrat_regular_ru</item>
+        <item name="tint">@color/textNight</item>
+    </style>
+
+    <!--Theme for separator between date and time-->
+
+    <style name="SeparatorView">
+        <item name="android:background">@color/textNight</item>
+    </style>
+
+    <!--Splash screen theme-->
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@color/gradientNightEnd</item>
+    </style>
+
 </resources>

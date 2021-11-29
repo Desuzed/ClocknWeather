@@ -2,4 +2,6 @@
 <resources>
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="corner_radius_16">16dp</dimen>
 </resources>

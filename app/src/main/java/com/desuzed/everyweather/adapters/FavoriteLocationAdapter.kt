@@ -36,8 +36,7 @@ class FavoriteLocationAdapter(
             onItemClickListener: OnItemClickListener
         ) {
             tvFavoriteLocationName.text = favoriteLocationDto.cityName
-            tvFavoriteLocationRegionCountry.text =
-                "${favoriteLocationDto.region}, ${favoriteLocationDto.country}"
+            tvFavoriteLocationRegionCountry.text = favoriteLocationDto.toString()
             itemView.setOnClickListener {
                 onItemClickListener.onClick(favoriteLocationDto)
             }
@@ -77,7 +76,6 @@ class FavoriteLocationAdapter(
         }
 
     }
-//todo Refactor to high order func
     interface OnItemClickListener {
         fun onClick(favoriteLocationDto: FavoriteLocationDto)
         fun onLongClick(favoriteLocationDto: FavoriteLocationDto)

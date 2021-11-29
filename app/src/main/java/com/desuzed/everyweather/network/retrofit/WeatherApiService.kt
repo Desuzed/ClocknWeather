@@ -13,17 +13,11 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherApiService {
-    @GET("search.json?key=${BuildConfig.WEATHER_API_KEY}")
-    suspend fun getLocation(
-        @Query("q") query: String
-    ): Response<LocationDto>
-    //Todo ru/en language
-
-    @GET("forecast.json?key=${BuildConfig.WEATHER_API_KEY}&days=7&lang=en")
+    @GET("forecast.json?key=${BuildConfig.WEATHER_API_KEY}&days=7")
     suspend fun getForecast(
-        @Query("q") query: String
+        @Query("q") query: String,
+        @Query("lang") lang: String
     ): NetworkResponse<WeatherResponseDto, ApiErrorDto>
-
 
     companion object{
         private const val baseUrl = "https://api.weatherapi.com/v1/"
