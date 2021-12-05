@@ -15,7 +15,6 @@
     <string name="your_current_location_not_found">Your current location not found</string>
     <!--    <string name="powered_by">Powered by: <a href="https://www.weatherapi.com/">Weather API</a></string>-->
     <string name="powered_by" translatable="false">Powered by: <![CDATA[<a href="https://www.weatherapi.com/">Weather API</a>]]></string>
-
     <string name="api_key_error">Sorry, developer has problems with weather information provider. Retry later.</string>
     <string name="q_not_provided">You must have typed wrong location. It must not be empty.</string>
     <string name="no_location_found">No location found matching your request. Please, try again.</string>
@@ -42,15 +41,10 @@
     <string name="save_location">Save location</string>
     <string name="choose_location">Choose location</string>
     <string name="find_on_map">Find on map</string>
+    <string name="deleted">Deleted</string>
+    <string name="saved">Saved</string>
     <string name="kmh">km/h</string>
     <string name="mm">mm</string>
+    <string name="delete">Delete?</string>
     <string name="mb" translatable="false">mb</string>
-    <!-- TODO: Remove or change this placeholder text -->
-
-    <!--    <string name="no_weather_data_is_loaded">No weather data is loaded. Please, try following:-->
-    <!--        \n\t-Проверьте интернет соединение-->
-    <!--        \n\t-Проверьте разрешение на местоположение. (Это нужно для загрузки погоды Вашего местоположения)-->
-    <!--        \n\t-Перейдите на экран "Местоположения" и введите название города-->
-    <!--    </string>-->
-
 </resources>

@@ -3,6 +3,9 @@ package com.desuzed.everyweather.mvvm.room.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.desuzed.everyweather.mvvm.model.Location
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 @Entity(tableName = "favorite_location_table")
 class FavoriteLocationDto(
@@ -20,5 +23,13 @@ class FavoriteLocationDto(
         return if (region.isNotEmpty()) {
             "$region, $country"
         } else country
+    }
+
+    companion object {
+        fun generateKey(location: Location) : String{
+            val df = DecimalFormat("#.#")
+            df.roundingMode = RoundingMode.CEILING
+            return "${df.format(location.lat)},${df.format(location.lon)}"
+        }
     }
 }

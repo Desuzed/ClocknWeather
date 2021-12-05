@@ -9,7 +9,6 @@ import android.net.NetworkRequest
 import androidx.lifecycle.LiveData
 
 class NetworkLiveData(val context: Context) : LiveData<Boolean>(true) {
-    private val TAG = "TAG"
     private val networkManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback

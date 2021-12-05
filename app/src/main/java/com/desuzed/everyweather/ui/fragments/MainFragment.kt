@@ -1,12 +1,12 @@
 package com.desuzed.everyweather.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -61,8 +61,6 @@ class MainFragment : Fragment() {
         sharedViewModel.queryLiveData.observe(viewLifecycleOwner, queryObserver)
         sharedViewModel.location.observe(viewLifecycleOwner, locationObserver)
         sharedViewModel.getNetworkLiveData().observe(viewLifecycleOwner, networkObserver)
-
-
     }
 
     private fun getQueryForecast(query: String) {
@@ -70,8 +68,17 @@ class MainFragment : Fragment() {
     }
 
 
-    fun launchRefresh(state: Boolean) {
+    private fun launchRefresh(state: Boolean) {
         swipeRefresh.isRefreshing = state
+    }
+
+    private fun toast(message: String) {
+        Toast.makeText(
+            requireContext(),
+            message,
+            Toast.LENGTH_LONG
+        )
+            .show()
     }
 
     private val stateObserver = Observer<StateRequest> {
@@ -80,28 +87,31 @@ class MainFragment : Fragment() {
                 launchRefresh(true)
             }
             is StateRequest.Success -> {
-                if (it.toggleSaveButton) {
-                        toggleSaveButton(true)
-                    } else {
-                        toggleSaveButton(false)
-                    }
-                launchRefresh(false)
+                onSuccess(it)
             }
             is StateRequest.Error -> {
+                onError(it)
+            }
+            is StateRequest.NoData -> {
                 launchRefresh(false)
                 toggleSaveButton(false)
-                Toast.makeText(
-                    requireContext(),
-                    it.message,
-                    Toast.LENGTH_LONG
-                )
-                    .show()
             }
-//            is StateRequest.NoData -> {
-//                launchRefresh(false)
-//                toggleSaveButton(false)
-//            }
         }
+    }
+
+    private fun onSuccess(it: StateRequest.Success) {
+        if (it.toggleSaveButton) toggleSaveButton(true)
+        else toggleSaveButton(false)
+        if (it.message.isNotEmpty()) {
+            toast(it.message)
+        }
+        launchRefresh(false)
+    }
+
+    private fun onError(it: StateRequest.Error) {
+        launchRefresh(false)
+        toggleSaveButton(false)
+        toast(it.message)
     }
 
     private val queryObserver = Observer<String> {

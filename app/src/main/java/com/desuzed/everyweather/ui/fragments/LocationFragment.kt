@@ -2,10 +2,10 @@ package com.desuzed.everyweather.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -26,13 +26,14 @@ import com.desuzed.everyweather.mvvm.vm.AppViewModelFactory
 import com.desuzed.everyweather.mvvm.vm.SharedViewModel
 import com.desuzed.everyweather.ui.MainActivity
 import com.desuzed.everyweather.util.addOnBackPressedCallback
+import com.desuzed.everyweather.util.mappers.FavoriteLocationMapper
 import com.desuzed.everyweather.util.navigate
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
 
 class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener {
-    val TAG = "Location"
     private lateinit var fragmentLocationBinding: FragmentLocationBinding
     private lateinit var etCity: EditText
     private lateinit var rvCity: RecyclerView
@@ -64,6 +65,11 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
         onClickListeners()
         observeLiveData()
         setOnEditTextListener()
+    }
+
+    fun setStatusBarColor(color: Int) {
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        requireActivity().window.statusBarColor = color
     }
 
     private fun bind() {
@@ -114,22 +120,28 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
     }
 
 
-    //TODO refactor to mapper
     override fun onClick(favoriteLocationDto: FavoriteLocationDto) {
-        val locationApp = LocationApp(
-            favoriteLocationDto.lat.toFloat(),
-            favoriteLocationDto.lon.toFloat(),
-            favoriteLocationDto.cityName,
-            favoriteLocationDto.region,
-            favoriteLocationDto.country
-        )
+        val locationApp = FavoriteLocationMapper().mapFromEntity(favoriteLocationDto)
         sharedViewModel.postLocation(locationApp)
         navigateToWeatherFragment()
     }
 
-    //todo alert dialog
     override fun onLongClick(favoriteLocationDto: FavoriteLocationDto) {
-        sharedViewModel.deleteItem(favoriteLocationDto)
+        showAlertDialog(favoriteLocationDto)
+    }
+
+    private fun showAlertDialog(favoriteLocationDto: FavoriteLocationDto) {
+        val dialog =
+            MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_MaterialAlertDialog)
+                .setTitle(resources.getString(R.string.delete))
+                .setPositiveButton(resources.getString(R.string.ok)) { alertDialog, _ ->
+                    sharedViewModel.deleteItem(favoriteLocationDto)
+                    alertDialog.dismiss()
+                }
+                .setNeutralButton(resources.getString(R.string.cancel)) { alertDialog, _ ->
+                    alertDialog.dismiss()
+                }.create()
+        dialog.show()
     }
 
     private fun onClickListeners() {
@@ -147,9 +159,7 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
     }
 
     private fun navigateToWeatherFragment() {
-        // findNavController().navigate(R.id.action_locationFragment_to_weatherFragment)
         navigate(R.id.action_locationFragment_to_weatherFragment)
-
     }
 
     private fun hideKeyboard() {

@@ -11,10 +11,10 @@ interface FavoriteLocationDAO {
     fun getAlphabetizedLocations(): Flow<List<FavoriteLocationDto>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(favoriteLocationDto: FavoriteLocationDto)
+    suspend fun insert(favoriteLocationDto: FavoriteLocationDto) : Long
 
     @Delete
-    suspend fun deleteItem(favoriteLocationDto: FavoriteLocationDto)
+    suspend fun deleteItem(favoriteLocationDto: FavoriteLocationDto) : Int
 
     @Query("DELETE FROM favorite_location_table")
     suspend fun deleteAll()

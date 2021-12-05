@@ -1,12 +1,11 @@
 package com.desuzed.everyweather.mvvm.vm
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.*
 import com.desuzed.everyweather.mvvm.LocationApp
 import com.desuzed.everyweather.mvvm.NetworkLiveData
-import com.desuzed.everyweather.mvvm.model.Hour
 import com.desuzed.everyweather.mvvm.model.WeatherResponse
 import com.desuzed.everyweather.mvvm.repository.RepositoryApp
+import com.desuzed.everyweather.mvvm.room.RoomErrorHandler
 import com.desuzed.everyweather.mvvm.room.model.FavoriteLocationDto
 import com.desuzed.everyweather.network.retrofit.NetworkResponse
 import com.desuzed.everyweather.ui.StateRequest
@@ -15,13 +14,9 @@ import com.desuzed.everyweather.util.mappers.WeatherResponseMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.math.RoundingMode
-import java.text.DecimalFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
-    //TODO Мб здесь будет роутер
     val stateLiveData = MutableLiveData<StateRequest>()
     val saveLocationVisibility = MutableLiveData <Boolean>(false)
     val weatherApiLiveData = MutableLiveData<WeatherResponse?>()
@@ -29,7 +24,6 @@ class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
     val location = MutableLiveData<LocationApp>()
     val allLocations: LiveData<List<FavoriteLocationDto>> = repo.getAllLocations()
 
-    //TODo REFACTOR
     fun getForecast(query: String) = viewModelScope.launch(Dispatchers.IO) {
         stateLiveData.postValue(StateRequest.Loading())
         if (query.isEmpty()) {
@@ -41,8 +35,11 @@ class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
                 val weatherResponse = WeatherResponseMapper().mapFromEntity(response.body)
                 weatherApiLiveData.postValue(weatherResponse)
                 repo.saveForecast(weatherResponse)
-                if (isLocationSaved(weatherResponse)){
-                    //Triggers save location button
+                /**
+                 * Triggers save location button on weather screen
+                 **/
+                if (isLocationSaved(weatherResponse)) {
+
                     stateLiveData.postValue(StateRequest.Success())
                 } else {
                     stateLiveData.postValue(StateRequest.Success(true))
@@ -68,25 +65,13 @@ class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
         location.postValue(locationApp)
     }
 
-    //TODO refactor to mapper
-    @SuppressLint("SimpleDateFormat")
-    fun generateCurrentDayList(date: Long, weatherResponse: WeatherResponse, timeZone: String): ArrayList<Hour> {
-        val sdf = SimpleDateFormat("H")
-        sdf.timeZone = TimeZone.getTimeZone(timeZone)
-        val hour = sdf.format(date).toInt()
-        val forecastDay = weatherResponse.forecastDay
-        val currentDayList: List<Hour> = forecastDay.get(0).hourForecast
-            .drop(hour)
-            .plus(forecastDay[1].hourForecast.take(hour))
-        return currentDayList as ArrayList<Hour>
-    }
 
     fun getCachedForecast() {
         stateLiveData.postValue(StateRequest.Loading())
         when (val result = repo.loadForecast()) {
             null -> {
                 weatherApiLiveData.postValue(null)
-                stateLiveData.postValue(StateRequest.NoData()) //todo нужен ли этот стейт вообще
+                stateLiveData.postValue(StateRequest.NoData())
             }
             else -> {
                 weatherApiLiveData.postValue(result)
@@ -101,6 +86,9 @@ class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
         stateLiveData.postValue(StateRequest.Error(message))
     }
 
+    private fun onSuccess(message: String) {
+        stateLiveData.postValue(StateRequest.Success(message))
+    }
 
     fun loadCachedQuery() {
         val query = repo.loadQuery()
@@ -114,26 +102,29 @@ class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
         return repo.getNetworkLiveData()
     }
 
-
-
+    /**
+     * Inserts item to DB. If success or not, user gets notification
+     */
     fun insert(favoriteLocationDto: FavoriteLocationDto) = viewModelScope.launch {
-        repo.insert(favoriteLocationDto)
+        val inserted = repo.insert(favoriteLocationDto)
+        if (inserted.first == RoomErrorHandler.success) onSuccess(inserted.second)
+        else if (inserted.first == RoomErrorHandler.fail) onError(inserted.second)
     }
 
+    /**
+     * Deletes item from DB. If success or not, user gets notification
+     */
     fun deleteItem(favoriteLocationDto: FavoriteLocationDto) = viewModelScope.launch {
-        repo.deleteItem(favoriteLocationDto)
+        val deleted = repo.deleteItem(favoriteLocationDto)
+        if (deleted.first == RoomErrorHandler.success) onSuccess(deleted.second)
+        else if (deleted.first == RoomErrorHandler.fail) onError(deleted.second)
     }
 
     /**
      * Method checks if database contains place with that coordinates
      */
-    fun isLocationSaved (response:  WeatherResponse) : Boolean  = runBlocking {
-        //todo refactor
-        val lat = response.location.lat
-        val lon = response.location.lon
-        val df = DecimalFormat("#.#")
-        df.roundingMode = RoundingMode.CEILING
-        val latLonKey = "${df.format(lat)},${df.format(lon)}"
+    private fun isLocationSaved(response: WeatherResponse): Boolean = runBlocking {
+        val latLonKey = FavoriteLocationDto.generateKey(response.location)
         // Returns boolean
         repo.containsPrimaryKey(latLonKey)
     }

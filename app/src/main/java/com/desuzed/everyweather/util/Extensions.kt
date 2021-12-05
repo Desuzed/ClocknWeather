@@ -1,11 +1,5 @@
 package com.desuzed.everyweather.util
 
-import android.app.Activity
-import android.graphics.Color
-import android.os.Build
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.DialogFragmentNavigator

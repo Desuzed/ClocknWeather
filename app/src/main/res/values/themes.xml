@@ -12,36 +12,36 @@
         <item name="colorOnSecondary">@color/black</item>
         <item name="bgPrimary">@drawable/main_background_light</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="bgSecondary">@color/white</item>
-                <item name="android:statusBarColor">@color/gradientLightEnd</item>
-
-
-
-        <!--        <item name="android:statusBarColor">@color/transparent</item>-->
-        <!--                <item name="android:statusBarColor">@color/gradientLightEnd</item>-->
-<!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
-<!--                <item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:statusBarColor">@color/gradientLightEnd</item>
     </style>
 
 
     <!--Bottom Sheet Dialog Theme-->
     <style name="AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+        <item name="android:backgroundDimAmount">0.4</item>
     </style>
 
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/rounded_bg_bottom_sheet_light</item>
     </style>
+
     <!--Alert dialog themes-->
-
-    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
-        <item name="alertDialogStyle">@style/DialogStyle</item>
+    <style name="ThemeOverlay.MaterialAlertDialog" parent="ThemeOverlay.MaterialAlertDialog.Base">
+        <item name="buttonBarPositiveButtonStyle">@style/AlertButton.Positive</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AlertButton</item>
+        <item name="colorSurface">@color/bgDetailLight</item>
     </style>
 
-    <style name="DialogStyle" parent="Widget.AppCompat.ButtonBar.AlertDialog">
-        <item name="android:background">@drawable/dialog_bg_light</item>
+    <style name="AlertButton" parent="AlertButton.Base">
+        <item name="android:textColor">@color/textLight</item>
     </style>
+
+    <style name="AlertButton.Positive" parent="AlertButton.Positive.Base">
+        <item name="backgroundTint">@color/button_color_light</item>
+    </style>
+
     <!--Button themes-->
 
     <style name="CustomButton" parent="Widget.AppCompat.Button">
@@ -70,5 +70,6 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="android:statusBarColor">@color/gradientNightEnd</item>
     </style>
+
 
 </resources>

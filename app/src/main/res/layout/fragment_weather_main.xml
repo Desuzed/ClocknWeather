@@ -59,7 +59,7 @@
 
 </androidx.cardview.widget.CardView>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -80,24 +80,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <!--            <ImageView-->
-                <!--                android:id="@+id/btnLocation"-->
-                <!--                android:layout_width="32dp"-->
-                <!--                android:layout_height="32dp"-->
-                <!--                android:layout_marginTop="16dp"-->
-                <!--                android:layout_marginEnd="@dimen/margin_10"-->
-                <!--                android:src="@drawable/ic_location"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintTop_toTopOf="parent" />-->
-
                 <TextView
                     android:id="@+id/tvCurrentTemp"
                     style="@style/TextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_8"
+                    android:layout_marginTop="@dimen/margin_10"
                     android:layout_marginEnd="@dimen/margin_20dp"
-                    android:textSize="70sp"
+                    android:textSize="66sp"
                     android:textColor="?attr/textColorSecondary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPlace"
@@ -137,7 +127,7 @@
                     style="@style/TextViewStyle.TextBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_8"
+                    android:layout_marginTop="@dimen/margin_10"
                     android:padding="4dp"
                     android:textColor="?attr/textColorSecondary"
                     app:layout_constraintEnd_toEndOf="@id/tvCurrentTemp"
@@ -163,16 +153,17 @@
                     android:textColor="?attr/textColorSecondary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_8"
+                    android:layout_marginTop="@dimen/margin_10"
                     app:layout_constraintEnd_toEndOf="@id/tvCurrentTemp"
                     app:layout_constraintTop_toBottomOf="@id/tvCurrentTemp"
                     tools:text="feels like 13" />
 
                 <ImageView
                     android:id="@+id/imgIcon"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginEnd="@dimen/margin_8"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:layout_margin="@dimen/margin_8"
                     app:layout_constraintBottom_toBottomOf="@id/tvCurrentTemp"
                     app:layout_constraintEnd_toStartOf="@id/tvCurrentTemp"
                     app:layout_constraintTop_toTopOf="@id/tvCurrentTemp" />
@@ -183,7 +174,7 @@
                     style="@style/TextViewStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_8"
+                    android:layout_marginTop="@dimen/margin_10"
                     android:textAlignment="textEnd"
                     android:textColor="?attr/textColorSecondary"
                     app:layout_constraintEnd_toEndOf="@id/tvTime"
@@ -271,7 +262,7 @@
 
 
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

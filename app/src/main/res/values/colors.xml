@@ -7,10 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
     <color name="edit_text_bg_light">#99999999</color>
     <color name="edit_text_bg_night">#99E6E6E6</color>
-
     <color name="place_background">#4DFFFFFF</color>
     <color name="bgDetailLight">#EFF6FF</color>
     <color name="bgDetailNight">#3C567D</color>

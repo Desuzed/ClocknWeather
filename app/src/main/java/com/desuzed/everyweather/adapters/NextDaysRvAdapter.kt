@@ -9,17 +9,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.desuzed.everyweather.R
 import com.desuzed.everyweather.databinding.NextDayItemBinding
 import com.desuzed.everyweather.mvvm.model.ForecastDay
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.math.roundToInt
+import com.desuzed.everyweather.util.editor.NextDaysEditor
 
 class NextDaysRvAdapter : RecyclerView.Adapter<NextDaysRvAdapter.NextDaysVH>() {
     private var list: ArrayList<ForecastDay> = ArrayList()
@@ -59,7 +54,7 @@ class NextDaysRvAdapter : RecyclerView.Adapter<NextDaysRvAdapter.NextDaysVH>() {
     class NextDaysVH(binding: NextDayItemBinding, val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
         private val tvNextDate: TextView = binding.tvNextDate
-        private val tvNextText: TextView = binding.tvNextText
+        private val tvNextDescription: TextView = binding.tvNextDescription
         private val tvNextMaxTemp: TextView = binding.tvNextMaxTemp
         private val tvNextMinTemp: TextView = binding.tvNextMinTemp
         private val tvNextWind: TextView = binding.tvNextWind
@@ -75,39 +70,28 @@ class NextDaysRvAdapter : RecyclerView.Adapter<NextDaysRvAdapter.NextDaysVH>() {
             binding.expandableContainer
         val clNextDays: CardView = binding.clNextDays
 
-        //TODO refactor  to mapper
-        @SuppressLint("SetTextI18n", "SimpleDateFormat")
         fun bind(forecastDay: ForecastDay, timeZone: String) {
-            val sdf = SimpleDateFormat("E. dd/MM", Locale.getDefault())
-
-            val day = forecastDay.day
+            val resultMap = NextDaysEditor(forecastDay, timeZone, context).getResultMap()
             Glide
                 .with(context)
-                .load("https:${forecastDay.day.icon}")
+                .load(resultMap["nextIcon"])
                 .into(nextIcon)
-            sdf.timeZone = TimeZone.getTimeZone(timeZone)
-            tvNextDate.text = sdf.format(forecastDay.dateEpoch * 1000)
-            tvNextText.text = day.text
-            tvNextMaxTemp.text = day.maxTemp.roundToInt().toString() + context.resources.getString(
-                R.string.celsius
-            )
-            tvNextMinTemp.text = day.minTemp.roundToInt().toString() + context.resources.getString(
-                R.string.celsius
-            )
-            tvNextWind.text = "${day.maxWind} " + context.resources.getString(R.string.kmh)
-            tvNextPressure.text = "${forecastDay.hourForecast[0].pressureMb} mb"
-            tvNextHumidity.text = "${day.avgHumidity}%"
-            tvNextPop.text = "${day.popRain}%, ${day.totalPrecip} "+ context.resources.getString(R.string.mm)
-            tvNextSun.text = "${forecastDay.astro.sunrise}\n${forecastDay.astro.sunset}"
-            tvNextMoon.text = "${forecastDay.astro.moonrise}\n${forecastDay.astro.moonset}"
+            tvNextDate.text = resultMap["tvNextDate"]
+            tvNextDescription.text = resultMap["tvNextDescription"]
+            tvNextMaxTemp.text = resultMap["tvNextMaxTemp"]
+            tvNextMinTemp.text = resultMap["tvNextMinTemp"]
+            tvNextWind.text = resultMap["tvNextWind"]
+            tvNextPressure.text = resultMap["tvNextPressure"]
+            tvNextHumidity.text = resultMap["tvNextHumidity"]
+            tvNextPop.text = resultMap["tvNextPop"]
+            tvNextSun.text = resultMap["tvNextSun"]
+            tvNextMoon.text = resultMap["tvNextMoon"]
             rvNextHourly.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             val rvAdapter = HourAdapter()
             rvAdapter.updateList(forecastDay.hourForecast, timeZone)
             rvNextHourly.adapter = rvAdapter
-            val isExpanded = forecastDay.isExpanded
-            expandCollapse(isExpanded)
-
+            expandCollapse(forecastDay.isExpanded)
         }
 
         private fun expandCollapse(isExpanded: Boolean) {

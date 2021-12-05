@@ -5,9 +5,9 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.mvvm.LocationApp
 import com.desuzed.everyweather.mvvm.vm.SharedViewModel
 import com.desuzed.everyweather.ui.StateRequest
+import com.desuzed.everyweather.util.mappers.LocationAppMapper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -26,7 +26,7 @@ class LocationHandler(
                 .addOnSuccessListener {
                     sharedViewModel.stateLiveData.postValue(StateRequest.Loading())
                     if (it != null) {
-                        val locationApp = LocationApp (it.latitude.toFloat(), it.longitude.toFloat())
+                        val locationApp = LocationAppMapper().mapFromEntity(it)
                         sharedViewModel.postLocation(locationApp)
                     }else{
                         onError("Проверьте настройки местоположения")
@@ -38,12 +38,12 @@ class LocationHandler(
         }
     }
 
-    fun postLastLocation() {
+    private fun postLastLocation() {
         if (permissionsGranted()) {
             sharedViewModel.stateLiveData.postValue(StateRequest.Loading())
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if (it != null) {
-                    val locationApp = LocationApp (it.latitude.toFloat(), it.longitude.toFloat())
+                    val locationApp = LocationAppMapper().mapFromEntity(it)
                  //   val latLon = LatLon(it.latitude, it.longitude)
                     sharedViewModel.postLocation(locationApp)
                 }
@@ -53,7 +53,7 @@ class LocationHandler(
         }
     }
 
-    fun onError(message: String) {
+    private fun onError(message: String) {
         sharedViewModel.stateLiveData.postValue(StateRequest.Error(message))
     }
 

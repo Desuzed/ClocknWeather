@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.ui.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -22,17 +21,13 @@ import com.desuzed.everyweather.R
 import com.desuzed.everyweather.adapters.HourAdapter
 import com.desuzed.everyweather.databinding.FragmentWeatherMainBinding
 import com.desuzed.everyweather.mvvm.model.WeatherResponse
-import com.desuzed.everyweather.mvvm.room.model.FavoriteLocationDto
 import com.desuzed.everyweather.mvvm.vm.AppViewModelFactory
 import com.desuzed.everyweather.mvvm.vm.SharedViewModel
+import com.desuzed.everyweather.util.editor.WeatherFragEditor
 import com.desuzed.everyweather.util.navigate
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_weather_main.*
-import java.math.RoundingMode
-import java.text.DecimalFormat
-import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.roundToInt
 
 class WeatherMainFragment : Fragment() {
     override fun onCreateView(
@@ -82,11 +77,6 @@ class WeatherMainFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
-    val sdfDate = SimpleDateFormat("dd/MM")
-
-    @SuppressLint("SimpleDateFormat")
-    val sdfTime = SimpleDateFormat("HH:mm")
 
     private fun observeLiveData() {
         sharedViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
@@ -110,59 +100,35 @@ class WeatherMainFragment : Fragment() {
         }
     }
 
-    //TODO refactor!
-    @SuppressLint("SetTextI18n")
     private fun updateUi(response: WeatherResponse) {
-        val lat = response.location.lat
-        val lon = response.location.lon
-        val df = DecimalFormat("#.#")
-        df.roundingMode = RoundingMode.CEILING
-        val favoriteLocation = FavoriteLocationDto(
-            "${df.format(lat)},${df.format(lon)}",
-            response.location.name,
-            response.location.region,
-            response.location.country,
-            response.location.lat.toString(),
-            response.location.lon.toString()
-        )
-        //TODO Bug : На разных языках ставит либо точку либо запятую, хотя данные с апи приходят через точку
+        val editor = WeatherFragEditor(response, requireContext())
+        val favoriteLocation = editor.buildFavoriteLocationObj()
         fabAddLocation.setOnClickListener {
             sharedViewModel.insert(favoriteLocation)
             sharedViewModel.toggleSaveButton(false)
         }
-
-        val date = response.location.localtime_epoch.times(1000)
-        val timeZone = response.location.tzId
-        val current = response.current
-        val forecastDay = response.forecastDay[0]
-        sdfDate.timeZone = TimeZone.getTimeZone(timeZone)
-        sdfTime.timeZone = TimeZone.getTimeZone(timeZone)
-        Glide.with(this).load("https:${current.icon}").into(ivIcon)
-
+        val resultMap = editor.getResultMap()
+        Glide
+            .with(this)
+            .load(resultMap["imgIcon"])
+            .into(imgIcon)
         hourAdapter.updateList(
-            sharedViewModel.generateCurrentDayList(date, response, timeZone),
-            timeZone
+            editor.generateCurrentDayList(),
+            editor.timeZone
         )
         rvHour.startLayoutAnimation()
-
-        tvDate.text = sdfDate.format(date)
-        tvTime.text = sdfTime.format(date)
-        tvPlace.text = response.location.toString()
-        tvCurrentTemp.text =
-            current.temp.roundToInt().toString() + resources.getString(R.string.celsius)
-        tvDescription.text = current.text
-        tvFeelsLike.text =
-            resources.getString(R.string.feels_like) + " ${current.feelsLike.roundToInt()}" + resources.getString(
-                R.string.celsius
-            )
-        tvHumidity.text = "${current.humidity}%"
-        tvPressure.text = "${current.pressureMb} " + resources.getString(R.string.mb)
-        tvPop.text =
-            "${forecastDay.day.popRain}%, ${current.precipMm} " + resources.getString(R.string.mm) //TODO обработать снежные осадки
-        tvWind.text = "${current.windSpeed} " + resources.getString(R.string.kmh)
-        tvSun.text = "${forecastDay.astro.sunrise}\n${forecastDay.astro.sunset}"
-        tvMoon.text = "${forecastDay.astro.moonrise}\n${forecastDay.astro.moonset}"
-
+        tvDate.text = resultMap["tvDate"]
+        tvTime.text = resultMap["tvTime"]
+        tvPlace.text = resultMap["tvPlace"]
+        tvCurrentTemp.text = resultMap["tvCurrentTemp"]
+        tvDescription.text = resultMap["tvDescription"]
+        tvFeelsLike.text = resultMap["tvFeelsLike"]
+        tvHumidity.text = resultMap["tvHumidity"]
+        tvPressure.text = resultMap["tvPressure"]
+        tvPop.text = resultMap["tvPop"]
+        tvWind.text = resultMap["tvWind"]
+        tvSun.text = resultMap["tvSun"]
+        tvMoon.text = resultMap["tvMoon"]
     }
 
 
@@ -207,7 +173,7 @@ class WeatherMainFragment : Fragment() {
     private lateinit var btnNextDaysForecast: TextView
     private lateinit var containerNoData: CardView
     private lateinit var clMainWeather: LinearLayout
-    private lateinit var ivIcon: ImageView
+    private lateinit var imgIcon: ImageView
 
     private fun bind() {
         tvDate = fragmentWeatherBinding.tvDate
@@ -223,7 +189,7 @@ class WeatherMainFragment : Fragment() {
         tvPop = fragmentWeatherBinding.includedContainer.tvPopMain
         tvWind = fragmentWeatherBinding.includedContainer.tvWindMain
         tvMoon = fragmentWeatherBinding.includedContainer.tvMoonMain
-        ivIcon = fragmentWeatherBinding.imgIcon
+        imgIcon = fragmentWeatherBinding.imgIcon
         btnNextDaysForecast = fragmentWeatherBinding.btnNextDaysForecast
         tvPoweredBy = fragmentWeatherBinding.tvPoweredBy
         clMainWeather = fragmentWeatherBinding.clMainWeather

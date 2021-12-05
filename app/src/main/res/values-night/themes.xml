@@ -13,43 +13,35 @@
         <item name="bgPrimary">@drawable/main_background_night</item>
         <item name="bgSecondary">@drawable/secondary_background_night</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="android:statusBarColor">@color/gradientNightEnd</item>
-
-
-        <!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
-        <!--                <item name="android:statusBarColor">@color/transparent</item>-->
-        <!--        <item name="android:windowTranslucentStatus">true</item>-->
-        <!--        <item name="android:windowTranslucentNavigation">true</item>-->
     </style>
-
-    <style name="TextViewStyle.White">
-        <item name="android:textColorPrimary">@color/textNight</item>
-    </style>
-
 
     <!--Bottom Sheet Dialog Theme-->
-
     <style name="AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+        <item name="android:backgroundDimAmount">0.4</item>
     </style>
 
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/rounded_bg_bottom_sheet_night</item>
     </style>
 
-
     <!--Alert dialog themes-->
-    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
-        <item name="alertDialogStyle">@style/DialogStyle</item>
+    <style name="ThemeOverlay.MaterialAlertDialog" parent="ThemeOverlay.MaterialAlertDialog.Base">
+        <item name="buttonBarPositiveButtonStyle">@style/AlertButton.Positive.Night</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AlertButton.Night</item>
+        <item name="colorSurface">@color/bgDetailNight</item>
     </style>
 
-    <style name="DialogStyle" parent="Widget.AppCompat.ButtonBar.AlertDialog">
-        <item name="android:background">@drawable/dialog_bg_night</item>
+    <style name="AlertButton.Night" parent="AlertButton.Base">
+        <item name="android:textColor">@color/textNight</item>
+    </style>
+
+    <style name="AlertButton.Positive.Night" parent="AlertButton.Positive.Base">
+        <item name="backgroundTint">@color/button_color_night</item>
     </style>
 
     <!--Button themes-->
-
     <style name="CustomButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background</item>
         <item name="fontFamily">@font/montserrat_regular_ru</item>
@@ -65,7 +57,6 @@
     </style>
 
     <!--Theme for separator between date and time-->
-
     <style name="SeparatorView">
         <item name="android:background">@color/textNight</item>
     </style>

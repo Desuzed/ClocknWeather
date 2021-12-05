@@ -1,5 +1,6 @@
 package com.desuzed.everyweather.network.dto
 
+
 import com.google.gson.annotations.SerializedName
 
 class AstroDto {
@@ -20,4 +21,5 @@ class AstroDto {
 
     @SerializedName("moon_illumination")
     var moonIllumination: String = ""
+
 }

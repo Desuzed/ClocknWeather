@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.ui.fragments
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.*
 class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var job: Job? = null
@@ -50,7 +50,6 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     }
 
-    //TODO refactor. Refactor alert dialog , make custom
     override fun onMapReady(googleMap: GoogleMap) {
         val location = sharedViewModel.weatherApiLiveData.value?.location
             val oldMarker = instantiateOldMarker(location, googleMap)
@@ -73,37 +72,34 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun showAlertDialog(latLng: LatLng, googleMap: GoogleMap, oldMarker: Marker?) {
-        val alertDialog: AlertDialog = activity.let {
-            val builder = AlertDialog.Builder(it)
-            builder.apply {
-                setTitle(R.string.load_weather_of_this_location)
-                setPositiveButton(R.string.ok) { _, _ ->
-                    job = CoroutineScope(Dispatchers.Main).launch {
-                        googleMap.addMarker(
-                            MarkerOptions()
-                                .position(latLng)
-                        )
-                        oldMarker?.remove()
-                        delay(1000)
-                        //TODO delegate to mapper
-                        val locationApp = LocationApp(latLng.latitude.toFloat(), latLng.longitude.toFloat())
-                        sharedViewModel.postLocation(locationApp)
-                        dismiss()
-                        navigateToMainFragment()
-                    }
-                }
-                setNegativeButton(R.string.cancel) { _, _ ->
 
+    private fun showAlertDialog(latLng: LatLng, googleMap: GoogleMap, oldMarker: Marker?) {
+        val dialog = MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_MaterialAlertDialog)
+            .setTitle(resources.getString(R.string.load_weather_of_this_location))
+            .setPositiveButton(resources.getString(R.string.ok)) { alertDialog, _ ->
+                job = CoroutineScope(Dispatchers.Main).launch {
+                    googleMap.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                    )
+                    oldMarker?.remove()
+                    alertDialog.dismiss()
+                    delay(1000)
+                    val locationApp =
+                        LocationApp(latLng.latitude.toFloat(), latLng.longitude.toFloat())
+                    sharedViewModel.postLocation(locationApp)
+                    dismiss()
+                    navigateToMainFragment()
                 }
             }
-            builder.create()
-        }
-        alertDialog.show()
+            .setNeutralButton(resources.getString(R.string.cancel)) { alertDialog, _ ->
+                alertDialog.dismiss()
+            }.create()
+        dialog.show()
     }
 
 
-    private fun navigateToMainFragment (){
+    private fun navigateToMainFragment() {
         navigate(R.id.action_mapBottomSheetFragment_to_weatherFragment)
     }
 

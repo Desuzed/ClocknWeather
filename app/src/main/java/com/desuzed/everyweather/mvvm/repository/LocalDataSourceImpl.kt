@@ -6,8 +6,9 @@ import com.desuzed.everyweather.App
 import com.desuzed.everyweather.mvvm.NetworkLiveData
 import com.desuzed.everyweather.mvvm.model.WeatherResponse
 import com.desuzed.everyweather.mvvm.room.FavoriteLocationDAO
+import com.desuzed.everyweather.mvvm.room.RoomErrorHandler
 import com.desuzed.everyweather.mvvm.room.model.FavoriteLocationDto
-import com.desuzed.everyweather.network.ErrorHandler
+import com.desuzed.everyweather.network.NetworkErrorHandler
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 
@@ -17,13 +18,13 @@ class LocalDataSourceImpl(private val favoriteLocationDAO: FavoriteLocationDAO, 
         favoriteLocationDAO.getAlphabetizedLocations()
 
     @WorkerThread
-    override suspend fun insert(favoriteLocationDto: FavoriteLocationDto) {
-        favoriteLocationDAO.insert(favoriteLocationDto)
+    override suspend fun insert(favoriteLocationDto: FavoriteLocationDto) : Long {
+        return favoriteLocationDAO.insert(favoriteLocationDto)
     }
 
     @WorkerThread
-    override suspend fun deleteItem(favoriteLocationDto: FavoriteLocationDto) {
-        favoriteLocationDAO.deleteItem(favoriteLocationDto)
+    override suspend fun deleteItem(favoriteLocationDto: FavoriteLocationDto) : Int {
+        return favoriteLocationDAO.deleteItem(favoriteLocationDto)
     }
 
     @WorkerThread
@@ -59,7 +60,7 @@ class LocalDataSourceImpl(private val favoriteLocationDAO: FavoriteLocationDAO, 
         return networkLiveData
     }
 
-    private val errorHandler = ErrorHandler(app.applicationContext)
+    private val errorHandler = NetworkErrorHandler(app.applicationContext.resources)
 
     //TODO refactor errors to one method
     override fun getInternetError(): String =
@@ -68,11 +69,18 @@ class LocalDataSourceImpl(private val favoriteLocationDAO: FavoriteLocationDAO, 
     override fun getUnknownError(): String =
         errorHandler.getUnknownError()
 
+
     override fun noDataToLoad(): String =
         errorHandler.noDataToLoad()
 
     override fun getApiError(errorCode: Int?): String =
         errorHandler.getApiError(errorCode)
+
+    private val roomErrorHandler = RoomErrorHandler(app.applicationContext.resources)
+
+    override fun getInsertInfo(saved: Boolean): Pair <Int, String> = roomErrorHandler.getInsertInfo(saved)
+
+    override fun getDeleteInfo(deleted: Boolean): Pair <Int, String>  = roomErrorHandler.getDeleteInfo(deleted)
 
     companion object {
         const val S_PREF_NAME = "SP"
