@@ -23,7 +23,7 @@
     <string name="unknown_app_error">Sorry, something went wrong. Unknown application error.</string>
     <string name="check_internet_connection">Сheck internet connection.</string>
     <string name="field_must_not_be_empty">Field must not be empty.</string>
-    <string name="next_days_forecast">Show next days forecast</string>
+    <string name="next_days_forecast">Next days forecast</string>
     <string name="no_data_to_load">No data to load.</string>
     <string name="location_permissions_are_not_granted">Location permissions are not granted.</string>
     <string name="your_saved_cities_list_is_empty">Your saved cities list is empty. Load weather data and add your location from weather screen.</string>

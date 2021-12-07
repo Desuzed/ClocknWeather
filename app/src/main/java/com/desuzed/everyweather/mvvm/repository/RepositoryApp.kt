@@ -16,13 +16,11 @@ class RepositoryApp(
 ) {
     suspend fun insert(favoriteLocationDto: FavoriteLocationDto): Pair <Int, String> {
         val inserted = localDataSource.insert(favoriteLocationDto)
-        Log.i("TAG", "insert: $inserted")
         return localDataSource.getInsertInfo(inserted>0)
     }
 
     suspend fun deleteItem(favoriteLocationDto: FavoriteLocationDto) : Pair <Int, String> {
         val deleted = localDataSource.deleteItem(favoriteLocationDto)
-        Log.i("TAG", "deleteItem: $deleted")
         return localDataSource.getDeleteInfo(deleted>0)
     }
 

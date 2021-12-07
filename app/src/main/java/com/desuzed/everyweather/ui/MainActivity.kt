@@ -15,6 +15,9 @@ import com.desuzed.everyweather.databinding.ActivityMainBinding
 import com.desuzed.everyweather.mvvm.vm.AppViewModelFactory
 import com.desuzed.everyweather.mvvm.vm.SharedViewModel
 import com.desuzed.everyweather.util.LocationHandler
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         bind()
         requestLocationPermissions()
         setLangForRequest()
+        MobileAds.initialize(this) {}
 
     }
 

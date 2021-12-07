@@ -20,7 +20,7 @@
     <string name="unknown_app_error">Извините, что-то пошло не так. Неизвестная ошибка приложения.</string>
     <string name="check_internet_connection">Проверьте интернет соединение.</string>
     <string name="field_must_not_be_empty">Поля не должны быть пустыми.</string>
-    <string name="next_days_forecast">Показать погоду на следующие дни</string>
+    <string name="next_days_forecast">Погода на следующие дни</string>
     <string name="no_data_to_load">Нет информации для загрузки.</string>
     <string name="location_permissions_are_not_granted">Нет разрешений на доступ к Вашему местоположению.</string>
     <string name="your_saved_cities_list_is_empty">Ваш список сохраненных местоположений пуст. Загрузите погоду и сохраните место с экрана погоды.</string>

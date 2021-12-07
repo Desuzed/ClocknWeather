@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +17,17 @@ import com.desuzed.everyweather.mvvm.LocationApp
 import com.desuzed.everyweather.mvvm.vm.AppViewModelFactory
 import com.desuzed.everyweather.mvvm.vm.SharedViewModel
 import com.desuzed.everyweather.ui.StateRequest
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
 
 
 class MainFragment : Fragment() {
     private lateinit var fragmentMainBinding: FragmentMainBinding
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var tvInternetConnection: TextView
-
+    private lateinit var mAdView : AdView
     private val sharedViewModel: SharedViewModel by lazy {
         ViewModelProvider(
             requireActivity(),
@@ -44,14 +49,22 @@ class MainFragment : Fragment() {
         bind()
         observeLiveData()
         swipeRefresh.setOnRefreshListener {
-            sharedViewModel.queryLiveData.value?.let { getQueryForecast(it) }
+            sharedViewModel.queryLiveData.value?.let { getQueryForecast(it)
+            }
         }
+        tryLoadAd()
+    }
 
+    private fun tryLoadAd (){
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
     }
 
     private fun bind() {
         tvInternetConnection = fragmentMainBinding.tvInternetConnection
         swipeRefresh = fragmentMainBinding.swipeRefresh
+        mAdView = fragmentMainBinding.adView
+        mAdView.adListener = mAdListener
     }
 
     private fun observeLiveData() {
@@ -122,6 +135,7 @@ class MainFragment : Fragment() {
         when (it) {
             true -> {
                 tvInternetConnection.visibility = View.GONE
+                tryLoadAd()
             }
             else -> {
                 tvInternetConnection.visibility = View.VISIBLE
@@ -144,6 +158,17 @@ class MainFragment : Fragment() {
         sharedViewModel.postQuery(query)
     }
 
+    private val mAdListener = object: AdListener() {
+        override fun onAdLoaded() {
+            Log.d("ad", "onAdLoaded")
+        }
+
+        override fun onAdFailedToLoad(adError : LoadAdError) {
+            Log.d("ad", "onAdFailedToLoad")
+        }
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         sharedViewModel.location.removeObserver(locationObserver)
@@ -151,6 +176,4 @@ class MainFragment : Fragment() {
         sharedViewModel.getNetworkLiveData().removeObserver(networkObserver)
         sharedViewModel.stateLiveData.removeObserver(stateObserver)
     }
-
-
 }

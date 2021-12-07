@@ -5,6 +5,7 @@ import com.desuzed.everyweather.mvvm.repository.LocalDataSourceImpl
 import com.desuzed.everyweather.mvvm.repository.RemoteDataSourceImpl
 import com.desuzed.everyweather.mvvm.repository.RepositoryApp
 import com.desuzed.everyweather.mvvm.room.RoomDbApp
+import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
@@ -22,6 +23,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+
 
     }
     companion object {

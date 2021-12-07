@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.mvvm
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -36,7 +35,6 @@ class NetworkLiveData(val context: Context) : LiveData<Boolean>(true) {
 
 
     private fun createNetworkCallback() = object : ConnectivityManager.NetworkCallback() {
-        @SuppressLint("MissingPermission")
         override fun onAvailable(network: Network) {
             val networkCapabilities = networkManager.getNetworkCapabilities(network)
             val isInternet =
@@ -45,7 +43,6 @@ class NetworkLiveData(val context: Context) : LiveData<Boolean>(true) {
                 validNetworks.add(network)
             }
             checkValidNetworks()
-
         }
 
         override fun onLost(network: Network) {
