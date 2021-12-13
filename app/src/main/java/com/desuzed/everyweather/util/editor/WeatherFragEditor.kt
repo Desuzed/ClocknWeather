@@ -3,9 +3,9 @@ package com.desuzed.everyweather.util.editor
 import android.annotation.SuppressLint
 import android.content.Context
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.mvvm.model.Hour
-import com.desuzed.everyweather.mvvm.model.WeatherResponse
-import com.desuzed.everyweather.mvvm.room.model.FavoriteLocationDto
+import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.model.model.Hour
+import com.desuzed.everyweather.model.model.WeatherResponse
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -51,18 +51,18 @@ class WeatherFragEditor(private val response: WeatherResponse, context: Context)
      *  Generates list for HourAdapter since current time and plus next 24 items
      */
     @SuppressLint("SimpleDateFormat")
-    fun generateCurrentDayList(): ArrayList<Hour> {
+    fun generateCurrentDayList(): List<Hour> {
         val sdf = SimpleDateFormat("H")
         sdf.timeZone = TimeZone.getTimeZone(timeZone)
         val hour = sdf.format(date).toInt()
         val forecastDay = response.forecastDay
-        val currentDayList: List<Hour> = forecastDay[0].hourForecast
+        return forecastDay[0].hourForecast
             .drop(hour)
             .plus(forecastDay[1].hourForecast.take(hour))
-        return currentDayList as ArrayList<Hour>
     }
+
     //TODO Bug : На разных языках ставит либо точку либо запятую, хотя данные с апи приходят через точку
-    fun buildFavoriteLocationObj() : FavoriteLocationDto {
+    fun buildFavoriteLocationObj(): FavoriteLocationDto {
         return FavoriteLocationDto(
             FavoriteLocationDto.generateKey(location),
             location.name,

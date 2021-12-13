@@ -5,9 +5,9 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.mvvm.vm.SharedViewModel
-import com.desuzed.everyweather.ui.StateRequest
-import com.desuzed.everyweather.util.mappers.LocationAppMapper
+import com.desuzed.everyweather.data.network.dto.weatherApi.mappers.LocationAppMapper
+import com.desuzed.everyweather.model.vm.SharedViewModel
+import com.desuzed.everyweather.view.StateUI
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -20,18 +20,16 @@ class LocationHandler(
         LocationServices.getFusedLocationProviderClient(activity)
 
     fun postCurrentLocation() {
-    sharedViewModel.stateLiveData.postValue(StateRequest.Loading())
+        sharedViewModel.stateLiveData.postValue(StateUI.Loading())
         if (permissionsGranted()) {
             fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null)
                 .addOnSuccessListener {
-                    sharedViewModel.stateLiveData.postValue(StateRequest.Loading())
                     if (it != null) {
                         val locationApp = LocationAppMapper().mapFromEntity(it)
                         sharedViewModel.postLocation(locationApp)
                     }else{
-                        onError("Проверьте настройки местоположения")
+                        onError(activity.resources.getString(R.string.location_permissions_are_not_granted))
                     }
-
                 }
         } else {
            postLastLocation()
@@ -40,11 +38,11 @@ class LocationHandler(
 
     private fun postLastLocation() {
         if (permissionsGranted()) {
-            sharedViewModel.stateLiveData.postValue(StateRequest.Loading())
+            sharedViewModel.stateLiveData.postValue(StateUI.Loading())
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if (it != null) {
                     val locationApp = LocationAppMapper().mapFromEntity(it)
-                 //   val latLon = LatLon(it.latitude, it.longitude)
+                    //   val latLon = LatLon(it.latitude, it.longitude)
                     sharedViewModel.postLocation(locationApp)
                 }
             }
@@ -54,7 +52,7 @@ class LocationHandler(
     }
 
     private fun onError(message: String) {
-        sharedViewModel.stateLiveData.postValue(StateRequest.Error(message))
+        sharedViewModel.stateLiveData.postValue(StateUI.Error(message))
     }
 
     fun permissionsGranted(): Boolean {
