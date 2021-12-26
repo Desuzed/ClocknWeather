@@ -108,7 +108,6 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
     private val allLocationObserver = Observer<List<FavoriteLocationDto>> {
         favoriteLocationAdapter.submitList(it)
         rvCity.startLayoutAnimation()
-        //TODO неккоректно отрабатывает анимация, когнда переходишь на фрагмент, поэтом приходится вызывать ее вручную
         if (it.isEmpty()) {
             toggleEmptyList(true)
         } else {

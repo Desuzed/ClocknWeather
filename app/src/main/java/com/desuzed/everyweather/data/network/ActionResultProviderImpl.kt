@@ -11,6 +11,8 @@ class ActionResultProviderImpl(private val resources: Resources) : ActionResultP
             10 -> resources.getString(R.string.no_data_to_load)
             20 -> resources.getString(R.string.check_internet_connection)
             30 -> resources.getString(R.string.unknown_app_error)
+            500, 501 -> resources.getString(R.string.wrong_server_result)
+            in 502..530 -> resources.getString(R.string.server_error)
             1002 -> resources.getString(R.string.api_key_error)
             1003 -> resources.getString(R.string.q_not_provided)
             1005 -> resources.getString(R.string.api_request_is_invalid)

@@ -2,12 +2,15 @@ package com.desuzed.everyweather.view
 
 
 import android.Manifest
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.os.ConfigurationCompat
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
@@ -16,6 +19,7 @@ import com.desuzed.everyweather.model.vm.AppViewModelFactory
 import com.desuzed.everyweather.model.vm.SharedViewModel
 import com.desuzed.everyweather.util.LocationHandler
 import com.google.android.gms.ads.MobileAds
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,9 +43,14 @@ class MainActivity : AppCompatActivity() {
         MobileAds.initialize(this) {}
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun setLangForRequest() {
-        App.instance.setLang(resources.configuration.locales[0].language)
+        val lang = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].language
+        App.instance.setLang(lang)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+//            App.instance.setLang(Resources.getSystem().configuration.locales[0].language)
+//        }else{
+//            App.instance.setLang(Locale.getDefault().language)
+//        }
     }
 
     private fun bind() {
