@@ -1,5 +1,7 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
+import com.desuzed.everyweather.data.network.dto.EntityMapper
+import com.desuzed.everyweather.model.model.Location
 import com.google.gson.annotations.SerializedName
 
 class LocationDto {
@@ -27,4 +29,19 @@ class LocationDto {
     @SerializedName("localtime")
     var localtime: String= ""
 
+}
+
+class LocationMapper : EntityMapper<LocationDto, Location> {
+    override fun mapFromEntity(entity: LocationDto): Location {
+        return Location(
+            entity.name,
+            entity.region,
+            entity.country,
+            entity.lat,
+            entity.lon,
+            entity.tzId,
+            entity.localtime_epoch,
+            entity.localtime
+        )
+    }
 }

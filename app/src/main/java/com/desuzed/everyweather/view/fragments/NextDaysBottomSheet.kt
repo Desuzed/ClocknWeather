@@ -12,19 +12,19 @@ import com.desuzed.everyweather.view.adapters.NextDaysRvAdapter
 import com.desuzed.everyweather.databinding.FragmentNextDaysBotSheetBinding
 import com.desuzed.everyweather.model.model.WeatherResponse
 import com.desuzed.everyweather.model.vm.AppViewModelFactory
-import com.desuzed.everyweather.model.vm.SharedViewModel
+import com.desuzed.everyweather.model.vm.WeatherViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.*
 
 class NextDaysBottomSheet : BottomSheetDialogFragment() {
     private val tenAdapter by lazy { NextDaysRvAdapter() }
     private lateinit var binding: FragmentNextDaysBotSheetBinding
-    private val sharedViewModel: SharedViewModel by lazy {
+    private val weatherViewModel: WeatherViewModel by lazy {
         ViewModelProvider(
             requireActivity(),
             AppViewModelFactory(App.instance.getRepo())
         )
-            .get(SharedViewModel::class.java)
+            .get(WeatherViewModel::class.java)
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +41,7 @@ class NextDaysBottomSheet : BottomSheetDialogFragment() {
         rvTen.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         rvTen.adapter = tenAdapter
-        sharedViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
+        weatherViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
     }
 
     private val weatherObserver = Observer<WeatherResponse?> { response ->

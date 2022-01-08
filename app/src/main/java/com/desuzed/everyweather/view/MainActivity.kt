@@ -46,11 +46,6 @@ class MainActivity : AppCompatActivity() {
     private fun setLangForRequest() {
         val lang = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].language
         App.instance.setLang(lang)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-//            App.instance.setLang(Resources.getSystem().configuration.locales[0].language)
-//        }else{
-//            App.instance.setLang(Locale.getDefault().language)
-//        }
     }
 
     private fun bind() {

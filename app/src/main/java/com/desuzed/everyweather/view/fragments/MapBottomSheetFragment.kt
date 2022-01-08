@@ -23,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.*
 class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var job: Job? = null
+    private var location : Location? = null
 
     private val sharedViewModel: SharedViewModel by lazy {
         ViewModelProvider(
@@ -50,7 +51,7 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        val location = sharedViewModel.weatherApiLiveData.value?.location
+        location = requireArguments().getParcelable<Location>("key")
             val oldMarker = instantiateOldMarker(location, googleMap)
             googleMap.setOnMapClickListener { latLng ->
                 showAlertDialog(latLng, googleMap, oldMarker)

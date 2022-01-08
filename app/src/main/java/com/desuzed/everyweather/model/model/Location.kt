@@ -1,6 +1,10 @@
 package com.desuzed.everyweather.model.model
 
-class Location(
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+class Location (
     val name: String,
 
     val region: String,
@@ -16,7 +20,7 @@ class Location(
     val localtime_epoch: Long,
 
     val localtime: String
-){
+): Parcelable{
     /**
      * toString made for showing correct text
      */

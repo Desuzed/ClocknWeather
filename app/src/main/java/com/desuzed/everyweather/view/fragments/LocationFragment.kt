@@ -12,20 +12,23 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.view.adapters.FavoriteLocationAdapter
-import com.desuzed.everyweather.databinding.FragmentLocationBinding
-import com.desuzed.everyweather.data.room.FavoriteLocationDto
-import com.desuzed.everyweather.model.vm.AppViewModelFactory
-import com.desuzed.everyweather.model.vm.SharedViewModel
 import com.desuzed.everyweather.data.network.ActionResultProvider
+import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.data.room.FavoriteLocationMapper
+import com.desuzed.everyweather.databinding.FragmentLocationBinding
+import com.desuzed.everyweather.model.model.Location
+import com.desuzed.everyweather.model.vm.AppViewModelFactory
+import com.desuzed.everyweather.model.vm.LocationViewModel
+import com.desuzed.everyweather.model.vm.SharedViewModel
 import com.desuzed.everyweather.view.MainActivity
-import com.desuzed.everyweather.data.network.dto.weatherApi.mappers.FavoriteLocationMapper
+import com.desuzed.everyweather.view.adapters.FavoriteLocationAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
@@ -45,6 +48,14 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
             AppViewModelFactory(App.instance.getRepo())
         )
             .get(SharedViewModel::class.java)
+    }
+
+    private val locationViewModel: LocationViewModel by lazy {
+        ViewModelProvider(
+            requireActivity(),
+            AppViewModelFactory(App.instance.getRepo())
+        )
+            .get(LocationViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -83,13 +94,13 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
         etCity.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
             val text = etCity.text.toString()
             if (text.isEmpty()) {
-                sharedViewModel.onError(ActionResultProvider.EMPTY_FIELD)
+                locationViewModel.onError(ActionResultProvider.EMPTY_FIELD)
                 hideKeyboard()
                 return@OnEditorActionListener false
             }
             if (actionId != EditorInfo.IME_ACTION_SEARCH) {
                 hideKeyboard()
-                sharedViewModel.onError(ActionResultProvider.FAIL)
+                locationViewModel.onError(ActionResultProvider.FAIL)
                 return@OnEditorActionListener false
             } else {
                 sharedViewModel.postQuery(text)
@@ -102,7 +113,12 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
     }
 
     private fun observeLiveData() {
-        sharedViewModel.allLocations.observe(viewLifecycleOwner, allLocationObserver)
+        locationViewModel.allLocations.observe(viewLifecycleOwner, allLocationObserver)
+        locationViewModel.messageLiveData.observe(viewLifecycleOwner, messageObserver)
+    }
+
+    private val messageObserver = Observer<String> {
+        toast(it)
     }
 
     private val allLocationObserver = Observer<List<FavoriteLocationDto>> {
@@ -131,7 +147,7 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
             MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_MaterialAlertDialog)
                 .setTitle(resources.getString(R.string.delete))
                 .setPositiveButton(resources.getString(R.string.ok)) { alertDialog, _ ->
-                    sharedViewModel.deleteItem(favoriteLocationDto)
+                    locationViewModel.deleteItem(favoriteLocationDto)
                     alertDialog.dismiss()
                 }
                 .setNeutralButton(resources.getString(R.string.cancel)) { alertDialog, _ ->
@@ -151,7 +167,8 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
     }
 
     private fun showMapBotSheet() {
-        navigate(R.id.action_locationFragment_to_mapBottomSheetFragment)
+        val bundle = bundleOf("key" to Location("1", "2", "3", 44.1f, 131.1f, "4", 10000, "st"))
+        navigate(R.id.action_locationFragment_to_mapBottomSheetFragment, bundle)
     }
 
     private fun navigateToWeatherFragment() {
@@ -184,6 +201,6 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
 
     override fun onDestroy() {
         super.onDestroy()
-        sharedViewModel.allLocations.removeObserver(allLocationObserver)
+        locationViewModel.allLocations.removeObserver(allLocationObserver)
     }
 }

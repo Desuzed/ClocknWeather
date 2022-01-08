@@ -5,7 +5,7 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.network.dto.weatherApi.mappers.LocationAppMapper
+import com.desuzed.everyweather.model.model.LocationAppMapper
 import com.desuzed.everyweather.model.vm.SharedViewModel
 import com.desuzed.everyweather.view.StateUI
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -20,7 +20,7 @@ class LocationHandler(
         LocationServices.getFusedLocationProviderClient(activity)
 
     fun postCurrentLocation() {
-        sharedViewModel.stateLiveData.postValue(StateUI.Loading())
+       // sharedViewModel.stateLiveData.postValue(StateUI.Loading())
         if (permissionsGranted()) {
             fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null)
                 .addOnSuccessListener {
@@ -38,7 +38,7 @@ class LocationHandler(
 
     private fun postLastLocation() {
         if (permissionsGranted()) {
-            sharedViewModel.stateLiveData.postValue(StateUI.Loading())
+           // sharedViewModel.stateLiveData.postValue(StateUI.Loading())
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if (it != null) {
                     val locationApp = LocationAppMapper().mapFromEntity(it)
@@ -52,7 +52,7 @@ class LocationHandler(
     }
 
     private fun onError(message: String) {
-        sharedViewModel.stateLiveData.postValue(StateUI.Error(message))
+     //   sharedViewModel.stateLiveData.postValue(StateUI.Error(message))
     }
 
     fun permissionsGranted(): Boolean {

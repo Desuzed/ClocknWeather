@@ -3,7 +3,9 @@ package com.desuzed.everyweather.data.room
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.desuzed.everyweather.data.network.dto.EntityMapper
 import com.desuzed.everyweather.model.model.Location
+import com.desuzed.everyweather.model.model.LocationApp
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -32,4 +34,17 @@ class FavoriteLocationDto(
             return "${df.format(location.lat)},${df.format(location.lon)}"
         }
     }
+}
+
+class FavoriteLocationMapper : EntityMapper<FavoriteLocationDto, LocationApp> {
+    override fun mapFromEntity(entity: FavoriteLocationDto): LocationApp {
+        return LocationApp(
+            entity.lat.toFloat(),
+            entity.lon.toFloat(),
+            entity.cityName,
+            entity.region,
+            entity.country
+        )
+    }
+
 }

@@ -13,7 +13,7 @@ class RemoteDataSourceImpl : RemoteDataSource {
      * Default language: English
      */
     var lang: String = "en"
-    var mApiType: ApiTypeWeather = ApiTypeWeather.WeatherApi()
+  //  var mApiType: ApiTypeWeather = ApiTypeWeather.WeatherApi()
 
     override suspend fun getForecast(query: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> =
         withContext(Dispatchers.IO) {

@@ -24,7 +24,6 @@ import com.google.android.gms.ads.LoadAdError
 
 class MainFragment : Fragment() {
     private lateinit var fragmentMainBinding: FragmentMainBinding
-    private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var tvInternetConnection: TextView
     private lateinit var mAdView : AdView
     private val sharedViewModel: SharedViewModel by lazy {
@@ -47,10 +46,6 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bind()
         observeLiveData()
-        swipeRefresh.setOnRefreshListener {
-            sharedViewModel.queryLiveData.value?.let { getQueryForecast(it)
-            }
-        }
         tryLoadAd()
     }
 
@@ -61,79 +56,21 @@ class MainFragment : Fragment() {
 
     private fun bind() {
         tvInternetConnection = fragmentMainBinding.tvInternetConnection
-        swipeRefresh = fragmentMainBinding.swipeRefresh
         mAdView = fragmentMainBinding.adView
         mAdView.adListener = mAdListener
     }
 
     private fun observeLiveData() {
         sharedViewModel.loadCachedQuery()
-        sharedViewModel.stateLiveData.observe(viewLifecycleOwner, stateObserver)
-        sharedViewModel.queryLiveData.observe(viewLifecycleOwner, queryObserver)
         sharedViewModel.location.observe(viewLifecycleOwner, locationObserver)
         sharedViewModel.getNetworkLiveData().observe(viewLifecycleOwner, networkObserver)
     }
 
-    private fun getQueryForecast(query: String) {
-        sharedViewModel.getForecast(query)
-    }
-
-
-    private fun launchRefresh(state: Boolean) {
-        swipeRefresh.isRefreshing = state
-    }
-
-    private fun toast(message: String) {
-        Toast.makeText(
-            requireContext(),
-            message,
-            Toast.LENGTH_LONG
-        )
-            .show()
-    }
-
-    private val stateObserver = Observer<StateUI> {
-        when (it) {
-            is StateUI.Loading -> {
-                launchRefresh(true)
-            }
-            is StateUI.Success -> {
-                onSuccess(it)
-            }
-            is StateUI.Error -> {
-                onError(it)
-            }
-            is StateUI.NoData -> {
-                launchRefresh(false)
-                toggleSaveButton(false)
-            }
-        }
-    }
-
-    private fun onSuccess(it: StateUI.Success) {
-        if (it.toggleSaveButton) toggleSaveButton(true)
-        else toggleSaveButton(false)
-        if (it.message.isNotEmpty()) {
-            toast(it.message)
-        }
-        launchRefresh(false)
-    }
-
-    private fun onError(it: StateUI.Error) {
-        launchRefresh(false)
-        toggleSaveButton(false)
-        toast(it.message)
-    }
-
-    private val queryObserver = Observer<String> {
-        getQueryForecast(it)
-    }
 
     private val networkObserver = Observer<Boolean> {
         when (it) {
             true -> {
                 tvInternetConnection.visibility = View.GONE
-              //  tryLoadAd()
             }
             else -> {
                 tvInternetConnection.visibility = View.VISIBLE
@@ -145,11 +82,6 @@ class MainFragment : Fragment() {
         if (it != null) {
             postQuery(it.toString())
         }
-    }
-
-    private fun toggleSaveButton(state: Boolean) {
-        sharedViewModel.toggleSaveButton(state)
-
     }
 
     private fun postQuery(query: String) {
@@ -168,8 +100,6 @@ class MainFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         sharedViewModel.location.removeObserver(locationObserver)
-        sharedViewModel.queryLiveData.removeObserver(queryObserver)
         sharedViewModel.getNetworkLiveData().removeObserver(networkObserver)
-        sharedViewModel.stateLiveData.removeObserver(stateObserver)
     }
 }

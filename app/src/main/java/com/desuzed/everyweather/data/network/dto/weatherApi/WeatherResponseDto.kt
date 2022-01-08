@@ -1,6 +1,9 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
 import com.desuzed.everyweather.data.network.dto.ApiTypeWeather
+import com.desuzed.everyweather.data.network.dto.EntityMapper
+import com.desuzed.everyweather.model.model.ForecastDay
+import com.desuzed.everyweather.model.model.WeatherResponse
 import com.google.gson.annotations.SerializedName
 
 class WeatherResponseDto : ApiTypeWeather.WeatherApi()  {
@@ -13,5 +16,17 @@ class WeatherResponseDto : ApiTypeWeather.WeatherApi()  {
     @SerializedName("forecast")
     var forecastDto: ForecastDto? = null
 
+}
+
+class WeatherResponseMapper: EntityMapper<WeatherResponseDto, WeatherResponse> {
+    override fun mapFromEntity(entity: WeatherResponseDto): WeatherResponse {
+        val location = LocationMapper().mapFromEntity(entity.locationDto!!)
+        val current = CurrentMapper().mapFromEntity(entity.currentDto!!)
+        val forecastDayList = mutableListOf<ForecastDay>()
+        entity.forecastDto?.forecastday?.forEach {
+            forecastDayList.add(ForecastDayMapper().mapFromEntity(it))
+        }
+        return WeatherResponse(location, current, forecastDayList)
+    }
 }
 
