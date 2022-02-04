@@ -3,23 +3,27 @@ package com.desuzed.everyweather
 import android.app.Application
 import com.desuzed.everyweather.data.repository.*
 import com.desuzed.everyweather.data.room.RoomDbApp
-import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
 class App : Application() {
     private val applicationScope = CoroutineScope(SupervisorJob())
     private val database by lazy { RoomDbApp.getDatabase(this, applicationScope) }
-    private val roomProvider by lazy { RoomProviderImpl (database.favoriteLocationDAO()) }
-    private val sPrefProvider by lazy { SPrefProviderImpl(this)}
+    private val roomProvider by lazy {
+        RoomProviderImpl(
+            database.favoriteLocationDAO(),
+            database.latLngDAO()
+        )
+    }
+    private val sPrefProvider by lazy { SPrefProviderImpl(this) }
     private val localDataSource by lazy { LocalDataSourceImpl(roomProvider, this, sPrefProvider) }
     private val remoteDataSource by lazy { RemoteDataSourceImpl() }
     private val repositoryApp by lazy { RepositoryAppImpl(localDataSource, remoteDataSource) }
 
 
-    fun getRepo () : RepositoryApp = repositoryApp
+    fun getRepo(): RepositoryApp = repositoryApp
 
-    fun setLang (lang : String){
+    fun setLang(lang: String) {
         remoteDataSource.lang = lang
     }
 
@@ -28,6 +32,7 @@ class App : Application() {
         instance = this
 
     }
+
     companion object {
         lateinit var instance: App
             private set

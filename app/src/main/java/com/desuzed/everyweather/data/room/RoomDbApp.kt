@@ -1,15 +1,24 @@
 package com.desuzed.everyweather.data.room
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import kotlinx.coroutines.CoroutineScope
 
-@Database(entities = [FavoriteLocationDto::class], version = 1, exportSchema = false)
-abstract class RoomDbApp : RoomDatabase () {
+@Database(
+    entities = [FavoriteLocationDto::class, LatLngDto::class],
+    version = 2,
+    autoMigrations = [
+        AutoMigration (from = 1, to = 2)
+    ],
+    exportSchema = true
+)
+abstract class RoomDbApp : RoomDatabase() {
 
     abstract fun favoriteLocationDAO(): FavoriteLocationDAO
+    abstract fun latLngDAO(): LatLngDAO
 
     companion object {
         @Volatile

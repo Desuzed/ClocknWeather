@@ -4,10 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.desuzed.everyweather.data.room.FavoriteLocationDAO
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.data.room.LatLngDAO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RoomProviderImpl(private val favoriteLocationDAO: FavoriteLocationDAO) : RoomProvider {
+class RoomProviderImpl(
+    private val favoriteLocationDAO: FavoriteLocationDAO,
+    private val latLngDAO: LatLngDAO
+) : RoomProvider {
     override suspend fun insert(favoriteLocationDto: FavoriteLocationDto): Boolean =
         withContext(Dispatchers.IO) {
             val inserted = favoriteLocationDAO.insert(favoriteLocationDto)

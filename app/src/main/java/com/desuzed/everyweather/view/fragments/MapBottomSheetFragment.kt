@@ -51,6 +51,7 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        //todo mock
         location = requireArguments().getParcelable<Location>("key")
             val oldMarker = instantiateOldMarker(location, googleMap)
             googleMap.setOnMapClickListener { latLng ->
@@ -106,6 +107,5 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     override fun onDestroy() {
         super.onDestroy()
         job?.cancel()
-
     }
 }

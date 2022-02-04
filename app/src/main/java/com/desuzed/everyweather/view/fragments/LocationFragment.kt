@@ -167,6 +167,7 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
     }
 
     private fun showMapBotSheet() {
+        //todo mock
         val bundle = bundleOf("key" to Location("1", "2", "3", 44.1f, 131.1f, "4", 10000, "st"))
         navigate(R.id.action_locationFragment_to_mapBottomSheetFragment, bundle)
     }
