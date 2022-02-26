@@ -5,7 +5,7 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.network.dto.weatherApi.mappers.LocationAppMapper
+import com.desuzed.everyweather.model.model.LocationAppMapper
 import com.desuzed.everyweather.model.vm.SharedViewModel
 import com.desuzed.everyweather.view.StateUI
 import com.google.android.gms.location.FusedLocationProviderClient

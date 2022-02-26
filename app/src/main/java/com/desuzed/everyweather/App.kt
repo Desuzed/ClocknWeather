@@ -3,7 +3,6 @@ package com.desuzed.everyweather
 import android.app.Application
 import com.desuzed.everyweather.data.repository.*
 import com.desuzed.everyweather.data.room.RoomDbApp
-import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 

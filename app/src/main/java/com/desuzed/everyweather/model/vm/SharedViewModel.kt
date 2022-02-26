@@ -2,8 +2,8 @@ package com.desuzed.everyweather.model.vm
 
 import androidx.lifecycle.*
 import com.desuzed.everyweather.data.network.ActionResultProvider
-import com.desuzed.everyweather.data.network.dto.weatherApi.mappers.ApiErrorMapper
-import com.desuzed.everyweather.data.network.dto.weatherApi.mappers.WeatherResponseMapper
+import com.desuzed.everyweather.data.network.dto.weatherApi.ApiErrorMapper
+import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseMapper
 import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
 import com.desuzed.everyweather.data.repository.RepositoryApp
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
@@ -51,21 +51,6 @@ class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
             is NetworkResponse.UnknownError -> onError(ActionResultProvider.UNKNOWN)
         }
     }
-
-//    private suspend fun test (query: String){
-//        val result: Pair<WeatherResponse?, Int> = repo.getForecast1(query)
-//        if (result.first==null){
-//            onError(result.second)
-//        }else{
-//            val weatherResponse = result.first
-//            weatherApiLiveData.postValue(weatherResponse)
-//            if (isLocationSaved(weatherResponse)) {
-//                stateLiveData.postValue(StateUI.Success())
-//            } else {
-//                stateLiveData.postValue(StateUI.Success(true))
-//            }
-//        }
-//    }
 
 
     fun postQuery(query: String) {
