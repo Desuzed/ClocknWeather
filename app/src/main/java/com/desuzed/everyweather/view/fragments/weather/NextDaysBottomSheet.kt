@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.view.fragments
+package com.desuzed.everyweather.view.fragments.weather
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.desuzed.everyweather.App
-import com.desuzed.everyweather.view.adapters.NextDaysRvAdapter
 import com.desuzed.everyweather.databinding.FragmentNextDaysBotSheetBinding
 import com.desuzed.everyweather.model.model.WeatherResponse
-import com.desuzed.everyweather.model.vm.AppViewModelFactory
-import com.desuzed.everyweather.model.vm.SharedViewModel
+import com.desuzed.everyweather.view.AppViewModelFactory
+import com.desuzed.everyweather.view.SharedViewModel
+import com.desuzed.everyweather.view.adapters.NextDaysRvAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.*
 
@@ -52,7 +52,7 @@ class NextDaysBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun updateUi(response: WeatherResponse) {
-        tenAdapter.updateList(
+        tenAdapter.submitList(
             response.forecastDay,
             response.location.tzId
         )

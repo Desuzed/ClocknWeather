@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.model.vm
+package com.desuzed.everyweather.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

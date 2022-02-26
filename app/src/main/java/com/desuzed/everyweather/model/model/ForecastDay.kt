@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.model.model
 
-class ForecastDay(
+data class ForecastDay(
     val date: String,
 
     val dateEpoch: Long,
@@ -12,6 +12,4 @@ class ForecastDay(
     val hourForecast : List<Hour>,
 
     var isExpanded: Boolean = false
-) {
-
-}
+)

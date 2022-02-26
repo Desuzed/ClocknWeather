@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.model.model
 
-class Hour(
+data class Hour(
     val timeEpoch: Long,
 
     val temp: Float,
@@ -14,7 +14,4 @@ class Hour(
     val windDegree: Int,
 
     val pressureMb: Float
-) {
-
-
-}
+)

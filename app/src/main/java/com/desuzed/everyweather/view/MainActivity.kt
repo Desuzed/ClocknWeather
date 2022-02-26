@@ -5,7 +5,6 @@ import android.Manifest
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -15,11 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.databinding.ActivityMainBinding
-import com.desuzed.everyweather.model.vm.AppViewModelFactory
-import com.desuzed.everyweather.model.vm.SharedViewModel
 import com.desuzed.everyweather.util.LocationHandler
 import com.google.android.gms.ads.MobileAds
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,11 +42,6 @@ class MainActivity : AppCompatActivity() {
     private fun setLangForRequest() {
         val lang = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].language
         App.instance.setLang(lang)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-//            App.instance.setLang(Resources.getSystem().configuration.locales[0].language)
-//        }else{
-//            App.instance.setLang(Locale.getDefault().language)
-//        }
     }
 
     private fun bind() {
@@ -59,17 +50,6 @@ class MainActivity : AppCompatActivity() {
         )
         val view: View = activityBinding.root
         setContentView(view)
-        //TODO Сделать прозрачный статус бар
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
-//        ViewCompat.setOnApplyWindowInsetsListener(view) { v: View, windowInsets: WindowInsetsCompat ->
-//            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            val mlp = v.layoutParams as MarginLayoutParams
-//            mlp.topMargin = insets.top
-//            v.layoutParams = mlp
-//            v.updatePadding(top = insets.top, bottom = insets.bottom)
-//            WindowInsetsCompat.CONSUMED
-//        }
-
     }
 
     override fun onRequestPermissionsResult(

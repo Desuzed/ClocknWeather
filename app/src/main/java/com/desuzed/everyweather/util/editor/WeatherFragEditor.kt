@@ -10,15 +10,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
-class WeatherFragEditor(private val response: WeatherResponse, context: Context): StringEditor {
+class WeatherFragEditor(private val response: WeatherResponse, context: Context) : StringEditor {
     private val res = context.resources
+
     @SuppressLint("SimpleDateFormat")
     private val sdfDate = SimpleDateFormat("dd/MM")
+
     @SuppressLint("SimpleDateFormat")
     private val sdfTime = SimpleDateFormat("HH:mm")
     val timeZone = response.location.tzId
     val location = response.location
     private val date = response.location.localtime_epoch.times(1000)
+
     init {
         sdfDate.timeZone = TimeZone.getTimeZone(timeZone)
         sdfTime.timeZone = TimeZone.getTimeZone(timeZone)
@@ -32,14 +35,17 @@ class WeatherFragEditor(private val response: WeatherResponse, context: Context)
         resultMap["tvDate"] = sdfDate.format(date)
         resultMap["tvTime"] = sdfTime.format(date)
         resultMap["tvPlace"] = response.location.toString()
-        resultMap["tvCurrentTemp"] = current.temp.roundToInt().toString() + res.getString(R.string.celsius)
+        resultMap["tvCurrentTemp"] =
+            current.temp.roundToInt().toString() + res.getString(R.string.celsius)
         resultMap["tvDescription"] = current.text
-        resultMap["tvFeelsLike"] = res.getString(R.string.feels_like) + " ${current.feelsLike.roundToInt()}" + res.getString(
-            R.string.celsius
-        )
+        resultMap["tvFeelsLike"] =
+            res.getString(R.string.feels_like) + " ${current.feelsLike.roundToInt()}" + res.getString(
+                R.string.celsius
+            )
         resultMap["tvHumidity"] = "${current.humidity}%"
         resultMap["tvPressure"] = "${current.pressureMb} " + res.getString(R.string.mb)
-        resultMap["tvPop"] = "${forecastDay.day.popRain}%, ${current.precipMm} " + res.getString(R.string.mm) //TODO обработать снежные осадки
+        resultMap["tvPop"] =
+            "${forecastDay.day.popRain}%, ${current.precipMm} " + res.getString(R.string.mm) //TODO обработать снежные осадки
         resultMap["tvWind"] = "${current.windSpeed} " + res.getString(R.string.kmh)
         val astro = forecastDay.astro
         resultMap["tvSun"] = "${astro.sunrise}\n${astro.sunset}"

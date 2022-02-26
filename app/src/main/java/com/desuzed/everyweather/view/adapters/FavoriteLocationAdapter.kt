@@ -1,9 +1,7 @@
 package com.desuzed.everyweather.view.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,19 +22,15 @@ class FavoriteLocationAdapter(
         holder.bind(current, onItemClickListener)
     }
 
-    class FavoriteLocationVH(binding: FavoriteLocationItemBinding) :
+    class FavoriteLocationVH(private val binding: FavoriteLocationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val tvFavoriteLocationName: TextView = binding.tvFavoriteLocationName
-        private val tvFavoriteLocationRegionCountry: TextView =
-            binding.tvFavoriteLocationRegionCountry
 
-        @SuppressLint("SetTextI18n")
         fun bind(
             favoriteLocationDto: FavoriteLocationDto,
             onItemClickListener: OnItemClickListener
         ) {
-            tvFavoriteLocationName.text = favoriteLocationDto.cityName
-            tvFavoriteLocationRegionCountry.text = favoriteLocationDto.toString()
+            binding.tvFavoriteLocationName.text = favoriteLocationDto.cityName
+            binding.tvFavoriteLocationRegionCountry.text = favoriteLocationDto.toString()
             itemView.setOnClickListener {
                 onItemClickListener.onClick(favoriteLocationDto)
             }

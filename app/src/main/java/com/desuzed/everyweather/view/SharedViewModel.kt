@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.model.vm
+package com.desuzed.everyweather.view
 
 import androidx.lifecycle.*
 import com.desuzed.everyweather.data.network.ActionResultProvider
@@ -10,7 +10,6 @@ import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.model.NetworkLiveData
 import com.desuzed.everyweather.model.model.LocationApp
 import com.desuzed.everyweather.model.model.WeatherResponse
-import com.desuzed.everyweather.view.StateUI
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*

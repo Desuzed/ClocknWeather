@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.view.fragments
+package com.desuzed.everyweather.view.fragments.location
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.model.model.LocationApp
 import com.desuzed.everyweather.model.model.Location
-import com.desuzed.everyweather.model.vm.AppViewModelFactory
-import com.desuzed.everyweather.model.vm.SharedViewModel
+import com.desuzed.everyweather.model.model.LocationApp
+import com.desuzed.everyweather.view.AppViewModelFactory
+import com.desuzed.everyweather.view.SharedViewModel
+import com.desuzed.everyweather.view.fragments.navigate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.*
+
 class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var job: Job? = null
 
