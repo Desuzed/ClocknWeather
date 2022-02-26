@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.data.repository
+package com.desuzed.everyweather.data.repository.local
 
 import android.content.Context
 import com.desuzed.everyweather.data.network.ActionResultProviderImpl
@@ -9,7 +9,7 @@ class SPrefProviderImpl(private val context: Context) : SPrefProvider {
     private val sp =
         context.getSharedPreferences(LocalDataSourceImpl.S_PREF_NAME, Context.MODE_PRIVATE)
 
-    override fun saveForecast(weatherResponse: WeatherResponse) {
+    override fun saveForecastToCache(weatherResponse: WeatherResponse) {
         val gson = Gson().toJson(weatherResponse)
         sp
             .edit()
@@ -17,7 +17,7 @@ class SPrefProviderImpl(private val context: Context) : SPrefProvider {
             .apply()
     }
 
-    override fun loadForecast(): WeatherResponse? {
+    override fun loadForecastFromCache(): WeatherResponse? {
         val savedForecast = sp.getString(LocalDataSourceImpl.WEATHER_API, null)
         return Gson().fromJson(savedForecast, WeatherResponse::class.java)
     }
@@ -36,8 +36,8 @@ class SPrefProviderImpl(private val context: Context) : SPrefProvider {
 }
 
 interface SPrefProvider {
-    fun saveForecast(weatherResponse: WeatherResponse)
-    fun loadForecast(): WeatherResponse?
+    fun saveForecastToCache(weatherResponse: WeatherResponse)
+    fun loadForecastFromCache(): WeatherResponse?
     fun saveQuery(query: String)
     fun loadQuery(): String
     fun parseCode(errorCode: Int): String

@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.data.repository
+package com.desuzed.everyweather.data.repository.local
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData

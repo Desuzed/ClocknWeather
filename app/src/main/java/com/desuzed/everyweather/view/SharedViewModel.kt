@@ -2,9 +2,6 @@ package com.desuzed.everyweather.view
 
 import androidx.lifecycle.*
 import com.desuzed.everyweather.data.network.ActionResultProvider
-import com.desuzed.everyweather.data.network.dto.weatherApi.ApiErrorMapper
-import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseMapper
-import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
 import com.desuzed.everyweather.data.repository.RepositoryApp
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.model.NetworkLiveData
@@ -24,30 +21,19 @@ class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
 
     fun getForecast(query: String) = viewModelScope.launch {
         stateLiveData.postValue(StateUI.Loading())
-        if (query.isEmpty()) {
-            onError(ActionResultProvider.NO_DATA)
+        val fetchedForecast = repo.fetchForecastOrErrorMessage(query)
+        val weatherResponse = fetchedForecast.getWeatherResponse()
+        val errorMessage = fetchedForecast.getErrorMessage()
+        if (weatherResponse != null) {
+            weatherApiLiveData.postValue(fetchedForecast.getWeatherResponse())
+            if (isLocationSaved(weatherResponse)) {
+                stateLiveData.postValue(StateUI.Success())
+            } else {
+                stateLiveData.postValue(StateUI.Success(true))
+            }
             return@launch
-        }
-        when (val response = repo.getForecast(query)) {
-            is NetworkResponse.Success -> {
-                val weatherResponse = WeatherResponseMapper().mapFromEntity(response.body)
-                weatherApiLiveData.postValue(weatherResponse)
-                repo.saveForecast(weatherResponse)
-                /**
-                 * Triggers save location button on weather screen
-                 **/
-                if (isLocationSaved(weatherResponse)) {
-                    stateLiveData.postValue(StateUI.Success())
-                } else {
-                    stateLiveData.postValue(StateUI.Success(true))
-                }
-            }
-            is NetworkResponse.ApiError -> {
-                val apiError = ApiErrorMapper().mapFromEntity(response.body)
-                onError(apiError.error.code)
-            }
-            is NetworkResponse.NetworkError -> onError(ActionResultProvider.NO_INTERNET)
-            is NetworkResponse.UnknownError -> onError(ActionResultProvider.UNKNOWN)
+        } else if (errorMessage != null) {
+            stateLiveData.postValue(StateUI.Error(errorMessage))
         }
     }
 
@@ -65,7 +51,7 @@ class SharedViewModel (private val repo: RepositoryApp) : ViewModel() {
 
     private fun getCachedForecast(): WeatherResponse? {
         stateLiveData.postValue(StateUI.Loading())
-        return when (val result = repo.loadForecast()) {
+        return when (val result = repo.loadForecastFromCache()) {
             null -> {
                 stateLiveData.postValue(StateUI.NoData())
                 null

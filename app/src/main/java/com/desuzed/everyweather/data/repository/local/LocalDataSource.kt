@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.data.repository
+package com.desuzed.everyweather.data.repository.local
 
 import android.content.Context
 import com.desuzed.everyweather.model.NetworkLiveData
@@ -29,8 +29,5 @@ class LocalDataSourceImpl(
 interface LocalDataSource {
     fun provideRoom(): RoomProvider
     fun provideSPref(): SPrefProvider
-
-    //??
     fun getNetworkLiveData(): NetworkLiveData
-
 }
