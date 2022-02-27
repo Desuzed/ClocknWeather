@@ -14,17 +14,20 @@ import com.bumptech.glide.Glide
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.databinding.FragmentWeatherMainBinding
+import com.desuzed.everyweather.model.Event
 import com.desuzed.everyweather.model.model.WeatherResponse
 import com.desuzed.everyweather.util.editor.WeatherFragEditor
 import com.desuzed.everyweather.view.AppViewModelFactory
-import com.desuzed.everyweather.view.SharedViewModel
+import com.desuzed.everyweather.view.StateUI
 import com.desuzed.everyweather.view.adapters.HourAdapter
 import com.desuzed.everyweather.view.fragments.navigate
+import com.desuzed.everyweather.view.fragments.toast
 import kotlinx.android.synthetic.main.fragment_weather_main.*
 import java.util.*
 
 class WeatherMainFragment : Fragment() {
     private lateinit var binding: FragmentWeatherMainBinding
+    private val hourAdapter by lazy { HourAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,14 +38,12 @@ class WeatherMainFragment : Fragment() {
         return binding.root
     }
 
-    private val hourAdapter by lazy { HourAdapter() }
-
-    private val sharedViewModel: SharedViewModel by lazy {
+    private val weatherViewModel: WeatherViewModel by lazy {
         ViewModelProvider(
             requireActivity(),
             AppViewModelFactory(App.instance.getRepo())
         )
-            .get(SharedViewModel::class.java)
+            .get(WeatherViewModel::class.java)
     }
 
 
@@ -52,6 +53,66 @@ class WeatherMainFragment : Fragment() {
         observeLiveData()
         setOnClickListeners()
         setClickableUrl()
+        resolveArguments()
+        binding.swipeRefresh.setOnRefreshListener {
+            weatherViewModel.queryLiveData.value?.let {
+                getQueryForecast(it)
+            }
+        }
+    }
+
+    private fun resolveArguments() {
+        val query = arguments?.getString(QUERY_KEY)
+        if (!query.isNullOrEmpty()) {
+            getQueryForecast(query)
+            arguments?.remove(QUERY_KEY)
+        }
+    }
+
+    private val stateObserver = Observer<Event<StateUI>> {
+        when (it.getContentIfNotHandled()) {
+            is StateUI.Loading -> {
+                launchRefresh(true)
+            }
+            is StateUI.Success -> {
+                onSuccess(it.peekContent() as StateUI.Success)
+            }
+            is StateUI.Error -> {
+                onError(it.peekContent() as StateUI.Error)
+            }
+            is StateUI.NoData -> {
+                launchRefresh(false)
+                toggleSaveButton(false)
+            }
+        }
+    }
+
+    private fun onSuccess(success: StateUI.Success) {
+        if (success.toggleSaveButton) toggleSaveButton(true)
+        else toggleSaveButton(false)
+        val message = success.message
+        if (!message.isNullOrEmpty()) {
+            toast(message)
+        }
+        launchRefresh(false)
+    }
+
+    private fun onError(error: StateUI.Error) {
+        launchRefresh(false)
+        toggleSaveButton(false)
+        toast(error.message)
+    }
+
+    private fun toggleSaveButton(state: Boolean) {
+        weatherViewModel.toggleSaveButton(state)
+    }
+
+    private fun getQueryForecast(query: String) {
+        weatherViewModel.getForecast(query)
+    }
+
+    private fun launchRefresh(state: Boolean) {
+        binding.swipeRefresh.isRefreshing = state
     }
 
     private fun setClickableUrl() {
@@ -74,8 +135,9 @@ class WeatherMainFragment : Fragment() {
 
 
     private fun observeLiveData() {
-        sharedViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
-        sharedViewModel.toggleLocationVisibility.observe(viewLifecycleOwner, saveLocationObserver)
+        weatherViewModel.stateLiveData.observe(viewLifecycleOwner, stateObserver)
+        weatherViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
+        weatherViewModel.toggleLocationVisibility.observe(viewLifecycleOwner, saveLocationObserver)
     }
 
     private val weatherObserver = Observer<WeatherResponse?> { response ->
@@ -99,8 +161,8 @@ class WeatherMainFragment : Fragment() {
         val editor = WeatherFragEditor(response, requireContext())
         val favoriteLocation = editor.buildFavoriteLocationObj()
         fabAddLocation.setOnClickListener {
-            sharedViewModel.insert(favoriteLocation)
-            sharedViewModel.toggleSaveButton(false)
+            weatherViewModel.insert(favoriteLocation)
+            weatherViewModel.toggleSaveButton(false)
         }
         val resultMap = editor.getResultMap()
         Glide
@@ -140,13 +202,17 @@ class WeatherMainFragment : Fragment() {
             true -> {
                 clMainWeather.visibility = View.GONE
                 containerNoData.visibility = View.VISIBLE
-                sharedViewModel.toggleSaveButton(false)
+                weatherViewModel.toggleSaveButton(false)
             }
             false -> {
                 clMainWeather.visibility = View.VISIBLE
                 containerNoData.visibility = View.GONE
             }
         }
+    }
+
+    companion object {
+        const val QUERY_KEY = "QUERY"
     }
 
 }

@@ -5,7 +5,7 @@ import com.desuzed.everyweather.data.network.ActionResultProviderImpl
 import com.desuzed.everyweather.model.model.WeatherResponse
 import com.google.gson.Gson
 
-class SPrefProviderImpl(private val context: Context) : SPrefProvider {
+class ContextProviderImpl(private val context: Context) : ContextProvider {
     private val sp =
         context.getSharedPreferences(LocalDataSourceImpl.S_PREF_NAME, Context.MODE_PRIVATE)
 
@@ -35,7 +35,7 @@ class SPrefProviderImpl(private val context: Context) : SPrefProvider {
         ActionResultProviderImpl(context.resources).parseCode(errorCode)
 }
 
-interface SPrefProvider {
+interface ContextProvider {
     fun saveForecastToCache(weatherResponse: WeatherResponse)
     fun loadForecastFromCache(): WeatherResponse?
     fun saveQuery(query: String)

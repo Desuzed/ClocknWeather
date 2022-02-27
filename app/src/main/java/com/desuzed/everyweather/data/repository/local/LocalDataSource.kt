@@ -6,11 +6,11 @@ import com.desuzed.everyweather.model.NetworkLiveData
 class LocalDataSourceImpl(
     private val roomProvider: RoomProvider,
     private val context: Context,
-    private val sPrefProvider: SPrefProvider
+    private val contextProvider: ContextProvider
 ) :
     LocalDataSource {
     override fun provideRoom(): RoomProvider = roomProvider
-    override fun provideSPref(): SPrefProvider = sPrefProvider
+    override fun provideSPref(): ContextProvider = contextProvider
 
     private val networkLiveData = NetworkLiveData(context)
 
@@ -28,6 +28,6 @@ class LocalDataSourceImpl(
 
 interface LocalDataSource {
     fun provideRoom(): RoomProvider
-    fun provideSPref(): SPrefProvider
+    fun provideSPref(): ContextProvider
     fun getNetworkLiveData(): NetworkLiveData
 }

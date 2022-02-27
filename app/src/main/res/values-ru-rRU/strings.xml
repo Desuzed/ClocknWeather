@@ -43,5 +43,6 @@
     <string name="delete">Удалить?</string>
     <string name="wrong_server_result">Извините, получен неверный результат от поставщика погоды. Пожалуйста, повторите снова.</string>
     <string name="server_error">Извините, ошибка сервера. Попытайтесь снова.</string>
+    <string name="looking_for_your_location">Поиск вашего местоположения...</string>
 
 </resources>

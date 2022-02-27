@@ -3,40 +3,42 @@ package com.desuzed.everyweather.view
 
 import android.Manifest
 import android.content.res.Resources
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import androidx.annotation.RequiresApi
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.os.ConfigurationCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.databinding.ActivityMainBinding
 import com.desuzed.everyweather.util.LocationHandler
-import com.google.android.gms.ads.MobileAds
 
 
 class MainActivity : AppCompatActivity() {
-    val locationHandler by lazy { LocationHandler(this, sharedViewModel) }
+    private lateinit var binding: ActivityMainBinding
+    val locationHandler by lazy { LocationHandler(this, mainActivityViewModel) }
     private val locationCode = 100
-    private val sharedViewModel: SharedViewModel by lazy {
+    private val mainActivityViewModel: MainActivityViewModel by lazy {
         ViewModelProvider(
             this,
             AppViewModelFactory(App.instance.getRepo())
         )
-            .get(SharedViewModel::class.java)
+            .get(MainActivityViewModel::class.java)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Everyweather)
         super.onCreate(savedInstanceState)
         bind()
         requestLocationPermissions()
         setLangForRequest()
-        MobileAds.initialize(this) {}
+        observeLiveData()
+       // tryLoadAd()
+      //  MobileAds.initialize(this) {}
     }
 
     private fun setLangForRequest() {
@@ -44,13 +46,65 @@ class MainActivity : AppCompatActivity() {
         App.instance.setLang(lang)
     }
 
+    private fun observeLiveData() {
+        mainActivityViewModel.location.observe(this, {
+            Log.i("TAG", "observeLiveData: $it")
+        })
+
+        mainActivityViewModel.toggleLookingForLocation.observe(this, {
+            toggleLookingForLocation(it)
+        })
+
+        mainActivityViewModel.messageLiveData.observe(this, {
+            if (it.hasBeenHandled){
+                return@observe
+            }
+            Toast.makeText(
+                applicationContext,
+                it.getContentIfNotHandled(),
+                Toast.LENGTH_LONG
+            ).show()
+        })
+        mainActivityViewModel.getNetworkLiveData().observe(this, networkObserver)
+    }
+
     private fun bind() {
-        val activityBinding = ActivityMainBinding.inflate(
+        binding = ActivityMainBinding.inflate(
             layoutInflater
         )
-        val view: View = activityBinding.root
+        val view: View = binding.root
         setContentView(view)
     }
+
+    private fun toggleLookingForLocation (state : Boolean){
+        when (state) {
+            true -> {
+                binding.tvLookingForLocation.visibility = View.VISIBLE
+                binding.geoProgressBar.visibility = View.VISIBLE
+            }
+            false -> {
+                binding.tvLookingForLocation.visibility = View.GONE
+                binding.geoProgressBar.visibility = View.GONE
+            }
+        }
+    }
+
+    private val networkObserver = Observer<Boolean> {
+        when (it) {
+            true -> {
+                binding.tvInternetConnection.visibility = View.GONE
+            }
+            else -> {
+                binding.tvInternetConnection.visibility = View.VISIBLE
+            }
+        }
+    }
+//    private fun tryLoadAd (){
+//        val adRequest = AdRequest.Builder().build()
+//        binding.adView.loadAd(adRequest)
+//    }
+
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -58,11 +112,12 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        locationHandler.postCurrentLocation()
+        toggleLookingForLocation(true)
+        locationHandler.findUserLocation()
     }
 
     fun requestLocationPermissions() {
-        if (locationHandler.permissionsGranted()) return
+        //if (locationHandler.permissionsGranted()) return
         ActivityCompat
             .requestPermissions(
                 this,

@@ -9,7 +9,7 @@ import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseMappe
 import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
 import com.desuzed.everyweather.data.repository.local.LocalDataSource
 import com.desuzed.everyweather.data.repository.local.RoomProvider
-import com.desuzed.everyweather.data.repository.local.SPrefProvider
+import com.desuzed.everyweather.data.repository.local.ContextProvider
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.model.NetworkLiveData
 import com.desuzed.everyweather.model.model.WeatherResponse
@@ -32,7 +32,7 @@ class RepositoryAppImpl(
     override fun getAllLocations(): LiveData<List<FavoriteLocationDto>> =
         localDataSource.provideRoom().getAllLocations()
 
-    //SPrefProvider
+    //ContextProvider
     override fun saveForecastToCache(weatherResponse: WeatherResponse) =
         localDataSource.provideSPref().saveForecastToCache(weatherResponse)
 
@@ -51,7 +51,6 @@ class RepositoryAppImpl(
         return remoteDataSource.getForecast(query)
     }
 
-    //TODO refactor networkLiveData
     override fun getNetworkLiveData(): NetworkLiveData = localDataSource.getNetworkLiveData()
 
     override suspend fun fetchForecastOrErrorMessage(query: String): ResultForecast {
@@ -81,7 +80,7 @@ class RepositoryAppImpl(
 
 }
 
-interface RepositoryApp : RoomProvider, SPrefProvider, RemoteDataSource {
+interface RepositoryApp : RoomProvider, ContextProvider, RemoteDataSource {
     fun getNetworkLiveData(): NetworkLiveData
     suspend fun fetchForecastOrErrorMessage(query: String): ResultForecast
 }

@@ -4,8 +4,8 @@ import com.desuzed.everyweather.model.model.WeatherResponse
 
 class ResultForecast(
     private val weatherResponse: WeatherResponse?,
-    private val errorMessage: String?
+    private val message: String?
 ) {
-    fun getErrorMessage(): String? = errorMessage
+    fun getMessage(): String? = message
     fun getWeatherResponse(): WeatherResponse? = weatherResponse
 }

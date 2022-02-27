@@ -4,7 +4,7 @@ import android.app.Application
 import com.desuzed.everyweather.data.repository.*
 import com.desuzed.everyweather.data.repository.local.LocalDataSourceImpl
 import com.desuzed.everyweather.data.repository.local.RoomProviderImpl
-import com.desuzed.everyweather.data.repository.local.SPrefProviderImpl
+import com.desuzed.everyweather.data.repository.local.ContextProviderImpl
 import com.desuzed.everyweather.data.room.RoomDbApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -13,8 +13,8 @@ class App : Application() {
     private val applicationScope = CoroutineScope(SupervisorJob())
     private val database by lazy { RoomDbApp.getDatabase(this, applicationScope) }
     private val roomProvider by lazy { RoomProviderImpl (database.favoriteLocationDAO()) }
-    private val sPrefProvider by lazy { SPrefProviderImpl(this) }
-    private val localDataSource by lazy { LocalDataSourceImpl(roomProvider, this, sPrefProvider) }
+    private val contextProvider by lazy { ContextProviderImpl(this) }
+    private val localDataSource by lazy { LocalDataSourceImpl(roomProvider, this, contextProvider) }
     private val remoteDataSource by lazy { RemoteDataSourceImpl() }
     private val repositoryApp by lazy { RepositoryAppImpl(localDataSource, remoteDataSource) }
 

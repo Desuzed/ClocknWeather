@@ -5,54 +5,40 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.model.Event
 import com.desuzed.everyweather.model.model.LocationAppMapper
-import com.desuzed.everyweather.view.SharedViewModel
-import com.desuzed.everyweather.view.StateUI
+import com.desuzed.everyweather.view.MainActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 
 class LocationHandler(
     private val activity: Activity,
-    private val sharedViewModel: SharedViewModel
+    private val mainActivityViewModel: MainActivityViewModel
 ) {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(activity)
 
-    fun postCurrentLocation() {
-        sharedViewModel.stateLiveData.postValue(StateUI.Loading())
+    fun findUserLocation() {
         if (permissionsGranted()) {
             fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null)
                 .addOnSuccessListener {
                     if (it != null) {
                         val locationApp = LocationAppMapper().mapFromEntity(it)
-                        sharedViewModel.postLocation(locationApp)
+                        mainActivityViewModel.location.postValue(locationApp)
+                        mainActivityViewModel.toggleLookingForLocation.postValue(false)
                     }else{
-                        onError(activity.resources.getString(R.string.location_permissions_are_not_granted))
+                        onError(activity.resources.getString(R.string.your_current_location_not_found))
                     }
                 }
-        } else {
-           postLastLocation()
-        }
-    }
-
-    private fun postLastLocation() {
-        if (permissionsGranted()) {
-            sharedViewModel.stateLiveData.postValue(StateUI.Loading())
-            fusedLocationClient.lastLocation.addOnSuccessListener {
-                if (it != null) {
-                    val locationApp = LocationAppMapper().mapFromEntity(it)
-                    //   val latLon = LatLon(it.latitude, it.longitude)
-                    sharedViewModel.postLocation(locationApp)
-                }
-            }
         } else {
             onError(activity.resources.getString(R.string.location_permissions_are_not_granted))
         }
     }
 
     private fun onError(message: String) {
-        sharedViewModel.stateLiveData.postValue(StateUI.Error(message))
+        mainActivityViewModel.toggleLookingForLocation.postValue(false)
+        mainActivityViewModel.messageLiveData.postValue(Event(message))
     }
 
     fun permissionsGranted(): Boolean {

@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.model.model.Location
 import com.desuzed.everyweather.model.model.LocationApp
 import com.desuzed.everyweather.view.AppViewModelFactory
-import com.desuzed.everyweather.view.SharedViewModel
 import com.desuzed.everyweather.view.fragments.navigate
+import com.desuzed.everyweather.view.fragments.weather.WeatherMainFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,12 +27,12 @@ import kotlinx.coroutines.*
 class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var job: Job? = null
 
-    private val sharedViewModel: SharedViewModel by lazy {
+    private val locationViewModel: LocationViewModel by lazy {
         ViewModelProvider(
             requireActivity(),
             AppViewModelFactory(App.instance.getRepo())
         )
-            .get(SharedViewModel::class.java)
+            .get(LocationViewModel::class.java)
     }
 
 
@@ -52,7 +53,7 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        val location = sharedViewModel.weatherApiLiveData.value?.location
+        val location = locationViewModel.loadCachedLocation()
             val oldMarker = instantiateOldMarker(location, googleMap)
             googleMap.setOnMapClickListener { latLng ->
                 showAlertDialog(latLng, googleMap, oldMarker)
@@ -88,9 +89,9 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     delay(1000)
                     val locationApp =
                         LocationApp(latLng.latitude.toFloat(), latLng.longitude.toFloat())
-                    sharedViewModel.postLocation(locationApp)
+                  //  locationViewModel.postLocation(locationApp)
                     dismiss()
-                    navigateToMainFragment()
+                    navigateToMainFragment(locationApp.toString())
                 }
             }
             .setNeutralButton(resources.getString(R.string.cancel)) { alertDialog, _ ->
@@ -100,8 +101,9 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     }
 
 
-    private fun navigateToMainFragment() {
-        navigate(R.id.action_mapBottomSheetFragment_to_weatherFragment)
+    private fun navigateToMainFragment(query : String) {
+        val bundle = bundleOf(WeatherMainFragment.QUERY_KEY to query)
+        navigate(R.id.action_mapBottomSheetFragment_to_weatherFragment, bundle)
     }
 
     override fun onDestroy() {
