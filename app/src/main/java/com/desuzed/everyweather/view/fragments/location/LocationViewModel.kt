@@ -29,7 +29,6 @@ class LocationViewModel(private val repo: RepositoryApp) : ViewModel() {
     /**
      * Deletes item from DB. If success or not, user gets notification
      */
-    //LocationFragment
     fun deleteItem(favoriteLocationDto: FavoriteLocationDto) = viewModelScope.launch {
         val deleted = repo.deleteItem(favoriteLocationDto)
         if (deleted) onSuccess(ActionResultProvider.DELETED)

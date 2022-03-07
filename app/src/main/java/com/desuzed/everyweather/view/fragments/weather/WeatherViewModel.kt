@@ -8,7 +8,7 @@ import com.desuzed.everyweather.data.network.ActionResultProvider
 import com.desuzed.everyweather.data.repository.RepositoryApp
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.model.Event
-import com.desuzed.everyweather.model.model.WeatherResponse
+import com.desuzed.everyweather.model.entity.WeatherResponse
 import com.desuzed.everyweather.view.StateUI
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

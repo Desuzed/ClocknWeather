@@ -6,7 +6,8 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.model.Event
-import com.desuzed.everyweather.model.model.LocationAppMapper
+import com.desuzed.everyweather.model.entity.LocationApp
+import com.desuzed.everyweather.model.entity.LocationAppMapper
 import com.desuzed.everyweather.view.MainActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -20,14 +21,23 @@ class LocationHandler(
         LocationServices.getFusedLocationProviderClient(activity)
 
     fun findUserLocation() {
+        if (mainActivityViewModel.locationLiveData.value?.let { shouldRefreshUserLocation(it) } == false) {
+            mainActivityViewModel.toggleLookingForLocation.postValue(false)
+            return
+        }
+
         if (permissionsGranted()) {
-            fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null)
+            mainActivityViewModel.toggleLookingForLocation.postValue(true)
+            fusedLocationClient.getCurrentLocation(
+                LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY,
+                null
+            )
                 .addOnSuccessListener {
                     if (it != null) {
                         val locationApp = LocationAppMapper().mapFromEntity(it)
-                        mainActivityViewModel.location.postValue(locationApp)
+                        mainActivityViewModel.locationLiveData.postValue(locationApp)
                         mainActivityViewModel.toggleLookingForLocation.postValue(false)
-                    }else{
+                    } else {
                         onError(activity.resources.getString(R.string.your_current_location_not_found))
                     }
                 }
@@ -36,12 +46,15 @@ class LocationHandler(
         }
     }
 
+    private fun shouldRefreshUserLocation(locationApp: LocationApp): Boolean =
+        System.currentTimeMillis() - locationApp.time > 1000 * 60
+
     private fun onError(message: String) {
         mainActivityViewModel.toggleLookingForLocation.postValue(false)
         mainActivityViewModel.messageLiveData.postValue(Event(message))
     }
 
-    fun permissionsGranted(): Boolean {
+    private fun permissionsGranted(): Boolean {
         val permissionFine = ContextCompat.checkSelfPermission(
             activity.applicationContext,
             Manifest.permission.ACCESS_FINE_LOCATION

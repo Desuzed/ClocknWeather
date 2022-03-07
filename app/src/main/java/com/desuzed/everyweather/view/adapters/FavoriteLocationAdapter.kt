@@ -70,6 +70,7 @@ class FavoriteLocationAdapter(
         }
 
     }
+
     interface OnItemClickListener {
         fun onClick(favoriteLocationDto: FavoriteLocationDto)
         fun onLongClick(favoriteLocationDto: FavoriteLocationDto)

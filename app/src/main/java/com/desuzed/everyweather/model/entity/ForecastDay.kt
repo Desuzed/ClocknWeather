@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.model.model
+package com.desuzed.everyweather.model.entity
 
 data class ForecastDay(
     val date: String,

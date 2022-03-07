@@ -3,8 +3,8 @@ package com.desuzed.everyweather.data.room
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.desuzed.everyweather.model.model.Location
-import com.desuzed.everyweather.model.model.LocationApp
+import com.desuzed.everyweather.model.entity.Location
+import com.desuzed.everyweather.model.entity.LocationApp
 import com.desuzed.everyweather.util.EntityMapper
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -41,6 +41,7 @@ class FavoriteLocationMapper : EntityMapper<FavoriteLocationDto, LocationApp> {
         return LocationApp(
             entity.lat.toFloat(),
             entity.lon.toFloat(),
+            System.currentTimeMillis(),
             entity.cityName,
             entity.region,
             entity.country

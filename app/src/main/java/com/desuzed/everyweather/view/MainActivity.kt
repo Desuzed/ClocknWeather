@@ -10,11 +10,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.os.ConfigurationCompat
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.databinding.ActivityMainBinding
+import com.desuzed.everyweather.model.entity.LocationApp
 import com.desuzed.everyweather.util.LocationHandler
 
 
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeLiveData() {
-        mainActivityViewModel.location.observe(this, {
+        mainActivityViewModel.locationLiveData.observe(this, {
             Log.i("TAG", "observeLiveData: $it")
         })
 
@@ -105,16 +107,17 @@ class MainActivity : AppCompatActivity() {
 //    }
 
 
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        toggleLookingForLocation(true)
+        mainActivityViewModel.toggleLookingForLocation.postValue(true)
         locationHandler.findUserLocation()
     }
+
+    fun getLocationLiveData(): LiveData<LocationApp> = mainActivityViewModel.locationLiveData
 
     fun requestLocationPermissions() {
         //if (locationHandler.permissionsGranted()) return

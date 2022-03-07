@@ -2,7 +2,7 @@ package com.desuzed.everyweather.data.repository.local
 
 import android.content.Context
 import com.desuzed.everyweather.data.network.ActionResultProviderImpl
-import com.desuzed.everyweather.model.model.WeatherResponse
+import com.desuzed.everyweather.model.entity.WeatherResponse
 import com.google.gson.Gson
 
 class ContextProviderImpl(private val context: Context) : ContextProvider {

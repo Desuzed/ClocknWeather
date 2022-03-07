@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.databinding.FragmentNextDaysBotSheetBinding
-import com.desuzed.everyweather.model.model.WeatherResponse
+import com.desuzed.everyweather.model.entity.WeatherResponse
 import com.desuzed.everyweather.view.AppViewModelFactory
 import com.desuzed.everyweather.view.adapters.NextDaysRvAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.data.repository
 
-import com.desuzed.everyweather.model.model.WeatherResponse
+import com.desuzed.everyweather.model.entity.WeatherResponse
 
 class ResultForecast(
     private val weatherResponse: WeatherResponse?,

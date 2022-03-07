@@ -8,8 +8,8 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.model.model.Location
-import com.desuzed.everyweather.model.model.LocationApp
+import com.desuzed.everyweather.model.entity.Location
+import com.desuzed.everyweather.model.entity.LocationApp
 import com.desuzed.everyweather.view.AppViewModelFactory
 import com.desuzed.everyweather.view.fragments.navigate
 import com.desuzed.everyweather.view.fragments.weather.WeatherMainFragment
@@ -88,8 +88,11 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     alertDialog.dismiss()
                     delay(1000)
                     val locationApp =
-                        LocationApp(latLng.latitude.toFloat(), latLng.longitude.toFloat())
-                  //  locationViewModel.postLocation(locationApp)
+                        LocationApp(
+                            latLng.latitude.toFloat(),
+                            latLng.longitude.toFloat(),
+                            System.currentTimeMillis()      //todo Лишний параметр
+                        )
                     dismiss()
                     navigateToMainFragment(locationApp.toString())
                 }

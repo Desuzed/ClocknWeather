@@ -2,8 +2,8 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 
 
 import android.annotation.SuppressLint
+import com.desuzed.everyweather.model.entity.Astro
 import com.desuzed.everyweather.util.EntityMapper
-import com.desuzed.everyweather.model.model.Astro
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 

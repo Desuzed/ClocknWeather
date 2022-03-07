@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.desuzed.everyweather.databinding.NextDayItemBinding
-import com.desuzed.everyweather.model.model.ForecastDay
+import com.desuzed.everyweather.model.entity.ForecastDay
 import com.desuzed.everyweather.util.editor.NextDaysEditor
 
 class NextDaysRvAdapter :

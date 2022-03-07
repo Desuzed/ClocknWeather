@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.model.model
+package com.desuzed.everyweather.model.entity
 
 class Location(
     val name: String,

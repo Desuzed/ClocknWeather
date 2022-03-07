@@ -3,6 +3,7 @@ package com.desuzed.everyweather.view.fragments.weather
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +16,11 @@ import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.databinding.FragmentWeatherMainBinding
 import com.desuzed.everyweather.model.Event
-import com.desuzed.everyweather.model.model.WeatherResponse
+import com.desuzed.everyweather.model.entity.LocationApp
+import com.desuzed.everyweather.model.entity.WeatherResponse
 import com.desuzed.everyweather.util.editor.WeatherFragEditor
 import com.desuzed.everyweather.view.AppViewModelFactory
+import com.desuzed.everyweather.view.MainActivity
 import com.desuzed.everyweather.view.StateUI
 import com.desuzed.everyweather.view.adapters.HourAdapter
 import com.desuzed.everyweather.view.fragments.navigate
@@ -61,7 +64,9 @@ class WeatherMainFragment : Fragment() {
         }
     }
 
+    private var loadForecastByUserLocation = false
     private fun resolveArguments() {
+        loadForecastByUserLocation = arguments?.getBoolean(USER_LOCATION) ?: false
         val query = arguments?.getString(QUERY_KEY)
         if (!query.isNullOrEmpty()) {
             getQueryForecast(query)
@@ -138,6 +143,8 @@ class WeatherMainFragment : Fragment() {
         weatherViewModel.stateLiveData.observe(viewLifecycleOwner, stateObserver)
         weatherViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
         weatherViewModel.toggleLocationVisibility.observe(viewLifecycleOwner, saveLocationObserver)
+        (activity as MainActivity).getLocationLiveData()
+            .observe(viewLifecycleOwner, locationObserver)
     }
 
     private val weatherObserver = Observer<WeatherResponse?> { response ->
@@ -154,6 +161,14 @@ class WeatherMainFragment : Fragment() {
         when (it) {
             true -> fabAddLocation.visibility = View.VISIBLE
             false -> fabAddLocation.visibility = View.GONE
+        }
+    }
+
+    private val locationObserver = Observer<LocationApp> { location ->
+        if (!loadForecastByUserLocation) return@Observer
+        else {
+            Log.i("WEATHER_FRAG", ": $loadForecastByUserLocation")
+            getQueryForecast(location.toString())
         }
     }
 
@@ -211,8 +226,15 @@ class WeatherMainFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        loadForecastByUserLocation = false
+        arguments?.remove(USER_LOCATION)
+    }
+
     companion object {
         const val QUERY_KEY = "QUERY"
+        const val USER_LOCATION = "USER_LOCATION"
     }
 
 }

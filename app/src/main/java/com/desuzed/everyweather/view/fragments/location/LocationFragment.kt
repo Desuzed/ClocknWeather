@@ -23,6 +23,7 @@ import com.desuzed.everyweather.view.MainActivity
 import com.desuzed.everyweather.view.adapters.FavoriteLocationAdapter
 import com.desuzed.everyweather.view.fragments.addOnBackPressedCallback
 import com.desuzed.everyweather.view.fragments.navigate
+import com.desuzed.everyweather.view.fragments.toast
 import com.desuzed.everyweather.view.fragments.weather.WeatherMainFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
@@ -70,7 +71,8 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
                 locationViewModel.onError(ActionResultProvider.FAIL)
                 return@OnEditorActionListener false
             } else {
-                navigateToWeatherFragment(text)
+                val bundle = bundleOf(WeatherMainFragment.QUERY_KEY to text)
+                navigateToWeatherFragment(bundle)
                 hideKeyboard()
                 return@OnEditorActionListener true
             }
@@ -80,6 +82,10 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
 
     private fun observeLiveData() {
         locationViewModel.allLocations.observe(viewLifecycleOwner, allLocationObserver)
+        locationViewModel.messageLiveData.observe(viewLifecycleOwner, { event ->
+            if (event.hasBeenHandled) return@observe
+            event.getContentIfNotHandled()?.let { message -> toast(message) }
+        })
     }
 
     private val allLocationObserver = Observer<List<FavoriteLocationDto>> {
@@ -95,7 +101,8 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
 
     override fun onClick(favoriteLocationDto: FavoriteLocationDto) {
         val locationApp = FavoriteLocationMapper().mapFromEntity(favoriteLocationDto)
-        navigateToWeatherFragment(locationApp.toString())
+        val bundle = bundleOf(WeatherMainFragment.QUERY_KEY to locationApp.toString())
+        navigateToWeatherFragment(bundle)
     }
 
     override fun onLongClick(favoriteLocationDto: FavoriteLocationDto) {
@@ -122,7 +129,8 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
         }
         binding.fabCurrentLocation.setOnClickListener {
             (activity as MainActivity).locationHandler.findUserLocation()
-            navigateToWeatherFragment("") //todo
+            val bundle = bundleOf(WeatherMainFragment.USER_LOCATION to true)
+            navigateToWeatherFragment(bundle)
         }
     }
 
@@ -130,8 +138,7 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
         navigate(R.id.action_locationFragment_to_mapBottomSheetFragment)
     }
 
-    private fun navigateToWeatherFragment(query : String) {
-        val bundle = bundleOf(WeatherMainFragment.QUERY_KEY to query)
+    private fun navigateToWeatherFragment(bundle: Bundle) {
         navigate(R.id.action_locationFragment_to_weatherFragment, bundle)
     }
 

@@ -7,12 +7,12 @@ import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseMapper
 import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
+import com.desuzed.everyweather.data.repository.local.ContextProvider
 import com.desuzed.everyweather.data.repository.local.LocalDataSource
 import com.desuzed.everyweather.data.repository.local.RoomProvider
-import com.desuzed.everyweather.data.repository.local.ContextProvider
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.model.NetworkLiveData
-import com.desuzed.everyweather.model.model.WeatherResponse
+import com.desuzed.everyweather.model.entity.WeatherResponse
 
 class RepositoryAppImpl(
     private val localDataSource: LocalDataSource,
