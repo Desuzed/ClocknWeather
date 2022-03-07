@@ -3,7 +3,7 @@ package com.desuzed.everyweather.util.editor
 import android.annotation.SuppressLint
 import android.content.Context
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.model.model.Hour
+import com.desuzed.everyweather.model.entity.Hour
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt

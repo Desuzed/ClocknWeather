@@ -51,4 +51,5 @@
     <string name="mm">mm</string>
     <string name="delete">Delete?</string>
     <string name="mb" translatable="false">mb</string>
+    <string name="looking_for_your_location">Looking for your location...</string>
 </resources>

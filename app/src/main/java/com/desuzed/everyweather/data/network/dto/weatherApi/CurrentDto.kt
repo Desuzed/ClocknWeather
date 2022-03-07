@@ -1,5 +1,7 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
+import com.desuzed.everyweather.model.entity.Current
+import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 
 class CurrentDto {
@@ -48,4 +50,21 @@ class CurrentDto {
     @SerializedName("gust_kph")
     var gust = 0f
 
+}
+
+class CurrentMapper : EntityMapper<CurrentDto, Current> {
+    override fun mapFromEntity(entity: CurrentDto): Current {
+        return Current(
+            entity.temp,
+            entity.conditionDto?.text.toString(),
+            entity.conditionDto?.icon.toString(),
+            entity.windSpeed,
+            entity.windDegree,
+            entity.windDir,
+            entity.pressureMb,
+            entity.precipMm,
+            entity.humidity,
+            entity.feelsLike
+        )
+    }
 }

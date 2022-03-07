@@ -26,7 +26,7 @@ interface WeatherApiService {
                 val interceptor = HttpLoggingInterceptor()
                 interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
                 val client = OkHttpClient.Builder()
-                   // .addInterceptor(interceptor)
+                    .addInterceptor(interceptor)
                     .connectTimeout(30, TimeUnit.SECONDS)
                     .build()
                 val retrofit = Retrofit.Builder()
