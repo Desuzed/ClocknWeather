@@ -16,7 +16,7 @@ import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.databinding.FragmentWeatherMainBinding
 import com.desuzed.everyweather.model.Event
-import com.desuzed.everyweather.model.entity.LocationApp
+import com.desuzed.everyweather.model.entity.UserLatLng
 import com.desuzed.everyweather.model.entity.WeatherResponse
 import com.desuzed.everyweather.util.editor.WeatherFragEditor
 import com.desuzed.everyweather.view.AppViewModelFactory
@@ -143,7 +143,7 @@ class WeatherMainFragment : Fragment() {
         weatherViewModel.stateLiveData.observe(viewLifecycleOwner, stateObserver)
         weatherViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
         weatherViewModel.toggleLocationVisibility.observe(viewLifecycleOwner, saveLocationObserver)
-        (activity as MainActivity).getLocationLiveData()
+        (activity as MainActivity).getUserLatLngLiveData()
             .observe(viewLifecycleOwner, locationObserver)
     }
 
@@ -164,7 +164,7 @@ class WeatherMainFragment : Fragment() {
         }
     }
 
-    private val locationObserver = Observer<LocationApp> { location ->
+    private val locationObserver = Observer<UserLatLng> { location ->
         if (!loadForecastByUserLocation) return@Observer
         else {
             Log.i("WEATHER_FRAG", ": $loadForecastByUserLocation")
