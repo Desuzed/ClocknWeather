@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.desuzed.everyweather.databinding.NextDayItemBinding
 import com.desuzed.everyweather.model.entity.ForecastDay
-import com.desuzed.everyweather.util.editor.NextDaysEditor
+import com.desuzed.everyweather.view.entity.NextDaysEntityView
 
 class NextDaysRvAdapter :
     ListAdapter<ForecastDay, NextDaysRvAdapter.NextDaysVH>(NextDaysComparator()) {
@@ -47,22 +47,21 @@ class NextDaysRvAdapter :
         val clNextDays: CardView = binding.clNextDays
 
         fun bind(forecastDay: ForecastDay) {
-            val resultMap =
-                NextDaysEditor(forecastDay, mTimeZone!!, itemView.context).getResultMap()
+            val nextDaysEntityView = NextDaysEntityView(forecastDay, mTimeZone!!, itemView.resources)
             Glide
                 .with(itemView.context)
-                .load(resultMap["nextIcon"])
+                .load(nextDaysEntityView.iconUrl)
                 .into(binding.nextIcon)
-            binding.tvNextDate.text = resultMap["tvNextDate"]
-            binding.tvNextDescription.text = resultMap["tvNextDescription"]
-            binding.tvNextMaxTemp.text = resultMap["tvNextMaxTemp"]
-            binding.tvNextMinTemp.text = resultMap["tvNextMinTemp"]
-            binding.tvNextWind.text = resultMap["tvNextWind"]
-            binding.tvNextPressure.text = resultMap["tvNextPressure"]
-            binding.tvNextHumidity.text = resultMap["tvNextHumidity"]
-            binding.tvNextPop.text = resultMap["tvNextPop"]
-            binding.tvNextSun.text = resultMap["tvNextSun"]
-            binding.tvNextMoon.text = resultMap["tvNextMoon"]
+            binding.tvNextDate.text = nextDaysEntityView.date
+            binding.tvNextDescription.text = nextDaysEntityView.description
+            binding.tvNextMaxTemp.text = nextDaysEntityView.maxTemp
+            binding.tvNextMinTemp.text = nextDaysEntityView.minTemp
+            binding.tvNextWind.text = nextDaysEntityView.wind
+            binding.tvNextPressure.text = nextDaysEntityView.pressure
+            binding.tvNextHumidity.text = nextDaysEntityView.humidity
+            binding.tvNextPop.text = nextDaysEntityView.pop
+            binding.tvNextSun.text = nextDaysEntityView.sun
+            binding.tvNextMoon.text = nextDaysEntityView.moon
             binding.rvNextHourly.layoutManager =
                 LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
             val rvAdapter = HourAdapter()

@@ -16,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.*
 
 class NextDaysBottomSheet : BottomSheetDialogFragment() {
-    private val tenAdapter by lazy { NextDaysRvAdapter() }
+    private val nextDaysAdapter by lazy { NextDaysRvAdapter() }
     private lateinit var binding: FragmentNextDaysBotSheetBinding
     private val weatherViewModel: WeatherViewModel by lazy {
         ViewModelProvider(
@@ -39,7 +39,7 @@ class NextDaysBottomSheet : BottomSheetDialogFragment() {
         val rvTen = binding.rvTenDaysMain
         rvTen.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        rvTen.adapter = tenAdapter
+        rvTen.adapter = nextDaysAdapter
         weatherViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
     }
 
@@ -51,9 +51,9 @@ class NextDaysBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun updateUi(response: WeatherResponse) {
-        tenAdapter.submitList(
+        nextDaysAdapter.submitList(
             response.forecastDay,
-            response.location.tzId
+            response.location.timezone
         )
     }
 }

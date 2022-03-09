@@ -1,9 +1,9 @@
 package com.desuzed.everyweather.view.fragments.weather
 
+import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,11 +18,11 @@ import com.desuzed.everyweather.databinding.FragmentWeatherMainBinding
 import com.desuzed.everyweather.model.Event
 import com.desuzed.everyweather.model.entity.UserLatLng
 import com.desuzed.everyweather.model.entity.WeatherResponse
-import com.desuzed.everyweather.util.editor.WeatherFragEditor
 import com.desuzed.everyweather.view.AppViewModelFactory
 import com.desuzed.everyweather.view.MainActivity
 import com.desuzed.everyweather.view.StateUI
 import com.desuzed.everyweather.view.adapters.HourAdapter
+import com.desuzed.everyweather.view.entity.WeatherEntityView
 import com.desuzed.everyweather.view.fragments.navigate
 import com.desuzed.everyweather.view.fragments.toast
 import kotlinx.android.synthetic.main.fragment_weather_main.*
@@ -121,8 +121,12 @@ class WeatherMainFragment : Fragment() {
     }
 
     private fun setClickableUrl() {
-        tvPoweredBy.setMovementMethod(LinkMovementMethod.getInstance())
-        tvPoweredBy.setText(Html.fromHtml(getString(R.string.powered_by)))
+        tvPoweredBy.movementMethod = LinkMovementMethod.getInstance()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            tvPoweredBy.text = Html.fromHtml(getString(R.string.powered_by), Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            tvPoweredBy.text = Html.fromHtml(getString(R.string.powered_by))
+        }
     }
 
 
@@ -167,41 +171,38 @@ class WeatherMainFragment : Fragment() {
     private val locationObserver = Observer<UserLatLng> { location ->
         if (!loadForecastByUserLocation) return@Observer
         else {
-            Log.i("WEATHER_FRAG", ": $loadForecastByUserLocation")
             getQueryForecast(location.toString())
         }
     }
 
     private fun updateUi(response: WeatherResponse) {
-        val editor = WeatherFragEditor(response, requireContext())
-        val favoriteLocation = editor.buildFavoriteLocationObj()
+        val weatherEntityView = WeatherEntityView (response, resources)
+        val favoriteLocation = weatherEntityView.buildFavoriteLocationObj()
         fabAddLocation.setOnClickListener {
             weatherViewModel.insert(favoriteLocation)
             weatherViewModel.toggleSaveButton(false)
         }
-        val resultMap = editor.getResultMap()
         Glide
             .with(this)
-            .load(resultMap["imgIcon"])
+            .load(weatherEntityView.iconUrl)
             .into(binding.imgIcon)
         hourAdapter.submitList(
-            editor.generateCurrentDayList(),
-            editor.timeZone
+            weatherEntityView.generateCurrentDayList(),
+            weatherEntityView.timeZone
         )
         binding.rvHourly.startLayoutAnimation()
-        binding.tvDate.text = resultMap["tvDate"]
-        binding.tvTime.text = resultMap["tvTime"]
-        binding.tvPlace.text = resultMap["tvPlace"]
-        binding.tvCurrentTemp.text = resultMap["tvCurrentTemp"]
-        binding.tvDescription.text = resultMap["tvDescription"]
-        binding.tvFeelsLike.text = resultMap["tvFeelsLike"]
-        binding.includedContainer.tvHumidityMain.text = resultMap["tvHumidity"]
-        binding.includedContainer.tvPressureMain.text = resultMap["tvPressure"]
-        binding.includedContainer.tvPopMain.text = resultMap["tvPop"]
-        binding.includedContainer.tvWindMain.text = resultMap["tvWind"]
-        binding.includedContainer.tvSunMain.text = resultMap["tvSun"]
-        binding.includedContainer.tvMoonMain.text = resultMap["tvMoon"]
-
+        binding.tvDate.text = weatherEntityView.date
+        binding.tvTime.text = weatherEntityView.time
+        binding.tvPlace.text = weatherEntityView.place
+        binding.tvCurrentTemp.text = weatherEntityView.currentTemp
+        binding.tvDescription.text = weatherEntityView.description
+        binding.tvFeelsLike.text = weatherEntityView.feelsLike
+        binding.includedContainer.tvHumidityMain.text = weatherEntityView.humidity
+        binding.includedContainer.tvPressureMain.text = weatherEntityView.pressure
+        binding.includedContainer.tvPopMain.text = weatherEntityView.pop
+        binding.includedContainer.tvWindMain.text = weatherEntityView.wind
+        binding.includedContainer.tvSunMain.text = weatherEntityView.sun
+        binding.includedContainer.tvMoonMain.text = weatherEntityView.moon
     }
 
 

@@ -1,7 +1,7 @@
-package com.desuzed.everyweather.util.editor
+package com.desuzed.everyweather.view.entity
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.model.entity.Hour
@@ -10,47 +10,50 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
-class WeatherFragEditor(private val response: WeatherResponse, context: Context) : StringEditor {
-    private val res = context.resources
-
+class WeatherEntityView(private val response: WeatherResponse, res: Resources) {
     @SuppressLint("SimpleDateFormat")
     private val sdfDate = SimpleDateFormat("dd/MM")
 
     @SuppressLint("SimpleDateFormat")
     private val sdfTime = SimpleDateFormat("HH:mm")
-    val timeZone = response.location.tzId
+    private val localTime = response.location.localtimeEpoch.times(1000)
+
+    val timeZone = response.location.timezone
     val location = response.location
-    private val date = response.location.localtime_epoch.times(1000)
+    val iconUrl: String
+    val date: String
+    val time: String
+    val place: String
+    val currentTemp: String
+    val description: String
+    val feelsLike: String
+    val humidity: String
+    val pressure: String
+    val pop: String
+    val wind: String
+    val sun: String
+    val moon: String
 
     init {
         sdfDate.timeZone = TimeZone.getTimeZone(timeZone)
         sdfTime.timeZone = TimeZone.getTimeZone(timeZone)
-    }
-
-    override fun getResultMap(): Map<String, String> {
-        val resultMap = mutableMapOf<String, String>()
         val current = response.current
         val forecastDay = response.forecastDay[0]
-        resultMap["imgIcon"] = "https:${current.icon}"
-        resultMap["tvDate"] = sdfDate.format(date)
-        resultMap["tvTime"] = sdfTime.format(date)
-        resultMap["tvPlace"] = response.location.toString()
-        resultMap["tvCurrentTemp"] =
-            current.temp.roundToInt().toString() + res.getString(R.string.celsius)
-        resultMap["tvDescription"] = current.text
-        resultMap["tvFeelsLike"] =
-            res.getString(R.string.feels_like) + " ${current.feelsLike.roundToInt()}" + res.getString(
-                R.string.celsius
-            )
-        resultMap["tvHumidity"] = "${current.humidity}%"
-        resultMap["tvPressure"] = "${current.pressureMb} " + res.getString(R.string.mb)
-        resultMap["tvPop"] =
-            "${forecastDay.day.popRain}%, ${current.precipMm} " + res.getString(R.string.mm) //TODO обработать снежные осадки
-        resultMap["tvWind"] = "${current.windSpeed} " + res.getString(R.string.kmh)
+        iconUrl = "https:${current.icon}"
+        date = sdfDate.format(localTime)
+        time = sdfTime.format(localTime)
+        place = response.location.toString()
+        currentTemp = current.temp.roundToInt().toString() + res.getString(R.string.celsius)
+        description = current.text
+        feelsLike = res.getString(R.string.feels_like) + " ${current.feelsLike.roundToInt()}" +
+                res.getString(R.string.celsius)
+        humidity = "${current.humidity}%"
+        pressure = "${current.pressureMb} " + res.getString(R.string.mb)
+        pop = "${forecastDay.day.popRain}%, ${current.precipMm} " + res.getString(R.string.mm)       //TODO обработать снежные осадки
+        wind = "${current.windSpeed} " + res.getString(R.string.kmh)
         val astro = forecastDay.astro
-        resultMap["tvSun"] = "${astro.sunrise}\n${astro.sunset}"
-        resultMap["tvMoon"] = "${astro.moonrise}\n${astro.moonset}"
-        return resultMap
+        sun = "${astro.sunrise}\n${astro.sunset}"
+        moon = "${astro.moonrise}\n${astro.moonset}"
     }
 
     /**
@@ -60,7 +63,7 @@ class WeatherFragEditor(private val response: WeatherResponse, context: Context)
     fun generateCurrentDayList(): List<Hour> {
         val sdf = SimpleDateFormat("H")
         sdf.timeZone = TimeZone.getTimeZone(timeZone)
-        val hour = sdf.format(date).toInt()
+        val hour = sdf.format(localTime).toInt()
         val forecastDay = response.forecastDay
         return forecastDay[0].hourForecast
             .drop(hour)
