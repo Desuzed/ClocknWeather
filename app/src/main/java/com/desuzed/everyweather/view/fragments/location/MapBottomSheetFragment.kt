@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.model.entity.Location
-import com.desuzed.everyweather.model.entity.LocationApp
+import com.desuzed.everyweather.model.entity.UserLatLng
 import com.desuzed.everyweather.view.AppViewModelFactory
 import com.desuzed.everyweather.view.fragments.navigate
 import com.desuzed.everyweather.view.fragments.weather.WeatherMainFragment
@@ -87,14 +87,14 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     oldMarker?.remove()
                     alertDialog.dismiss()
                     delay(1000)
-                    val locationApp =
-                        LocationApp(
+                    val userLatLng =
+                        UserLatLng(
                             latLng.latitude.toFloat(),
                             latLng.longitude.toFloat(),
                             System.currentTimeMillis()      //todo Лишний параметр
                         )
                     dismiss()
-                    navigateToMainFragment(locationApp.toString())
+                    navigateToMainFragment(userLatLng.toString())
                 }
             }
             .setNeutralButton(resources.getString(R.string.cancel)) { alertDialog, _ ->

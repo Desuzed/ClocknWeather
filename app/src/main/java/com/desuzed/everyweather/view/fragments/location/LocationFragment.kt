@@ -100,8 +100,8 @@ class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener
 
 
     override fun onClick(favoriteLocationDto: FavoriteLocationDto) {
-        val locationApp = FavoriteLocationMapper().mapFromEntity(favoriteLocationDto)
-        val bundle = bundleOf(WeatherMainFragment.QUERY_KEY to locationApp.toString())
+        val userLatLng = FavoriteLocationMapper().mapFromEntity(favoriteLocationDto)
+        val bundle = bundleOf(WeatherMainFragment.QUERY_KEY to userLatLng.toString())
         navigateToWeatherFragment(bundle)
     }
 
