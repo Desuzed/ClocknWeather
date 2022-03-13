@@ -36,7 +36,6 @@ class AstroMapper : EntityMapper<AstroDto, Astro> {
     private val appFormat = SimpleDateFormat("HH:mm")
 
     override fun mapFromEntity(entity: AstroDto): Astro {
-        //TODO Отловить случаи когда с апи не приходит moonrise/moonset и чтобы не крашнулось добавил костыль
         return try {
             val apiSunrise = apiFormat.parse(entity.sunrise)
             val apiSunset = apiFormat.parse(entity.sunset)

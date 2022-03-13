@@ -11,9 +11,5 @@ class ConditionDto {
 
     @SerializedName("code")
     var code: Int = 0
-    override fun toString(): String {
-        return "test: $text)"
-    }
-
 
 }

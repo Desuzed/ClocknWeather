@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.model.entity
 
 
-class Astro(
+data class Astro(
     val sunrise: String,
 
     val sunset: String,

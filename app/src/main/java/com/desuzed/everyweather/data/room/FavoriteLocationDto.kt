@@ -8,6 +8,8 @@ import com.desuzed.everyweather.model.entity.UserLatLng
 import com.desuzed.everyweather.util.EntityMapper
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 @Entity(tableName = "favorite_location_table")
 class FavoriteLocationDto(
@@ -29,7 +31,7 @@ class FavoriteLocationDto(
 
     companion object {
         fun generateKey(location: Location) : String {
-            val df = DecimalFormat("#.#")
+            val df = DecimalFormat("#.#", DecimalFormatSymbols(Locale.ENGLISH))
             df.roundingMode = RoundingMode.CEILING
             return "${df.format(location.lat)},${df.format(location.lon)}"
         }
