@@ -11,9 +11,9 @@ class Location(
 
     val lon: Float,
 
-    val tzId: String,
+    val timezone: String,
 
-    val localtime_epoch: Long,
+    val localtimeEpoch: Long,
 
     val localtime: String
 ){

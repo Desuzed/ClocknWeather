@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.desuzed.everyweather.databinding.HourItemBinding
 import com.desuzed.everyweather.model.entity.Hour
-import com.desuzed.everyweather.util.editor.HourStringEditor
+import com.desuzed.everyweather.view.entity.HourEntityView
 
 class HourAdapter : ListAdapter<Hour, HourAdapter.HourVH>(HourComparator()) {
     private var mTimeZone: String? = null
@@ -36,14 +36,14 @@ class HourAdapter : ListAdapter<Hour, HourAdapter.HourVH>(HourComparator()) {
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(hour: Hour) {
-            val resultMap = HourStringEditor(hour, mTimeZone!!, itemView.context).getResultMap()
-            binding.hTime.text = resultMap["hTime"]
-            binding.hTempC.text = resultMap["hTempC"]
-            binding.hWind.text = resultMap["hWind"]
-            binding.hWindDegree.rotation = hour.windDegree.toFloat() - 180
+            val hourEntityView = HourEntityView(hour, mTimeZone!!, itemView.resources )
+            binding.hTime.text = hourEntityView.time
+            binding.hTempC.text = hourEntityView.temp
+            binding.hWind.text = hourEntityView.wind
+            binding.hWindDegree.rotation = hourEntityView.rotation
             Glide
                 .with(itemView.context)
-                .load(resultMap["hIcon"])
+                .load(hourEntityView.iconUrl)
                 .into(binding.hIcon)
         }
 

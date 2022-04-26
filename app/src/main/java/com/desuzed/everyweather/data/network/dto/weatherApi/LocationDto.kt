@@ -21,10 +21,10 @@ class LocationDto {
     var lon = 0f
 
     @SerializedName("tz_id")
-    var tzId: String = ""
+    var timeZone: String = ""
 
     @SerializedName("localtime_epoch")
-    var localtime_epoch: Long = 0
+    var localtimeEpoch: Long = 0
 
     @SerializedName("localtime")
     var localtime: String = ""
@@ -39,8 +39,8 @@ class LocationMapper : EntityMapper<LocationDto, Location> {
             entity.country,
             entity.lat,
             entity.lon,
-            entity.tzId,
-            entity.localtime_epoch,
+            entity.timeZone,
+            entity.localtimeEpoch,
             entity.localtime
         )
     }
