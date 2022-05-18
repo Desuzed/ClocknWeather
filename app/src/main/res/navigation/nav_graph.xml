@@ -54,7 +54,6 @@
         android:id="@+id/nextDaysBottomSheet"
         android:name="com.desuzed.everyweather.view.fragments.weather.NextDaysBottomSheet"
         android:label="NextDaysBottomSheet"
-        tools:layout="@layout/fragment_next_days_bot_sheet"
         />
 
 </navigation>

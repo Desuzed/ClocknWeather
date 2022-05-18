@@ -13,6 +13,7 @@ import com.desuzed.everyweather.data.repository.local.RoomProvider
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.model.NetworkLiveData
 import com.desuzed.everyweather.model.entity.WeatherResponse
+import com.desuzed.everyweather.view.ui.NextDaysUi
 
 class RepositoryAppImpl(
     private val localDataSource: LocalDataSource,
@@ -45,6 +46,10 @@ class RepositoryAppImpl(
 
     override fun parseCode(errorCode: Int): String =
         localDataSource.provideSPref().parseCode(errorCode)
+
+    override suspend fun mapToNextDaysUi(response: WeatherResponse): List<NextDaysUi> {
+        return localDataSource.provideSPref().mapToNextDaysUi(response)
+    }
 
     override suspend fun getForecast(query: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> {
         saveQuery(query)

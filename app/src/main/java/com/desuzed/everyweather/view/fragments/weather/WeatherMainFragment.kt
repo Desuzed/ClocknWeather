@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.desuzed.everyweather.App
@@ -25,6 +26,7 @@ import com.desuzed.everyweather.view.adapters.HourAdapter
 import com.desuzed.everyweather.view.entity.WeatherEntityView
 import com.desuzed.everyweather.view.fragments.navigate
 import com.desuzed.everyweather.view.fragments.toast
+import com.desuzed.everyweather.view.fragments.weather.main.WeatherMainViewModel
 import kotlinx.android.synthetic.main.fragment_weather_main.*
 import java.util.*
 
@@ -41,12 +43,12 @@ class WeatherMainFragment : Fragment() {
         return binding.root
     }
 
-    private val weatherViewModel: WeatherViewModel by lazy {
+    private val weatherViewModel: WeatherMainViewModel by lazy {
         ViewModelProvider(
             requireActivity(),
             AppViewModelFactory(App.instance.getRepo())
         )
-            .get(WeatherViewModel::class.java)
+            .get(WeatherMainViewModel::class.java)
     }
 
 
@@ -58,9 +60,10 @@ class WeatherMainFragment : Fragment() {
         setClickableUrl()
         resolveArguments()
         binding.swipeRefresh.setOnRefreshListener {
-            weatherViewModel.queryLiveData.value?.let {
-                getQueryForecast(it)
-            }
+            getQueryForecast(weatherViewModel.state.value.query)
+//            weatherViewModel.queryLiveData.value?.let {
+//                getQueryForecast(it)
+//            }
         }
     }
 
@@ -144,11 +147,27 @@ class WeatherMainFragment : Fragment() {
 
 
     private fun observeLiveData() {
-        weatherViewModel.stateLiveData.observe(viewLifecycleOwner, stateObserver)
-        weatherViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
-        weatherViewModel.toggleLocationVisibility.observe(viewLifecycleOwner, saveLocationObserver)
+        lifecycleScope.launchWhenCreated {
+            weatherViewModel.state.collect{
+                collectWeather(it.weatherData)
+            }
+        }
+
+       // weatherViewModel.stateLiveData.observe(viewLifecycleOwner, stateObserver)
+       // weatherViewModel.weatherApiLiveData.observe(viewLifecycleOwner, weatherObserver)
+       // weatherViewModel.toggleLocationVisibility.observe(viewLifecycleOwner, saveLocationObserver)
         (activity as MainActivity).getUserLatLngLiveData()
             .observe(viewLifecycleOwner, locationObserver)
+    }
+
+    private fun collectWeather (response: WeatherResponse?) {
+        if (response == null) {
+          //  toggleEmptyWeatherData(true)
+            return
+        } else {
+          //  toggleEmptyWeatherData(false)
+            updateUi(response)
+        }
     }
 
     private val weatherObserver = Observer<WeatherResponse?> { response ->
@@ -178,10 +197,10 @@ class WeatherMainFragment : Fragment() {
     private fun updateUi(response: WeatherResponse) {
         val weatherEntityView = WeatherEntityView (response, resources)
         val favoriteLocation = weatherEntityView.buildFavoriteLocationObj()
-        fabAddLocation.setOnClickListener {
-            weatherViewModel.insert(favoriteLocation)
-            weatherViewModel.toggleSaveButton(false)
-        }
+//        fabAddLocation.setOnClickListener {
+//            weatherViewModel.insert(favoriteLocation)
+//            weatherViewModel.toggleSaveButton(false)
+//        }
         Glide
             .with(this)
             .load(weatherEntityView.iconUrl)
