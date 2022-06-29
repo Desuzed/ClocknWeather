@@ -25,13 +25,19 @@ data class EveryweatherTypography(
     ),
     val textLarge: TextStyle = TextStyle(
         fontFamily = montserratRegular,
-        fontWeight = FontWeight.Medium,
-        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        fontSize = 66.sp,
         lineHeight = 25.sp,
     ),
     val textMedium: TextStyle = TextStyle(
         fontFamily = montserratRegular,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Light,
+        fontSize = 16.sp,
+        lineHeight = 23.sp,
+    ),
+    val textMediumBold: TextStyle = TextStyle(
+        fontFamily = montserratRegular,
+        fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
         lineHeight = 23.sp,
     ),

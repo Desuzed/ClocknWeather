@@ -17,7 +17,7 @@ class WeatherResponseDto {
 
 }
 
-class WeatherResponseMapper : EntityMapper<WeatherResponseDto, WeatherResponse> {
+object WeatherResponseMapper : EntityMapper<WeatherResponseDto, WeatherResponse> {
     override fun mapFromEntity(entity: WeatherResponseDto): WeatherResponse {
         val location = LocationMapper().mapFromEntity(entity.locationDto!!)
         val current = CurrentMapper().mapFromEntity(entity.currentDto!!)

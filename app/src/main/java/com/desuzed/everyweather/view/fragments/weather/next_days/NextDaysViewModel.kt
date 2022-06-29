@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.data.repository.RepositoryApp
 import com.desuzed.everyweather.model.entity.WeatherResponse
 import com.desuzed.everyweather.view.BaseViewModel
-import com.desuzed.everyweather.view.ui.NextDaysUi
+import com.desuzed.everyweather.view.ui.next_days.NextDaysUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

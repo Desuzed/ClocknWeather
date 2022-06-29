@@ -1,14 +1,15 @@
-package com.desuzed.everyweather.view.entity
+package com.desuzed.everyweather.view.ui
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.model.entity.Hour
+import com.desuzed.everyweather.model.entity.WeatherResponse
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
-class HourEntityView(
+class HourUi(
     hour: Hour,
     timeZone: String,
     res: Resources
@@ -29,4 +30,23 @@ class HourEntityView(
         iconUrl = "https:${hour.icon}"
         rotation = hour.windDegree.toFloat() - 180
     }
+
+
+    companion object {
+
+        /**
+         *  Generates list for HourAdapter since current time and plus next 24 items
+         */
+        @SuppressLint("SimpleDateFormat")
+        fun generateCurrentDayList(response: WeatherResponse): List<Hour> {
+            val sdf = SimpleDateFormat("H")
+            sdf.timeZone = TimeZone.getTimeZone(response.location.timezone)
+            val hour = sdf.format(response.location.localtimeEpoch.times(1000)).toInt()
+            val forecastDay = response.forecastDay
+            return forecastDay[0].hourForecast
+                .drop(hour)
+                .plus(forecastDay[1].hourForecast.take(hour))
+        }
+    }
+
 }

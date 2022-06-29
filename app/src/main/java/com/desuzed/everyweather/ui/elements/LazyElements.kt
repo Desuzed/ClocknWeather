@@ -9,20 +9,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
-import com.desuzed.everyweather.view.entity.HourUi
+import com.desuzed.everyweather.view.ui.HourUi
 
 @Composable
 fun HourItemContent(hourItem: HourUi) {
     EveryweatherTheme {
         Card(
-            modifier = Modifier.padding(8.dp).wrapContentWidth(),
+            modifier = Modifier
+                .padding(8.dp)
+                .wrapContentWidth(),
             shape = RoundedCornerShape(
                 dimensionResource(id = R.dimen.corner_radius_16),
                 dimensionResource(id = R.dimen.corner_radius_16),
@@ -37,7 +41,13 @@ fun HourItemContent(hourItem: HourUi) {
                 BoldText(text = hourItem.temp)
                 Image(painter = rememberAsyncImagePainter(hourItem.iconUrl), contentDescription = "", modifier = Modifier.size(34.dp))
                 Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                    Image(painter = painterResource(id = R.drawable.ic_wind_direction), contentDescription = "", Modifier.rotate(hourItem.rotation).size(12.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_wind_direction),
+                        contentDescription = "",
+                        Modifier
+                            .rotate(hourItem.rotation)
+                            .size(12.dp)
+                    )
                     SmallText(modifier = Modifier.padding(start = 4.dp), text = hourItem.wind)
                 }
             }
@@ -55,6 +65,10 @@ fun HourItemContent(hourItem: HourUi) {
 @Composable
 private fun PreviewHourItemContent() {
     HourItemContent(
-        HourUi("10:20", "27 ", "20 m/s", "icon url", 60f)
+        HourUi(
+            MockWeatherObject.weather.forecastDay[0].hourForecast[0],
+            MockWeatherObject.weather.location.timezone,
+            LocalContext.current.resources
+        )
     )
 }

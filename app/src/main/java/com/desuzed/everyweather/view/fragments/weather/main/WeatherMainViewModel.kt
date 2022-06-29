@@ -19,19 +19,31 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
         loadCachedQuery()
     }
 
+    fun saveLocation() {
+        viewModelScope.launch {
+            val favoriteLocationDto =
+                FavoriteLocationDto.buildFavoriteLocationObj(state.value.weatherData!!.location)    //todo safe call
+            val inserted = repo.insert(favoriteLocationDto)
+            if (inserted) onSuccess(ActionResultProvider.SAVED)
+            else onError(ActionResultProvider.FAIL)
+        }
+    }
+
     fun getForecast(query: String) {
         viewModelScope.launch {
             setState { copy(isLoading = true, query = query) }
             val fetchedForecast = repo.fetchForecastOrErrorMessage(query)
-            val weatherResponse = fetchedForecast.getWeatherResponse()
-            val message = fetchedForecast.getMessage()
+            val weatherResponse = fetchedForecast.weatherResponse
+            val message = fetchedForecast.message
             if (weatherResponse != null) {
                 val isLocationSaved = isLocationSaved(weatherResponse)
+                val weatherUi = repo.mapToMainWeatherUi(weatherResponse)
                 setState {
                     copy(
                         weatherData = weatherResponse,
+                        weatherUi = weatherUi,
                         isLoading = false,
-                        isAddButtonEnabled = isLocationSaved,
+                        isAddButtonEnabled = !isLocationSaved,
                     )
                 }
                 return@launch
@@ -47,12 +59,6 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
         }
     }
 
-    fun insert(favoriteLocationDto: FavoriteLocationDto) = viewModelScope.launch {
-        val inserted = repo.insert(favoriteLocationDto)
-        if (inserted) onSuccess(ActionResultProvider.SAVED)
-        else onError(ActionResultProvider.FAIL)
-    }
-
     fun toggleSaveButton(state: Boolean) {
         setState { copy(isAddButtonEnabled = state) }
     }
@@ -64,7 +70,12 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
 
     private fun onSuccess(code: Int) {
         val message = repo.parseCode(code)
-        setState { copy(infoMessage = message) }
+        setState {
+            copy(
+                infoMessage = message,
+                isAddButtonEnabled = false,
+            )
+        }
     }
 
     private suspend fun isLocationSaved(response: WeatherResponse): Boolean {
@@ -73,9 +84,20 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
     }
 
     private fun getCachedForecast() {
-        setState { copy(isLoading = true) }
-        val result = repo.loadForecastFromCache()
-        setState { copy(weatherData = result, isLoading = false) }
+        viewModelScope.launch {
+            setState { copy(isLoading = true) }
+            val result = repo.loadForecastFromCache()
+            if (result != null) {
+                val weatherUi = repo.mapToMainWeatherUi(result)
+                setState {
+                    copy(
+                        weatherUi = weatherUi,
+                        weatherData = result,
+                        isLoading = false
+                    )
+                }
+            }
+        }
     }
 
     private fun loadCachedQuery() {

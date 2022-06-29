@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.data.repository.RepositoryApp
 import com.desuzed.everyweather.view.fragments.location.LocationViewModel
-import com.desuzed.everyweather.view.fragments.weather.WeatherViewModel
 import com.desuzed.everyweather.view.fragments.weather.main.WeatherMainViewModel
 import com.desuzed.everyweather.view.fragments.weather.next_days.NextDaysViewModel
 
@@ -16,9 +15,6 @@ class AppViewModelFactory(private val repositoryApp: RepositoryApp) : ViewModelP
         return when {
             modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> {
                 MainActivityViewModel(repositoryApp) as T
-            }
-            modelClass.isAssignableFrom(WeatherViewModel::class.java) -> {
-                WeatherViewModel(repositoryApp) as T
             }
             modelClass.isAssignableFrom(LocationViewModel::class.java) -> {
                 LocationViewModel(repositoryApp) as T

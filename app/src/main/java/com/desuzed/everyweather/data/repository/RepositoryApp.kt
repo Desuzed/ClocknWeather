@@ -13,7 +13,8 @@ import com.desuzed.everyweather.data.repository.local.RoomProvider
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.model.NetworkLiveData
 import com.desuzed.everyweather.model.entity.WeatherResponse
-import com.desuzed.everyweather.view.ui.NextDaysUi
+import com.desuzed.everyweather.view.ui.next_days.NextDaysUi
+import com.desuzed.everyweather.view.ui.main.WeatherMainUi
 
 class RepositoryAppImpl(
     private val localDataSource: LocalDataSource,
@@ -51,6 +52,9 @@ class RepositoryAppImpl(
         return localDataSource.provideSPref().mapToNextDaysUi(response)
     }
 
+    override suspend fun mapToMainWeatherUi(response: WeatherResponse): WeatherMainUi =
+        localDataSource.provideSPref().mapToMainWeatherUi(response)
+
     override suspend fun getForecast(query: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> {
         saveQuery(query)
         return remoteDataSource.getForecast(query)
@@ -58,13 +62,14 @@ class RepositoryAppImpl(
 
     override fun getNetworkLiveData(): NetworkLiveData = localDataSource.getNetworkLiveData()
 
+    //todo вынести в какой нибудь юзкейс и избавиться от репозиторий слоя
     override suspend fun fetchForecastOrErrorMessage(query: String): ResultForecast {
         if (query.isEmpty()) {
             return ResultForecast(null, parseCode(ActionResultProvider.NO_DATA))
         }
         return when (val response = getForecast(query)) {
             is NetworkResponse.Success -> {
-                val weatherResponse = WeatherResponseMapper().mapFromEntity(response.body)
+                val weatherResponse = WeatherResponseMapper.mapFromEntity(response.body)
                 saveForecastToCache(weatherResponse)
                 ResultForecast(weatherResponse, null)
             }

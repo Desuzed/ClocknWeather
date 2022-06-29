@@ -1,11 +1,13 @@
 package com.desuzed.everyweather.view.fragments.weather.main
 
 import com.desuzed.everyweather.model.entity.WeatherResponse
+import com.desuzed.everyweather.view.ui.main.WeatherMainUi
 
-data class WeatherState (
-    val weatherData : WeatherResponse? = null,
+data class WeatherState(
+    val weatherData: WeatherResponse? = null,
+    val weatherUi: WeatherMainUi? = null,
     val isAddButtonEnabled: Boolean = false,
-    val query : String = "",
-    val isLoading : Boolean = false,
-    val infoMessage : String = "",
+    val isLoading: Boolean = true,
+    val query: String = "",
+    val infoMessage: String = "",
 )

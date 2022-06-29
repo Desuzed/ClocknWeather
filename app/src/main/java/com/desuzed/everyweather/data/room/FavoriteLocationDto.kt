@@ -30,10 +30,22 @@ class FavoriteLocationDto(
     }
 
     companion object {
-        fun generateKey(location: Location) : String {
+        fun generateKey(location: Location): String {
             val df = DecimalFormat("#.#", DecimalFormatSymbols(Locale.ENGLISH))
             df.roundingMode = RoundingMode.CEILING
             return "${df.format(location.lat)},${df.format(location.lon)}"
+        }
+
+        //TODO Bug : На разных языках ставит либо точку либо запятую, хотя данные с апи приходят через точку
+        fun buildFavoriteLocationObj(location: Location): FavoriteLocationDto {
+            return FavoriteLocationDto(
+                generateKey(location),
+                location.name,
+                location.region,
+                location.country,
+                location.lat.toString(),
+                location.lon.toString()
+            )
         }
     }
 }

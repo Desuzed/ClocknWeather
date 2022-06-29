@@ -52,7 +52,7 @@
     </fragment>
     <dialog
         android:id="@+id/nextDaysBottomSheet"
-        android:name="com.desuzed.everyweather.view.fragments.weather.NextDaysBottomSheet"
+        android:name="com.desuzed.everyweather.view.fragments.weather.next_days.NextDaysBottomSheet"
         android:label="NextDaysBottomSheet"
         />
 

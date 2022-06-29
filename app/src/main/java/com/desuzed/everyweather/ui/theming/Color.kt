@@ -8,6 +8,11 @@ data class EveryweatherColors(
     val secondary: Color,
     val tertiary: Color,
     val onSurface: Color,
+    val textColorPrimary: Color,
+    val textColorSecondary: Color,
+    val gradientStart: Color,
+    val gradientEnd: Color,
+    val textBg: Color = Color(0x4DFFFFFF), //todo пеереименовать
 )
 
 //<color name="edit_text_bg_light">#99999999</color>
@@ -39,15 +44,18 @@ val Blue50customized = Color(0xFFDEECFF)
 val Indigo300DarkCustomized = Color(0xFF334766)
 val Blue50DarkCustomized = Color(0xFFEFF6FF)
 val Indigo400DarkCustomized = Color(0xFF3C567D)
+val NearDark = Color(0xFF4D4D4D)
+val NearWhite = Color(0xFFD6D6D6)
+val White = Color(0xFFFFFFFF)
 
 //<color name="bgDetailLight">#EFF6FF</color>
 //<color name="bgDetailNight">#3C567D</color>
 
 // Gradient
-val BackgroundGradientLightStart = Color(0xFF00C4DE)
-val BackgroundGradientLightEnd = LightBlue50customized
-val BackgroundGradientNightStart = Color(0xFF011131)
-val BackgroundGradientNightEnd = Indigo700customized
+val BackgroundGradientLightStart = LightBlue50customized
+val BackgroundGradientLightEnd = Color(0xFF00C4DE)
+val BackgroundGradientNightStart = Indigo700customized
+val BackgroundGradientNightEnd = Color(0xFF011131)
 
 
 // Alpha
@@ -57,14 +65,22 @@ val LightColorPalette = EveryweatherColors(
     primary = LightBlue50customized,
     secondary = indigo700,
     tertiary = Blue50customized,
-    onSurface = Blue50DarkCustomized
+    onSurface = Blue50DarkCustomized,
+    textColorPrimary = NearDark,
+    textColorSecondary = White,
+    gradientStart = BackgroundGradientLightStart,
+    gradientEnd = BackgroundGradientLightEnd,
     )
 
 val DarkColorPalette = EveryweatherColors(
     primary = Indigo700customized,
     secondary = lightBlue700,
     tertiary = Indigo300DarkCustomized,
-    onSurface = Indigo400DarkCustomized
+    onSurface = Indigo400DarkCustomized,
+    textColorPrimary = NearWhite,
+    textColorSecondary = NearWhite,
+    gradientStart = BackgroundGradientNightStart,
+    gradientEnd = BackgroundGradientNightEnd,
     )
 
 val LocalAppColors = staticCompositionLocalOf<EveryweatherColors> {

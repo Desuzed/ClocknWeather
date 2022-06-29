@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.view.fragments.weather
+package com.desuzed.everyweather.view.fragments.weather.next_days
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.view.AppViewModelFactory
-import com.desuzed.everyweather.view.fragments.weather.next_days.NextDaysViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class NextDaysBottomSheet : BottomSheetDialogFragment() {

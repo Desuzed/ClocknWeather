@@ -15,6 +15,7 @@
     <string name="your_current_location_not_found">Your current location not found</string>
     <!--    <string name="powered_by">Powered by: <a href="https://www.weatherapi.com/">Weather API</a></string>-->
     <string name="powered_by" translatable="false">Powered by: <![CDATA[<a href="https://www.weatherapi.com/">Weather API</a>]]></string>
+    <string name="powered_by1" translatable="false">Powered by: Weather API</string>
 
     <string name="api_key_error">Sorry, developer has problems with weather information provider. Retry later.</string>
 

@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_Everyweather)
+        setTheme(R.style.Theme_Everyweather)//todo поменять сплешскрин на компоуз версию чтобы не видеть белый фон при входе в приложение
         super.onCreate(savedInstanceState)
         bind()
         requestLocationPermissions()
@@ -49,16 +49,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeLiveData() {
-        mainActivityViewModel.userLatLngLiveData.observe(this, {
+        mainActivityViewModel.userLatLngLiveData.observe(this) {
             Log.i("TAG", "observeLiveData: $it")
-        })
-
-        mainActivityViewModel.toggleLookingForLocation.observe(this, {
+        }
+//todo переделать в state и compose
+        mainActivityViewModel.toggleLookingForLocation.observe(this) {
             toggleLookingForLocation(it)
-        })
-
-        mainActivityViewModel.messageLiveData.observe(this, {
-            if (it.hasBeenHandled){
+        }
+//todo сделать через flow с DROP_LATEST
+        mainActivityViewModel.messageLiveData.observe(this) {
+            if (it.hasBeenHandled) {
                 return@observe
             }
             Toast.makeText(
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 it.getContentIfNotHandled(),
                 Toast.LENGTH_LONG
             ).show()
-        })
+        }
         mainActivityViewModel.getNetworkLiveData().observe(this, networkObserver)
     }
 
@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //todo вынести в общий фрагмент вместо с тостами
     private val networkObserver = Observer<Boolean> {
         when (it) {
             true -> {
@@ -117,6 +118,7 @@ class MainActivity : AppCompatActivity() {
         locationHandler.findUserLocation()
     }
 
+    //todo flow
     fun getUserLatLngLiveData(): LiveData<UserLatLng> = mainActivityViewModel.userLatLngLiveData
 
     fun requestLocationPermissions() {
