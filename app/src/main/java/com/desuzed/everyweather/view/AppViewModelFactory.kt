@@ -6,6 +6,7 @@ import com.desuzed.everyweather.data.repository.RepositoryApp
 import com.desuzed.everyweather.view.fragments.location.LocationViewModel
 import com.desuzed.everyweather.view.fragments.weather.main.WeatherMainViewModel
 import com.desuzed.everyweather.view.fragments.weather.next_days.NextDaysViewModel
+import com.desuzed.everyweather.view.main_activity.MainActivityViewModel
 
 /**
  * Factory for creating ViewModels with parameters
@@ -16,6 +17,7 @@ class AppViewModelFactory(private val repositoryApp: RepositoryApp) : ViewModelP
             modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> {
                 MainActivityViewModel(repositoryApp) as T
             }
+
             modelClass.isAssignableFrom(LocationViewModel::class.java) -> {
                 LocationViewModel(repositoryApp) as T
             }

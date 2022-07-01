@@ -21,7 +21,6 @@ class NextDaysViewModel(private val repo: RepositoryApp) :
         }
     }
 
-    //TODO REFACTORING to mapper
     private suspend fun mapToUi(weatherResponse: WeatherResponse): List<NextDaysUi> =
         withContext(Dispatchers.IO) {
             repo.mapToNextDaysUi(weatherResponse)

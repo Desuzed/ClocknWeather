@@ -12,7 +12,7 @@ import com.desuzed.everyweather.model.entity.Location
 import com.desuzed.everyweather.model.entity.UserLatLng
 import com.desuzed.everyweather.view.AppViewModelFactory
 import com.desuzed.everyweather.view.fragments.navigate
-import com.desuzed.everyweather.view.fragments.weather.WeatherMainFragment
+import com.desuzed.everyweather.view.fragments.weather.main.WeatherMainFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback

@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.view.fragments.weather.main
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.TweenSpec
@@ -97,7 +98,6 @@ fun WeatherMainContent(
                 }
             }
         }
-
     }
 }
 
@@ -136,7 +136,6 @@ fun WeatherHeaderInfo(
                         .width(60.dp),
                     alignment = Alignment.CenterEnd,
                     painter = rememberAsyncImagePainter(mainInfoUi.iconUrl),
-                    //  painter = painterResource(id = R.drawable.ic_edit_location), //todo убрать мок
                     contentDescription = "",
                 )
                 LargeBoldText(

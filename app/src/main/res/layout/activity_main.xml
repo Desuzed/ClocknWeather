@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:theme="@style/Theme.Everyweather"
-    tools:context=".view.MainActivity">
+    tools:context=".view.main_activity.MainActivity">
 
     <TextView
         android:id="@+id/tvInternetConnection"
@@ -19,7 +19,7 @@
         android:background="?attr/backgroundError"
         tools:visibility="visible" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
@@ -27,7 +27,6 @@
         app:defaultNavHost="true"
         android:layout_weight="98"
         app:navGraph="@navigation/nav_graph" />
-
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/geoProgressBar"

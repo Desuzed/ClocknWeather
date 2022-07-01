@@ -3,10 +3,13 @@ package com.desuzed.everyweather.view.fragments
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.flow.Flow
 
 
 fun Fragment.navigate(directions: Int, bundle: Bundle? = null) {
@@ -45,6 +48,27 @@ fun Fragment.addOnBackPressedCallback() {
     )
 }
 
+inline fun <T> Fragment.collect(
+    source: Flow<T>,
+    crossinline consumer: suspend (T) -> Unit
+) {
+    lifecycleScope.launchWhenCreated {
+        source.collect {
+            consumer(it)
+        }
+    }
+}
+
+inline fun <T> AppCompatActivity.collect(
+    source: Flow<T>,
+    crossinline consumer: suspend (T) -> Unit
+) {
+    lifecycleScope.launchWhenCreated {
+        source.collect {
+            consumer(it)
+        }
+    }
+}
 //fun Activity.makeStatusBarTransparent() {
 //    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //        window.apply {

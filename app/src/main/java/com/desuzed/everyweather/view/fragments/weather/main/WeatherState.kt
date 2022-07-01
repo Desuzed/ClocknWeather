@@ -9,5 +9,5 @@ data class WeatherState(
     val isAddButtonEnabled: Boolean = false,
     val isLoading: Boolean = true,
     val query: String = "",
-    val infoMessage: String = "",
+ //   val infoMessage: String = "",
 )

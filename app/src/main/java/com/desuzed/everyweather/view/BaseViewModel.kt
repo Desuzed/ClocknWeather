@@ -21,4 +21,12 @@ abstract class BaseViewModel <S, A> (initState : S) : ViewModel() {
             _action.emit(action)
         }
     }
+
+    inline fun <T> collect(source: Flow<T>, crossinline consumer: suspend (T) -> Unit) {
+        viewModelScope.launch {
+            source.collect {
+                consumer(it)
+            }
+        }
+    }
 }

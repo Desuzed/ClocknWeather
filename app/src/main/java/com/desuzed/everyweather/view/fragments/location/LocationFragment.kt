@@ -19,14 +19,13 @@ import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.data.room.FavoriteLocationMapper
 import com.desuzed.everyweather.databinding.FragmentLocationBinding
 import com.desuzed.everyweather.view.AppViewModelFactory
-import com.desuzed.everyweather.view.MainActivity
+import com.desuzed.everyweather.view.main_activity.MainActivity
 import com.desuzed.everyweather.view.adapters.FavoriteLocationAdapter
 import com.desuzed.everyweather.view.fragments.addOnBackPressedCallback
 import com.desuzed.everyweather.view.fragments.navigate
 import com.desuzed.everyweather.view.fragments.toast
-import com.desuzed.everyweather.view.fragments.weather.WeatherMainFragment
+import com.desuzed.everyweather.view.fragments.weather.main.WeatherMainFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.util.*
 
 
 class LocationFragment : Fragment(), FavoriteLocationAdapter.OnItemClickListener {

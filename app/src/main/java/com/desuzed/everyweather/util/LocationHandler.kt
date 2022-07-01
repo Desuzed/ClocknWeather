@@ -3,41 +3,44 @@ package com.desuzed.everyweather.util
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.model.Event
 import com.desuzed.everyweather.model.entity.UserLatLng
 import com.desuzed.everyweather.model.entity.UserLatLngMapper
-import com.desuzed.everyweather.view.MainActivityViewModel
+import com.desuzed.everyweather.view.main_activity.MainActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 
 class LocationHandler(
-    private val activity: Activity,
-    private val mainActivityViewModel: MainActivityViewModel
+    private val activity: Activity,//todo koin
+    private val viewModel: MainActivityViewModel
 ) {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(activity)
 
+
     fun findUserLocation() {
-        if (mainActivityViewModel.userLatLngLiveData.value?.let { shouldRefreshUserLocation(it) } == false) {
-            mainActivityViewModel.toggleLookingForLocation.postValue(false)
+        if (viewModel.userLatLng.value?.let { shouldRefreshUserLocation(it) } == false) {
+            viewModel.toggleLookingForLocation(false)
             return
         }
 
         if (permissionsGranted()) {
-            mainActivityViewModel.toggleLookingForLocation.postValue(true)
+            viewModel.toggleLookingForLocation(true)
             fusedLocationClient.getCurrentLocation(
-                LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY,
+                LocationRequest.PRIORITY_HIGH_ACCURACY,
                 null
             )
                 .addOnSuccessListener {
                     if (it != null) {
+                        Log.i("TAG", "findUserLocation: found: ${it.latitude}")
                         val userLatLng = UserLatLngMapper().mapFromEntity(it)
-                        mainActivityViewModel.userLatLngLiveData.postValue(userLatLng)
-                        mainActivityViewModel.toggleLookingForLocation.postValue(false)
+                        viewModel.userLatLng.value = userLatLng
+                        viewModel.toggleLookingForLocation(false)
                     } else {
+                        Log.i("TAG", "findUserLocation: NOT FOUND")
                         onError(activity.resources.getString(R.string.your_current_location_not_found))
                     }
                 }
@@ -50,11 +53,11 @@ class LocationHandler(
         System.currentTimeMillis() - userLatLng.time > 1000 * 60
 
     private fun onError(message: String) {
-        mainActivityViewModel.toggleLookingForLocation.postValue(false)
-        mainActivityViewModel.messageLiveData.postValue(Event(message))
+        viewModel.toggleLookingForLocation(false)
+        viewModel.postMessage(message)
     }
 
-    private fun permissionsGranted(): Boolean {
+    fun permissionsGranted(): Boolean {
         val permissionFine = ContextCompat.checkSelfPermission(
             activity.applicationContext,
             Manifest.permission.ACCESS_FINE_LOCATION

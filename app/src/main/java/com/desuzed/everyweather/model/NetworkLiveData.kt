@@ -6,7 +6,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.lifecycle.LiveData
-
+//todo переделать на flow
 class NetworkLiveData(val context: Context) : LiveData<Boolean>(true) {
     private val networkManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -49,7 +49,6 @@ class NetworkLiveData(val context: Context) : LiveData<Boolean>(true) {
             validNetworks.remove(network)
             checkValidNetworks()
         }
-
 
     }
 }

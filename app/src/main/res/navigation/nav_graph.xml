@@ -8,9 +8,9 @@
 
     <fragment
         android:id="@+id/weatherFragment"
-        android:name="com.desuzed.everyweather.view.fragments.weather.WeatherMainFragment"
+        android:name="com.desuzed.everyweather.view.fragments.weather.main.WeatherMainFragment"
         android:label="WeatherFragment"
-        tools:layout="@layout/fragment_weather_main" >
+        tools:layout="@layout/fragment_weather_main">
         <action
             android:id="@+id/action_weatherFragment_to_nextDaysBottomSheet"
             app:destination="@id/nextDaysBottomSheet" />

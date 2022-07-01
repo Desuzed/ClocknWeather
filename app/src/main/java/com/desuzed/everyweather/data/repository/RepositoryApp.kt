@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
 import com.desuzed.everyweather.data.network.ActionResultProvider
 import com.desuzed.everyweather.data.network.dto.weatherApi.ApiErrorMapper
 import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
@@ -15,6 +16,7 @@ import com.desuzed.everyweather.model.NetworkLiveData
 import com.desuzed.everyweather.model.entity.WeatherResponse
 import com.desuzed.everyweather.view.ui.next_days.NextDaysUi
 import com.desuzed.everyweather.view.ui.main.WeatherMainUi
+import kotlinx.coroutines.flow.Flow
 
 class RepositoryAppImpl(
     private val localDataSource: LocalDataSource,
@@ -60,7 +62,8 @@ class RepositoryAppImpl(
         return remoteDataSource.getForecast(query)
     }
 
-    override fun getNetworkLiveData(): NetworkLiveData = localDataSource.getNetworkLiveData()
+    override fun getNetworkConnection(): Flow<Boolean> =
+        localDataSource.getNetworkLiveData().asFlow()
 
     //todo вынести в какой нибудь юзкейс и избавиться от репозиторий слоя
     override suspend fun fetchForecastOrErrorMessage(query: String): ResultForecast {
@@ -91,6 +94,6 @@ class RepositoryAppImpl(
 }
 
 interface RepositoryApp : RoomProvider, ContextProvider, RemoteDataSource {
-    fun getNetworkLiveData(): NetworkLiveData
+    fun getNetworkConnection(): Flow<Boolean>
     suspend fun fetchForecastOrErrorMessage(query: String): ResultForecast
 }
