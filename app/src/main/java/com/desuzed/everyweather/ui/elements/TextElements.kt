@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -32,7 +33,8 @@ fun BoldText(text: String, modifier: Modifier = Modifier) {
     Text(
         modifier = modifier,
         text = text,
-        style = EveryweatherTheme.typography.h3
+        style = EveryweatherTheme.typography.h3,
+        color = EveryweatherTheme.colors.textColorPrimary,
     )
 }
 
@@ -41,6 +43,7 @@ fun RegularText(text: String) {
     Text(
         text = text,
         style = EveryweatherTheme.typography.text,
+        color = EveryweatherTheme.colors.textColorPrimary,
     )
 }
 
@@ -84,6 +87,7 @@ fun SmallText(modifier: Modifier = Modifier, text: String) {
         text = text,
         style = EveryweatherTheme.typography.textSmall,
         maxLines = 1,
+        color = EveryweatherTheme.colors.textColorPrimary
     )
 }
 
@@ -117,17 +121,15 @@ fun LocationText(text: String, onLocationClick: () -> Unit) {
             .clickable {
                 onLocationClick()
             },
-        shape = RoundedCornerShape(
-            dimensionResource(id = R.dimen.corner_radius_16),    //todo добавить более округлые
-        ),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         backgroundColor = EveryweatherTheme.colors.textBg,
+        elevation = 0.dp,
     ) {
         Row(
             modifier = Modifier
                 .padding(horizontal = 8.dp, vertical = 4.dp)
                 .fillMaxWidth()
                 .clickable(
-//todo onClick отрабатывает нестабильно, не всегда
                     interactionSource = interactionSource,
                     indication = null,
                     onClick = onLocationClick,
@@ -144,6 +146,7 @@ fun LocationText(text: String, onLocationClick: () -> Unit) {
             Image(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.ic_edit_location),
+                colorFilter = ColorFilter.tint(EveryweatherTheme.colors.textColorPrimary),
                 contentDescription = "",
             )
         }

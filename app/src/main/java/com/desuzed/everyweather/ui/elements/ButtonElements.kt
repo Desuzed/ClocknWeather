@@ -18,12 +18,11 @@ fun FloatingButton(modifier: Modifier = Modifier, id: Int, onClick: () -> Unit) 
     FloatingActionButton(
         modifier = modifier,
         onClick = onClick,
-        backgroundColor = EveryweatherTheme.colors.secondary,//todo цвет не белый и почти белый в светлой теме
-        //    contentColor = EveryweatherTheme.colors.primary,
+        backgroundColor = EveryweatherTheme.colors.secondary,
     ) {
         Image(
             painter = painterResource(id),
-            colorFilter = ColorFilter.tint(EveryweatherTheme.colors.textColorSecondary),
+            colorFilter = ColorFilter.tint(EveryweatherTheme.colors.buttonTextColor),
             contentDescription = "",
         )
     }
@@ -42,7 +41,7 @@ fun RoundedButton(modifier: Modifier = Modifier, onClick: () -> Unit, text: Stri
     {
         MediumText(
             text = text,
-            color = EveryweatherTheme.colors.textColorSecondary
+            color = EveryweatherTheme.colors.buttonTextColor
         )
     }
 }

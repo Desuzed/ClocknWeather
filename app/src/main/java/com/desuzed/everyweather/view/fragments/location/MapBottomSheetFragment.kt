@@ -91,7 +91,7 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                         UserLatLng(
                             latLng.latitude.toFloat(),
                             latLng.longitude.toFloat(),
-                            System.currentTimeMillis()      //todo Лишний параметр
+                            System.currentTimeMillis()
                         )
                     dismiss()
                     navigateToMainFragment(userLatLng.toString())

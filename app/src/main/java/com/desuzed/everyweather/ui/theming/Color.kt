@@ -10,8 +10,11 @@ data class EveryweatherColors(
     val onSurface: Color,
     val textColorPrimary: Color,
     val textColorSecondary: Color,
-    val gradientStart: Color,
-    val gradientEnd: Color,
+    val buttonTextColor: Color,
+    val primaryGradientStart: Color,
+    val primaryGradientEnd: Color,
+    val secondaryGradientStart: Color,
+    val secondaryGradientEnd: Color,
     val textBg: Color = Color(0x4DFFFFFF), //todo пеереименовать
 )
 
@@ -56,6 +59,8 @@ val BackgroundGradientLightStart = LightBlue50customized
 val BackgroundGradientLightEnd = Color(0xFF00C4DE)
 val BackgroundGradientNightStart = Indigo700customized
 val BackgroundGradientNightEnd = Color(0xFF011131)
+val SecondaryGradientNightStart = Color(0xFF000716)
+val SecondaryGradientNightEnd = Color(0xFF000E2E)
 
 
 // Alpha
@@ -68,8 +73,11 @@ val LightColorPalette = EveryweatherColors(
     onSurface = Blue50DarkCustomized,
     textColorPrimary = NearDark,
     textColorSecondary = White,
-    gradientStart = BackgroundGradientLightStart,
-    gradientEnd = BackgroundGradientLightEnd,
+    buttonTextColor = NearWhite,
+    primaryGradientStart = BackgroundGradientLightStart,
+    primaryGradientEnd = BackgroundGradientLightEnd,
+    secondaryGradientStart = White,
+    secondaryGradientEnd = White,
     )
 
 val DarkColorPalette = EveryweatherColors(
@@ -79,8 +87,11 @@ val DarkColorPalette = EveryweatherColors(
     onSurface = Indigo400DarkCustomized,
     textColorPrimary = NearWhite,
     textColorSecondary = NearWhite,
-    gradientStart = BackgroundGradientNightStart,
-    gradientEnd = BackgroundGradientNightEnd,
+    buttonTextColor = NearWhite,
+    primaryGradientStart = BackgroundGradientNightStart,
+    primaryGradientEnd = BackgroundGradientNightEnd,
+    secondaryGradientStart = SecondaryGradientNightStart,
+    secondaryGradientEnd = SecondaryGradientNightEnd,
     )
 
 val LocalAppColors = staticCompositionLocalOf<EveryweatherColors> {

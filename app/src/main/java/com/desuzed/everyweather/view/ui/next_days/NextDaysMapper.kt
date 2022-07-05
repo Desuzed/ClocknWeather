@@ -24,7 +24,6 @@ class NextDaysMapper(private val resources: Resources) {
                 nextDaysMainInfo = nextDaysMainInfo,
                 detailCard = DetailCardNextDays(
                     forecastDay = it,
-                    timeZone = timezone,
                     res = resources,
                 ),
                 hourList = hourUiList,

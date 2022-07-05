@@ -87,8 +87,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun isLookingForLocation(isLooking: Boolean) {
         with(binding) {
-            tvLookingForLocation.isVisible = isLooking
-            geoProgressBar.isVisible = isLooking
+            geoLayout.isVisible = isLooking
         }
     }
 

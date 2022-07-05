@@ -27,6 +27,7 @@ class WeatherMainInfoUi(response: WeatherResponse, res: Resources) {
     val iconUrl: String
 
     init {
+        //todo refactoring sdf to SdfFormatter utill class
         sdfDate.timeZone = TimeZone.getTimeZone(timeZone)
         sdfTime.timeZone = TimeZone.getTimeZone(timeZone)
         val current = response.current

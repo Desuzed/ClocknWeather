@@ -10,12 +10,10 @@ import java.util.*
 
 class DetailCardMain(
     response: WeatherResponse,
-    timeZone: String,
     res: Resources,
 ) : DetailCard() {
 
     @SuppressLint("SimpleDateFormat")
-    private val sdfEddMM = SimpleDateFormat("E. dd/MM", Locale.getDefault())
     override val wind: String
     override val pressure: String
     override val humidity: String
@@ -24,7 +22,6 @@ class DetailCardMain(
     override val moon: String
 
     init {
-        sdfEddMM.timeZone = TimeZone.getTimeZone(timeZone)
         val current = response.current
         val forecastDay = response.forecastDay[0]
         val astro = forecastDay.astro

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -44,7 +45,8 @@ fun HourItemContent(hourItem: HourUi) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_wind_direction),
                         contentDescription = "",
-                        Modifier
+                        colorFilter = ColorFilter.tint(EveryweatherTheme.colors.textColorPrimary),
+                        modifier = Modifier
                             .rotate(hourItem.rotation)
                             .size(12.dp)
                     )

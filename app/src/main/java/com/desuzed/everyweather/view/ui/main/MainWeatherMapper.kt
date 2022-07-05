@@ -18,7 +18,6 @@ class MainWeatherMapper(private val resources: Resources) {
         val detailCard = DetailCardMain(
             response = response,
             res = resources,
-            timeZone = response.location.timezone
         )
         return WeatherMainUi(
             mainInfo = weatherMainInfo,

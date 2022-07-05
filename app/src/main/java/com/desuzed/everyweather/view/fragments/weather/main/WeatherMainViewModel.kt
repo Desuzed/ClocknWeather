@@ -40,7 +40,7 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
                 return@launch
             }
             val favoriteLocationDto =
-                FavoriteLocationDto.buildFavoriteLocationObj(state.value.weatherData!!.location)    //todo safe call
+                FavoriteLocationDto.buildFavoriteLocationObj(state.value.weatherData!!.location)
             val inserted = repo.insert(favoriteLocationDto)
             if (inserted) onSuccess(ActionResultProvider.SAVED)
             else onError(ActionResultProvider.FAIL)

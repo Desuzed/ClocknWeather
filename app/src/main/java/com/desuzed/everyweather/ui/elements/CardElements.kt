@@ -28,12 +28,7 @@ import com.desuzed.everyweather.view.ui.DetailCard
 fun CardDetailDayItem(detailCard: DetailCard, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(
-            dimensionResource(id = R.dimen.corner_radius_16),
-            dimensionResource(id = R.dimen.corner_radius_16),
-            dimensionResource(id = R.dimen.corner_radius_16),
-            dimensionResource(id = R.dimen.corner_radius_16)
-        ),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         backgroundColor = EveryweatherTheme.colors.onSurface,
         elevation = 4.dp,
     ) {

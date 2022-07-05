@@ -14,7 +14,7 @@ class NextDaysMainInfo(
     res: Resources,
 ) {
     @SuppressLint("SimpleDateFormat")
-    private val sdfEddMM = SimpleDateFormat("E. dd/MM", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("E. dd/MM", Locale.getDefault())
     val iconUrl: String
     val date: String
     val description: String
@@ -22,10 +22,10 @@ class NextDaysMainInfo(
     val minTemp: String
 
     init {
-        sdfEddMM.timeZone = TimeZone.getTimeZone(timeZone)
+        dateFormat.timeZone = TimeZone.getTimeZone(timeZone)
         val day = forecastDay.day
         iconUrl = "https:${day.icon}"
-        date = sdfEddMM.format(forecastDay.dateEpoch * 1000)
+        date = dateFormat.format(forecastDay.dateEpoch * 1000)
         description = day.text
         maxTemp = day.maxTemp.roundToInt().toString() + res.getString(
             R.string.celsius
