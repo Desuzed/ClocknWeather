@@ -11,6 +11,7 @@ import com.desuzed.everyweather.R
 import com.desuzed.everyweather.model.entity.Location
 import com.desuzed.everyweather.model.entity.UserLatLng
 import com.desuzed.everyweather.view.AppViewModelFactory
+import com.desuzed.everyweather.view.fragments.location.main.LocationViewModel
 import com.desuzed.everyweather.view.fragments.navigate
 import com.desuzed.everyweather.view.fragments.weather.main.WeatherMainFragment
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -59,7 +60,6 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                 showAlertDialog(latLng, googleMap, oldMarker)
         }
     }
-
 
     private fun instantiateOldMarker (location: Location?, googleMap: GoogleMap): Marker? {
         return if (location == null){

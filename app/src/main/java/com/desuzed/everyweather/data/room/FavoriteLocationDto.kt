@@ -12,7 +12,7 @@ import java.text.DecimalFormatSymbols
 import java.util.*
 
 @Entity(tableName = "favorite_location_table")
-class FavoriteLocationDto(
+data class FavoriteLocationDto(
     /**
      * latLon is made to be unique key by concatenating latitude and longitude values
      */

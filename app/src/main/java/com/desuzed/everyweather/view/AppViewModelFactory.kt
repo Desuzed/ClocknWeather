@@ -3,7 +3,7 @@ package com.desuzed.everyweather.view
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.data.repository.RepositoryApp
-import com.desuzed.everyweather.view.fragments.location.LocationViewModel
+import com.desuzed.everyweather.view.fragments.location.main.LocationViewModel
 import com.desuzed.everyweather.view.fragments.weather.main.WeatherMainViewModel
 import com.desuzed.everyweather.view.fragments.weather.next_days.NextDaysViewModel
 import com.desuzed.everyweather.view.main_activity.MainActivityViewModel

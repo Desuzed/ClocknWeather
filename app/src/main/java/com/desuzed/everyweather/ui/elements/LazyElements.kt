@@ -2,6 +2,7 @@ package com.desuzed.everyweather.ui.elements
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -10,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.view.ui.HourUi
 
@@ -29,9 +32,6 @@ fun HourItemContent(hourItem: HourUi) {
                 .padding(8.dp)
                 .wrapContentWidth(),
             shape = RoundedCornerShape(
-                dimensionResource(id = R.dimen.corner_radius_16),
-                dimensionResource(id = R.dimen.corner_radius_16),
-                dimensionResource(id = R.dimen.corner_radius_16),
                 dimensionResource(id = R.dimen.corner_radius_16),
             ),
             backgroundColor = EveryweatherTheme.colors.onSurface,
@@ -57,6 +57,52 @@ fun HourItemContent(hourItem: HourUi) {
     }
 }
 
+@Composable
+fun LocationItemContent(
+    item: FavoriteLocationDto,
+    onClick: (FavoriteLocationDto) -> Unit,
+    onLongClick: (FavoriteLocationDto) -> Unit
+) {
+    EveryweatherTheme {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            shape = RoundedCornerShape(
+                dimensionResource(id = R.dimen.corner_radius_16),
+            ),
+            backgroundColor = EveryweatherTheme.colors.onSurface,
+            elevation = 4.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onLongPress = { onLongClick(item) },
+                            onTap = { onClick(item) }
+                        )
+                    }
+            ) {
+                LargeBoldText(text = item.cityName)
+                MediumText(text = item.toString())
+            }
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    widthDp = 320,
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "LocationItemContentPreview"
+)
+@Composable
+fun PreviewLocationItemContent() {
+    LocationItemContent(
+        item = FavoriteLocationDto("", "London", "RegionName", "England", "", ""),
+        {}, {})
+}
 
 @Preview(
     showBackground = true,

@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.ui.elements
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
@@ -40,6 +42,7 @@ fun RoundedButton(modifier: Modifier = Modifier, onClick: () -> Unit, text: Stri
     )
     {
         MediumText(
+            modifier = Modifier.padding(vertical = 4.dp),
             text = text,
             color = EveryweatherTheme.colors.buttonTextColor
         )

@@ -1,5 +1,6 @@
 package com.desuzed.everyweather
 
+import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.model.entity.*
 
 object MockWeatherObject {
@@ -34,4 +35,6 @@ object MockWeatherObject {
             )
         )
     )
+    val location = FavoriteLocationDto("", "London", "London region", "United Kingdoms", "", "")
+    val locations = listOf(location, location, location, location, location, location, location)
 }

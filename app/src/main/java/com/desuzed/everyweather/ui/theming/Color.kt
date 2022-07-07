@@ -11,6 +11,7 @@ data class EveryweatherColors(
     val textColorPrimary: Color,
     val textColorSecondary: Color,
     val buttonTextColor: Color,
+    val editTextStrokeColor: Color,
     val primaryGradientStart: Color,
     val primaryGradientEnd: Color,
     val secondaryGradientStart: Color,
@@ -50,6 +51,7 @@ val Indigo400DarkCustomized = Color(0xFF3C567D)
 val NearDark = Color(0xFF4D4D4D)
 val NearWhite = Color(0xFFD6D6D6)
 val White = Color(0xFFFFFFFF)
+val Gray = Color(0x99999999)
 
 //<color name="bgDetailLight">#EFF6FF</color>
 //<color name="bgDetailNight">#3C567D</color>
@@ -74,11 +76,12 @@ val LightColorPalette = EveryweatherColors(
     textColorPrimary = NearDark,
     textColorSecondary = White,
     buttonTextColor = NearWhite,
+    editTextStrokeColor = Gray,
     primaryGradientStart = BackgroundGradientLightStart,
     primaryGradientEnd = BackgroundGradientLightEnd,
     secondaryGradientStart = White,
     secondaryGradientEnd = White,
-    )
+)
 
 val DarkColorPalette = EveryweatherColors(
     primary = Indigo700customized,
@@ -88,11 +91,12 @@ val DarkColorPalette = EveryweatherColors(
     textColorPrimary = NearWhite,
     textColorSecondary = NearWhite,
     buttonTextColor = NearWhite,
+    editTextStrokeColor = Gray,
     primaryGradientStart = BackgroundGradientNightStart,
     primaryGradientEnd = BackgroundGradientNightEnd,
     secondaryGradientStart = SecondaryGradientNightStart,
     secondaryGradientEnd = SecondaryGradientNightEnd,
-    )
+)
 
 val LocalAppColors = staticCompositionLocalOf<EveryweatherColors> {
     error("No colors provided")

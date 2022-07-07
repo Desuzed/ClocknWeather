@@ -148,7 +148,7 @@ fun WeatherHeaderInfo(
                     painter = rememberAsyncImagePainter(mainInfoUi.iconUrl),
                     contentDescription = "",
                 )
-                LargeBoldText(
+                UltraLargeBoldText(
                     text = mainInfoUi.currentTemp,
                     color = EveryweatherTheme.colors.textColorSecondary
                 )

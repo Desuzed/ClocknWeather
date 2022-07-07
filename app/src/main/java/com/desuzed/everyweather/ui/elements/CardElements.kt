@@ -13,17 +13,6 @@ import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.view.ui.DetailCard
 
-//@Preview(
-//    showBackground = true,
-//    widthDp = 400,
-//    uiMode = Configuration.UI_MODE_NIGHT_NO,
-//    name = "PreviewCardDetailDayItem"
-//)
-//@Composable
-//private fun PreviewCardDetailDayItem() {
-//    CardDetailDayItem(detailCard = MockUi.detailCard)
-//}
-
 @Composable
 fun CardDetailDayItem(detailCard: DetailCard, modifier: Modifier = Modifier) {
     Card(

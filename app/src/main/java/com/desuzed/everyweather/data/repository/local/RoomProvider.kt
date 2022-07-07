@@ -1,10 +1,9 @@
 package com.desuzed.everyweather.data.repository.local
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import com.desuzed.everyweather.data.room.FavoriteLocationDAO
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class RoomProviderImpl(private val favoriteLocationDAO: FavoriteLocationDAO) : RoomProvider {
@@ -27,8 +26,8 @@ class RoomProviderImpl(private val favoriteLocationDAO: FavoriteLocationDAO) : R
         }
 
 
-    override fun getAllLocations(): LiveData<List<FavoriteLocationDto>> =
-        favoriteLocationDAO.getAlphabetizedLocations().asLiveData()
+    override fun getAllLocations(): Flow<List<FavoriteLocationDto>> =
+        favoriteLocationDAO.getAlphabetizedLocations()
 }
 
 
@@ -36,5 +35,5 @@ interface RoomProvider {
     suspend fun insert(favoriteLocationDto: FavoriteLocationDto): Boolean
     suspend fun deleteItem(favoriteLocationDto: FavoriteLocationDto): Boolean
     suspend fun containsPrimaryKey(latLon: String): Boolean
-    fun getAllLocations(): LiveData<List<FavoriteLocationDto>>
+    fun getAllLocations(): Flow<List<FavoriteLocationDto>>
 }
