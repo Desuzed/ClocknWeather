@@ -24,15 +24,11 @@ class NextDaysBottomSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-
-
-        return ComposeView(requireContext()).apply {
-            setContent {
-                val state by weatherViewModel.state.collectAsState()
-                NextDaysBottomSheetContent(state = state)
-            }
-            isNestedScrollingEnabled = true
+    ): View = ComposeView(requireContext()).apply {
+        setContent {
+            val state by weatherViewModel.state.collectAsState()
+            NextDaysBottomSheetContent(state = state)
         }
+        isNestedScrollingEnabled = true
     }
 }

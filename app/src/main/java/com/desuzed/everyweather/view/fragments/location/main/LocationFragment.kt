@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.view.fragments.location
+package com.desuzed.everyweather.view.fragments.location.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,9 +18,6 @@ import com.desuzed.everyweather.view.AppViewModelFactory
 import com.desuzed.everyweather.view.main_activity.MainActivity
 import com.desuzed.everyweather.view.fragments.addOnBackPressedCallback
 import com.desuzed.everyweather.view.fragments.collect
-import com.desuzed.everyweather.view.fragments.location.main.LocationMainAction
-import com.desuzed.everyweather.view.fragments.location.main.LocationMainContent
-import com.desuzed.everyweather.view.fragments.location.main.LocationViewModel
 import com.desuzed.everyweather.view.fragments.navigate
 import com.desuzed.everyweather.view.fragments.toast
 import com.desuzed.everyweather.view.fragments.weather.main.WeatherMainFragment

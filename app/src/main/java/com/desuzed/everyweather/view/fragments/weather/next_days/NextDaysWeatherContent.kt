@@ -40,8 +40,8 @@ fun NextDaysBottomSheetContent(
         Surface(
             modifier = Modifier.height(350.dp) ,
             shape = RoundedCornerShape(
-                dimensionResource(id = R.dimen.corner_radius_16),
-                dimensionResource(id = R.dimen.corner_radius_16)
+                topStart = dimensionResource(id = R.dimen.corner_radius_16),
+                topEnd = dimensionResource(id = R.dimen.corner_radius_16)
             ),
         ) {
             Box(
