@@ -1,5 +1,6 @@
 package com.desuzed.everyweather.view.fragments
 
+import android.content.res.Resources.getSystem
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -69,6 +70,8 @@ inline fun <T> AppCompatActivity.collect(
         }
     }
 }
+
+val Int.toIntDp: Int get() = (this / getSystem().displayMetrics.density).toInt()
 //fun Activity.makeStatusBarTransparent() {
 //    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //        window.apply {

@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
@@ -30,33 +29,31 @@ import com.desuzed.everyweather.view.ui.next_days.NextDaysMainInfo
 import com.desuzed.everyweather.view.ui.next_days.NextDaysMapper
 import com.desuzed.everyweather.view.ui.next_days.NextDaysUi
 
-//Todo migrate to ModalBottomSheetLayout
-//todo тем самым решить проблему со скролом
 @Composable
 fun NextDaysBottomSheetContent(
     state: NextDaysState,
 ) {
     EveryweatherTheme {
         Surface(
-            modifier = Modifier.height(350.dp) ,
+            modifier = Modifier.height(dimensionResource(id = R.dimen.dimen_350)),
             shape = RoundedCornerShape(
-                topStart = dimensionResource(id = R.dimen.corner_radius_16),
-                topEnd = dimensionResource(id = R.dimen.corner_radius_16)
+                topStart = dimensionResource(id = R.dimen.corner_radius_30),
+                topEnd = dimensionResource(id = R.dimen.corner_radius_30)
             ),
+            color = EveryweatherTheme.colors.bottomDialogBackground
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
-                        top = 20.dp,
-                        start = 4.dp,
-                        end = 4.dp,
-                        bottom = 8.dp,
+                        top = dimensionResource(id = R.dimen.dimen_20),
+                        start = dimensionResource(id = R.dimen.dimen_4),
+                        end = dimensionResource(id = R.dimen.dimen_4),
+                        bottom = dimensionResource(id = R.dimen.dimen_8),
                     )
             ) {
                 LazyColumn(
                     modifier = Modifier
-                       // .padding(top = 40.dp, bottom = 1.dp)
                         .fillMaxHeight()
                 ) { //todo разобраться с паддингами и тенями от карточки
                     items(items = state.nextDaysUiList) { forecastItem ->
@@ -74,34 +71,27 @@ fun NextDaysBottomSheetContent(
 fun ForecastListItem(
     dayItem: NextDaysUi,
 ) {
+    //Todo подумать как можно сделать чтобы клик отрабатывался не на всю карточку, а на верхнюю область
     var isExpanded by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
-            .padding(top = 4.dp)
+            .padding(top = dimensionResource(id = R.dimen.dimen_4))
             .fillMaxSize()
-            .clickable {
-                isExpanded =
-                    !isExpanded        //Todo подумать как можно сделать чтобы клик отрабатывался не на всю карточку, а на верхнюю область
-            },
-        shape = RoundedCornerShape(
-            dimensionResource(id = R.dimen.corner_radius_16),
-            dimensionResource(id = R.dimen.corner_radius_16),
-            dimensionResource(id = R.dimen.corner_radius_16),
-            dimensionResource(id = R.dimen.corner_radius_16),
-        ),
+            .clickable { isExpanded = !isExpanded },
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         backgroundColor = EveryweatherTheme.colors.tertiary,
-        elevation = 8.dp
+        elevation = dimensionResource(id = R.dimen.dimen_8)
     ) {
         Column(
-            modifier = Modifier.padding(bottom = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.dimen_10)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_10))
         ) {
             TopAreaDayItem(nextDaysMainInfo = dayItem.nextDaysMainInfo, isExpanded)
             AnimatedVisibility(visible = isExpanded) {
                 Column {
                     CardDetailDayItem(
                         detailCard = dayItem.detailCard,
-                        Modifier.padding(horizontal = 20.dp)
+                        Modifier.padding(horizontal = dimensionResource(id = R.dimen.dimen_20))
                     )
                     LazyRow {
                         items(items = dayItem.hourList) { hourItem ->
@@ -119,12 +109,13 @@ fun TopAreaDayItem(nextDaysMainInfo: NextDaysMainInfo, isExpanded: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp)
-            .padding(top = 10.dp), horizontalArrangement = Arrangement.SpaceBetween
+            .padding(horizontal = dimensionResource(id = R.dimen.dimen_20))
+            .padding(top = dimensionResource(id = R.dimen.dimen_10)),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_8))
         ) {
             BoldText(text = nextDaysMainInfo.date)
             RegularText(text = nextDaysMainInfo.description)
@@ -141,21 +132,20 @@ fun MaxMinTempWithImg(nextDaysMainInfo: NextDaysMainInfo, isExpanded: Boolean) {
             iconSize = it.size.height
         },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_8))
     ) {
         Image(
             modifier = Modifier
-                .height(40.dp)
-                .width(40.dp),
+                .height(dimensionResource(id = R.dimen.dimen_40))
+                .width(dimensionResource(id = R.dimen.dimen_40)),
             alignment = Alignment.CenterEnd,
             painter = rememberAsyncImagePainter(nextDaysMainInfo.iconUrl),
-            //  painter = painterResource(id = R.drawable.ic_arrow_24),
             contentDescription = "",
         )
 
         Column(
             horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_8))
         ) {
             BoldText(text = nextDaysMainInfo.maxTemp)
             RegularText(text = nextDaysMainInfo.minTemp)

@@ -3,65 +3,10 @@
     <style name="Theme.Everyweather" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/button_color_light</item>
         <item name="colorAccent">@color/gradientNightEnd</item>
-        <item name="android:textColorPrimary">@color/textLight</item>
-        <item name="textColorSecondary">@color/white</item>
         <item name="backgroundError">@color/errorLight</item>
-        <item name="backgroundDetail">@color/bgDetailLight</item>
-        <item name="bgRvItem">@color/bgRvItemLight</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="bgPrimary">@drawable/main_background_light</item>
-        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
-        <item name="bgSecondary">@color/white</item>
         <item name="android:statusBarColor">@color/gradientLightEnd</item>
-    </style>
-
-
-    <!--Bottom Sheet Dialog Theme-->
-    <style name="AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
-        <item name="android:backgroundDimAmount">0.4</item>
-    </style>
-
-    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rounded_bg_bottom_sheet_light</item>
-    </style>
-
-    <!--Alert dialog themes-->
-    <style name="ThemeOverlay.MaterialAlertDialog" parent="ThemeOverlay.MaterialAlertDialog.Base">
-        <item name="buttonBarPositiveButtonStyle">@style/AlertButton.Positive</item>
-        <item name="buttonBarNeutralButtonStyle">@style/AlertButton</item>
-        <item name="colorSurface">@color/bgDetailLight</item>
-    </style>
-
-    <style name="AlertButton" parent="AlertButton.Base">
-        <item name="android:textColor">@color/textLight</item>
-    </style>
-
-    <style name="AlertButton.Positive" parent="AlertButton.Positive.Base">
-        <item name="backgroundTint">@color/button_color_light</item>
-    </style>
-
-    <!--Button themes-->
-
-    <style name="CustomButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button_background</item>
-        <item name="fontFamily">@font/montserrat_regular_ru</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/textNight</item>
-    </style>
-
-    <style name="Fab" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="backgroundTint">?colorPrimary</item>
-        <item name="fontFamily">@font/montserrat_regular_ru</item>
-        <item name="tint">@color/textNight</item>
-
-    </style>
-
-    <!--Theme for separator between date and time-->
-
-    <style name="SeparatorView">
-        <item name="android:background">@color/textLight</item>
     </style>
 
     <!--Splash screen theme-->
@@ -70,6 +15,5 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="android:statusBarColor">@color/gradientNightEnd</item>
     </style>
-
 
 </resources>

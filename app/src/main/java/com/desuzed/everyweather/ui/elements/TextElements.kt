@@ -1,13 +1,10 @@
 package com.desuzed.everyweather.ui.elements
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,12 +24,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.view.fragments.weather.main.WeatherUserInteraction
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
 @Composable
@@ -51,9 +47,19 @@ fun BoldText(text: String, modifier: Modifier = Modifier, onClick: () -> Unit = 
 }
 
 @Composable
-fun RegularText(text: String, modifier: Modifier = Modifier, textAlign: TextAlign? = null) {
+fun RegularText(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    onClick: () -> Unit = {}
+) {
+    val interactionSource = remember { MutableInteractionSource() }
     Text(
-        modifier = modifier,
+        modifier = modifier.clickable(
+            onClick = onClick,
+            indication = null,
+            interactionSource = interactionSource,
+        ),
         text = text,
         style = EveryweatherTheme.typography.text,
         color = EveryweatherTheme.colors.textColorPrimary,
@@ -129,7 +135,7 @@ fun LargeBoldText(
     Text(
         modifier = modifier,
         text = text,
-        style = EveryweatherTheme.typography.textLarge,
+        style = EveryweatherTheme.typography.textBoldLarge,
         maxLines = 1,
         color = color,
     )
@@ -147,6 +153,14 @@ fun HintEditText(text: String, modifier: Modifier = Modifier) {
     )
 }
 
+@Composable
+fun DelimiterText() {
+    Text(
+        text = stringResource(id = R.string.delimiter),
+        style = EveryweatherTheme.typography.textLarge,
+        color = EveryweatherTheme.colors.textColorSecondary
+    )
+}
 
 @Composable
 fun TextPair(header: String, text: String, modifier: Modifier = Modifier) {
@@ -155,26 +169,26 @@ fun TextPair(header: String, text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LocationText(text: String, onLocationClick: () -> Unit) {
+fun LocationText(text: String, onUserInteraction: (WeatherUserInteraction) -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     Card(
         modifier = Modifier
-            .padding(4.dp)
-            .clickable {
-                onLocationClick()
-            },
+            .padding(dimensionResource(id = R.dimen.dimen_4)),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         backgroundColor = EveryweatherTheme.colors.textBg,
-        elevation = 0.dp,
+        elevation = dimensionResource(id = R.dimen.dimen_0),
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .padding(
+                    horizontal = dimensionResource(id = R.dimen.dimen_8),
+                    vertical = dimensionResource(id = R.dimen.dimen_4)
+                )
                 .fillMaxWidth()
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,
-                    onClick = onLocationClick,
+                    onClick = { onUserInteraction(WeatherUserInteraction.Location) },
                 ),
             horizontalArrangement = Arrangement.SpaceBetween,
 
@@ -198,47 +212,38 @@ fun LocationText(text: String, onLocationClick: () -> Unit) {
 
 @Composable
 fun LinkText(modifier: Modifier) {
-    // Creating an annonated string
+
     val mAnnotatedLinkString = buildAnnotatedString {
 
-        // creating a string to display in the Text
-        val mStr = stringResource(id = R.string.powered_by1)
+        val inputStr = stringResource(id = R.string.powered_by)
 
-        // word and span to be hyperlinked
-        val mStartIndex = mStr.indexOf("W")
-        val mEndIndex = mStr.indexOf("i")
-
-        append(mStr)
+        val startIndex = inputStr.indexOf("W")
+        val endIndex = startIndex + 11
+        append(inputStr)
         addStyle(
             style = SpanStyle(
-                color = Color.Blue,
+                color = EveryweatherTheme.colors.secondary,
                 textDecoration = TextDecoration.Underline
-            ), start = mStartIndex, end = mEndIndex
+            ), start = startIndex, end = endIndex
         )
-
         addStringAnnotation(
             tag = "URL",
-            annotation = "https://www.weatherapi.com/",
-            start = mStartIndex,
-            end = mEndIndex
+            annotation = stringResource(id = R.string.uri),
+            start = startIndex,
+            end = endIndex
         )
 
     }
-
-// UriHandler parse and opens URI inside
-// AnnotatedString Item in Browse
-    val mUriHandler = LocalUriHandler.current
-
-    // ???? Clickable text returns position of text
-    // that is clicked in onClick callback
+    val uriHandler = LocalUriHandler.current
     ClickableText(
         text = mAnnotatedLinkString,
         modifier = modifier,
+        style = EveryweatherTheme.typography.textMediumAnnotated,
         onClick = {
             mAnnotatedLinkString
                 .getStringAnnotations("URL", it, it)
                 .firstOrNull()?.let { stringAnnotation ->
-                    mUriHandler.openUri(stringAnnotation.item)
+                    uriHandler.openUri(stringAnnotation.item)
                 }
         }
     )
@@ -267,9 +272,7 @@ fun OutlinedEditText(
                 text = hint
             )
         },
-        shape = RoundedCornerShape(
-            dimensionResource(id = R.dimen.corner_radius_16)
-        ),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = EveryweatherTheme.colors.textColorPrimary,
             focusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
@@ -291,55 +294,3 @@ fun OutlinedEditText(
         })
     )
 }
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun AppEditText(text: String, onTextChanged: (String) -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                border = BorderStroke(
-                    2.dp,
-                    EveryweatherTheme.colors.editTextStrokeColor
-                ),
-                shape = RoundedCornerShape(
-                    dimensionResource(id = R.dimen.corner_radius_16)
-                )
-            )
-            .padding(4.dp)
-    ) {
-
-
-        BasicTextField(
-            value = "",
-            onValueChange = onTextChanged,
-            modifier = Modifier.fillMaxWidth(),
-            decorationBox = @Composable { innerTextField ->
-                // places leading icon, text field with label and placeholder, trailing icon
-                TextFieldDefaults.TextFieldDecorationBox(
-                    value = "12344",
-                    placeholder = {
-                        HintEditText(
-                            text = stringResource(id = R.string.search_hint)
-                        )
-                    },
-                    innerTextField = innerTextField,
-                    visualTransformation = VisualTransformation.None,
-                    singleLine = true,
-                    enabled = true,
-                    interactionSource = remember { MutableInteractionSource() },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = EveryweatherTheme.colors.textColorPrimary,
-                        focusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
-                        unfocusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
-                        backgroundColor = Color.Transparent,
-                    ),
-                    contentPadding = PaddingValues(4.dp)
-                )
-            }
-        )
-    }
-}
-
-

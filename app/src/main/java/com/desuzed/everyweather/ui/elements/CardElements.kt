@@ -8,7 +8,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.view.ui.DetailCard
@@ -19,10 +18,10 @@ fun CardDetailDayItem(detailCard: DetailCard, modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         backgroundColor = EveryweatherTheme.colors.onSurface,
-        elevation = 4.dp,
+        elevation = dimensionResource(id = R.dimen.dimen_4),
     ) {
         Row(
-            modifier = Modifier.padding(dimensionResource(id = R.dimen.margin_20dp)),
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_20)),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             LeftColumn(detailCard = detailCard)
@@ -35,7 +34,7 @@ fun CardDetailDayItem(detailCard: DetailCard, modifier: Modifier = Modifier) {
 fun LeftColumn(detailCard: DetailCard, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_4)),
         horizontalAlignment = Alignment.Start
     ) {
         TextPair(
@@ -57,7 +56,7 @@ fun LeftColumn(detailCard: DetailCard, modifier: Modifier = Modifier) {
 fun RightColumn(detailCard: DetailCard, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_4)),
         horizontalAlignment = Alignment.End
     ) {
         TextPair(
@@ -66,7 +65,7 @@ fun RightColumn(detailCard: DetailCard, modifier: Modifier = Modifier) {
         )
         TextPair(header = stringResource(id = R.string.wind), text = detailCard.wind)
         TextPair(
-            modifier = modifier.align(Alignment.End),   //todo цифры восхода/заката луны неровно выстроены
+            modifier = modifier.align(Alignment.End),
             header = stringResource(id = R.string.moonrise_moonset),
             text = detailCard.moon
         )

@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.ui.theming
 
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -29,8 +30,13 @@ data class EveryweatherTypography(
         fontSize = 66.sp,
         lineHeight = 25.sp,
     ),
-    val textLarge: TextStyle = TextStyle(
+    val textBoldLarge: TextStyle = TextStyle(
         fontFamily = montserratRegularBold,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+    ),
+    val textLarge: TextStyle = TextStyle(
+        fontFamily = montserratRegular,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
     ),
@@ -40,8 +46,15 @@ data class EveryweatherTypography(
         fontSize = 16.sp,
         lineHeight = 23.sp,
     ),
-    val textMediumBold: TextStyle = TextStyle(
+    val textMediumAnnotated: TextStyle = TextStyle(
+        color = Color.Gray,
         fontFamily = montserratRegular,
+        fontWeight = FontWeight.Light,
+        fontSize = 16.sp,
+        lineHeight = 23.sp,
+    ),
+    val textMediumBold: TextStyle = TextStyle(
+        fontFamily = montserratRegularBold,
         fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
         lineHeight = 23.sp,
@@ -53,7 +66,7 @@ data class EveryweatherTypography(
     ),
     val textSmall: TextStyle = TextStyle(
         fontFamily = montserratRegular,
-        fontWeight = FontWeight.Medium, //todo поиграться поменять
+        fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
     ),
 )

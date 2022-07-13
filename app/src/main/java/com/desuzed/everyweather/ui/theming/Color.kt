@@ -16,25 +16,9 @@ data class EveryweatherColors(
     val primaryGradientEnd: Color,
     val secondaryGradientStart: Color,
     val secondaryGradientEnd: Color,
-    val textBg: Color = Color(0x4DFFFFFF), //todo пеереименовать
+    val bottomDialogBackground: Color,
+    val textBg: Color = Gray30Alpha,
 )
-
-//<color name="edit_text_bg_light">#99999999</color>
-//<color name="edit_text_bg_night">#99E6E6E6</color>
-//<color name="place_background">#4DFFFFFF</color>
-//<color name="bgDetailLight">#EFF6FF</color>
-//<color name="bgDetailNight">#3C567D</color>
-
-//<color name="bg_black_night">#121212</color>
-//<color name="bg_white_light">#FFFFFF</color>
-//<color name="errorLight">#E04844</color>
-//<color name="errorNight">#A61A1A</color>
-//<color name="textLight">#4D4D4D</color>
-//<color name="textNight">#D6D6D6</color>
-//<color name="primary">#42A5F5</color>
-//<color name="secondary">#448AFF</color>
-//<color name="transparent">#00FBFBFB</color>
-
 
 //MaterialColors
 val indigo700 = Color(0xFF303F9F)
@@ -50,11 +34,10 @@ val Blue50DarkCustomized = Color(0xFFEFF6FF)
 val Indigo400DarkCustomized = Color(0xFF3C567D)
 val NearDark = Color(0xFF4D4D4D)
 val NearWhite = Color(0xFFD6D6D6)
+val AlmostBlack = Color(0xFF121212)
 val White = Color(0xFFFFFFFF)
 val Gray = Color(0x99999999)
-
-//<color name="bgDetailLight">#EFF6FF</color>
-//<color name="bgDetailNight">#3C567D</color>
+val Gray30Alpha = Color(0x4DFFFFFF)
 
 // Gradient
 val BackgroundGradientLightStart = LightBlue50customized
@@ -63,10 +46,6 @@ val BackgroundGradientNightStart = Indigo700customized
 val BackgroundGradientNightEnd = Color(0xFF011131)
 val SecondaryGradientNightStart = Color(0xFF000716)
 val SecondaryGradientNightEnd = Color(0xFF000E2E)
-
-
-// Alpha
-val LoaderBackground = Color(0x265646D1)
 
 val LightColorPalette = EveryweatherColors(
     primary = LightBlue50customized,
@@ -81,6 +60,7 @@ val LightColorPalette = EveryweatherColors(
     primaryGradientEnd = BackgroundGradientLightEnd,
     secondaryGradientStart = White,
     secondaryGradientEnd = White,
+    bottomDialogBackground = White,
 )
 
 val DarkColorPalette = EveryweatherColors(
@@ -96,6 +76,7 @@ val DarkColorPalette = EveryweatherColors(
     primaryGradientEnd = BackgroundGradientNightEnd,
     secondaryGradientStart = SecondaryGradientNightStart,
     secondaryGradientEnd = SecondaryGradientNightEnd,
+    bottomDialogBackground = AlmostBlack,
 )
 
 val LocalAppColors = staticCompositionLocalOf<EveryweatherColors> {

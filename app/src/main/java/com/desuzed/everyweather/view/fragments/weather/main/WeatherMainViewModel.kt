@@ -33,20 +33,6 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
         }
     }
 
-    fun saveLocation() {
-        viewModelScope.launch {
-            if (state.value.weatherData == null) {
-                onError(ActionResultProvider.FAIL)
-                return@launch
-            }
-            val favoriteLocationDto =
-                FavoriteLocationDto.buildFavoriteLocationObj(state.value.weatherData!!.location)
-            val inserted = repo.insert(favoriteLocationDto)
-            if (inserted) onSuccess(ActionResultProvider.SAVED)
-            else onError(ActionResultProvider.FAIL)
-        }
-    }
-
     fun getForecast(query: String) {
         viewModelScope.launch {
             setState { copy(isLoading = true, query = query) }
@@ -69,12 +55,34 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
                 messageFlow.emit(message)
                 setState {
                     copy(
-                        //    infoMessage = message,
                         isLoading = false,
                         isAddButtonEnabled = false,
                     )
                 }
             }
+        }
+    }
+
+    fun onUserInteraction(userInteraction: WeatherUserInteraction) {
+        when (userInteraction) {
+            WeatherUserInteraction.Location -> setAction(WeatherMainAction.NavigateToLocation)
+            WeatherUserInteraction.NextDays -> setAction(WeatherMainAction.NavigateToNextDaysWeather)
+            WeatherUserInteraction.Refresh -> getForecast(state.value.query)
+            WeatherUserInteraction.SaveLocation -> saveLocation()
+        }
+    }
+
+    private fun saveLocation() {
+        viewModelScope.launch {
+            if (state.value.weatherData == null) {
+                onError(ActionResultProvider.FAIL)
+                return@launch
+            }
+            val favoriteLocationDto =
+                FavoriteLocationDto.buildFavoriteLocationObj(state.value.weatherData!!.location)
+            val inserted = repo.insert(favoriteLocationDto)
+            if (inserted) onSuccess(ActionResultProvider.SAVED)
+            else onError(ActionResultProvider.FAIL)
         }
     }
 

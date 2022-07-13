@@ -9,11 +9,6 @@ class UserLatLng(val lat: Float, val lon: Float, val time: Long) {
         return "$lat, $lon"
     }
 
-//    fun toStringInfoFields(): String {
-//        return "$cityName, $region, $country"
-//    }
-//    fun hasLocationInfo () : Boolean = cityName.isNotEmpty() && region.isNotEmpty() && country.isNotEmpty()
-
 }
 
 class UserLatLngMapper : EntityMapper<Location, UserLatLng> {

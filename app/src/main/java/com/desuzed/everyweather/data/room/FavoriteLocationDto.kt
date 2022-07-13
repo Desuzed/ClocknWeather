@@ -29,6 +29,8 @@ data class FavoriteLocationDto(
         } else country
     }
 
+    fun toQuery(): String = "$lat, $lon"
+
     companion object {
         fun generateKey(location: Location): String {
             val df = DecimalFormat("#.#", DecimalFormatSymbols(Locale.ENGLISH))

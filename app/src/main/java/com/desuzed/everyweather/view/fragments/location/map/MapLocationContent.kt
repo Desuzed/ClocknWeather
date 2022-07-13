@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.elements.AppAlertDialog
 import com.desuzed.everyweather.ui.elements.RegularText
@@ -28,21 +27,21 @@ fun MapLocationContent(
 ) {
     EveryweatherTheme {
         Surface(
-            modifier = Modifier.height(350.dp),
+            modifier = Modifier.height(dimensionResource(id = R.dimen.dimen_350)),
             shape = RoundedCornerShape(
-                topStart = dimensionResource(id = R.dimen.corner_radius_16),
-                topEnd = dimensionResource(id = R.dimen.corner_radius_16)
+                topStart = dimensionResource(id = R.dimen.corner_radius_30),
+                topEnd = dimensionResource(id = R.dimen.corner_radius_30)
             ),
-            color = EveryweatherTheme.colors.secondaryGradientStart
+            color = EveryweatherTheme.colors.bottomDialogBackground
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
-                        top = 20.dp,
-                        start = 10.dp,
-                        end = 10.dp,
-                        bottom = 10.dp,
+                        top = dimensionResource(id = R.dimen.dimen_20),
+                        start = dimensionResource(id = R.dimen.dimen_10),
+                        end = dimensionResource(id = R.dimen.dimen_10),
+                        bottom = dimensionResource(id = R.dimen.dimen_10),
                     )
             ) {
                 val oldMarker = if (state.location != null) {
@@ -55,7 +54,7 @@ fun MapLocationContent(
 
                 Column {
                     RegularText(
-                        text = stringResource(id = R.string.load_weather_of_this_location),
+                        text = stringResource(id = R.string.set_place_on_map),
                         modifier = Modifier
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center
@@ -63,7 +62,7 @@ fun MapLocationContent(
                     GoogleMap(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(top = 10.dp),
+                            .padding(top = dimensionResource(id = R.dimen.dimen_10)),
                         cameraPositionState = cameraPositionState,
                         onMapClick = onNewLocation
                     ) {

@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
@@ -25,18 +24,18 @@ fun AppAlertDialog(title: String, onPositiveButtonClick: () -> Unit, onDismiss: 
         ) {
             Column(
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(dimensionResource(id = R.dimen.dimen_20))
                     .fillMaxWidth()
             ) {
                 RegularText(text = title)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 20.dp),
+                        .padding(top = dimensionResource(id = R.dimen.dimen_20)),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    BoldText(text = stringResource(id = R.string.cancel), onClick = onDismiss)
+                    RegularText(text = stringResource(id = R.string.cancel), onClick = onDismiss)
                     RoundedButton(
                         text = stringResource(id = R.string.ok),
                         onClick = onPositiveButtonClick

@@ -1,12 +1,7 @@
 package com.desuzed.everyweather.view.fragments.weather.main
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -17,7 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +23,7 @@ import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.elements.*
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.view.fragments.toIntDp
 import com.desuzed.everyweather.view.ui.main.MainWeatherMapper
 import com.desuzed.everyweather.view.ui.main.WeatherMainInfoUi
 import com.desuzed.everyweather.view.ui.main.WeatherMainUi
@@ -48,10 +44,7 @@ private fun PreviewWeatherMainContent() {
                 MockWeatherObject.weather
             )
         ),
-        onNextDaysButtonCLick = {},
-        onSaveLocationClick = {},
-        onLocationClick = {},
-        onRefresh = {},
+        onUserInteraction = {},
     )
 }
 
@@ -59,51 +52,50 @@ private fun PreviewWeatherMainContent() {
 @Composable
 fun WeatherMainContent(
     state: WeatherState,
-    onNextDaysButtonCLick: () -> Unit,
-    onSaveLocationClick: () -> Unit,
-    onLocationClick: () -> Unit,
-    onRefresh: () -> Unit,
+    onUserInteraction: (WeatherUserInteraction) -> Unit,
 ) {
     EveryweatherTheme {
         val refreshingState = rememberSwipeRefreshState(isRefreshing = state.isLoading)
-        BoxWithConstraints {
-            Box(modifier = Modifier.fillMaxSize()) {
-//                var headerSize by remember { mutableStateOf(0) }
-//                var fabHeight by remember { mutableStateOf(0) }
-                SwipeRefresh(
-                    state = refreshingState,
-                    onRefresh = onRefresh,
-                ) {
-                    if (state.weatherUi != null) {
-                        Column(
+        val fabSize = dimensionResource(id = R.dimen.dimen_50)
+        Box(modifier = Modifier.fillMaxSize()) {
+            var fabPadding by remember { mutableStateOf(0.dp) }
+            SwipeRefresh(
+                state = refreshingState,
+                onRefresh = { onUserInteraction(WeatherUserInteraction.Refresh) },
+            ) {
+                if (state.weatherUi != null) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        WeatherHeaderInfo(
+                            state.weatherUi.mainInfo,
+                            onUserInteraction
+                        ) { headerHeight ->
+                            fabPadding = headerHeight.toIntDp.dp - fabSize / 2
+                        }
+                        BottomDetailWeather(state.weatherUi, onUserInteraction)
+                    }
+                    if (state.isAddButtonEnabled) {
+                        FloatingButton(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .verticalScroll(rememberScrollState())
-                                // explicit height modifier
-                                .height(this@BoxWithConstraints.maxHeight)
-                        ) {
-                            WeatherHeaderInfo(state.weatherUi.mainInfo, onLocationClick)
-                            BottomDetailWeather(state.weatherUi, onNextDaysButtonCLick)
-                        }
-                        if (state.isAddButtonEnabled) {
-                            FloatingButton(
-                                modifier = Modifier
-                                    .padding(top = 210.dp, start = 20.dp)
-                                    .size(50.dp),
-                                id = R.drawable.ic_round_add_location_24,
-                                onClick = onSaveLocationClick
-                            )
-                            //.padding(top = (headerSize - fabHeight / 2).dp, start = 20.dp),//todo подумать как расположить кнопку посередине
-                        }
-                    } else {
-                        if (!refreshingState.isRefreshing) {
-                            EmptyWeatherCard(
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                                    .verticalScroll(rememberScrollState()),
-                                onLocationClick = onLocationClick,
-                            )    //todo Выровнять по центру
-                        }
+                                .padding(
+                                    top = fabPadding,
+                                    start = dimensionResource(id = R.dimen.dimen_20)
+                                )
+                                .size(size = fabSize),
+                            id = R.drawable.ic_round_add_location_24,
+                            onClick = { onUserInteraction(WeatherUserInteraction.SaveLocation) }
+                        )
+                    }
+                } else {
+                    if (!refreshingState.isRefreshing) {
+                        EmptyWeatherCard(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .verticalScroll(rememberScrollState()),
+                            onUserInteraction = onUserInteraction,
+                        )
                     }
                 }
             }
@@ -113,37 +105,36 @@ fun WeatherMainContent(
 
 @Composable
 fun WeatherHeaderInfo(
-    mainInfoUi: WeatherMainInfoUi, onLocationClick: () -> Unit,
+    mainInfoUi: WeatherMainInfoUi,
+    onUserInteraction: (WeatherUserInteraction) -> Unit,
+    onNewHeight: (Int) -> Unit,
 ) {
-    Box(
-        modifier = Modifier
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        EveryweatherTheme.colors.primaryGradientStart,
-                        EveryweatherTheme.colors.primaryGradientEnd,
-                    )
-                )
-            )
-//            .onGloballyPositioned {
-//                onNewHeight(it.size.height)
-//            }
+    GradientBox(
+        modifier = Modifier.onGloballyPositioned {
+            onNewHeight(it.size.height)
+        },
+        colors = listOf(
+            EveryweatherTheme.colors.primaryGradientStart,
+            EveryweatherTheme.colors.primaryGradientEnd,
+        )
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier
+                .padding(dimensionResource(id = R.dimen.dimen_20))
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_10))
         ) {
-            LocationText(text = mainInfoUi.geoText, onLocationClick)
+            LocationText(text = mainInfoUi.geoText, onUserInteraction)
             Row(
                 modifier = Modifier,
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_16)),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     modifier = Modifier
-                        .height(60.dp)      //todo разобраться с размерами
-                        .width(60.dp),
+                        .height(dimensionResource(id = R.dimen.dimen_60))      //todo разобраться с размерами
+                        .width(dimensionResource(id = R.dimen.dimen_60)),
                     alignment = Alignment.CenterEnd,
                     painter = rememberAsyncImagePainter(mainInfoUi.iconUrl),
                     contentDescription = "",
@@ -157,99 +148,103 @@ fun WeatherHeaderInfo(
                 text = mainInfoUi.feelsLike,
                 color = EveryweatherTheme.colors.textColorSecondary,
             )
-            Row(modifier = Modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_8)),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 MediumText(
                     text = mainInfoUi.date,
                     color = EveryweatherTheme.colors.textColorSecondary,
                 )
-                MediumText(
-                    text = "|",
-                    color = EveryweatherTheme.colors.textColorSecondary,
-                )
-//                Box(
-//                    modifier = Modifier
-//                        .width(1.dp)//todo разобраться почему не применяется фон
-//                        .background(EveryweatherTheme.colors.textColorSecondary)
-//                )
+                DelimiterText()
                 MediumBoldText(
-//todo понять почему не применился жирный шрифт
                     text = mainInfoUi.time,
                     color = EveryweatherTheme.colors.textColorSecondary,
                 )
             }
+            MediumText(
+                text = mainInfoUi.description,
+                color = EveryweatherTheme.colors.textColorSecondary,
+            )
         }
     }
 }
 
 @Composable
-fun BottomDetailWeather(weatherUi: WeatherMainUi, onNextDaysButtonCLick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        EveryweatherTheme.colors.secondaryGradientStart,
-                        EveryweatherTheme.colors.secondaryGradientEnd,
-                    )
-                )
-            )
+fun BottomDetailWeather(
+    weatherUi: WeatherMainUi,
+    onUserInteraction: (WeatherUserInteraction) -> Unit
+) {
+    GradientBox(
+        colors = listOf(
+            EveryweatherTheme.colors.secondaryGradientStart,
+            EveryweatherTheme.colors.secondaryGradientEnd,
+        )
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
-            //    horizontalAlignment = Alignment.Center,
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier
+                .padding(
+                    top = dimensionResource(id = R.dimen.dimen_20),
+                    start = dimensionResource(id = R.dimen.dimen_20),
+                    end = dimensionResource(id = R.dimen.dimen_20),
+                )
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_10)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            //todo придумать анимацию
             LazyRow {
                 items(items = weatherUi.hourList) { hourItem ->
-                    AnimatedVisibility( //todo сделать анимацию
-                        visible = true,
-                        exit = fadeOut(
-                            animationSpec = TweenSpec(200, 200, FastOutLinearInEasing)
-                        )
-                    ) {
-                        HourItemContent(hourItem = hourItem)
-                    }
+                    HourItemContent(hourItem = hourItem)
                 }
             }
             CardDetailDayItem(detailCard = weatherUi.detailCard)
             RoundedButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onNextDaysButtonCLick,
+                onClick = { onUserInteraction(WeatherUserInteraction.NextDays) },
                 text = stringResource(id = R.string.next_days_forecast)
             )
-            //  LinkText(Modifier)//TODO Не работает
+            LinkText(Modifier.padding(bottom = dimensionResource(id = R.dimen.dimen_20)))
         }
     }
 
 }
 
 @Composable
-fun EmptyWeatherCard(onLocationClick: () -> Unit, modifier: Modifier) {
-    Card(
-        modifier = modifier.padding(20.dp),
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
-        backgroundColor = EveryweatherTheme.colors.onSurface,
-        elevation = 4.dp,
+fun EmptyWeatherCard(onUserInteraction: (WeatherUserInteraction) -> Unit, modifier: Modifier) {
+    GradientBox(
+        colors = listOf(
+            EveryweatherTheme.colors.secondaryGradientStart,
+            EveryweatherTheme.colors.secondaryGradientEnd,
+        )
     ) {
-        Column(
-            modifier = Modifier.padding(dimensionResource(id = R.dimen.margin_20dp)),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Card(
+            modifier = modifier
+                .padding(dimensionResource(id = R.dimen.dimen_20))
+                .align(Alignment.Center),
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
+            backgroundColor = EveryweatherTheme.colors.onSurface,
+            elevation = dimensionResource(id = R.dimen.dimen_4),
         ) {
-            BoldText(
-                text = stringResource(id = R.string.no_weather_data_is_loaded_header),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-            )
-            RegularText(text = stringResource(id = R.string.no_weather_data_is_loaded))
-            RoundedButton(
-                onClick = onLocationClick,
-                text = stringResource(id = R.string.choose_location)
-            )
-
+            Column(
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_20)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_20)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                BoldText(
+                    text = stringResource(id = R.string.no_weather_data_is_loaded_header),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                )
+                RegularText(text = stringResource(id = R.string.no_weather_data_is_loaded))
+                RoundedButton(
+                    onClick = { onUserInteraction(WeatherUserInteraction.SaveLocation) },
+                    text = stringResource(id = R.string.choose_location)
+                )
+            }
         }
     }
+
 }

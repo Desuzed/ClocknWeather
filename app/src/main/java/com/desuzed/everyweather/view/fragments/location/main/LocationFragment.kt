@@ -41,11 +41,7 @@ class LocationFragment : Fragment() {
                 val state by viewModel.state.collectAsState()
                 LocationMainContent(
                     state = state,
-                    onMyLocationClick = ::onMyLocationClick,
-                    onFavoriteLocationClick = ::onFavoriteLocationClick,
-                    onFavoriteLocationLongClick = viewModel::deleteFavoriteLocation,
-                    onFindMapLocationClick = ::showMapBotSheet,
-                    onFindTypedQueryClick = viewModel::findTypedLocation,
+                    onUserInteraction = viewModel::onUserInteraction,
                     onGeoTextChanged = viewModel::onNewGeoText,
                 )
             }
@@ -58,23 +54,19 @@ class LocationFragment : Fragment() {
         collect(viewModel.action, ::onNewAction)
     }
 
-    private fun onFavoriteLocationClick(favoriteLocationDto: FavoriteLocationDto) {
-        val userLatLng = FavoriteLocationMapper().mapFromEntity(favoriteLocationDto)
-        val bundle = bundleOf(WeatherMainFragment.QUERY_KEY to userLatLng.toString())
-        navigateToWeatherFragment(bundle) //todo вынести в onNewAction
-    }
-
     private fun onNewAction(action: LocationMainAction) {
         when (action) {
             is LocationMainAction.ShowToast -> toast(action.message)//todo избавиться от тостов
             is LocationMainAction.NavigateToWeather -> navigateToWeatherFragment(bundleOf(action.key to action.query))
+            LocationMainAction.MyLocation -> onMyLocationClick()
+            LocationMainAction.ShowMapFragment -> showMapBotSheet()
         }
     }
 
     private fun onMyLocationClick() {
         (activity as MainActivity).locationHandler.findUserLocation()
         val bundle = bundleOf(WeatherMainFragment.USER_LOCATION to true)
-        navigateToWeatherFragment(bundle)//todo вынести в onNewAction
+        navigateToWeatherFragment(bundle)
     }
 
     private fun showMapBotSheet() {

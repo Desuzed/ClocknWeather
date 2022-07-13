@@ -1,9 +1,6 @@
 package com.desuzed.everyweather.view.fragments.weather.main
 
-import android.os.Build
 import android.os.Bundle
-import android.text.Html
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +17,16 @@ import com.desuzed.everyweather.view.fragments.collect
 import com.desuzed.everyweather.view.fragments.navigate
 import com.desuzed.everyweather.view.fragments.toast
 import com.desuzed.everyweather.view.main_activity.MainActivity
-import kotlinx.android.synthetic.main.fragment_weather_main.*
 
 class WeatherMainFragment : Fragment() {
+    //todo koin
+    private val viewModel: WeatherMainViewModel by lazy {
+        ViewModelProvider(
+            requireActivity(),
+            AppViewModelFactory(App.instance.getRepo())
+        )
+            .get(WeatherMainViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,30 +38,11 @@ class WeatherMainFragment : Fragment() {
                 val state by viewModel.state.collectAsState()
                 WeatherMainContent(
                     state = state,
-                    onNextDaysButtonCLick = {
-                        navigate(R.id.action_weatherFragment_to_nextDaysBottomSheet)
-                    },
-                    onSaveLocationClick = {
-                        viewModel.saveLocation()
-                    },
-                    onLocationClick = {
-                        navigate(R.id.action_weatherFragment_to_locationFragment)
-                    },
-                    onRefresh = { viewModel.getForecast(viewModel.state.value.query) }    //todo убрать во вью модель
+                    onUserInteraction = viewModel::onUserInteraction,
                 )
             }
         }
     }
-
-    //todo koin
-    private val viewModel: WeatherMainViewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            AppViewModelFactory(App.instance.getRepo())
-        )
-            .get(WeatherMainViewModel::class.java)
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,19 +66,11 @@ class WeatherMainFragment : Fragment() {
         viewModel.getForecast(query)
     }
 
-    private fun setClickableUrl() {
-        tvPoweredBy.movementMethod = LinkMovementMethod.getInstance()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tvPoweredBy.text =
-                Html.fromHtml(getString(R.string.powered_by), Html.FROM_HTML_MODE_LEGACY)
-        } else {
-            tvPoweredBy.text = Html.fromHtml(getString(R.string.powered_by))
-        }
-    }
-
     private fun onNewAction(action: WeatherMainAction) {
         when (action) {
             is WeatherMainAction.ShowToast -> toast(action.message)//todo избавиться от тостов
+            WeatherMainAction.NavigateToLocation -> navigate(R.id.action_weatherFragment_to_locationFragment)
+            WeatherMainAction.NavigateToNextDaysWeather -> navigate(R.id.action_weatherFragment_to_nextDaysBottomSheet)
         }
     }
 

@@ -14,8 +14,8 @@
     <string name="enter_location_name">Enter location name</string>
     <string name="your_current_location_not_found">Your current location not found</string>
     <!--    <string name="powered_by">Powered by: <a href="https://www.weatherapi.com/">Weather API</a></string>-->
-    <string name="powered_by" translatable="false">Powered by: <![CDATA[<a href="https://www.weatherapi.com/">Weather API</a>]]></string>
-    <string name="powered_by1" translatable="false">Powered by: Weather API</string>
+    <string name="powered_by" translatable="false">Powered by: Weather API</string>
+    <string name="uri" translatable="false">https://www.weatherapi.com/</string>
 
     <string name="api_key_error">Sorry, developer has problems with weather information provider. Retry later.</string>
 
@@ -52,5 +52,6 @@
     <string name="mm">mm</string>
     <string name="delete">Delete?</string>
     <string name="mb" translatable="false">mb</string>
-    <string name="looking_for_your_location">Looking for your location...</string>
+    <string name="delimiter" translatable="false">|</string>
+    <string name="looking_for_your_location">Looking for your location…</string>
 </resources>

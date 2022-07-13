@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
@@ -29,28 +28,41 @@ fun HourItemContent(hourItem: HourUi) {
     EveryweatherTheme {
         Card(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(dimensionResource(id = R.dimen.dimen_8))
                 .wrapContentWidth(),
             shape = RoundedCornerShape(
                 dimensionResource(id = R.dimen.corner_radius_16),
             ),
             backgroundColor = EveryweatherTheme.colors.onSurface,
-            elevation = 4.dp
+            elevation = dimensionResource(id = R.dimen.dimen_4)
         ) {
-            Column (modifier = Modifier.padding(8.dp) , horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_8)),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 SmallText(text = hourItem.time)
                 BoldText(text = hourItem.temp)
-                Image(painter = rememberAsyncImagePainter(hourItem.iconUrl), contentDescription = "", modifier = Modifier.size(34.dp))
-                Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                Image(
+                    painter = rememberAsyncImagePainter(hourItem.iconUrl),
+                    contentDescription = "",
+                    modifier = Modifier.size(size = dimensionResource(id = R.dimen.dimen_34))
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_wind_direction),
                         contentDescription = "",
                         colorFilter = ColorFilter.tint(EveryweatherTheme.colors.textColorPrimary),
                         modifier = Modifier
                             .rotate(hourItem.rotation)
-                            .size(12.dp)
+                            .size(size = dimensionResource(id = R.dimen.dimen_12))
                     )
-                    SmallText(modifier = Modifier.padding(start = 4.dp), text = hourItem.wind)
+                    SmallText(
+                        modifier = Modifier.padding(start = dimensionResource(id = R.dimen.dimen_4)),
+                        text = hourItem.wind
+                    )
                 }
             }
         }
@@ -67,16 +79,16 @@ fun LocationItemContent(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp),
+                .padding(vertical = dimensionResource(id = R.dimen.dimen_4)),
             shape = RoundedCornerShape(
                 dimensionResource(id = R.dimen.corner_radius_16),
             ),
             backgroundColor = EveryweatherTheme.colors.onSurface,
-            elevation = 4.dp
+            elevation = dimensionResource(id = R.dimen.dimen_4)
         ) {
             Column(
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(dimensionResource(id = R.dimen.dimen_10))
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = { onLongClick(item) },

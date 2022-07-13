@@ -19,33 +19,46 @@ class LocationViewModel(private val repo: RepositoryApp) :
         setState { copy(geoText = text) }
     }
 
-    fun loadCachedLocation() = repo.loadForecastFromCache()?.location
-
-    /**
-     * Deletes item from DB. If success or not, user gets notification
-     */
-    fun deleteFavoriteLocation(favoriteLocationDto: FavoriteLocationDto) = viewModelScope.launch {
-        val deleted = repo.deleteItem(favoriteLocationDto)
-        if (deleted) onSuccess(ActionResultProvider.DELETED)
-        else onError(ActionResultProvider.FAIL)
+    fun onUserInteraction(userInteraction: LocationUserInteraction) {
+        when (userInteraction) {
+            is LocationUserInteraction.DeleteFavoriteLocation -> deleteFavoriteLocation(
+                userInteraction.favoriteLocationDto
+            )
+            is LocationUserInteraction.FavoriteLocation -> setAction(
+                LocationMainAction.NavigateToWeather(
+                    query = userInteraction.favoriteLocationDto.toQuery(),
+                    key = WeatherMainFragment.QUERY_KEY
+                )
+            )
+            LocationUserInteraction.FindByQuery -> findTypedLocation()
+            LocationUserInteraction.FindOnMap -> setAction(LocationMainAction.ShowMapFragment)
+            LocationUserInteraction.MyLocation -> setAction(LocationMainAction.MyLocation)
+        }
     }
 
-    fun onError(code: Int) {
-        val message = repo.parseCode(code)
-        setAction(LocationMainAction.ShowToast(message))
-    }
-
-    fun findTypedLocation() {
+    private fun findTypedLocation() {
         setAction(
             LocationMainAction.NavigateToWeather(
-                state.value.geoText,
-                WeatherMainFragment.QUERY_KEY
+                query = state.value.geoText,
+                key = WeatherMainFragment.QUERY_KEY
             )
         )
         setState { copy(geoText = "") }
     }
 
+    private fun deleteFavoriteLocation(favoriteLocationDto: FavoriteLocationDto) =
+        viewModelScope.launch {
+            val deleted = repo.deleteItem(favoriteLocationDto)
+            if (deleted) onSuccess(ActionResultProvider.DELETED)
+            else onError(ActionResultProvider.FAIL)
+        }
+
     private fun onSuccess(code: Int) {
+        val message = repo.parseCode(code)
+        setAction(LocationMainAction.ShowToast(message))
+    }
+
+    private fun onError(code: Int) {
         val message = repo.parseCode(code)
         setAction(LocationMainAction.ShowToast(message))
     }

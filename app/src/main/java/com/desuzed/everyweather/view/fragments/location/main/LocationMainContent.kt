@@ -1,11 +1,6 @@
 package com.desuzed.everyweather.view.fragments.location.main
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,11 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
@@ -35,88 +29,81 @@ import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 private fun PreviewWeatherMainContent() {
     LocationMainContent(
         state = LocationMainState(locations = MockWeatherObject.locations),
-        onMyLocationClick = {},
-        onFavoriteLocationClick = {},
-        onFavoriteLocationLongClick = {},
-        onFindMapLocationClick = {},
-        onFindTypedQueryClick = {},
+        onUserInteraction = {},
         onGeoTextChanged = {},
     )
 }
 
-//todo заглушку
 @Composable
 fun LocationMainContent(
     state: LocationMainState,
-    onMyLocationClick: () -> Unit,
-    onFavoriteLocationClick: (FavoriteLocationDto) -> Unit,
-    onFavoriteLocationLongClick: (FavoriteLocationDto) -> Unit,
-    onFindMapLocationClick: () -> Unit,
-    onFindTypedQueryClick: () -> Unit,
+    onUserInteraction: (LocationUserInteraction) -> Unit,
     onGeoTextChanged: (text: String) -> Unit,
 ) {
     EveryweatherTheme {
         val showDeleteDialog = remember { mutableStateOf<FavoriteLocationDto?>(null) }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            EveryweatherTheme.colors.secondaryGradientStart,
-                            EveryweatherTheme.colors.secondaryGradientEnd,
-                        )
-                    )
-                )
+        GradientBox(
+            colors = listOf(
+                EveryweatherTheme.colors.secondaryGradientStart,
+                EveryweatherTheme.colors.secondaryGradientEnd,
+            )
         ) {
-            Column(modifier = Modifier.padding(10.dp)) {
+            Column(modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_10))) {
                 OutlinedEditText(
                     text = state.geoText,
-                    modifier = Modifier.padding(10.dp),
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_10)),
                     hint = stringResource(id = R.string.search_hint),
                     onTextChanged = onGeoTextChanged,
-                    onSearchClick = onFindTypedQueryClick,
+                    onSearchClick = { onUserInteraction(LocationUserInteraction.FindByQuery) },
                 )
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
-                        //        .fillMaxHeight()
-                        .padding(horizontal = 10.dp, vertical = 10.dp)
+                        .padding(
+                            horizontal = dimensionResource(id = R.dimen.dimen_10),
+                            vertical = dimensionResource(id = R.dimen.dimen_10)
+                        )
                 ) {
-                    items(items = state.locations) { locationItem ->
-                        AnimatedVisibility( //todo сделать анимацию
-                            visible = true,
-                            exit = fadeOut(
-                                animationSpec = TweenSpec(200, 200, FastOutLinearInEasing)
-                            )
-                        ) {
-                            LocationItemContent(
-                                item = locationItem,
-                                onClick = onFavoriteLocationClick,
-                                onLongClick = { showDeleteDialog.value = it }
-                            )
-                        }
+                    items(items = state.locations, key = { it.latLon }) { locationItem ->
+                        LocationItemContent(
+                            item = locationItem,
+                            onClick = {
+                                onUserInteraction(
+                                    LocationUserInteraction.FavoriteLocation(
+                                        locationItem
+                                    )
+                                )
+                            },
+                            onLongClick = { showDeleteDialog.value = it }
+                        )
                     }
                 }
                 RoundedButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 10.dp),
-                    onClick = onFindMapLocationClick,
+                        .padding(horizontal = dimensionResource(id = R.dimen.dimen_10)),
+                    onClick = { onUserInteraction(LocationUserInteraction.FindOnMap) },
                     text = stringResource(id = R.string.find_on_map)
                 )
             }
             FloatingButton(
                 id = R.drawable.ic_my_location,
                 modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 100.dp)
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.dimen_20),
+                        vertical = dimensionResource(id = R.dimen.dimen_100)
+                    )
                     .align(Alignment.BottomEnd),
-                onClick = onMyLocationClick,
+                onClick = { onUserInteraction(LocationUserInteraction.MyLocation) },
             )
             if (showDeleteDialog.value != null) {
                 AppAlertDialog(title = stringResource(id = R.string.delete),
                     onPositiveButtonClick = {
-                        onFavoriteLocationLongClick(showDeleteDialog.value!!)
+                        onUserInteraction(
+                            LocationUserInteraction.DeleteFavoriteLocation(
+                                showDeleteDialog.value!!
+                            )
+                        )
                         showDeleteDialog.value = null
                     }, onDismiss = {
                         showDeleteDialog.value = null
@@ -130,7 +117,7 @@ fun LocationMainContent(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxWidth()
-                        .padding(20.dp)
+                        .padding(dimensionResource(id = R.dimen.dimen_20))
                 )
             }
         }
