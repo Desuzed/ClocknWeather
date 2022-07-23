@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.databinding.ActivityMainBinding
+import com.desuzed.everyweather.model.NetworkConnection
 import com.desuzed.everyweather.model.entity.UserLatLng
 import com.desuzed.everyweather.util.LocationHandler
 import com.desuzed.everyweather.view.AppViewModelFactory
@@ -33,10 +34,12 @@ class MainActivity : AppCompatActivity() {
         )
             .get(MainActivityViewModel::class.java)
     }
+    private lateinit var networkConnection : NetworkConnection
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Everyweather)//todo поменять сплешскрин на компоуз версию чтобы не видеть белый фон при входе в приложение
         super.onCreate(savedInstanceState)
+        networkConnection = NetworkConnection(this)
         bind()
         requestLocationPermissions()
         setLangForRequest()
@@ -76,7 +79,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun collectData() {
-        collect(viewModel.hasInternet, ::onNewNetworkState)
+        collect(networkConnection.hasInternetFlow(), ::onNewNetworkState)
+      //  collect(viewModel.hasInternet, ::onNewNetworkState)
         collect(viewModel.isLookingForLocation, ::isLookingForLocation)
         collect(viewModel.messageFlow, ::onNewMessage)
     }
