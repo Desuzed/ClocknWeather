@@ -8,7 +8,7 @@ import android.net.NetworkRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class NetworkConnection(val context: Context) {
+class NetworkConnection(context: Context) {
     private val networkManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private val networkCallback: ConnectivityManager.NetworkCallback = createNetworkCallback()
@@ -16,7 +16,6 @@ class NetworkConnection(val context: Context) {
     private val hasInternet = MutableStateFlow(false)
 
     init {
-        //networkCallback = createNetworkCallback()
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .build()

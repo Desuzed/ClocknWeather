@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.data.repository
 
-import androidx.lifecycle.asFlow
 import com.desuzed.everyweather.util.ActionResultProvider
 import com.desuzed.everyweather.data.network.dto.weatherApi.ApiErrorMapper
 import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
@@ -37,24 +36,24 @@ class RepositoryAppImpl(
 
     //ContextProvider
     override fun saveForecastToCache(weatherResponse: WeatherResponse) =
-        localDataSource.provideSPref().saveForecastToCache(weatherResponse)
+        localDataSource.getContextProvider().saveForecastToCache(weatherResponse)
 
     override fun loadForecastFromCache(): WeatherResponse? =
-        localDataSource.provideSPref().loadForecastFromCache()
+        localDataSource.getContextProvider().loadForecastFromCache()
 
-    override fun saveQuery(query: String) = localDataSource.provideSPref().saveQuery(query)
+    override fun saveQuery(query: String) = localDataSource.getContextProvider().saveQuery(query)
 
-    override fun loadQuery(): String = localDataSource.provideSPref().loadQuery()
+    override fun loadQuery(): String = localDataSource.getContextProvider().loadQuery()
 
     override fun parseCode(errorCode: Int): String =
-        localDataSource.provideSPref().parseCode(errorCode)
+        localDataSource.getContextProvider().parseCode(errorCode)
 
     override suspend fun mapToNextDaysUi(response: WeatherResponse): List<NextDaysUi> {
-        return localDataSource.provideSPref().mapToNextDaysUi(response)
+        return localDataSource.getContextProvider().mapToNextDaysUi(response)
     }
 
     override suspend fun mapToMainWeatherUi(response: WeatherResponse): WeatherMainUi =
-        localDataSource.provideSPref().mapToMainWeatherUi(response)
+        localDataSource.getContextProvider().mapToMainWeatherUi(response)
 
     override suspend fun getForecast(query: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> {
         saveQuery(query)
@@ -62,7 +61,7 @@ class RepositoryAppImpl(
     }
 
     override fun getNetworkConnection(): Flow<Boolean> =
-        localDataSource.getNetworkLiveData().asFlow()
+        localDataSource.getContextProvider().getNetworkConnection()
 
     //todo вынести в какой нибудь юзкейс и избавиться от репозиторий слоя
     override suspend fun fetchForecastOrErrorMessage(query: String): ResultForecast {
@@ -93,6 +92,5 @@ class RepositoryAppImpl(
 }
 
 interface RepositoryApp : RoomProvider, ContextProvider, RemoteDataSource {
-    fun getNetworkConnection(): Flow<Boolean>
     suspend fun fetchForecastOrErrorMessage(query: String): ResultForecast
 }
