@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.model.entity.ForecastDay
-import com.desuzed.everyweather.model.entity.Hour
+import com.desuzed.everyweather.domain.model.ForecastDay
+import com.desuzed.everyweather.domain.model.Hour
 import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 
@@ -21,7 +21,7 @@ class ForecastDayDto {
     @SerializedName("hour")
     var hourDto: ArrayList<HourDto>? = null
 }
-
+//todo вынести мапперы в дата слой
 class ForecastDayMapper : EntityMapper<ForecastDayDto, ForecastDay> {
     override fun mapFromEntity(entity: ForecastDayDto): ForecastDay {
         val listHour = mutableListOf<Hour>()

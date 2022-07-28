@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.repository.local
 
 import android.content.Context
-import com.desuzed.everyweather.model.NetworkLiveData
+import com.desuzed.everyweather.NetworkLiveData
 
 class LocalDataSourceImpl(
     private val roomProvider: RoomProvider,

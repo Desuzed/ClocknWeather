@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.model.entity.ApiError
+import com.desuzed.everyweather.domain.model.ApiError
 import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 

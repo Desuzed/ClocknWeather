@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.view.fragments.weather.main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
 @Composable

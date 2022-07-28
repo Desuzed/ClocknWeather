@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.data.repository
+package com.desuzed.everyweather.data.repository.remote
 
 import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto

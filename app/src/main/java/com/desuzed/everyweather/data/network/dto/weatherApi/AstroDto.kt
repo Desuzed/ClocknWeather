@@ -2,7 +2,7 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 
 
 import android.annotation.SuppressLint
-import com.desuzed.everyweather.model.entity.Astro
+import com.desuzed.everyweather.domain.model.Astro
 import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
@@ -30,6 +30,7 @@ class AstroDto {
 
 
 class AstroMapper : EntityMapper<AstroDto, Astro> {
+    //todo вынести в SimpleDateUtil Formatter
     @SuppressLint("SimpleDateFormat")
     private val apiFormat = SimpleDateFormat("hh:mm a")
     @SuppressLint("SimpleDateFormat")

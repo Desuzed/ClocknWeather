@@ -21,7 +21,7 @@ import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
-import com.desuzed.everyweather.view.ui.HourUi
+import com.desuzed.everyweather.presentation.ui.HourUi
 
 @Composable
 fun HourItemContent(hourItem: HourUi) {

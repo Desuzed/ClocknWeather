@@ -1,12 +1,12 @@
 package com.desuzed.everyweather.data.repository.local
 
 import android.content.Context
-import com.desuzed.everyweather.data.network.ActionResultProviderImpl
-import com.desuzed.everyweather.model.entity.WeatherResponse
-import com.desuzed.everyweather.view.ui.main.MainWeatherMapper
-import com.desuzed.everyweather.view.ui.main.WeatherMainUi
-import com.desuzed.everyweather.view.ui.next_days.NextDaysMapper
-import com.desuzed.everyweather.view.ui.next_days.NextDaysUi
+import com.desuzed.everyweather.util.ActionResultProviderImpl
+import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.presentation.ui.main.MainWeatherMapper
+import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
+import com.desuzed.everyweather.presentation.ui.next_days.NextDaysMapper
+import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -51,7 +51,7 @@ class ContextProviderImpl(private val context: Context) : ContextProvider {
         }
 
 }
-
+//todo вынести в domain слой
 interface ContextProvider {
     fun saveForecastToCache(weatherResponse: WeatherResponse)
     fun loadForecastFromCache(): WeatherResponse?

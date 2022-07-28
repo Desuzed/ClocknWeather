@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.repository
 
 import androidx.lifecycle.asFlow
-import com.desuzed.everyweather.data.network.ActionResultProvider
+import com.desuzed.everyweather.util.ActionResultProvider
 import com.desuzed.everyweather.data.network.dto.weatherApi.ApiErrorMapper
 import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
@@ -10,10 +10,11 @@ import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
 import com.desuzed.everyweather.data.repository.local.ContextProvider
 import com.desuzed.everyweather.data.repository.local.LocalDataSource
 import com.desuzed.everyweather.data.repository.local.RoomProvider
+import com.desuzed.everyweather.data.repository.remote.RemoteDataSource
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
-import com.desuzed.everyweather.model.entity.WeatherResponse
-import com.desuzed.everyweather.view.ui.next_days.NextDaysUi
-import com.desuzed.everyweather.view.ui.main.WeatherMainUi
+import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
+import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import kotlinx.coroutines.flow.Flow
 
 class RepositoryAppImpl(

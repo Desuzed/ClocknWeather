@@ -5,6 +5,7 @@ import com.desuzed.everyweather.data.repository.*
 import com.desuzed.everyweather.data.repository.local.LocalDataSourceImpl
 import com.desuzed.everyweather.data.repository.local.RoomProviderImpl
 import com.desuzed.everyweather.data.repository.local.ContextProviderImpl
+import com.desuzed.everyweather.data.repository.remote.RemoteDataSourceImpl
 import com.desuzed.everyweather.data.room.RoomDbApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob

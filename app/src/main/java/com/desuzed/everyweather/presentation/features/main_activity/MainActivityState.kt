@@ -1,0 +1,3 @@
+package com.desuzed.everyweather.presentation.features.main_activity
+
+class MainActivityState

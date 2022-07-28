@@ -6,9 +6,9 @@ import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.model.entity.UserLatLng
-import com.desuzed.everyweather.model.entity.UserLatLngMapper
-import com.desuzed.everyweather.view.main_activity.MainActivityViewModel
+import com.desuzed.everyweather.domain.model.UserLatLng
+import com.desuzed.everyweather.domain.model.UserLatLngMapper
+import com.desuzed.everyweather.presentation.features.main_activity.MainActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices

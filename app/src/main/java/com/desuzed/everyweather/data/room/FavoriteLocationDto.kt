@@ -3,8 +3,8 @@ package com.desuzed.everyweather.data.room
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.desuzed.everyweather.model.entity.Location
-import com.desuzed.everyweather.model.entity.UserLatLng
+import com.desuzed.everyweather.domain.model.Location
+import com.desuzed.everyweather.domain.model.UserLatLng
 import com.desuzed.everyweather.util.EntityMapper
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -50,13 +50,4 @@ data class FavoriteLocationDto(
             )
         }
     }
-}
-
-class FavoriteLocationMapper : EntityMapper<FavoriteLocationDto, UserLatLng> {
-    override fun mapFromEntity(entity: FavoriteLocationDto): UserLatLng =
-        UserLatLng(
-            entity.lat.toFloat(),
-            entity.lon.toFloat(),
-            System.currentTimeMillis()
-        )
 }

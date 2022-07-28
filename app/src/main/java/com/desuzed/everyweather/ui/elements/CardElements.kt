@@ -10,7 +10,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
-import com.desuzed.everyweather.view.ui.DetailCard
+import com.desuzed.everyweather.presentation.ui.base.DetailCard
 
 @Composable
 fun CardDetailDayItem(detailCard: DetailCard, modifier: Modifier = Modifier) {

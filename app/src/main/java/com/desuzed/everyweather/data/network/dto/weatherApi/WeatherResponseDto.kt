@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.model.entity.ForecastDay
-import com.desuzed.everyweather.model.entity.WeatherResponse
+import com.desuzed.everyweather.domain.model.ForecastDay
+import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 

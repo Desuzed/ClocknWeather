@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/weatherFragment"
-        android:name="com.desuzed.everyweather.view.fragments.weather.main.WeatherMainFragment"
+        android:name="com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment"
         android:label="WeatherFragment">
         <action
             android:id="@+id/action_weatherFragment_to_nextDaysBottomSheet"
@@ -24,7 +24,7 @@
     </fragment>
     <dialog
         android:id="@+id/mapBottomSheetFragment"
-        android:name="com.desuzed.everyweather.view.fragments.location.map.MapBottomSheetFragment"
+        android:name="com.desuzed.everyweather.presentation.features.locatation_map.MapBottomSheetFragment"
         android:label="MapBottomSheetFragment" >
         <action
             android:id="@+id/action_mapBottomSheetFragment_to_weatherFragment"
@@ -32,7 +32,7 @@
     </dialog>
     <fragment
         android:id="@+id/locationFragment"
-        android:name="com.desuzed.everyweather.view.fragments.location.main.LocationFragment"
+        android:name="com.desuzed.everyweather.presentation.features.location_main.LocationFragment"
         android:label="fragment_location">
         <action
             android:id="@+id/action_locationFragment_to_mapBottomSheetFragment"
@@ -49,7 +49,7 @@
     </fragment>
     <dialog
         android:id="@+id/nextDaysBottomSheet"
-        android:name="com.desuzed.everyweather.view.fragments.weather.next_days.NextDaysBottomSheet"
+        android:name="com.desuzed.everyweather.presentation.features.weather_next_days.NextDaysBottomSheet"
         android:label="NextDaysBottomSheet"
         />
 

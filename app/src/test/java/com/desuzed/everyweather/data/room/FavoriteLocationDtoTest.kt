@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.data.room
 
-import com.desuzed.everyweather.model.entity.Location
+import com.desuzed.everyweather.domain.model.Location
 import junit.framework.TestCase
 
 class FavoriteLocationDtoTest : TestCase() {

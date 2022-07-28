@@ -32,7 +32,7 @@
 
         <activity
             android:theme="@style/SplashTheme"
-            android:name="com.desuzed.everyweather.view.main_activity.MainActivity"
+            android:name="com.desuzed.everyweather.presentation.features.main_activity.MainActivity"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
