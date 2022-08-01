@@ -41,19 +41,3 @@ class DayDto {
 
     var pop : Int = (popRain + popSnow)/2
 }
-
-class DayMapper : EntityMapper<DayDto, Day> {
-    override fun mapFromEntity(entity: DayDto): Day {
-        return Day(
-            entity.maxTemp,
-            entity.minTemp,
-            entity.maxWind,
-            entity.totalPrecip,
-            entity.avgHumidity,
-            entity.popRain,
-            entity.popSnow,
-            entity.conditionDto?.text.toString(),
-            entity.conditionDto?.icon.toString()
-        )
-    }
-}
