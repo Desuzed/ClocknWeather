@@ -8,25 +8,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.UserLatLng
-import com.desuzed.everyweather.presentation.base.AppViewModelFactory
+import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.navigate
 import com.desuzed.everyweather.util.toast
-import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WeatherMainFragment : Fragment() {
-    //todo koin
-    private val viewModel: WeatherMainViewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            AppViewModelFactory(App.instance.getRepo())
-        )
-            .get(WeatherMainViewModel::class.java)
-    }
+    private val viewModel by viewModel<WeatherMainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

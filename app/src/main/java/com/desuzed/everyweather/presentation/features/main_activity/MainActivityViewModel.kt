@@ -2,8 +2,8 @@ package com.desuzed.everyweather.presentation.features.main_activity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.data.repository.RepositoryApp
 import com.desuzed.everyweather.domain.model.UserLatLng
+import com.desuzed.everyweather.util.NetworkConnection
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel(private val repo: RepositoryApp) : ViewModel() {
+class MainActivityViewModel(private val networkConnection: NetworkConnection) : ViewModel() {
 
     private val _isLookingForLocation = MutableSharedFlow<Boolean>(
         replay = 0,
@@ -20,7 +20,7 @@ class MainActivityViewModel(private val repo: RepositoryApp) : ViewModel() {
     )
     val isLookingForLocation: Flow<Boolean> = _isLookingForLocation.asSharedFlow()
 
-    val hasInternet = repo.getNetworkConnection()
+    val hasInternet = networkConnection.hasInternetFlow()
 
     val userLatLng = MutableStateFlow<UserLatLng?>(null)
 

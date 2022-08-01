@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="myButtonBackground" format="reference|color" />
-    <attr name="bgPrimary" format="reference|color" />
-    <attr name="bgSecondary" format="reference|color" />
     <attr name="backgroundError" format="color" />
-    <attr name="backgroundDetail" format="color" />
-    <attr name="bgRvItem" format="color" />
-    <attr name="bgAlertDialog" format="reference" />
-    <attr name="textColorSecondary" format="color" />
-
 </resources>

@@ -2,6 +2,7 @@ package com.desuzed.everyweather.data.repository.local
 
 import com.desuzed.everyweather.data.room.FavoriteLocationDAO
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.repository.local.RoomProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -28,12 +29,4 @@ class RoomProviderImpl(private val favoriteLocationDAO: FavoriteLocationDAO) : R
 
     override fun getAllLocations(): Flow<List<FavoriteLocationDto>> =
         favoriteLocationDAO.getAlphabetizedLocations()
-}
-
-
-interface RoomProvider {
-    suspend fun insert(favoriteLocationDto: FavoriteLocationDto): Boolean
-    suspend fun deleteItem(favoriteLocationDto: FavoriteLocationDto): Boolean
-    suspend fun containsPrimaryKey(latLon: String): Boolean
-    fun getAllLocations(): Flow<List<FavoriteLocationDto>>
 }

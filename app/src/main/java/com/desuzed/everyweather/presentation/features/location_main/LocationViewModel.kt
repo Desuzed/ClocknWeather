@@ -1,18 +1,21 @@
 package com.desuzed.everyweather.presentation.features.location_main
 
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.util.ActionResultProvider
-import com.desuzed.everyweather.data.repository.RepositoryApp
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.repository.local.RoomProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
+import com.desuzed.everyweather.util.ActionResultProvider
 import kotlinx.coroutines.launch
 
-class LocationViewModel(private val repo: RepositoryApp) :
+class LocationViewModel(
+    private val roomProvider: RoomProvider,
+    private val actionResultProvider: ActionResultProvider
+) :
     BaseViewModel<LocationMainState, LocationMainAction>(LocationMainState()) {
 
     init {
-        collect(repo.getAllLocations(), ::onNewLocations)
+        collect(roomProvider.getAllLocations(), ::onNewLocations)
     }
 
     fun onNewGeoText(text: String) {
@@ -48,18 +51,18 @@ class LocationViewModel(private val repo: RepositoryApp) :
 
     private fun deleteFavoriteLocation(favoriteLocationDto: FavoriteLocationDto) =
         viewModelScope.launch {
-            val deleted = repo.deleteItem(favoriteLocationDto)
+            val deleted = roomProvider.deleteItem(favoriteLocationDto)
             if (deleted) onSuccess(ActionResultProvider.DELETED)
             else onError(ActionResultProvider.FAIL)
         }
 
     private fun onSuccess(code: Int) {
-        val message = repo.parseCode(code)
+        val message = actionResultProvider.parseCode(code)
         setAction(LocationMainAction.ShowToast(message))
     }
 
     private fun onError(code: Int) {
-        val message = repo.parseCode(code)
+        val message = actionResultProvider.parseCode(code)
         setAction(LocationMainAction.ShowToast(message))
     }
 

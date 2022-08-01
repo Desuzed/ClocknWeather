@@ -5,7 +5,7 @@ import com.desuzed.everyweather.domain.model.Astro
 import com.desuzed.everyweather.util.DateFormatter
 import com.desuzed.everyweather.util.EntityMapper
 
-object AstroMapper : EntityMapper<AstroDto, Astro> {
+class AstroMapper : EntityMapper<AstroDto, Astro> {
 
     override fun mapFromEntity(entity: AstroDto): Astro {
         return try {

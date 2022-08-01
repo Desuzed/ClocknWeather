@@ -8,26 +8,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModelProvider
-import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.presentation.base.AppViewModelFactory
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.navigate
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapBottomSheetFragment : BottomSheetDialogFragment() {
     private var job: Job? = null
 
-    private val viewModel: MapLocationViewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            AppViewModelFactory(App.instance.getRepo())
-        )
-            .get(MapLocationViewModel::class.java)
-    }
+    private val viewModel by viewModel<MapLocationViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

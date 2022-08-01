@@ -9,28 +9,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.os.ConfigurationCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
-import com.desuzed.everyweather.App
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.databinding.ActivityMainBinding
 import com.desuzed.everyweather.domain.model.UserLatLng
 import com.desuzed.everyweather.util.LocationHandler
-import com.desuzed.everyweather.presentation.base.AppViewModelFactory
 import com.desuzed.everyweather.util.collect
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     val locationHandler by lazy { LocationHandler(this, viewModel) }
     private val locationCode = 100
-    private val viewModel: MainActivityViewModel by lazy {
-        ViewModelProvider(
-            this,
-            AppViewModelFactory(App.instance.getRepo())
-        )
-            .get(MainActivityViewModel::class.java)
-    }
+    private val viewModel by viewModel<MainActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Everyweather)//todo поменять сплешскрин на компоуз версию чтобы не видеть белый фон при входе в приложение
@@ -70,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setLangForRequest() {
         val lang = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].language
-        App.instance.setLang(lang)
+        //    App.instance.setLang(lang)      //todo переделать
     }
 
     private fun collectData() {

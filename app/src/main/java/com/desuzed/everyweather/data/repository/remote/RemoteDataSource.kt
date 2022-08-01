@@ -4,10 +4,12 @@ import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
 import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
 import com.desuzed.everyweather.data.network.retrofit.WeatherApiService
+import com.desuzed.everyweather.domain.repository.remote.RemoteDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RemoteDataSourceImpl : RemoteDataSource {
+class RemoteDataSourceImpl(private val api: WeatherApiService) :
+    RemoteDataSource { //todo koin , settings feature
     /**
      * Default language: English
      */
@@ -15,13 +17,6 @@ class RemoteDataSourceImpl : RemoteDataSource {
 
     override suspend fun getForecast(query: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> =
         withContext(Dispatchers.IO) {
-            WeatherApiService
-                .getInstance()
-                .getForecast(query, lang)
+            api.getForecast(query, lang)
         }
-}
-
-
-interface RemoteDataSource {
-    suspend fun getForecast(query: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi>
 }

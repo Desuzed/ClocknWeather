@@ -4,7 +4,7 @@ import com.desuzed.everyweather.data.network.dto.weatherApi.LocationDto
 import com.desuzed.everyweather.domain.model.Location
 import com.desuzed.everyweather.util.EntityMapper
 
-object LocationMapper : EntityMapper<LocationDto, Location> {
+class LocationMapper : EntityMapper<LocationDto, Location> {
     override fun mapFromEntity(entity: LocationDto): Location {
         return Location(
             entity.name,

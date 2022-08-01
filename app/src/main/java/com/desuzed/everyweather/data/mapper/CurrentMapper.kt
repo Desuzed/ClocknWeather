@@ -4,7 +4,7 @@ import com.desuzed.everyweather.data.network.dto.weatherApi.CurrentDto
 import com.desuzed.everyweather.domain.model.Current
 import com.desuzed.everyweather.util.EntityMapper
 
-object CurrentMapper : EntityMapper<CurrentDto, Current> {
+class CurrentMapper : EntityMapper<CurrentDto, Current> {
     override fun mapFromEntity(entity: CurrentDto): Current {
         return Current(
             entity.temp,

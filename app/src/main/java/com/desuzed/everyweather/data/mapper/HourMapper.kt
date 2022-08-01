@@ -4,7 +4,7 @@ import com.desuzed.everyweather.data.network.dto.weatherApi.HourDto
 import com.desuzed.everyweather.domain.model.Hour
 import com.desuzed.everyweather.util.EntityMapper
 
-object HourMapper : EntityMapper<HourDto, Hour> {
+class HourMapper : EntityMapper<HourDto, Hour> {
     override fun mapFromEntity(entity: HourDto): Hour {
         return Hour(
             entity.timeEpoch,

@@ -1,18 +1,18 @@
 package com.desuzed.everyweather.presentation.features.locatation_map
 
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.data.repository.RepositoryApp
 import com.desuzed.everyweather.domain.model.UserLatLng
+import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MapLocationViewModel(private val repo: RepositoryApp) :
+class MapLocationViewModel(private val sharedPrefsProvider: SharedPrefsProvider) :
     BaseViewModel<MapState, MapAction>(MapState()) {
 
     fun initState() {
-        setState { copy(location = repo.loadForecastFromCache()?.location) }
+        setState { copy(location = sharedPrefsProvider.loadForecastFromCache()?.location) }
     }
 
     fun onNewLocationPicked(newLocation: LatLng) {

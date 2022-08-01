@@ -1,17 +1,24 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.util.ActionResultProvider
-import com.desuzed.everyweather.data.repository.RepositoryApp
+import com.desuzed.everyweather.data.repository.local.UiMapper
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.domain.repository.local.RoomProvider
+import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
+import com.desuzed.everyweather.util.ActionResultProvider
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
-
-class WeatherMainViewModel(private val repo: RepositoryApp) :
+class WeatherMainViewModel(
+    private val useCase: WeatherMainUseCase,
+    private val uiMapper: UiMapper,
+    private val sharedPrefsProvider: SharedPrefsProvider,
+    private val actionResultProvider: ActionResultProvider,
+    private val roomProvider: RoomProvider,
+) :
     BaseViewModel<WeatherState, WeatherMainAction>(
         WeatherState()
     ) {
@@ -36,12 +43,12 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
     fun getForecast(query: String) {
         viewModelScope.launch {
             setState { copy(isLoading = true, query = query) }
-            val fetchedForecast = repo.fetchForecastOrErrorMessage(query)
+            val fetchedForecast = useCase.fetchForecastOrErrorMessage(query)
             val weatherResponse = fetchedForecast.weatherResponse
             val message = fetchedForecast.message
             if (weatherResponse != null) {
                 val isLocationSaved = isLocationSaved(weatherResponse)
-                val weatherUi = repo.mapToMainWeatherUi(weatherResponse)
+                val weatherUi = uiMapper.mapToMainWeatherUi(weatherResponse)
                 setState {
                     copy(
                         weatherData = weatherResponse,
@@ -80,7 +87,7 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
             }
             val favoriteLocationDto =
                 FavoriteLocationDto.buildFavoriteLocationObj(state.value.weatherData!!.location)
-            val inserted = repo.insert(favoriteLocationDto)
+            val inserted = roomProvider.insert(favoriteLocationDto)
             if (inserted) onSuccess(ActionResultProvider.SAVED)
             else onError(ActionResultProvider.FAIL)
         }
@@ -88,13 +95,13 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
 
     private fun onError(code: Int) {
         viewModelScope.launch {
-            val message = repo.parseCode(code)
+            val message = actionResultProvider.parseCode(code)
             messageFlow.emit(message)
         }
     }
 
     private fun onSuccess(code: Int) {
-        val message = repo.parseCode(code)
+        val message = actionResultProvider.parseCode(code)
         viewModelScope.launch {
             messageFlow.emit(message)
             setState {
@@ -106,15 +113,15 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
 
     private suspend fun isLocationSaved(response: WeatherResponse): Boolean {
         val latLonKey = FavoriteLocationDto.generateKey(response.location)
-        return repo.containsPrimaryKey(latLonKey)
+        return roomProvider.containsPrimaryKey(latLonKey)
     }
 
     private fun getCachedForecast() {
         viewModelScope.launch {
             setState { copy(isLoading = true) }
-            val result = repo.loadForecastFromCache()
+            val result = sharedPrefsProvider.loadForecastFromCache()
             if (result != null) {
-                val weatherUi = repo.mapToMainWeatherUi(result)
+                val weatherUi = uiMapper.mapToMainWeatherUi(result)
                 val isLocationSaved = isLocationSaved(result)
                 setState {
                     copy(
@@ -129,7 +136,7 @@ class WeatherMainViewModel(private val repo: RepositoryApp) :
     }
 
     private fun loadCachedQuery() {
-        val query = repo.loadQuery()
+        val query = sharedPrefsProvider.loadQuery()
         setState { copy(query = query) }
     }
 
