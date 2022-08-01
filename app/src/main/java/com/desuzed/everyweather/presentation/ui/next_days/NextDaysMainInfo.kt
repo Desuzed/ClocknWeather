@@ -1,11 +1,9 @@
 package com.desuzed.everyweather.presentation.ui.next_days
 
-import android.annotation.SuppressLint
 import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.ForecastDay
-import java.text.SimpleDateFormat
-import java.util.*
+import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 
 class NextDaysMainInfo(
@@ -13,8 +11,6 @@ class NextDaysMainInfo(
     timeZone: String,
     res: Resources,
 ) {
-    @SuppressLint("SimpleDateFormat")
-    private val dateFormat = SimpleDateFormat("E. dd/MM", Locale.getDefault())
     val iconUrl: String
     val date: String
     val description: String
@@ -22,10 +18,13 @@ class NextDaysMainInfo(
     val minTemp: String
 
     init {
-        dateFormat.timeZone = TimeZone.getTimeZone(timeZone)
         val day = forecastDay.day
         iconUrl = "https:${day.icon}"
-        date = dateFormat.format(forecastDay.dateEpoch * 1000)
+        date = DateFormatter.format(
+            pattern = DateFormatter.fullDatePattern,
+            timeInMills = forecastDay.dateEpoch,
+            timeZone = timeZone
+        )
         description = day.text
         maxTemp = day.maxTemp.roundToInt().toString() + res.getString(
             R.string.celsius

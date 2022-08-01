@@ -1,20 +1,14 @@
 package com.desuzed.everyweather.presentation.ui.main
 
-import android.annotation.SuppressLint
 import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.WeatherResponse
-import java.text.SimpleDateFormat
-import java.util.*
+import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 
 class WeatherMainInfoUi(response: WeatherResponse, res: Resources) {
-    @SuppressLint("SimpleDateFormat")
-    private val sdfDate = SimpleDateFormat("dd/MM")
 
-    @SuppressLint("SimpleDateFormat")
-    private val sdfTime = SimpleDateFormat("HH:mm")
-    private val localTime = response.location.localtimeEpoch.times(1000)
+    private val localTime = response.location.localtimeEpoch
 
     val timeZone = response.location.timezone
     val location = response.location
@@ -27,13 +21,18 @@ class WeatherMainInfoUi(response: WeatherResponse, res: Resources) {
     val iconUrl: String
 
     init {
-        //todo refactoring sdf to SdfFormatter utill class
-        sdfDate.timeZone = TimeZone.getTimeZone(timeZone)
-        sdfTime.timeZone = TimeZone.getTimeZone(timeZone)
         val current = response.current
         iconUrl = "https:${current.icon}"
-        date = sdfDate.format(localTime)
-        time = sdfTime.format(localTime)
+        date = DateFormatter.format(
+            pattern = DateFormatter.datePattern,
+            timeInMills = localTime,
+            timeZone = timeZone
+        )
+        time = DateFormatter.format(
+            pattern = DateFormatter.timePattern,
+            timeInMills = localTime,
+            timeZone = timeZone
+        )
         geoText = response.location.toString()
         currentTemp = current.temp.roundToInt().toString() + res.getString(R.string.celsius)
         description = current.text

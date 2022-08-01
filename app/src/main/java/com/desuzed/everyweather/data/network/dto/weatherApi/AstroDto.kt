@@ -1,11 +1,9 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-
-import android.annotation.SuppressLint
 import com.desuzed.everyweather.domain.model.Astro
+import com.desuzed.everyweather.util.DateFormatter
 import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
-import java.text.SimpleDateFormat
 
 class AstroDto {
     @SerializedName("sunrise")
@@ -28,26 +26,22 @@ class AstroDto {
 
 }
 
-
 class AstroMapper : EntityMapper<AstroDto, Astro> {
-    //todo вынести в SimpleDateUtil Formatter
-    @SuppressLint("SimpleDateFormat")
-    private val apiFormat = SimpleDateFormat("hh:mm a")
-    @SuppressLint("SimpleDateFormat")
-    private val appFormat = SimpleDateFormat("HH:mm")
 
     override fun mapFromEntity(entity: AstroDto): Astro {
         return try {
-            val apiSunrise = apiFormat.parse(entity.sunrise)
-            val apiSunset = apiFormat.parse(entity.sunset)
-            val apiMoonrise = apiFormat.parse(entity.moonrise)
-            val apiMoonset = apiFormat.parse(entity.moonset)
-            val sunrise = appFormat.format(apiSunrise)
-            val sunset = appFormat.format(apiSunset)
-            val moonrise = appFormat.format(apiMoonrise)
-            val moonset = appFormat.format(apiMoonset)
+            val apiSunrise = DateFormatter.parse(DateFormatter.apiTimePattern, entity.sunrise)
+            val apiSunset = DateFormatter.parse(DateFormatter.apiTimePattern, entity.sunset)
+            val apiMoonrise = DateFormatter.parse(DateFormatter.apiTimePattern, entity.moonrise)
+            val apiMoonset = DateFormatter.parse(DateFormatter.apiTimePattern, entity.moonset)
+
+            val sunrise = DateFormatter.format(DateFormatter.timePattern, apiSunrise)
+            val sunset = DateFormatter.format(DateFormatter.timePattern, apiSunset)
+            val moonrise = DateFormatter.format(DateFormatter.timePattern, apiMoonrise)
+            val moonset = DateFormatter.format(DateFormatter.timePattern, apiMoonset)
+
             Astro(sunrise, sunset, moonrise, moonset)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Astro(entity.sunrise, entity.sunset, entity.moonrise, entity.moonset)
         }
 

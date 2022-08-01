@@ -1,12 +1,10 @@
 package com.desuzed.everyweather.presentation.ui
 
-import android.annotation.SuppressLint
 import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.Hour
 import com.desuzed.everyweather.domain.model.WeatherResponse
-import java.text.SimpleDateFormat
-import java.util.*
+import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 
 class HourUi(
@@ -14,8 +12,7 @@ class HourUi(
     timeZone: String,
     res: Resources
 ) {
-    @SuppressLint("SimpleDateFormat")
-    private val sdfHHmm = SimpleDateFormat("HH:mm")
+
     val time: String
     val temp: String
     val wind: String
@@ -23,25 +20,28 @@ class HourUi(
     val rotation: Float
 
     init {
-        sdfHHmm.timeZone = TimeZone.getTimeZone(timeZone)
-        time = sdfHHmm.format(hour.timeEpoch * 1000)
+        time = DateFormatter.format(
+            pattern = DateFormatter.timePattern,
+            timeInMills = hour.timeEpoch,
+            timeZone = timeZone,
+        )
         temp = hour.temp.roundToInt().toString() + res.getString(R.string.celsius)
         wind = "${hour.windSpeed.toInt()} " + res.getString(R.string.kmh)
         iconUrl = "https:${hour.icon}"
         rotation = hour.windDegree.toFloat() - 180
     }
 
-
     companion object {
 
         /**
          *  Generates list for HourAdapter since current time and plus next 24 items
          */
-        @SuppressLint("SimpleDateFormat")
         fun generateCurrentDayList(response: WeatherResponse): List<Hour> {
-            val sdf = SimpleDateFormat("H")
-            sdf.timeZone = TimeZone.getTimeZone(response.location.timezone)
-            val hour = sdf.format(response.location.localtimeEpoch.times(1000)).toInt()
+            val hour = DateFormatter.format(
+                pattern = DateFormatter.hourPattern,
+                timeInMills = response.location.localtimeEpoch,
+                timeZone = response.location.timezone,
+            ).toInt()
             val forecastDay = response.forecastDay
             return forecastDay[0].hourForecast
                 .drop(hour)
