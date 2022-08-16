@@ -89,14 +89,14 @@ fun WeatherMainContent(
                         )
                     }
                 } else {
-                    if (!refreshingState.isRefreshing) {
+                   // if (!refreshingState.isRefreshing) {
                         EmptyWeatherCard(
                             modifier = Modifier
                                 .align(Alignment.Center)
                                 .verticalScroll(rememberScrollState()),
                             onUserInteraction = onUserInteraction,
                         )
-                    }
+                  //  }
                 }
             }
         }
@@ -240,7 +240,7 @@ fun EmptyWeatherCard(onUserInteraction: (WeatherUserInteraction) -> Unit, modifi
                 )
                 RegularText(text = stringResource(id = R.string.no_weather_data_is_loaded))
                 RoundedButton(
-                    onClick = { onUserInteraction(WeatherUserInteraction.SaveLocation) },
+                    onClick = { onUserInteraction(WeatherUserInteraction.Location) },
                     text = stringResource(id = R.string.choose_location)
                 )
             }

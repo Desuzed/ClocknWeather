@@ -13,12 +13,9 @@ import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFr
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.navigate
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.Job
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapBottomSheetFragment : BottomSheetDialogFragment() {
-    private var job: Job? = null
-
     private val viewModel by viewModel<MapLocationViewModel>()
 
     override fun onCreateView(
@@ -58,6 +55,5 @@ class MapBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        job?.cancel()
     }
 }

@@ -14,7 +14,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 
 class LocationHandler(
-    private val activity: Activity,//todo koin
+    private val activity: Activity,
     private val viewModel: MainActivityViewModel
 ) {
     private val fusedLocationClient: FusedLocationProviderClient =

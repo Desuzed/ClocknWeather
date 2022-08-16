@@ -131,6 +131,8 @@ class WeatherMainViewModel(
                         isLoading = false
                     )
                 }
+            } else {
+                setState { copy(isLoading = false) }
             }
         }
     }
