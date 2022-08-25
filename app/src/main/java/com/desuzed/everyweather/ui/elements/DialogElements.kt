@@ -17,31 +17,39 @@ import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
 @Composable
 fun AppAlertDialog(title: String, onPositiveButtonClick: () -> Unit, onDismiss: () -> Unit) {
+    AppDialog(onDismiss = onDismiss) {
+        Column(
+            modifier = Modifier
+                .padding(dimensionResource(id = R.dimen.dimen_20))
+                .fillMaxWidth()
+        ) {
+            RegularText(text = title)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(id = R.dimen.dimen_20)),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+            ) {
+                RegularText(text = stringResource(id = R.string.cancel), onClick = onDismiss)
+                RoundedButton(
+                    text = stringResource(id = R.string.ok),
+                    onClick = onPositiveButtonClick
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun AppDialog(onDismiss: () -> Unit, content: @Composable () -> Unit) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             color = EveryweatherTheme.colors.onSurface,
             shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(dimensionResource(id = R.dimen.dimen_20))
-                    .fillMaxWidth()
-            ) {
-                RegularText(text = title)
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = dimensionResource(id = R.dimen.dimen_20)),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RegularText(text = stringResource(id = R.string.cancel), onClick = onDismiss)
-                    RoundedButton(
-                        text = stringResource(id = R.string.ok),
-                        onClick = onPositiveButtonClick
-                    )
-                }
-            }
+            content()
         }
     }
 }

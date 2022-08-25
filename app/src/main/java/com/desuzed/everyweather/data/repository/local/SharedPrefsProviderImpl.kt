@@ -6,6 +6,7 @@ import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.google.gson.Gson
 
 class SharedPrefsProviderImpl(context: Context) : SharedPrefsProvider {
+    //todo refactor to datastore
     private val sp =
         context.getSharedPreferences(S_PREF_NAME, Context.MODE_PRIVATE)
 

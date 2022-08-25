@@ -54,4 +54,13 @@
     <string name="mb" translatable="false">mb</string>
     <string name="delimiter" translatable="false">|</string>
     <string name="looking_for_your_location">Looking for your location…</string>
+
+<!--    Settings-->
+    <string name="dark_mode">Dark mode</string>
+    <string name="language">Language</string>
+    <string name="distance_dimension">Wind speed</string>
+    <string name="temperature_dimension">Temperature</string>
+    <string name="app_settings">Application settings</string>
+    <string name="dimension_settings">Dimension settings</string>
+
 </resources>

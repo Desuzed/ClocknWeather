@@ -9,17 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.presentation.ui.base.DetailCard
+import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
 @Composable
 fun CardDetailDayItem(detailCard: DetailCard, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
-        backgroundColor = EveryweatherTheme.colors.onSurface,
-        elevation = dimensionResource(id = R.dimen.dimen_4),
-    ) {
+    RoundedCardItem(modifier = modifier) {
         Row(
             modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_20)),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -69,5 +64,17 @@ fun RightColumn(detailCard: DetailCard, modifier: Modifier = Modifier) {
             header = stringResource(id = R.string.moonrise_moonset),
             text = detailCard.moon
         )
+    }
+}
+
+@Composable
+fun RoundedCardItem(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
+        backgroundColor = EveryweatherTheme.colors.onSurface,
+        elevation = dimensionResource(id = R.dimen.dimen_4),
+    ) {
+        content()
     }
 }

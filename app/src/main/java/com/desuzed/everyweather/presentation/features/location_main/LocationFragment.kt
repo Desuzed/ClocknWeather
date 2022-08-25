@@ -50,6 +50,7 @@ class LocationFragment : Fragment() {
             is LocationMainAction.NavigateToWeather -> navigateToWeatherFragment(bundleOf(action.key to action.query))
             LocationMainAction.MyLocation -> onMyLocationClick()
             LocationMainAction.ShowMapFragment -> showMapBotSheet()
+            LocationMainAction.NavigateToSettings -> navigateToSettingsFragment()
         }
     }
 
@@ -67,4 +68,7 @@ class LocationFragment : Fragment() {
         navigate(R.id.action_locationFragment_to_weatherFragment, bundle)
     }
 
+    private fun navigateToSettingsFragment() {
+        navigate(R.id.action_locationFragment_to_settingsFragment)
+    }
 }

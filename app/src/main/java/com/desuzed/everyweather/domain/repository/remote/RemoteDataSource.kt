@@ -5,5 +5,5 @@ import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
 import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
 
 interface RemoteDataSource {
-    suspend fun getForecast(query: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi>
+    suspend fun getForecast(query: String, lang: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi>
 }

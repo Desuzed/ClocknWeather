@@ -3,9 +3,7 @@ package com.desuzed.everyweather.ui.elements
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -46,4 +44,17 @@ fun RoundedButton(modifier: Modifier = Modifier, onClick: () -> Unit, text: Stri
             color = EveryweatherTheme.colors.buttonTextColor
         )
     }
+}
+
+@Composable
+fun AppRadioButton(isSelected: Boolean, onClick: () -> Unit) {
+    RadioButton(
+        colors = RadioButtonDefaults.colors(
+            selectedColor = EveryweatherTheme.colors.secondary,
+            unselectedColor = EveryweatherTheme.colors.secondary,
+            disabledColor = EveryweatherTheme.colors.buttonTextColor,
+        ),
+        selected = isSelected,
+        onClick = onClick
+    )
 }

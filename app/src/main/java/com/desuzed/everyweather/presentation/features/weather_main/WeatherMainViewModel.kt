@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import androidx.lifecycle.viewModelScope
+import com.desuzed.everyweather.data.repository.local.SettingsRepository
 import com.desuzed.everyweather.data.repository.local.UiMapper
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.WeatherResponse
@@ -18,10 +19,9 @@ class WeatherMainViewModel(
     private val sharedPrefsProvider: SharedPrefsProvider,
     private val actionResultProvider: ActionResultProvider,
     private val roomProvider: RoomProvider,
+    settingsRepository: SettingsRepository,
 ) :
-    BaseViewModel<WeatherState, WeatherMainAction>(
-        WeatherState()
-    ) {
+    BaseViewModel<WeatherState, WeatherMainAction>(WeatherState()) {
 
     private val messageFlow = MutableSharedFlow<String>(
         replay = 0,
@@ -33,6 +33,10 @@ class WeatherMainViewModel(
         getCachedForecast()
         loadCachedQuery()
 
+        collect(settingsRepository.language) {
+            setState { copy(language = it) }
+        }
+
         viewModelScope.launch {
             messageFlow.collect {
                 setAction(WeatherMainAction.ShowToast(it))
@@ -43,7 +47,7 @@ class WeatherMainViewModel(
     fun getForecast(query: String) {
         viewModelScope.launch {
             setState { copy(isLoading = true, query = query) }
-            val fetchedForecast = useCase.fetchForecastOrErrorMessage(query)
+            val fetchedForecast = useCase.fetchForecastOrErrorMessage(query, state.value.language)
             val weatherResponse = fetchedForecast.weatherResponse
             val message = fetchedForecast.message
             if (weatherResponse != null) {

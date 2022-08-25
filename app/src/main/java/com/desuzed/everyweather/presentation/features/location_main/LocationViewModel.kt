@@ -36,6 +36,7 @@ class LocationViewModel(
             LocationUserInteraction.FindByQuery -> findTypedLocation()
             LocationUserInteraction.FindOnMap -> setAction(LocationMainAction.ShowMapFragment)
             LocationUserInteraction.MyLocation -> setAction(LocationMainAction.MyLocation)
+            LocationUserInteraction.Settings -> setAction(LocationMainAction.NavigateToSettings)
         }
     }
 

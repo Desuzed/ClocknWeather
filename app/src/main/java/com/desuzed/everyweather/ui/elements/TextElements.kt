@@ -279,8 +279,8 @@ fun OutlinedEditText(
             unfocusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
             cursorColor = EveryweatherTheme.colors.secondary,
         ),
-        leadingIcon = {
-            Image(
+        trailingIcon = {
+            Image(//todo clickable, handle state disabled/enabled
                 painter = painterResource(id = R.drawable.ic_round_search),
                 colorFilter = ColorFilter.tint(EveryweatherTheme.colors.editTextStrokeColor),
                 contentDescription = "",

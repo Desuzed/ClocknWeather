@@ -6,6 +6,7 @@ import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
 import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
 import com.desuzed.everyweather.domain.model.ResultForecast
+import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.domain.repository.remote.RemoteDataSource
 import com.desuzed.everyweather.util.ActionResultProvider
@@ -17,19 +18,15 @@ class WeatherMainUseCase(
     private val weatherResponseMapper: WeatherResponseMapper,
     private val apiErrorMapper: ApiErrorMapper,
 ) {
-    private suspend fun getForecast(query: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> {
-        sharedPrefsProvider.saveQuery(query)
-        return remoteDataSource.getForecast(query)
-    }
 
-    suspend fun fetchForecastOrErrorMessage(query: String): ResultForecast {
+    suspend fun fetchForecastOrErrorMessage(query: String, lang: Language): ResultForecast {
         if (query.isEmpty()) {
             return ResultForecast(
                 null,
                 actionResultProvider.parseCode(ActionResultProvider.NO_DATA)
             )
         }
-        return when (val response = getForecast(query)) {
+        return when (val response = getForecast(query, lang.lang)) {
             is NetworkResponse.Success -> {
                 val weatherResponse = weatherResponseMapper.mapFromEntity(response.body)
                 sharedPrefsProvider.saveForecastToCache(weatherResponse)
@@ -51,5 +48,10 @@ class WeatherMainUseCase(
                 actionResultProvider.parseCode(ActionResultProvider.UNKNOWN)
             )
         }
+    }
+
+    private suspend fun getForecast(query: String, lang: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> {
+        sharedPrefsProvider.saveQuery(query)
+        return remoteDataSource.getForecast(query, lang)
     }
 }

@@ -44,5 +44,11 @@
     <string name="wrong_server_result">Извините, получен неверный результат от поставщика погоды. Пожалуйста, повторите снова.</string>
     <string name="server_error">Извините, ошибка сервера. Попытайтесь снова.</string>
     <string name="looking_for_your_location">Поиск вашего местоположения...</string>
+    <string name="dark_mode">Тёмная тема</string>
+    <string name="language">Язык</string>
+    <string name="temperature_dimension">Температура</string>
+    <string name="distance_dimension">Скорость ветра</string>
+    <string name="app_settings">Настройки приложения</string>
+    <string name="dimension_settings">Единицы измерения</string>
 
 </resources>
