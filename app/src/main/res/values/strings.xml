@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Everyweather</string>
     <string name="weather">Weather</string>
-    <string name="celsius" translatable="false">°</string>
+    <string name="dot_temperature" translatable="false">°</string>
     <string name="current_location">Current location</string>
     <string name="search_hint">Search</string>
     <string name="set_place_on_map">Set place on map</string>
@@ -62,5 +62,13 @@
     <string name="temperature_dimension">Temperature</string>
     <string name="app_settings">Application settings</string>
     <string name="dimension_settings">Dimension settings</string>
+    <string name="english">English</string>
+    <string name="russian">Russian</string>
+    <string name="mph">mph</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="system">System</string>
+    <string name="fahrenheit" translatable="false">°F</string>
+    <string name="celcius" translatable="false">°C</string>
 
 </resources>

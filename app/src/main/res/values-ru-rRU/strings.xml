@@ -50,5 +50,11 @@
     <string name="distance_dimension">Скорость ветра</string>
     <string name="app_settings">Настройки приложения</string>
     <string name="dimension_settings">Единицы измерения</string>
+    <string name="english">Английский</string>
+    <string name="russian">Русский</string>
+    <string name="mph">миль/ч</string>
+    <string name="on">Включен</string>
+    <string name="off">Выключен</string>
+    <string name="system">Системный</string>
 
 </resources>

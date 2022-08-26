@@ -1,12 +1,10 @@
 package com.desuzed.everyweather.presentation.features.settings
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.data.repository.local.SettingsRepository
 import com.desuzed.everyweather.domain.model.settings.*
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
@@ -15,15 +13,18 @@ class SettingsViewModel(
     BaseViewModel<SettingsState, SettingsAction>(SettingsState()) {
 
     init {
-
+        collect(settingsRepository.darkMode, ::collectDarkTheme)
+        collect(settingsRepository.lang, ::collectLanguage)
+        collect(settingsRepository.distanceDimen, ::collectWindSpeed)
+        collect(settingsRepository.tempDimen, ::collectTemperature)
     }
 
     fun onUserInteraction(interaction: SettingsUserInteraction) {
         when (interaction) {
-            is SettingsUserInteraction.ChangeLanguage -> onLanguage(interaction.language)
+            is SettingsUserInteraction.ChangeLanguage -> onLanguage(interaction.lang)
             is SettingsUserInteraction.ChangeDarkMode -> onDarkMode(interaction.darkMode)
-            is SettingsUserInteraction.ChangeDistanceDimension -> onDistanceDimen(interaction.distanceDimension)
-            is SettingsUserInteraction.ChangeTemperatureDimension -> onTemperatureDimen(interaction.temperatureDimension)
+            is SettingsUserInteraction.ChangeDistanceDimension -> onDistanceDimen(interaction.distanceDimen)
+            is SettingsUserInteraction.ChangeTemperatureDimension -> onTemperatureDimen(interaction.tempDimen)
             is SettingsUserInteraction.ShowSettingDialog -> showSettingsDialog(interaction.type)
             SettingsUserInteraction.DismissDialog -> hideDialog()
         }
@@ -39,37 +40,49 @@ class SettingsViewModel(
 
     private fun onDarkMode(darkMode: DarkMode) {
         viewModelScope.launch {
-            Log.i("ChangeDarkMode", "onUserInteraction: ${darkMode} ")
-            setState { copy(darkMode = darkMode) }
-            delay(1000)
+            settingsRepository.setDarkMode(darkMode)
+            delay(500)
             hideDialog()
         }
     }
 
-    private fun onLanguage(language: Language) {
+    private fun onLanguage(lang: Lang) {
         viewModelScope.launch {
-            Log.i("ChangeLang", "onUserInteraction: ${language} ")
-            setState { copy(language = language) }
-            delay(1000)
+            settingsRepository.setLanguage(lang)
+            delay(500)
             hideDialog()
         }
     }
 
-    private fun onDistanceDimen(distanceDimension: DistanceDimension) {
+    private fun onDistanceDimen(distanceDimen: DistanceDimen) {
         viewModelScope.launch {
-            Log.i("ChangeDistance", "onUserInteraction: ${distanceDimension} ")
-            setState { copy(distanceDimension = distanceDimension) }
-            delay(1000)
+            settingsRepository.setDistanceDimension(distanceDimen)
+            delay(500)
             hideDialog()
         }
     }
 
-    private fun onTemperatureDimen(temperatureDimension: TemperatureDimension) {
+    private fun onTemperatureDimen(tempDimen: TempDimen) {
         viewModelScope.launch {
-            Log.i("ChangeTemper", "onUserInteraction: ${temperatureDimension} ")
-            setState { copy(temperatureDimension = temperatureDimension) }
-            delay(1000)
+            settingsRepository.setTemperatureDimension(tempDimen)
+            delay(500)
             hideDialog()
         }
+    }
+
+    private fun collectDarkTheme(darkTheme: DarkTheme) = setState {
+        copy(darkTheme = darkTheme)
+    }
+
+    private fun collectLanguage(language: Language) = setState {
+        copy(lang = language)
+    }
+
+    private fun collectWindSpeed(windSpeed: WindSpeed) = setState {
+        copy(windSpeed = windSpeed)
+    }
+
+    private fun collectTemperature(temperature: Temperature) = setState {
+        copy(tempDimen = temperature)
     }
 }

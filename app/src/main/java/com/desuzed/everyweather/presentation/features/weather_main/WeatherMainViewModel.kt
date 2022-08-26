@@ -33,8 +33,8 @@ class WeatherMainViewModel(
         getCachedForecast()
         loadCachedQuery()
 
-        collect(settingsRepository.language) {
-            setState { copy(language = it) }
+        collect(settingsRepository.lang) { language ->
+            setState { copy(lang = language.id) }
         }
 
         viewModelScope.launch {
@@ -47,7 +47,7 @@ class WeatherMainViewModel(
     fun getForecast(query: String) {
         viewModelScope.launch {
             setState { copy(isLoading = true, query = query) }
-            val fetchedForecast = useCase.fetchForecastOrErrorMessage(query, state.value.language)
+            val fetchedForecast = useCase.fetchForecastOrErrorMessage(query, state.value.lang)
             val weatherResponse = fetchedForecast.weatherResponse
             val message = fetchedForecast.message
             if (weatherResponse != null) {

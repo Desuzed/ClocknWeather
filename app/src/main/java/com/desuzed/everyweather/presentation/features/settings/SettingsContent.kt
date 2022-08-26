@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,11 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.settings.*
-import com.desuzed.everyweather.presentation.ui.base.BaseSettingItem
-import com.desuzed.everyweather.presentation.ui.settings.DarkModeItem
-import com.desuzed.everyweather.presentation.ui.settings.DistanceItem
-import com.desuzed.everyweather.presentation.ui.settings.LanguageItem
-import com.desuzed.everyweather.presentation.ui.settings.TemperatureItem
 import com.desuzed.everyweather.ui.elements.*
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
@@ -64,33 +58,32 @@ fun SettingsContent(
                     bottom = dimensionResource(id = R.dimen.dimen_8),
                 )
         ) {
-            val res = LocalContext.current.resources
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 BoldText(text = stringResource(id = R.string.app_settings))
                 SettingsMenuGroupContent(
                     onUserInteraction = onUserInteraction,
-                    items = listOf(LanguageItem(res), DarkModeItem(res))
+                    items = listOf(state.lang, state.darkTheme)
                 )
                 BoldText(text = stringResource(id = R.string.dimension_settings))
                 SettingsMenuGroupContent(
                     onUserInteraction = onUserInteraction,
-                    items = listOf(TemperatureItem(res), DistanceItem(res))
+                    items = listOf(state.tempDimen, state.windSpeed)
                 )
                 val onDismissCallback: () -> Unit = {
                     onUserInteraction(SettingsUserInteraction.DismissDialog)
                 }
                 when (state.showDialogType) {
                     SettingsType.LANG -> AppDialog(onDismiss = onDismissCallback) {
-                        LanguagePickerContent(onUserInteraction, state.language)
+                        LanguagePickerContent(onUserInteraction, state.lang)
                     }
                     SettingsType.TEMP -> AppDialog(onDismiss = onDismissCallback) {
-                        TemperaturePickerContent(onUserInteraction, state.temperatureDimension)
+                        TemperaturePickerContent(onUserInteraction, state.tempDimen)
                     }
                     SettingsType.DISTANCE -> AppDialog(onDismiss = onDismissCallback) {
-                        DistancePickerContent(onUserInteraction, state.distanceDimension)
+                        DistancePickerContent(onUserInteraction, state.windSpeed)
                     }
                     SettingsType.DARK_MODE -> AppDialog(onDismiss = onDismissCallback) {
-                        DarkModePickerContent(onUserInteraction, state.darkMode)
+                        DarkModePickerContent(onUserInteraction, state.darkTheme)
                     }
                     null -> {}
                 }
@@ -135,7 +128,7 @@ fun SettingsMenuGroupContent(
                     ) {
                     Column {
                         BoldText(text = item.category, onClick = onItemCLick)
-                        MediumText(text = item.name)
+                        MediumText(text = item.value)
                     }
                     Icon(
                         modifier = Modifier.rotate(90f),
@@ -154,10 +147,11 @@ fun SettingsMenuGroupContent(
 @Composable
 fun DarkModePickerContent(
     onUserInteraction: (SettingsUserInteraction) -> Unit,
-    selectedItem: DarkMode,
+    selectedItem: DarkTheme,
 ) {
+    val selectedMode = DarkMode.valueOf(selectedItem.id)
     val radioOptions = DarkMode.values().toList()
-    val indexOfSelected = radioOptions.indexOf(selectedItem)
+    val indexOfSelected = radioOptions.indexOf(selectedMode)
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[indexOfSelected]) }
     val onPickMode: (DarkMode) -> Unit = { darkMode ->
         onOptionSelected(darkMode)
@@ -180,7 +174,12 @@ fun DarkModePickerContent(
                 AppRadioButton(isSelected = darkMode == selectedOption) {
                     onPickMode(darkMode)
                 }
-                MediumText(text = darkMode.mode)
+                val textId = when (darkMode) {
+                    DarkMode.ON -> R.string.on
+                    DarkMode.OFF -> R.string.off
+                    DarkMode.SYSTEM -> R.string.system
+                }
+                MediumText(text = stringResource(id = textId))
             }
         }
     }
@@ -191,12 +190,13 @@ fun LanguagePickerContent(
     onUserInteraction: (SettingsUserInteraction) -> Unit,
     selectedItem: Language,
 ) {
-    val radioOptions = Language.values().toList()
-    val indexOfSelected = radioOptions.indexOf(selectedItem)
+    val selectedLang = Lang.valueOf(selectedItem.id)
+    val radioOptions = Lang.values().toList()
+    val indexOfSelected = radioOptions.indexOf(selectedLang)
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[indexOfSelected]) }
-    val onPickMode: (Language) -> Unit = { language ->
+    val onPickMode: (Lang) -> Unit = { language ->
         onOptionSelected(language)
-        onUserInteraction(SettingsUserInteraction.ChangeLanguage(language = language))
+        onUserInteraction(SettingsUserInteraction.ChangeLanguage(lang = language))
     }
     Column {
         radioOptions.forEach { language ->
@@ -215,7 +215,11 @@ fun LanguagePickerContent(
                 AppRadioButton(isSelected = language == selectedOption) {
                     onPickMode(language)
                 }
-                MediumText(text = language.lang)
+                val textId = when (language) {
+                    Lang.EN -> R.string.english
+                    Lang.RU -> R.string.russian
+                }
+                MediumText(text = stringResource(id = textId))
             }
         }
     }
@@ -224,14 +228,15 @@ fun LanguagePickerContent(
 @Composable
 fun TemperaturePickerContent(
     onUserInteraction: (SettingsUserInteraction) -> Unit,
-    selectedItem: TemperatureDimension,
+    selectedItem: Temperature,
 ) {
-    val radioOptions = TemperatureDimension.values().toList()
-    val indexOfSelected = radioOptions.indexOf(selectedItem)
+    val selectedTemp = TempDimen.valueOf(selectedItem.id)
+    val radioOptions = TempDimen.values().toList()
+    val indexOfSelected = radioOptions.indexOf(selectedTemp)
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[indexOfSelected]) }
-    val onPickMode: (TemperatureDimension) -> Unit = { temperatureDimension ->
+    val onPickMode: (TempDimen) -> Unit = { temperatureDimension ->
         onOptionSelected(temperatureDimension)
-        onUserInteraction(SettingsUserInteraction.ChangeTemperatureDimension(temperatureDimension = temperatureDimension))
+        onUserInteraction(SettingsUserInteraction.ChangeTemperatureDimension(tempDimen = temperatureDimension))
     }
     Column {
         radioOptions.forEach { temperatureDimension ->
@@ -250,7 +255,11 @@ fun TemperaturePickerContent(
                 AppRadioButton(isSelected = temperatureDimension == selectedOption) {
                     onPickMode(temperatureDimension)
                 }
-                MediumText(text = temperatureDimension.dimensionName)
+                val textId = when (temperatureDimension) {
+                    TempDimen.FAHRENHEIT -> R.string.fahrenheit
+                    TempDimen.CELCIUS -> R.string.celcius
+                }
+                MediumText(text = stringResource(id = textId))
             }
         }
     }
@@ -259,14 +268,15 @@ fun TemperaturePickerContent(
 @Composable
 fun DistancePickerContent(
     onUserInteraction: (SettingsUserInteraction) -> Unit,
-    selectedItem: DistanceDimension,
+    selectedItem: WindSpeed,
 ) {
-    val radioOptions = DistanceDimension.values().toList()
-    val indexOfSelected = radioOptions.indexOf(selectedItem)
+    val selectedDist = DistanceDimen.valueOf(selectedItem.id)
+    val radioOptions = DistanceDimen.values().toList()
+    val indexOfSelected = radioOptions.indexOf(selectedDist)
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[indexOfSelected]) }
-    val onPickMode: (DistanceDimension) -> Unit = { distanceDimension ->
+    val onPickMode: (DistanceDimen) -> Unit = { distanceDimension ->
         onOptionSelected(distanceDimension)
-        onUserInteraction(SettingsUserInteraction.ChangeDistanceDimension(distanceDimension = distanceDimension))
+        onUserInteraction(SettingsUserInteraction.ChangeDistanceDimension(distanceDimen = distanceDimension))
     }
     Column {
         radioOptions.forEach { distanceDimension ->
@@ -285,7 +295,11 @@ fun DistancePickerContent(
                 AppRadioButton(isSelected = distanceDimension == selectedOption) {
                     onPickMode(distanceDimension)
                 }
-                MediumText(text = distanceDimension.dimensionName)
+                val textId = when (distanceDimension) {
+                    DistanceDimen.METRIC -> R.string.kmh
+                    DistanceDimen.IMPERIAL -> R.string.mph
+                }
+                MediumText(text = stringResource(id = textId))
             }
         }
     }

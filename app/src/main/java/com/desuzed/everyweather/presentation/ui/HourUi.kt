@@ -25,7 +25,7 @@ class HourUi(
             timeInMills = hour.timeEpoch,
             timeZone = timeZone,
         )
-        temp = hour.temp.roundToInt().toString() + res.getString(R.string.celsius)
+        temp = hour.temp.roundToInt().toString() + res.getString(R.string.dot_temperature)
         wind = "${hour.windSpeed.toInt()} " + res.getString(R.string.kmh)
         iconUrl = "https:${hour.icon}"
         rotation = hour.windDegree.toFloat() - 180

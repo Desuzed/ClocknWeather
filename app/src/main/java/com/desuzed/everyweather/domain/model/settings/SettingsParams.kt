@@ -1,25 +1,22 @@
 package com.desuzed.everyweather.domain.model.settings
 
-const val APP_SETTING = 1
-const val DIMENSION_SETTING = 2
-
-enum class SettingsType(category: Int) {
-    LANG(category = APP_SETTING),
-    DARK_MODE (category = APP_SETTING),
-    DISTANCE(category = DIMENSION_SETTING),
-    TEMP(category = DIMENSION_SETTING),
+enum class SettingsType {
+    LANG,
+    DARK_MODE,
+    DISTANCE,
+    TEMP,
 }
 
-enum class Language(val lang: String) {
-    RU("ru"), EN("en")
+enum class Lang(val lang: String) {
+    RU("RU"), EN("EN")
 }
 
-enum class TemperatureDimension(val dimensionName: String) {
-    FAHRENHEIT("fahrenheit"), CELCIUS("celcius")
+enum class TempDimen(val dimensionName: String) {
+    FAHRENHEIT("FAHRENHEIT"), CELCIUS("CELCIUS")
 }
 
 //todo метры в секунду переводить в километры в секунду на стороне мобилы, также с милями
-enum class DistanceDimension(val dimensionName: String) {
+enum class DistanceDimen(val dimensionName: String) {
     METRIC("METRIC"), IMPERIAL("IMPERIAL")
 }
 

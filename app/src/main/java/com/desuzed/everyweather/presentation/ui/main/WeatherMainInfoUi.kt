@@ -34,10 +34,10 @@ class WeatherMainInfoUi(response: WeatherResponse, res: Resources) {
             timeZone = timeZone
         )
         geoText = response.location.toString()
-        currentTemp = current.temp.roundToInt().toString() + res.getString(R.string.celsius)
+        currentTemp = current.temp.roundToInt().toString() + res.getString(R.string.dot_temperature)
         description = current.text
         feelsLike = res.getString(R.string.feels_like) + " ${current.feelsLike.roundToInt()}" +
-                res.getString(R.string.celsius)
+                res.getString(R.string.dot_temperature)
     }
 }
 

@@ -27,10 +27,10 @@ class NextDaysMainInfo(
         )
         description = day.text
         maxTemp = day.maxTemp.roundToInt().toString() + res.getString(
-            R.string.celsius
+            R.string.dot_temperature
         )
         minTemp = day.minTemp.roundToInt().toString() + res.getString(
-            R.string.celsius
+            R.string.dot_temperature
         )
     }
 }
