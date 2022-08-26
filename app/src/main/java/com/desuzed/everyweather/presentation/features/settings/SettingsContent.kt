@@ -127,8 +127,11 @@ fun SettingsMenuGroupContent(
 
                     ) {
                     Column {
-                        BoldText(text = item.category, onClick = onItemCLick)
-                        MediumText(text = item.value)
+                        BoldText(
+                            text = stringResource(id = item.categoryStringId),
+                            onClick = onItemCLick
+                        )
+                        MediumText(text = stringResource(item.valueStringId))
                     }
                     Icon(
                         modifier = Modifier.rotate(90f),

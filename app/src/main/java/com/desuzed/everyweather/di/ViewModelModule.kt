@@ -14,10 +14,17 @@ val viewModelModule = module {
         MapLocationViewModel(sharedPrefsProvider = get())
     }
     viewModel {
-        MainActivityViewModel(networkConnection = get())
+        MainActivityViewModel(
+            networkConnection = get(),
+            settingsRepository = get(),
+            sharedPrefsProvider = get(),
+        )
     }
     viewModel {
-        LocationViewModel(roomProvider = get(), actionResultProvider = get())
+        LocationViewModel(
+            roomProvider = get(),
+            actionResultProvider = get(),
+        )
     }
     viewModel {
         WeatherMainViewModel(
@@ -30,7 +37,10 @@ val viewModelModule = module {
         )
     }
     viewModel {
-        NextDaysViewModel(sharedPrefsProvider = get(), uiMapper = get())
+        NextDaysViewModel(
+            sharedPrefsProvider = get(),
+            uiMapper = get(),
+        )
     }
 
     viewModel {

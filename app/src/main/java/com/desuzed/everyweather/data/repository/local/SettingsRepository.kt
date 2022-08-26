@@ -27,8 +27,8 @@ class SettingsRepository(private val context: Context) {
         }
         Language(
             id = langId,
-            category = res.getString(R.string.language),
-            value = res.getString(langValueId),
+            categoryStringId = R.string.language,
+            valueStringId = langValueId,
         )
     }
 
@@ -45,8 +45,8 @@ class SettingsRepository(private val context: Context) {
             }
             WindSpeed(
                 id = distanceDimenId,
-                category = res.getString(R.string.distance_dimension),
-                value = res.getString(distValueId)
+                categoryStringId = R.string.distance_dimension,
+                valueStringId = distValueId,
             )
         }
 
@@ -62,8 +62,8 @@ class SettingsRepository(private val context: Context) {
             }
             Temperature(
                 id = tempDimenId,
-                category = res.getString(R.string.temperature_dimension),
-                value = res.getString(tempValueId)
+                categoryStringId = R.string.temperature_dimension,
+                valueStringId = tempValueId,
             )
         }
 
@@ -80,8 +80,8 @@ class SettingsRepository(private val context: Context) {
             }
             DarkTheme(
                 id = darkModeId,
-                category = res.getString(R.string.dark_mode),
-                value = res.getString(darkThemeValueId),
+                categoryStringId = R.string.dark_mode,
+                valueStringId = darkThemeValueId,
 
                 )
         }

@@ -1,3 +1,3 @@
 package com.desuzed.everyweather.presentation.features.main_activity
 
-class MainActivityState
+data class MainActivityState(val lang: String = "")

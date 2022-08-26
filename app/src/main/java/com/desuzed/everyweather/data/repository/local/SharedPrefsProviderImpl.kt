@@ -32,9 +32,22 @@ class SharedPrefsProviderImpl(context: Context) : SharedPrefsProvider {
 
     override fun loadQuery(): String = sp.getString(QUERY, "").toString()
 
+    override fun isFirstRunApp(): Boolean {
+        val isFirstTime = sp.getBoolean(IS_FIRST_RUN_APP_KEY, true)
+        if (isFirstTime) {
+            sp
+                .edit()
+                .putBoolean(IS_FIRST_RUN_APP_KEY, false)
+                .apply()
+        }
+        return isFirstTime
+    }
+
     companion object {
         const val S_PREF_NAME = "SP"
         const val WEATHER_API = "WEATHER_API"
         const val QUERY = "QUERY"
+        private const val IS_FIRST_RUN_APP_KEY = "IS_FIRST_RUN_APP"
+
     }
 }

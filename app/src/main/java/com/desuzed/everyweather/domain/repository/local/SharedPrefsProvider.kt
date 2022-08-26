@@ -7,4 +7,5 @@ interface SharedPrefsProvider {
     fun loadForecastFromCache(): WeatherResponse?
     fun saveQuery(query: String)
     fun loadQuery(): String
+    fun isFirstRunApp(): Boolean
 }

@@ -1,7 +1,9 @@
 package com.desuzed.everyweather.util
 
+import android.content.Context
 import android.content.res.Resources.getSystem
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +13,7 @@ import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 
 fun Fragment.navigate(directions: Int, bundle: Bundle? = null) {
     val controller = findNavController()
@@ -68,6 +71,16 @@ inline fun <T> AppCompatActivity.collect(
             consumer(it)
         }
     }
+}
+
+fun Context.setAppLocale(language: String): Context {
+    val locale = Locale(language)
+    Locale.setDefault(locale)
+    val config = resources.configuration
+    config.setLocale(locale)
+    config.setLayoutDirection(locale)
+    Log.i("MainActivity", "setAppLocale: ${language}, $locale")
+    return createConfigurationContext(config)
 }
 
 val Int.toIntDp: Int get() = (this / getSystem().displayMetrics.density).toInt()

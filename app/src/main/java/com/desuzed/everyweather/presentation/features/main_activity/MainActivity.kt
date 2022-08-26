@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.main_activity
 
 import android.Manifest
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
@@ -17,6 +18,7 @@ import com.desuzed.everyweather.util.collect
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -27,12 +29,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Everyweather)//todo поменять сплешскрин на компоуз версию чтобы не видеть белый фон при входе в приложение
         super.onCreate(savedInstanceState)
+        handleFirstEnterApp()
         bind()
         requestLocationPermissions()
-        setLangForRequest()
         collectData()
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     //todo рефакторинг на нормальное взаимодействие
     fun getUserLatLngFlow(): SharedFlow<UserLatLng?> = viewModel.userLatLng.asSharedFlow()
 
-    fun requestLocationPermissions() {
+    private fun requestLocationPermissions() {
         //if (locationHandler.permissionsGranted()) return
         ActivityCompat
             .requestPermissions(
@@ -60,15 +61,29 @@ class MainActivity : AppCompatActivity() {
             )
     }
 
-    private fun setLangForRequest() {
+    private fun handleFirstEnterApp() {
+        val isFirstRun = viewModel.isFirstRun()
+        if (isFirstRun) {
+            initFirstRunLanguage()
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        val lang = newConfig.locales[0].language
+        viewModel.onLanguage(lang)
+        super.onConfigurationChanged(newConfig)
+    }
+
+    private fun initFirstRunLanguage() {
         val lang = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].language
-        //    App.instance.setLang(lang)      //todo переделать
+        viewModel.onLanguage(lang)
     }
 
     private fun collectData() {
         collect(viewModel.hasInternet, ::onNewNetworkState)
         collect(viewModel.isLookingForLocation, ::isLookingForLocation)
         collect(viewModel.messageFlow, ::onNewMessage)
+        collect(viewModel.action, ::onNewAction)
     }
 
     private fun onNewNetworkState(networkState: Boolean) {
@@ -83,6 +98,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun onNewMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onNewAction(action: MainActivityAction) {
+        when (action) {
+            is MainActivityAction.ChangeLanguage -> changeAppLanguage(action.lang)
+        }
+    }
+
+    //todo refactor deprecated
+    private fun changeAppLanguage(lang: String) {
+        val locale = Locale(lang)
+        resources.configuration.setLocale(locale)
+        resources.updateConfiguration(resources.configuration, resources.displayMetrics)
     }
 
     private fun bind() {
