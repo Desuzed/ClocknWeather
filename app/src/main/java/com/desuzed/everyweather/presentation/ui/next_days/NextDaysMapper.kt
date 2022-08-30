@@ -3,6 +3,7 @@ package com.desuzed.everyweather.presentation.ui.next_days
 import android.content.res.Resources
 import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.presentation.ui.HourUi
@@ -12,6 +13,7 @@ class NextDaysMapper(
     private val temperature: Temperature,
     private val language: Language,
     private val resources: Resources,
+    private val pressure: Pressure,
 ) {
 
     fun mapToNextDaysList(entity: WeatherResponse): List<NextDaysUi> {
@@ -37,6 +39,7 @@ class NextDaysMapper(
                 nextDaysMainInfo = nextDaysMainInfo,
                 detailCard = DetailCardNextDays(
                     windSpeed = windSpeed,
+                    pressureDimen = pressure,
                     forecastDay = it,
                     res = resources,
                 ),

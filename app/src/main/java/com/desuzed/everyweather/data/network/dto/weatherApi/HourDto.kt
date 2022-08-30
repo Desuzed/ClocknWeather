@@ -31,9 +31,11 @@ class HourDto {
     @SerializedName("wind_dir")
     var windDir: String = ""
 
-    //todo handle settings
     @SerializedName("pressure_mb")
     var pressureMb = 0f
+
+    @SerializedName("pressure_in")
+    var pressureInch = 0f
 
     @SerializedName("precip_mm")
     var precipMm = 0f

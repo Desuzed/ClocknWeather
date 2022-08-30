@@ -15,7 +15,8 @@ class HourMapper : EntityMapper<HourDto, Hour> {
             entity.windSpeedKph,
             entity.windSpeedMph,
             entity.windDegree,
-            entity.pressureMb
+            entity.pressureMb,
+            entity.pressureInch,
         )
     }
 }

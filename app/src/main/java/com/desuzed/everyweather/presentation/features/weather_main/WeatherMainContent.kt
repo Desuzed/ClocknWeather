@@ -69,7 +69,8 @@ fun WeatherMainContent(
                         context = context,
                         language = state.lang,
                         windSpeed = state.windSpeed,
-                        temperature = state.temperature
+                        temperature = state.temperature,
+                        pressure = state.pressure,
                     ).mapToMainWeatherUi(it)
                 }
             }

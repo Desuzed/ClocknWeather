@@ -51,6 +51,7 @@ fun NextDaysBottomSheetContent(
                         windSpeed = state.windSpeed,
                         temperature = state.temperature,
                         language = state.language,
+                        pressure = state.pressure,
                     ).mapToNextDaysUi(it)
                 }
             }

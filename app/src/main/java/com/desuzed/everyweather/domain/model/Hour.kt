@@ -17,5 +17,7 @@ data class Hour(
 
     val windDegree: Int,
 
-    val pressureMb: Float
+    val pressureMb: Float,
+
+    val pressureInch: Float,
 )

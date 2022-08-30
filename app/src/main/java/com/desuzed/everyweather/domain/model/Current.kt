@@ -19,6 +19,8 @@ class Current(
 
     val pressureMb: Float,
 
+    val pressureInch: Float,
+
     val precipMm: Float,
 
     val precipInch: Float,

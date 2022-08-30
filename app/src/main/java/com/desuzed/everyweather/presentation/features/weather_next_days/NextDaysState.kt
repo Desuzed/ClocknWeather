@@ -2,6 +2,7 @@ package com.desuzed.everyweather.presentation.features.weather_next_days
 
 import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 
@@ -11,4 +12,5 @@ data class NextDaysState(
     val windSpeed: WindSpeed = WindSpeed("", 0, 0),
     val temperature: Temperature = Temperature("", 0, 0),
     val language: Language = Language("", 0, 0),
+    val pressure: Pressure = Pressure("", 0, 0),
 )

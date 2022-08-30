@@ -9,4 +9,5 @@ sealed interface SettingsUserInteraction {
     class ChangeDarkMode(val darkMode: DarkMode) : SettingsUserInteraction
     class ChangeDistanceDimension(val distanceDimen: DistanceDimen) : SettingsUserInteraction
     class ChangeTemperatureDimension(val tempDimen: TempDimen) : SettingsUserInteraction
+    class ChangePressureDimension(val pressureDimen: PressureDimen) : SettingsUserInteraction
 }

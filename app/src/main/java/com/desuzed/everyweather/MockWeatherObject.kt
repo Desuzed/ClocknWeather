@@ -27,6 +27,7 @@ object MockWeatherObject {
             273f,
             100f,
             100f,
+            100f,
             200,
             28.5f,
             28f
@@ -37,7 +38,7 @@ object MockWeatherObject {
                 13231312,
                 Day(27.3f, 21.3f, 100f, 200f, 125f, 125f, 10f, 12f, 13f, 50, 40, "text", "icon"),
                 Astro("11:22", "19:05", "10:00", "11:22"),
-                listOf(Hour(123122545, 20.1f, 20.1f, "text", "ic", 120f, 110f, 22, 543f)),
+                listOf(Hour(123122545, 20.1f, 20.1f, "text", "ic", 120f, 110f, 22, 543f, 550f)),
                 false
             ),
             ForecastDay(
@@ -45,7 +46,7 @@ object MockWeatherObject {
                 13231312,
                 Day(27.3f, 21.3f, 100f, 200f, 125f, 125f, 10f, 12f, 13f, 50, 40, "text", "icon"),
                 Astro("11:22", "19:05", "10:00", "11:22"),
-                listOf(Hour(123122545, 20.1f, 20.1f, "text", "ic", 120f, 110f, 22, 543f)),
+                listOf(Hour(123122545, 20.1f, 20.1f, "text", "ic", 120f, 110f, 22, 543f, 550f)),
                 false
             )
         )

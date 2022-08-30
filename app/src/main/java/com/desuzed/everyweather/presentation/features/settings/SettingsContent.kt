@@ -67,7 +67,7 @@ fun SettingsContent(
                 BoldText(text = stringResource(id = R.string.dimension_settings))
                 SettingsMenuGroupContent(
                     onUserInteraction = onUserInteraction,
-                    items = listOf(state.tempDimen, state.windSpeed)
+                    items = listOf(state.tempDimen, state.windSpeed, state.pressure)
                 )
                 val onDismissCallback: () -> Unit = {
                     onUserInteraction(SettingsUserInteraction.DismissDialog)
@@ -84,6 +84,9 @@ fun SettingsContent(
                     }
                     SettingsType.DARK_MODE -> AppDialog(onDismiss = onDismissCallback) {
                         DarkModePickerContent(onUserInteraction, state.darkTheme)
+                    }
+                    SettingsType.PRESSURE -> AppDialog(onDismiss = onDismissCallback) {
+                        PressurePickerContent(onUserInteraction, state.pressure)
                     }
                     null -> {}
                 }
@@ -302,6 +305,47 @@ fun DistancePickerContent(
                     DistanceDimen.IMPERIAL -> R.string.mph
                     DistanceDimen.METRIC_KMH -> R.string.kmh
                     DistanceDimen.METRIC_MS -> R.string.ms
+                }
+                MediumText(text = stringResource(id = textId))
+            }
+        }
+    }
+}
+
+@Composable
+fun PressurePickerContent(
+    onUserInteraction: (SettingsUserInteraction) -> Unit,
+    selectedItem: Pressure,
+) {
+    val selectedPressure = PressureDimen.valueOf(selectedItem.id)
+    val radioOptions = PressureDimen.values().toList()
+    val indexOfSelected = radioOptions.indexOf(selectedPressure)
+    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[indexOfSelected]) }
+    val onPickMode: (PressureDimen) -> Unit = { pressureDimen ->
+        onOptionSelected(pressureDimen)
+        onUserInteraction(SettingsUserInteraction.ChangePressureDimension(pressureDimen = pressureDimen))
+    }
+    Column {
+        radioOptions.forEach { pressureDimen ->
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .selectable(
+                        role = Role.RadioButton,
+                        selected = (pressureDimen == selectedOption),
+                        onClick = {
+                            onPickMode(pressureDimen)
+                        }
+                    )
+                    .padding(horizontal = 16.dp)
+            ) {
+                AppRadioButton(isSelected = pressureDimen == selectedOption) {
+                    onPickMode(pressureDimen)
+                }
+                val textId = when (pressureDimen) {
+                    PressureDimen.MILLIBAR -> R.string.mb
+                    PressureDimen.MILLIMETERS -> R.string.mmhg
+                    PressureDimen.INCHES -> R.string.inch
                 }
                 MediumText(text = stringResource(id = textId))
             }

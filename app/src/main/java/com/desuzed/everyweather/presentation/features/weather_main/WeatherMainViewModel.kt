@@ -5,6 +5,7 @@ import com.desuzed.everyweather.data.repository.local.SettingsRepository
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
@@ -37,6 +38,7 @@ class WeatherMainViewModel(
         collect(settingsRepository.distanceDimen, ::collectWindSpeed)
         collect(settingsRepository.tempDimen, ::collectTemperature)
         collect(settingsRepository.lang, ::collectLanguage)
+        collect(settingsRepository.pressureDimen, ::collectPressure)
 
         viewModelScope.launch {
             messageFlow.collect {
@@ -145,8 +147,14 @@ class WeatherMainViewModel(
     }
 
     private fun collectWindSpeed(windSpeed: WindSpeed) = setState { copy(windSpeed = windSpeed) }
-    private fun collectLanguage(language: Language) = setState { copy(lang = language) }
-    private fun collectTemperature(temperature: Temperature) =
-        setState { copy(temperature = temperature) }
 
+    private fun collectLanguage(language: Language) = setState { copy(lang = language) }
+
+    private fun collectTemperature(temperature: Temperature) = setState {
+        copy(temperature = temperature)
+    }
+
+    private fun collectPressure(pressure: Pressure) = setState {
+        copy(pressure = pressure)
+    }
 }

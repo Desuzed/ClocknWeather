@@ -4,12 +4,15 @@ import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.DistanceDimen
+import com.desuzed.everyweather.domain.model.settings.Pressure
+import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.presentation.ui.base.DetailCard
 import com.desuzed.everyweather.util.DecimalFormatter
 
 class DetailCardMain(
     windSpeed: WindSpeed,
+    pressureDimen: Pressure,
     response: WeatherResponse,
     res: Resources,
 ) : DetailCard() {
@@ -27,7 +30,6 @@ class DetailCardMain(
         val forecastDay = response.forecastDay[0]
         val astro = forecastDay.astro
         humidity = "${current.humidity}%"
-        pressure = "${current.pressureMb} " + res.getString(R.string.mb)
         val windSpeedDimen = DistanceDimen.valueOf(windSpeed.id.uppercase())
         val windValue: String
         val precipitation: String
@@ -48,6 +50,16 @@ class DetailCardMain(
                 precipitation = "${current.precipInch} " + res.getString(R.string.inch)
             }
         }
+        val pressureDimension = PressureDimen.valueOf(pressureDimen.id.uppercase())
+        val pressureValue = when (pressureDimension) {
+            PressureDimen.MILLIBAR -> current.pressureMb
+            PressureDimen.MILLIMETERS -> {
+                current.pressureMb.times(DecimalFormatter.MBAR_TO_MMHG_MULTIPLIER)
+            }
+            PressureDimen.INCHES -> current.pressureInch
+        }
+        val formattedPressure = DecimalFormatter.formatFloat(pressureValue)
+        pressure = "$formattedPressure " + res.getString(pressureDimen.valueStringId)
         pop = "${forecastDay.day.popRain}%, " + precipitation
         wind = windValue + res.getString(windSpeed.valueStringId)
         sun = "${astro.sunrise}\n${astro.sunset}"

@@ -16,6 +16,7 @@ class CurrentMapper : EntityMapper<CurrentDto, Current> {
             entity.windDegree,
             entity.windDir,
             entity.pressureMb,
+            entity.pressureInch,
             entity.precipMm,
             entity.precipInch,
             entity.humidity,

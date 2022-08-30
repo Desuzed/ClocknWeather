@@ -3,6 +3,7 @@ package com.desuzed.everyweather.data.repository.local
 import android.content.Context
 import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.presentation.ui.main.MainWeatherMapper
@@ -16,6 +17,7 @@ class UiMapper(
     private val windSpeed: WindSpeed,
     private val temperature: Temperature,
     private val language: Language,
+    private val pressure: Pressure,
     context: Context
 ) {
     private val resources = context.resources
@@ -26,7 +28,8 @@ class UiMapper(
                 language = language,
                 windSpeed = windSpeed,
                 temperature = temperature,
-                resources = resources
+                resources = resources,
+                pressure = pressure,
             ).mapToNextDaysList(response)
         }
 
@@ -35,7 +38,8 @@ class UiMapper(
             MainWeatherMapper(
                 resources = resources,
                 windSpeed = windSpeed,
-                temperature = temperature
+                temperature = temperature,
+                pressure = pressure,
             ).mapToMainWeatherUi(response)
         }
 }

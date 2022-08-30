@@ -33,6 +33,9 @@ class CurrentDto {
     @SerializedName("pressure_mb")
     var pressureMb = 0f
 
+    @SerializedName("pressure_in")
+    var pressureInch = 0f
+
     @SerializedName("precip_mm")
     var precipMm = 0f
 

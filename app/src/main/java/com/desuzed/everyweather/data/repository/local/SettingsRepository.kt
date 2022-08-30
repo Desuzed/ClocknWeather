@@ -18,7 +18,7 @@ class SettingsRepository(private val context: Context) {
         preferences[KEY_LANGUAGE] = lang.lang
     }
 
-    val lang: Flow<Language> = getFlowOf(KEY_LANGUAGE, Lang.RU.name).map { langId ->
+    val lang: Flow<Language> = getFlowOf(KEY_LANGUAGE, Lang.RU.lang).map { langId ->
         val langValueId = when (langId) {
             //todo mapping
             "RU" -> R.string.russian
@@ -35,9 +35,11 @@ class SettingsRepository(private val context: Context) {
         preferences[KEY_DISTANCE_DIMENSION] = dimension.dimensionName
     }
 
-    //todo проверить на каком потоке мапится
     val distanceDimen: Flow<WindSpeed> =
-        getFlowOf(KEY_DISTANCE_DIMENSION, DistanceDimen.METRIC_KMH.name).map { distanceDimenId ->
+        getFlowOf(
+            KEY_DISTANCE_DIMENSION,
+            DistanceDimen.METRIC_KMH.dimensionName
+        ).map { distanceDimenId ->
             val distValueId = when (distanceDimenId) {
                 "IMPERIAL" -> R.string.mph
                 "METRIC_MS" -> R.string.ms
@@ -55,7 +57,7 @@ class SettingsRepository(private val context: Context) {
     }
 
     val tempDimen: Flow<Temperature> =
-        getFlowOf(KEY_TEMPERATURE_DIMENSION, TempDimen.CELCIUS.name).map { tempDimenId ->
+        getFlowOf(KEY_TEMPERATURE_DIMENSION, TempDimen.CELCIUS.dimensionName).map { tempDimenId ->
             val tempValueId = when (tempDimenId) { //todo mapping
                 "FAHRENHEIT" -> R.string.fahrenheit
                 else -> R.string.celcius
@@ -67,12 +69,33 @@ class SettingsRepository(private val context: Context) {
             )
         }
 
+    suspend fun setPressureDimension(dimension: PressureDimen) = edit { preferences ->
+        preferences[KEY_PRESSURE_DIMENSION] = dimension.dimensionName
+    }
+
+    val pressureDimen: Flow<Pressure> = getFlowOf(
+        KEY_PRESSURE_DIMENSION,
+        PressureDimen.MILLIMETERS.dimensionName
+    ).map { pressureDimenId ->
+        val pressureValueId = when (pressureDimenId) {
+            "MILLIBAR" -> R.string.mb
+            "INCHES" -> R.string.inch
+            else -> R.string.mmhg
+
+        }
+        Pressure(
+            id = pressureDimenId,
+            categoryStringId = R.string.pressure,
+            valueStringId = pressureValueId,
+        )
+    }
+
     suspend fun setDarkMode(mode: DarkMode) = edit { preferences ->
         preferences[KEY_DARK_MODE] = mode.mode
     }
 
     val darkMode: Flow<DarkTheme> =
-        getFlowOf(KEY_DARK_MODE, DarkMode.SYSTEM.name).map { darkModeId ->
+        getFlowOf(KEY_DARK_MODE, DarkMode.SYSTEM.mode).map { darkModeId ->
             val darkThemeValueId = when (darkModeId) {//todo mapping
                 "ON" -> R.string.on
                 "OFF" -> R.string.off
@@ -95,13 +118,13 @@ class SettingsRepository(private val context: Context) {
     private fun <V> getFlowOf(key: Preferences.Key<V>, defaultValue: V): Flow<V> =
         context.dataStore.data.map { it[key] ?: defaultValue }
 
-
     companion object {
         private const val SETTINGS_PREFS = "settings"
         private val KEY_LANGUAGE = stringPreferencesKey("language")
         private val KEY_DARK_MODE = stringPreferencesKey("dark_mode")
         private val KEY_DISTANCE_DIMENSION = stringPreferencesKey("distance_dimension")
         private val KEY_TEMPERATURE_DIMENSION = stringPreferencesKey("temperature_dimension")
+        private val KEY_PRESSURE_DIMENSION = stringPreferencesKey("pressure_dimension")
     }
 
 }

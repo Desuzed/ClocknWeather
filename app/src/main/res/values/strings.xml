@@ -50,13 +50,14 @@
     <string name="saved">Saved</string>
     <string name="kmh">km/h</string>
     <string name="mm">mm</string>
+    <string name="mmhg">mmHg</string>
     <string name="inch">inch</string>
     <string name="delete">Delete?</string>
-    <string name="mb" translatable="false">mb</string>
+    <string name="mb">mb</string>
     <string name="delimiter" translatable="false">|</string>
     <string name="looking_for_your_location">Looking for your location…</string>
 
-<!--    Settings-->
+<!--    todo Прибраться в строках-->
     <string name="dark_mode">Dark mode</string>
     <string name="language">Language</string>
     <string name="distance_dimension">Wind speed</string>

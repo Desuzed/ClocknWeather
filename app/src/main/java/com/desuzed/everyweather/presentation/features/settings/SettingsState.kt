@@ -7,5 +7,6 @@ data class SettingsState(
     val darkTheme: DarkTheme = DarkTheme("", 0, 0),
     val windSpeed: WindSpeed = WindSpeed("", 0, 0),
     val tempDimen: Temperature = Temperature("", 0, 0),
+    val pressure: Pressure = Pressure("", 0, 0),
     val showDialogType: SettingsType? = null,
 )

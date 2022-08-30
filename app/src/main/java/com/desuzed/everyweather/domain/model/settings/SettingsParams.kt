@@ -5,10 +5,15 @@ enum class SettingsType {
     DARK_MODE,
     DISTANCE,
     TEMP,
+    PRESSURE,
 }
 
 enum class Lang(val lang: String) {
     RU("RU"), EN("EN")
+}
+
+enum class DarkMode(val mode: String) {
+    ON("ON"), OFF("OFF"), SYSTEM("SYSTEM")
 }
 
 enum class TempDimen(val dimensionName: String) {
@@ -21,6 +26,8 @@ enum class DistanceDimen(val dimensionName: String) {
     IMPERIAL("IMPERIAL"),
 }
 
-enum class DarkMode(val mode: String) {
-    ON("ON"), OFF("OFF"), SYSTEM("SYSTEM")
+enum class PressureDimen(val dimensionName: String) {
+    MILLIBAR("MILLIBAR"),
+    MILLIMETERS("MILLIMETERS"),
+    INCHES("INCHES"),
 }

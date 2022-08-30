@@ -2,6 +2,7 @@ package com.desuzed.everyweather.presentation.ui.main
 
 import android.content.res.Resources
 import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.presentation.ui.HourUi
@@ -9,6 +10,7 @@ import com.desuzed.everyweather.presentation.ui.HourUi
 class MainWeatherMapper(
     private val windSpeed: WindSpeed,
     private val temperature: Temperature,
+    private val pressure: Pressure,
     private val resources: Resources
 ) {
 
@@ -31,6 +33,7 @@ class MainWeatherMapper(
             response = response,
             res = resources,
             windSpeed = windSpeed,
+            pressureDimen = pressure,
         )
         return WeatherMainUi(
             mainInfo = weatherMainInfo,

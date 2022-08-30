@@ -17,6 +17,7 @@ class SettingsViewModel(
         collect(settingsRepository.lang, ::collectLanguage)
         collect(settingsRepository.distanceDimen, ::collectWindSpeed)
         collect(settingsRepository.tempDimen, ::collectTemperature)
+        collect(settingsRepository.pressureDimen, ::collectPressure)
     }
 
     fun onUserInteraction(interaction: SettingsUserInteraction) {
@@ -25,6 +26,7 @@ class SettingsViewModel(
             is SettingsUserInteraction.ChangeDarkMode -> onDarkMode(interaction.darkMode)
             is SettingsUserInteraction.ChangeDistanceDimension -> onDistanceDimen(interaction.distanceDimen)
             is SettingsUserInteraction.ChangeTemperatureDimension -> onTemperatureDimen(interaction.tempDimen)
+            is SettingsUserInteraction.ChangePressureDimension -> onPressureDimen(interaction.pressureDimen)
             is SettingsUserInteraction.ShowSettingDialog -> showSettingsDialog(interaction.type)
             SettingsUserInteraction.DismissDialog -> hideDialog()
         }
@@ -69,6 +71,14 @@ class SettingsViewModel(
         }
     }
 
+    private fun onPressureDimen(pressureDimen: PressureDimen) {
+        viewModelScope.launch {
+            settingsRepository.setPressureDimension(pressureDimen)
+            delay(500)
+            hideDialog()
+        }
+    }
+
     private fun collectDarkTheme(darkTheme: DarkTheme) = setState {
         copy(darkTheme = darkTheme)
     }
@@ -84,4 +94,9 @@ class SettingsViewModel(
     private fun collectTemperature(temperature: Temperature) = setState {
         copy(tempDimen = temperature)
     }
+
+    private fun collectPressure(pressure: Pressure) = setState {
+        copy(pressure = pressure)
+    }
+
 }
