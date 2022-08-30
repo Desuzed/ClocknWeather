@@ -1,8 +1,14 @@
 package com.desuzed.everyweather.presentation.features.weather_next_days
 
-import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
+import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.settings.WindSpeed
 
 data class NextDaysState(
-    val nextDaysUiList: List<NextDaysUi> = emptyList(),
-    val isExpanded : Boolean = false,
+    val weather: WeatherResponse? = null,
+    val isExpanded: Boolean = false,
+    val windSpeed: WindSpeed = WindSpeed("", 0, 0),
+    val temperature: Temperature = Temperature("", 0, 0),
+    val language: Language = Language("", 0, 0),
 )

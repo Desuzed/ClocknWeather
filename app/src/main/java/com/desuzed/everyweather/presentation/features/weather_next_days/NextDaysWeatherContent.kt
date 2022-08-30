@@ -23,17 +23,39 @@ import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.ui.elements.*
-import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.data.repository.local.UiMapper
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysMainInfo
-import com.desuzed.everyweather.presentation.ui.next_days.NextDaysMapper
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
+import com.desuzed.everyweather.ui.elements.BoldText
+import com.desuzed.everyweather.ui.elements.CardDetailDayItem
+import com.desuzed.everyweather.ui.elements.HourItemContent
+import com.desuzed.everyweather.ui.elements.RegularText
+import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun NextDaysBottomSheetContent(
     state: NextDaysState,
 ) {
     EveryweatherTheme {
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+        val mappedWeatherUi = remember { mutableStateOf<List<NextDaysUi>?>(null) }
+        coroutineScope.launch {
+            mappedWeatherUi.value = withContext(Dispatchers.IO) {
+                state.weather?.let {
+                    UiMapper(
+                        context = context,
+                        windSpeed = state.windSpeed,
+                        temperature = state.temperature,
+                        language = state.language,
+                    ).mapToNextDaysUi(it)
+                }
+            }
+        }
+
         Surface(
             modifier = Modifier.height(dimensionResource(id = R.dimen.dimen_350)),
             shape = RoundedCornerShape(
@@ -52,12 +74,15 @@ fun NextDaysBottomSheetContent(
                         bottom = dimensionResource(id = R.dimen.dimen_8),
                     )
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                ) { //todo разобраться с паддингами и тенями от карточки
-                    items(items = state.nextDaysUiList) { forecastItem ->
-                        ForecastListItem(dayItem = forecastItem)
+                val nextDaysWeather = mappedWeatherUi.value
+                if (nextDaysWeather != null) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    ) { //todo разобраться с паддингами и тенями от карточки
+                        items(items = nextDaysWeather) { forecastItem ->
+                            ForecastListItem(dayItem = forecastItem)
+                        }
                     }
                 }
             }
@@ -169,11 +194,7 @@ fun MaxMinTempWithImg(nextDaysMainInfo: NextDaysMainInfo, isExpanded: Boolean) {
 @Composable
 private fun PreviewNextDaysBottomSheetContent() {
     val state = NextDaysState(
-        nextDaysUiList = NextDaysMapper(LocalContext.current.resources).mapToNextDaysList(
-            MockWeatherObject.weather
-        )
+        weather = MockWeatherObject.weather
     )
-    NextDaysBottomSheetContent(
-        state,
-    )
+    NextDaysBottomSheetContent(state)
 }

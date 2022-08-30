@@ -8,10 +8,12 @@ class HourMapper : EntityMapper<HourDto, Hour> {
     override fun mapFromEntity(entity: HourDto): Hour {
         return Hour(
             entity.timeEpoch,
-            entity.temp,
+            entity.tempC,
+            entity.tempF,
             entity.conditionDto?.text.toString(),
             entity.conditionDto?.icon.toString(),
-            entity.windSpeed,
+            entity.windSpeedKph,
+            entity.windSpeedMph,
             entity.windDegree,
             entity.pressureMb
         )

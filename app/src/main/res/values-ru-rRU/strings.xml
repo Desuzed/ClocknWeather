@@ -56,5 +56,6 @@
     <string name="on">Включен</string>
     <string name="off">Выключен</string>
     <string name="system">Системный</string>
+    <string name="inch">дюйм</string>
 
 </resources>

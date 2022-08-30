@@ -10,13 +10,19 @@ class CurrentDto {
     var lastUpdated: String = ""
 
     @SerializedName("temp_c")
-    var temp = 0f
+    var tempC = 0f
+
+    @SerializedName("temp_f")
+    var tempF = 0f
 
     @SerializedName("condition")
     var conditionDto: ConditionDto? = null
 
     @SerializedName("wind_kph")
-    var windSpeed = 0f
+    var windSpeedKph = 0f
+
+    @SerializedName("wind_mph")
+    var windSpeedMph = 0f
 
     @SerializedName("wind_degree")
     var windDegree: Int = 0
@@ -30,6 +36,9 @@ class CurrentDto {
     @SerializedName("precip_mm")
     var precipMm = 0f
 
+    @SerializedName("precip_in")
+    var precipInch = 0f
+
     @SerializedName("humidity")
     var humidity: Int = 0
 
@@ -37,7 +46,10 @@ class CurrentDto {
     var cloud: Int = 0
 
     @SerializedName("feelslike_c")
-    var feelsLike = 0f
+    var feelsLikeC = 0f
+
+    @SerializedName("feelslike_f")
+    var feelsLikeF = 0f
 
     @SerializedName("vis_km")
     var vis = 0f

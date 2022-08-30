@@ -3,10 +3,15 @@ package com.desuzed.everyweather.presentation.ui.next_days
 import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.ForecastDay
+import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.TempDimen
+import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 
 class NextDaysMainInfo(
+    language: Language,
+    temperature: Temperature,
     forecastDay: ForecastDay,
     timeZone: String,
     res: Resources,
@@ -23,13 +28,29 @@ class NextDaysMainInfo(
         date = DateFormatter.format(
             pattern = DateFormatter.fullDatePattern,
             timeInMills = forecastDay.dateEpoch,
-            timeZone = timeZone
+            timeZone = timeZone,
+            lang = language.id.lowercase(),
         )
         description = day.text
-        maxTemp = day.maxTemp.roundToInt().toString() + res.getString(
+
+        val maxTemperature: Float
+        val minTemperature: Float
+        val id = temperature.id.uppercase()
+        val tempDimen = TempDimen.valueOf(id)
+        when (tempDimen) {
+            TempDimen.CELCIUS -> {
+                maxTemperature = day.maxTempC
+                minTemperature = day.minTempC
+            }
+            TempDimen.FAHRENHEIT -> {
+                maxTemperature = day.maxTempF
+                minTemperature = day.minTempF
+            }
+        }
+        maxTemp = maxTemperature.roundToInt().toString() + res.getString(
             R.string.dot_temperature
         )
-        minTemp = day.minTemp.roundToInt().toString() + res.getString(
+        minTemp = minTemperature.roundToInt().toString() + res.getString(
             R.string.dot_temperature
         )
     }

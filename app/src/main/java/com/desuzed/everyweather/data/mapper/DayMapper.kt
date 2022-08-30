@@ -7,10 +7,14 @@ import com.desuzed.everyweather.util.EntityMapper
 class DayMapper : EntityMapper<DayDto, Day> {
     override fun mapFromEntity(entity: DayDto): Day {
         return Day(
-            entity.maxTemp,
-            entity.minTemp,
-            entity.maxWind,
-            entity.totalPrecip,
+            entity.maxTempC,
+            entity.maxTempF,
+            entity.minTempC,
+            entity.minTempF,
+            entity.maxWindKph,
+            entity.maxWindMph,
+            entity.totalPrecipMm,
+            entity.totalPrecipInch,
             entity.avgHumidity,
             entity.popRain,
             entity.popSnow,

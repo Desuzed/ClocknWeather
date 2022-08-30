@@ -1,19 +1,27 @@
 package com.desuzed.everyweather.domain.model
 
 class Day(
-    val maxTemp : Float,
+    val maxTempC: Float,
 
-    val minTemp : Float,
+    val maxTempF: Float,
 
-    val maxWind : Float,
+    val minTempC: Float,
 
-    val totalPrecip : Float,
+    val minTempF: Float,
 
-    val avgHumidity : Float,
+    val maxWindKph: Float,
+
+    val maxWindMph: Float,
+
+    val totalPrecipMm: Float,
+
+    val totalPrecipInch: Float,
+
+    val avgHumidity: Float,
 
     val popRain: Int,
 
-    val popSnow: Int ,
+    val popSnow: Int,
 
     val text: String,
 

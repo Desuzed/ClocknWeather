@@ -1,13 +1,16 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import com.desuzed.everyweather.domain.model.WeatherResponse
-import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
+import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.settings.WindSpeed
 
 data class WeatherState(
     val weatherData: WeatherResponse? = null,
-    val weatherUi: WeatherMainUi? = null,
     val isAddButtonEnabled: Boolean = false,
     val isLoading: Boolean = true,
     val query: String = "",
-    val lang: String = "ru",
+    val lang: Language = Language("", 0, 0),
+    val windSpeed: WindSpeed = WindSpeed("", 0, 0),
+    val temperature: Temperature = Temperature("", 0, 0),
 )

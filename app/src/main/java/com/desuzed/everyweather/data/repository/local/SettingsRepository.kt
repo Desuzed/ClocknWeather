@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.map
 
 class SettingsRepository(private val context: Context) {
     private val Context.dataStore by preferencesDataStore(name = SETTINGS_PREFS)
-    private val res = context.resources
 
     suspend fun setLanguage(lang: Lang) = edit { preferences ->
         preferences[KEY_LANGUAGE] = lang.lang

@@ -1,25 +1,38 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.domain.model.Day
-import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 
 class DayDto {
 
     @SerializedName("maxtemp_c")
-    var maxTemp = 0f
+    var maxTempC = 0f
+
+    @SerializedName("maxtemp_f")
+    var maxTempF = 0f
 
     @SerializedName("mintemp_c")
-    var minTemp = 0f
+    var minTempC = 0f
+
+    @SerializedName("mintemp_f")
+    var minTempF = 0f
 
     @SerializedName("avgtemp_c")
-    var avgTemp = 0f
+    var avgTempC = 0f
+
+    @SerializedName("avgtemp_f")
+    var avgTempF = 0f
 
     @SerializedName("maxwind_kph")
-    var maxWind = 0f
+    var maxWindKph = 0f
+
+    @SerializedName("maxwind_mph")
+    var maxWindMph = 0f
 
     @SerializedName("totalprecip_mm")
-    var totalPrecip = 0f
+    var totalPrecipMm = 0f
+
+    @SerializedName("totalprecip_in")
+    var totalPrecipInch = 0f
 
     @SerializedName("avgvis_km")
     var avgVis = 0f

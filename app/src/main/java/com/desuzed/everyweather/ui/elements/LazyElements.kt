@@ -20,8 +20,10 @@ import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
-import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.presentation.ui.HourUi
+import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
 @Composable
 fun HourItemContent(hourItem: HourUi) {
@@ -126,9 +128,11 @@ fun PreviewLocationItemContent() {
 private fun PreviewHourItemContent() {
     HourItemContent(
         HourUi(
-            MockWeatherObject.weather.forecastDay[0].hourForecast[0],
-            MockWeatherObject.weather.location.timezone,
-            LocalContext.current.resources
+            windSpeed = WindSpeed("", 0, 0),
+            temperature = Temperature("", 0, 0),
+            hour = MockWeatherObject.weather.forecastDay[0].hourForecast[0],
+            timeZone = MockWeatherObject.weather.location.timezone,
+            res = LocalContext.current.resources
         )
     )
 }

@@ -4,7 +4,6 @@ import androidx.room.Room
 import com.desuzed.everyweather.data.repository.local.RoomProviderImpl
 import com.desuzed.everyweather.data.repository.local.SettingsRepository
 import com.desuzed.everyweather.data.repository.local.SharedPrefsProviderImpl
-import com.desuzed.everyweather.data.repository.local.UiMapper
 import com.desuzed.everyweather.data.repository.remote.RemoteDataSourceImpl
 import com.desuzed.everyweather.data.room.RoomDbApp
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
@@ -32,10 +31,6 @@ val localDataSourceModule = module {
 
     single<SharedPrefsProvider> {
         SharedPrefsProviderImpl(androidApplication())
-    }
-
-    single {
-        UiMapper(androidApplication())
     }
 
     single<RemoteDataSource> {

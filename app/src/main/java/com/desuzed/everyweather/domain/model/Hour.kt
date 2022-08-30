@@ -3,13 +3,17 @@ package com.desuzed.everyweather.domain.model
 data class Hour(
     val timeEpoch: Long,
 
-    val temp: Float,
+    val tempC: Float,
+
+    val tempF: Float,
 
     val text: String,
 
     val icon: String,
 
-    val windSpeed: Float,
+    val windSpeedKmh: Float,
+
+    val windSpeedMph: Float,
 
     val windDegree: Int,
 

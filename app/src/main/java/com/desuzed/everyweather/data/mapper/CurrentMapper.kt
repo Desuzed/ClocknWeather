@@ -7,16 +7,20 @@ import com.desuzed.everyweather.util.EntityMapper
 class CurrentMapper : EntityMapper<CurrentDto, Current> {
     override fun mapFromEntity(entity: CurrentDto): Current {
         return Current(
-            entity.temp,
+            entity.tempC,
+            entity.tempF,
             entity.conditionDto?.text.toString(),
             entity.conditionDto?.icon.toString(),
-            entity.windSpeed,
+            entity.windSpeedKph,
+            entity.windSpeedMph,
             entity.windDegree,
             entity.windDir,
             entity.pressureMb,
             entity.precipMm,
+            entity.precipInch,
             entity.humidity,
-            entity.feelsLike
+            entity.feelsLikeC,
+            entity.feelsLikeF,
         )
     }
 }

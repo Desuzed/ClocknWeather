@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Card
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,14 +21,17 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.data.repository.local.UiMapper
+import com.desuzed.everyweather.presentation.ui.main.WeatherMainInfoUi
+import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.ui.elements.*
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.toIntDp
-import com.desuzed.everyweather.presentation.ui.main.MainWeatherMapper
-import com.desuzed.everyweather.presentation.ui.main.WeatherMainInfoUi
-import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Preview(
     showBackground = true,
@@ -40,15 +43,13 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 private fun PreviewWeatherMainContent() {
     WeatherMainContent(
         state = WeatherState(
-            weatherUi = MainWeatherMapper(resources = LocalContext.current.resources).mapToMainWeatherUi(
-                MockWeatherObject.weather
-            )
+            weatherData = MockWeatherObject.weather,
         ),
         onUserInteraction = {},
     )
 }
 
-
+//todo убрать заглушку с при первом входе приложения
 @Composable
 fun WeatherMainContent(
     state: WeatherState,
@@ -57,24 +58,40 @@ fun WeatherMainContent(
     EveryweatherTheme {
         val refreshingState = rememberSwipeRefreshState(isRefreshing = state.isLoading)
         val fabSize = dimensionResource(id = R.dimen.dimen_50)
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+        val mappedWeatherUi = remember { mutableStateOf<WeatherMainUi?>(null) }
+        coroutineScope.launch {
+            mappedWeatherUi.value = withContext(Dispatchers.IO) {
+                state.weatherData?.let {
+                    UiMapper(
+                        context = context,
+                        language = state.lang,
+                        windSpeed = state.windSpeed,
+                        temperature = state.temperature
+                    ).mapToMainWeatherUi(it)
+                }
+            }
+        }
         Box(modifier = Modifier.fillMaxSize()) {
             var fabPadding by remember { mutableStateOf(0.dp) }
             SwipeRefresh(
                 state = refreshingState,
                 onRefresh = { onUserInteraction(WeatherUserInteraction.Refresh) },
             ) {
-                if (state.weatherUi != null) {
+                val weatherUi = mappedWeatherUi.value
+                if (weatherUi != null) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
                         WeatherHeaderInfo(
-                            state.weatherUi.mainInfo,
+                            weatherUi.mainInfo,
                             onUserInteraction
                         ) { headerHeight ->
                             fabPadding = headerHeight.toIntDp.dp - fabSize / 2
                         }
-                        BottomDetailWeather(state.weatherUi, onUserInteraction)
+                        BottomDetailWeather(weatherUi, onUserInteraction)
                     }
                     if (state.isAddButtonEnabled) {
                         FloatingButton(

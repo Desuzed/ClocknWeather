@@ -29,7 +29,6 @@ val viewModelModule = module {
     viewModel {
         WeatherMainViewModel(
             useCase = get(),
-            uiMapper = get(),
             sharedPrefsProvider = get(),
             actionResultProvider = get(),
             roomProvider = get(),
@@ -39,7 +38,7 @@ val viewModelModule = module {
     viewModel {
         NextDaysViewModel(
             sharedPrefsProvider = get(),
-            uiMapper = get(),
+            settingsRepository = get(),
         )
     }
 

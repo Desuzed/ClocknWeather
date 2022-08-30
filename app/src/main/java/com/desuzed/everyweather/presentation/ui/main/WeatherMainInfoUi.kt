@@ -3,10 +3,16 @@ package com.desuzed.everyweather.presentation.ui.main
 import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.domain.model.settings.TempDimen
+import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 
-class WeatherMainInfoUi(response: WeatherResponse, res: Resources) {
+class WeatherMainInfoUi(
+    temperature: Temperature,
+    response: WeatherResponse,
+    res: Resources,
+) {
 
     private val localTime = response.location.localtimeEpoch
 
@@ -34,9 +40,24 @@ class WeatherMainInfoUi(response: WeatherResponse, res: Resources) {
             timeZone = timeZone
         )
         geoText = response.location.toString()
-        currentTemp = current.temp.roundToInt().toString() + res.getString(R.string.dot_temperature)
+        val currentTemperature: Float
+        val feelsLikeTemperature: Float
+        val id = temperature.id.uppercase()
+        val tempDimen = TempDimen.valueOf(id)
+        when (tempDimen) {
+            TempDimen.CELCIUS -> {
+                currentTemperature = current.tempC
+                feelsLikeTemperature = current.feelsLikeC
+            }
+            TempDimen.FAHRENHEIT -> {
+                currentTemperature = current.tempF
+                feelsLikeTemperature = current.feelsLikeF
+            }
+        }
+        currentTemp =
+            currentTemperature.roundToInt().toString() + res.getString(R.string.dot_temperature)
         description = current.text
-        feelsLike = res.getString(R.string.feels_like) + " ${current.feelsLike.roundToInt()}" +
+        feelsLike = res.getString(R.string.feels_like) + " ${feelsLikeTemperature.roundToInt()}" +
                 res.getString(R.string.dot_temperature)
     }
 }

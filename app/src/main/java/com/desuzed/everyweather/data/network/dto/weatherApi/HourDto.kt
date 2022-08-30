@@ -11,13 +11,19 @@ class HourDto {
     var time: String = ""
 
     @SerializedName("temp_c")
-    var temp = 0f
+    var tempC = 0f
+
+    @SerializedName("temp_f")
+    var tempF = 0f
 
     @SerializedName("condition")
     var conditionDto: ConditionDto? = null
 
     @SerializedName("wind_kph")
-    var windSpeed = 0f
+    var windSpeedKph = 0f
+
+    @SerializedName("wind_mph")
+    var windSpeedMph = 0f
 
     @SerializedName("wind_degree")
     var windDegree: Int = 0
@@ -25,6 +31,7 @@ class HourDto {
     @SerializedName("wind_dir")
     var windDir: String = ""
 
+    //todo handle settings
     @SerializedName("pressure_mb")
     var pressureMb = 0f
 

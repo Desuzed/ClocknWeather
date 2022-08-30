@@ -1,32 +1,32 @@
 package com.desuzed.everyweather.presentation.features.weather_next_days
 
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.data.repository.local.UiMapper
-import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.data.repository.local.SettingsRepository
+import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
-import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class NextDaysViewModel(
     private val sharedPrefsProvider: SharedPrefsProvider,
-    private val uiMapper: UiMapper,
+    settingsRepository: SettingsRepository,
 ) :
     BaseViewModel<NextDaysState, NextDaysAction>(NextDaysState()) {
     init {
+        collect(settingsRepository.distanceDimen, ::collectWindSpeed)
+        collect(settingsRepository.tempDimen, ::collectTemperature)
+        collect(settingsRepository.lang, ::collectLanguage)
+
         viewModelScope.launch {
             val cachedForecast = sharedPrefsProvider.loadForecastFromCache()
-            if (cachedForecast != null) {
-                val list = mapToUi(cachedForecast)
-                setState { copy(nextDaysUiList = list) }
-            }
+            setState { copy(weather = cachedForecast) }
         }
     }
 
-    private suspend fun mapToUi(weatherResponse: WeatherResponse): List<NextDaysUi> =
-        withContext(Dispatchers.IO) {
-            uiMapper.mapToNextDaysUi(weatherResponse)
-        }
+    private fun collectWindSpeed(windSpeed: WindSpeed) = setState { copy(windSpeed = windSpeed) }
+    private fun collectLanguage(language: Language) = setState { copy(language = language) }
+    private fun collectTemperature(temperature: Temperature) =
+        setState { copy(temperature = temperature) }
 }

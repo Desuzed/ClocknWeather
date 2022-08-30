@@ -4,10 +4,16 @@ import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.Hour
 import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.domain.model.settings.DistanceDimen
+import com.desuzed.everyweather.domain.model.settings.TempDimen
+import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 
 class HourUi(
+    windSpeed: WindSpeed,
+    temperature: Temperature,
     hour: Hour,
     timeZone: String,
     res: Resources
@@ -25,8 +31,20 @@ class HourUi(
             timeInMills = hour.timeEpoch,
             timeZone = timeZone,
         )
-        temp = hour.temp.roundToInt().toString() + res.getString(R.string.dot_temperature)
-        wind = "${hour.windSpeed.toInt()} " + res.getString(R.string.kmh)
+
+        //todo ТУТ
+        val tempDimen = TempDimen.valueOf(temperature.id.uppercase())
+        val tempHour = when (tempDimen) {
+            TempDimen.CELCIUS -> hour.tempC.roundToInt()
+            TempDimen.FAHRENHEIT -> hour.tempF.roundToInt()
+        }
+        temp = tempHour.toString() + res.getString(R.string.dot_temperature)
+        val windSpeedDimen = DistanceDimen.valueOf(windSpeed.id.uppercase())
+        val windHour = when (windSpeedDimen) {
+            DistanceDimen.METRIC -> hour.windSpeedKmh.toInt()
+            DistanceDimen.IMPERIAL -> hour.windSpeedMph.toInt()
+        }
+        wind = "$windHour " + res.getString(windSpeed.valueStringId)
         iconUrl = "https:${hour.icon}"
         rotation = hour.windDegree.toFloat() - 180
     }

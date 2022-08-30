@@ -21,4 +21,11 @@ object DateFormatter {
         formatter.timeZone = TimeZone.getTimeZone(timeZone)
         return formatter.format(timeInMills.times(1000))
     }
+
+    fun format(pattern: String, timeInMills: Long, timeZone: String, lang: String): String {
+        val formatter = SimpleDateFormat(pattern, Locale(lang))
+        formatter.timeZone = TimeZone.getTimeZone(timeZone)
+        return formatter.format(timeInMills.times(1000))
+    }
+
 }

@@ -2,9 +2,11 @@ package com.desuzed.everyweather.presentation.features.weather_main
 
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.data.repository.local.SettingsRepository
-import com.desuzed.everyweather.data.repository.local.UiMapper
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
@@ -15,7 +17,6 @@ import kotlinx.coroutines.launch
 
 class WeatherMainViewModel(
     private val useCase: WeatherMainUseCase,
-    private val uiMapper: UiMapper,
     private val sharedPrefsProvider: SharedPrefsProvider,
     private val actionResultProvider: ActionResultProvider,
     private val roomProvider: RoomProvider,
@@ -33,9 +34,9 @@ class WeatherMainViewModel(
         getCachedForecast()
         loadCachedQuery()
 
-        collect(settingsRepository.lang) { language ->
-            setState { copy(lang = language.id) }
-        }
+        collect(settingsRepository.distanceDimen, ::collectWindSpeed)
+        collect(settingsRepository.tempDimen, ::collectTemperature)
+        collect(settingsRepository.lang, ::collectLanguage)
 
         viewModelScope.launch {
             messageFlow.collect {
@@ -47,16 +48,15 @@ class WeatherMainViewModel(
     fun getForecast(query: String) {
         viewModelScope.launch {
             setState { copy(isLoading = true, query = query) }
-            val fetchedForecast = useCase.fetchForecastOrErrorMessage(query, state.value.lang)
+            val fetchedForecast =
+                useCase.fetchForecastOrErrorMessage(query, state.value.lang.id.lowercase())
             val weatherResponse = fetchedForecast.weatherResponse
             val message = fetchedForecast.message
             if (weatherResponse != null) {
                 val isLocationSaved = isLocationSaved(weatherResponse)
-                val weatherUi = uiMapper.mapToMainWeatherUi(weatherResponse)
                 setState {
                     copy(
                         weatherData = weatherResponse,
-                        weatherUi = weatherUi,
                         isLoading = false,
                         isAddButtonEnabled = !isLocationSaved,
                     )
@@ -125,12 +125,10 @@ class WeatherMainViewModel(
             setState { copy(isLoading = true) }
             val result = sharedPrefsProvider.loadForecastFromCache()
             if (result != null) {
-                val weatherUi = uiMapper.mapToMainWeatherUi(result)
                 val isLocationSaved = isLocationSaved(result)
                 setState {
                     copy(
                         isAddButtonEnabled = !isLocationSaved,
-                        weatherUi = weatherUi,
                         weatherData = result,
                         isLoading = false
                     )
@@ -145,5 +143,10 @@ class WeatherMainViewModel(
         val query = sharedPrefsProvider.loadQuery()
         setState { copy(query = query) }
     }
+
+    private fun collectWindSpeed(windSpeed: WindSpeed) = setState { copy(windSpeed = windSpeed) }
+    private fun collectLanguage(language: Language) = setState { copy(lang = language) }
+    private fun collectTemperature(temperature: Temperature) =
+        setState { copy(temperature = temperature) }
 
 }

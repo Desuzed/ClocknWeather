@@ -50,6 +50,7 @@
     <string name="saved">Saved</string>
     <string name="kmh">km/h</string>
     <string name="mm">mm</string>
+    <string name="inch">inch</string>
     <string name="delete">Delete?</string>
     <string name="mb" translatable="false">mb</string>
     <string name="delimiter" translatable="false">|</string>

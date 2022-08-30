@@ -1,13 +1,17 @@
 package com.desuzed.everyweather.domain.model
 
 class Current(
-    val temp: Float,
+    val tempC: Float,
+
+    val tempF: Float,
 
     val text: String,
 
     val icon: String,
 
-    val windSpeed: Float,
+    val windSpeedKph: Float,
+
+    val windSpeedMph: Float,
 
     val windDegree: Int,
 
@@ -17,10 +21,11 @@ class Current(
 
     val precipMm: Float,
 
+    val precipInch: Float,
+
     val humidity: Int,
 
-    val feelsLike: Float
-) {
+    val feelsLikeC: Float,
 
-
-}
+    val feelsLikeF: Float
+)
