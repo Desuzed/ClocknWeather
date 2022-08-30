@@ -57,5 +57,6 @@
     <string name="off">Выключен</string>
     <string name="system">Системный</string>
     <string name="inch">дюйм</string>
+    <string name="ms">м/с</string>
 
 </resources>

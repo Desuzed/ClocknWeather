@@ -15,9 +15,10 @@ enum class TempDimen(val dimensionName: String) {
     FAHRENHEIT("FAHRENHEIT"), CELCIUS("CELCIUS")
 }
 
-//todo метры в секунду переводить в километры в секунду на стороне мобилы, также с милями
 enum class DistanceDimen(val dimensionName: String) {
-    METRIC("METRIC"), IMPERIAL("IMPERIAL")
+    METRIC_KMH("METRIC_KMH"),
+    METRIC_MS("METRIC_MS"),
+    IMPERIAL("IMPERIAL"),
 }
 
 enum class DarkMode(val mode: String) {

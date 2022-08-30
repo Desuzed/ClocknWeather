@@ -3,7 +3,6 @@ package com.desuzed.everyweather.util
 import android.content.Context
 import android.content.res.Resources.getSystem
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -79,7 +78,6 @@ fun Context.setAppLocale(language: String): Context {
     val config = resources.configuration
     config.setLocale(locale)
     config.setLayoutDirection(locale)
-    Log.i("MainActivity", "setAppLocale: ${language}, $locale")
     return createConfigurationContext(config)
 }
 

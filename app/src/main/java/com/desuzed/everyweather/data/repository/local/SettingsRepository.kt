@@ -37,9 +37,10 @@ class SettingsRepository(private val context: Context) {
 
     //todo проверить на каком потоке мапится
     val distanceDimen: Flow<WindSpeed> =
-        getFlowOf(KEY_DISTANCE_DIMENSION, DistanceDimen.METRIC.name).map { distanceDimenId ->
+        getFlowOf(KEY_DISTANCE_DIMENSION, DistanceDimen.METRIC_KMH.name).map { distanceDimenId ->
             val distValueId = when (distanceDimenId) {
                 "IMPERIAL" -> R.string.mph
+                "METRIC_MS" -> R.string.ms
                 else -> R.string.kmh
             }
             WindSpeed(

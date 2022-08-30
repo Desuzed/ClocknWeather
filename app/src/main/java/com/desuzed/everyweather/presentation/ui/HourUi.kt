@@ -9,6 +9,7 @@ import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.util.DateFormatter
+import com.desuzed.everyweather.util.DecimalFormatter
 import kotlin.math.roundToInt
 
 class HourUi(
@@ -32,7 +33,6 @@ class HourUi(
             timeZone = timeZone,
         )
 
-        //todo ТУТ
         val tempDimen = TempDimen.valueOf(temperature.id.uppercase())
         val tempHour = when (tempDimen) {
             TempDimen.CELCIUS -> hour.tempC.roundToInt()
@@ -41,10 +41,12 @@ class HourUi(
         temp = tempHour.toString() + res.getString(R.string.dot_temperature)
         val windSpeedDimen = DistanceDimen.valueOf(windSpeed.id.uppercase())
         val windHour = when (windSpeedDimen) {
-            DistanceDimen.METRIC -> hour.windSpeedKmh.toInt()
-            DistanceDimen.IMPERIAL -> hour.windSpeedMph.toInt()
+            DistanceDimen.METRIC_KMH -> hour.windSpeedKmh
+            DistanceDimen.METRIC_MS -> hour.windSpeedKmh.times(DecimalFormatter.KPH_TO_MS_MULTIPLIER)
+            DistanceDimen.IMPERIAL -> hour.windSpeedMph
         }
-        wind = "$windHour " + res.getString(windSpeed.valueStringId)
+        val formattedWindSpeed = DecimalFormatter.formatFloat(windHour)
+        wind = "$formattedWindSpeed " + res.getString(windSpeed.valueStringId)
         iconUrl = "https:${hour.icon}"
         rotation = hour.windDegree.toFloat() - 180
     }

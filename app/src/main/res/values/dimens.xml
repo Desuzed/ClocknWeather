@@ -15,5 +15,5 @@
     <dimen name="dimen_210">210dp</dimen>
     <dimen name="dimen_350">350dp</dimen>
     <dimen name="corner_radius_16">16dp</dimen>
-    <dimen name="corner_radius_30">16dp</dimen>
+    <dimen name="corner_radius_30">30dp</dimen>
 </resources>

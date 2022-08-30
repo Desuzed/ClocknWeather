@@ -4,12 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.desuzed.everyweather.domain.model.Location
-import com.desuzed.everyweather.domain.model.UserLatLng
-import com.desuzed.everyweather.util.EntityMapper
-import java.math.RoundingMode
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.*
+import com.desuzed.everyweather.util.DecimalFormatter
 
 @Entity(tableName = "favorite_location_table")
 data class FavoriteLocationDto(
@@ -33,12 +28,11 @@ data class FavoriteLocationDto(
 
     companion object {
         fun generateKey(location: Location): String {
-            val df = DecimalFormat("#.#", DecimalFormatSymbols(Locale.ENGLISH))
-            df.roundingMode = RoundingMode.CEILING
-            return "${df.format(location.lat)},${df.format(location.lon)}"
+            val lat = DecimalFormatter.formatFloatWithRoundingMode(location.lat)
+            val lon = DecimalFormatter.formatFloatWithRoundingMode(location.lon)
+            return "$lat,$lon"
         }
 
-        //TODO Bug : На разных языках ставит либо точку либо запятую, хотя данные с апи приходят через точку
         fun buildFavoriteLocationObj(location: Location): FavoriteLocationDto {
             return FavoriteLocationDto(
                 generateKey(location),

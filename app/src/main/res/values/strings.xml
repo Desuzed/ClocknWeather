@@ -66,6 +66,7 @@
     <string name="english">English</string>
     <string name="russian">Russian</string>
     <string name="mph">mph</string>
+    <string name="ms">m/s</string>
     <string name="on">ON</string>
     <string name="off">OFF</string>
     <string name="system">System</string>

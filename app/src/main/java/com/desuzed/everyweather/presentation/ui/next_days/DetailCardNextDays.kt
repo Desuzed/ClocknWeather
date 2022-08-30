@@ -6,6 +6,7 @@ import com.desuzed.everyweather.domain.model.ForecastDay
 import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.presentation.ui.base.DetailCard
+import com.desuzed.everyweather.util.DecimalFormatter
 
 class DetailCardNextDays(
     windSpeed: WindSpeed,
@@ -28,8 +29,14 @@ class DetailCardNextDays(
         val windValue: String
         val precipitation: String
         when (windSpeedDimen) {
-            DistanceDimen.METRIC -> {
+            DistanceDimen.METRIC_KMH -> {
                 windValue = "${day.maxWindKph} "
+                precipitation = "${day.totalPrecipMm} " + res.getString(R.string.mm)
+            }
+            DistanceDimen.METRIC_MS -> {
+                val decimalWindHour = day.maxWindKph.times(DecimalFormatter.KPH_TO_MS_MULTIPLIER)
+                val formattedWindSpeed = DecimalFormatter.formatFloat(decimalWindHour)
+                windValue = "$formattedWindSpeed "
                 precipitation = "${day.totalPrecipMm} " + res.getString(R.string.mm)
             }
             DistanceDimen.IMPERIAL -> {

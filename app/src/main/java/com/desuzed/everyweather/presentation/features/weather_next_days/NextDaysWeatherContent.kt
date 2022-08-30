@@ -44,7 +44,7 @@ fun NextDaysBottomSheetContent(
         val coroutineScope = rememberCoroutineScope()
         val mappedWeatherUi = remember { mutableStateOf<List<NextDaysUi>?>(null) }
         coroutineScope.launch {
-            mappedWeatherUi.value = withContext(Dispatchers.IO) {
+            mappedWeatherUi.value = withContext(Dispatchers.Default) {
                 state.weather?.let {
                     UiMapper(
                         context = context,

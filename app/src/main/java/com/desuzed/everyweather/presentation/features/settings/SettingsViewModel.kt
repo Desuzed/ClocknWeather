@@ -41,7 +41,6 @@ class SettingsViewModel(
     private fun onDarkMode(darkMode: DarkMode) {
         viewModelScope.launch {
             settingsRepository.setDarkMode(darkMode)
-            delay(500)
             hideDialog()
         }
     }

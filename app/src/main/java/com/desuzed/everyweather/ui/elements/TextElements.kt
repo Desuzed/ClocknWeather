@@ -3,12 +3,18 @@ package com.desuzed.everyweather.ui.elements
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -73,6 +79,8 @@ fun MediumText(
     modifier: Modifier = Modifier,
     color: Color = EveryweatherTheme.colors.textColorPrimary,
     overflow: TextOverflow = TextOverflow.Ellipsis,
+    maxLines: Int = 1,
+    textAlign: TextAlign? = null,
 ) {
     Text(
         modifier = modifier,
@@ -80,7 +88,8 @@ fun MediumText(
         style = EveryweatherTheme.typography.textMedium,
         color = color,
         overflow = overflow,
-        maxLines = 1,
+        maxLines = maxLines,
+        textAlign = textAlign,
     )
 }
 

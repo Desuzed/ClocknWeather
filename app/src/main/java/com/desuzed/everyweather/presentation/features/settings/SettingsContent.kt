@@ -299,8 +299,9 @@ fun DistancePickerContent(
                     onPickMode(distanceDimension)
                 }
                 val textId = when (distanceDimension) {
-                    DistanceDimen.METRIC -> R.string.kmh
                     DistanceDimen.IMPERIAL -> R.string.mph
+                    DistanceDimen.METRIC_KMH -> R.string.kmh
+                    DistanceDimen.METRIC_MS -> R.string.ms
                 }
                 MediumText(text = stringResource(id = textId))
             }

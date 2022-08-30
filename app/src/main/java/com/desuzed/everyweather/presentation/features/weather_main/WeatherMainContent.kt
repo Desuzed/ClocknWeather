@@ -16,6 +16,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -62,7 +63,7 @@ fun WeatherMainContent(
         val coroutineScope = rememberCoroutineScope()
         val mappedWeatherUi = remember { mutableStateOf<WeatherMainUi?>(null) }
         coroutineScope.launch {
-            mappedWeatherUi.value = withContext(Dispatchers.IO) {
+            mappedWeatherUi.value = withContext(Dispatchers.Default) {
                 state.weatherData?.let {
                     UiMapper(
                         context = context,
@@ -183,6 +184,8 @@ fun WeatherHeaderInfo(
             MediumText(
                 text = mainInfoUi.description,
                 color = EveryweatherTheme.colors.textColorSecondary,
+                maxLines = 2,
+                textAlign = TextAlign.End
             )
         }
     }
