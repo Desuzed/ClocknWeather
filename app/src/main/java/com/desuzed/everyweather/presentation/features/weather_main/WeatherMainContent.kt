@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.repository.local.UiMapper
+import com.desuzed.everyweather.data.mapper.UiMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainInfoUi
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.ui.elements.*
@@ -50,7 +50,6 @@ private fun PreviewWeatherMainContent() {
     )
 }
 
-//todo убрать заглушку с при первом входе приложения
 @Composable
 fun WeatherMainContent(
     state: WeatherState,
@@ -108,14 +107,14 @@ fun WeatherMainContent(
                         )
                     }
                 } else {
-                   // if (!refreshingState.isRefreshing) {
+                    if (!state.isLoading) {
                         EmptyWeatherCard(
                             modifier = Modifier
                                 .align(Alignment.Center)
                                 .verticalScroll(rememberScrollState()),
                             onUserInteraction = onUserInteraction,
                         )
-                  //  }
+                    }
                 }
             }
         }
@@ -152,7 +151,7 @@ fun WeatherHeaderInfo(
             ) {
                 Image(
                     modifier = Modifier
-                        .height(dimensionResource(id = R.dimen.dimen_60))      //todo разобраться с размерами
+                        .height(dimensionResource(id = R.dimen.dimen_60))
                         .width(dimensionResource(id = R.dimen.dimen_60)),
                     alignment = Alignment.CenterEnd,
                     painter = rememberAsyncImagePainter(mainInfoUi.iconUrl),

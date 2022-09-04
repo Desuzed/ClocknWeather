@@ -6,5 +6,6 @@ sealed interface LocationMainAction{
     class NavigateToWeather(val query: String, val key: String): LocationMainAction
     object MyLocation: LocationMainAction
     object ShowMapFragment: LocationMainAction
-    object NavigateToSettings: LocationMainAction
+    object NavigateToSettings : LocationMainAction
+    object NavigateBack : LocationMainAction
 }

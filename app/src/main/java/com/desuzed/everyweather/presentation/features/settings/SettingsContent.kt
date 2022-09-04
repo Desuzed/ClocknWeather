@@ -4,8 +4,11 @@ import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,6 +19,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
@@ -30,18 +34,18 @@ import com.desuzed.everyweather.ui.theming.EveryweatherTheme
     name = "PreviewLocationMainContent"
 )
 @Composable
-private fun PreviewWeatherMainContent() {
+private fun PreviewSettingsContent() {
     SettingsContent(
         state = SettingsState(),
         onUserInteraction = {},
     )
 }
-
+//todo history weather
 //todo contact to developer
-//todo powered by
 //todo locationHandling
 //todo change theme?????
 //todo notifications
+//todo delete all cache
 @Composable
 fun SettingsContent(
     state: SettingsState,
@@ -51,20 +55,47 @@ fun SettingsContent(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    top = dimensionResource(id = R.dimen.dimen_20),
-                    start = dimensionResource(id = R.dimen.dimen_4),
-                    end = dimensionResource(id = R.dimen.dimen_4),
-                    bottom = dimensionResource(id = R.dimen.dimen_8),
-                )
+                .padding(dimensionResource(id = R.dimen.dimen_10))
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                BoldText(text = stringResource(id = R.string.app_settings))
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+            ) {
+                Box(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.dimen_10))) {
+                    LargeBoldText(
+                        text = stringResource(id = R.string.settings),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                    IconButton(
+                        modifier = Modifier.size(dimensionResource(id = R.dimen.dimen_34)).padding(start = dimensionResource(id = R.dimen.dimen_10)),
+                        onClick = { onUserInteraction(SettingsUserInteraction.OnBackClick) },
+                        content = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_round_arrow_back),
+                                contentDescription = "",
+                                tint = EveryweatherTheme.colors.textColorPrimary
+                            )
+                        }
+                    )
+                }
+                BoldText(
+                    text = stringResource(id = R.string.app_settings),
+                    modifier = Modifier.padding(
+                        top = dimensionResource(id = R.dimen.dimen_10),
+                        start = dimensionResource(id = R.dimen.dimen_10)
+                    )
+                )
                 SettingsMenuGroupContent(
                     onUserInteraction = onUserInteraction,
                     items = listOf(state.lang, state.darkTheme)
                 )
-                BoldText(text = stringResource(id = R.string.dimension_settings))
+                BoldText(
+                    text = stringResource(id = R.string.dimension_settings),
+                    modifier = Modifier.padding(
+                        top = dimensionResource(id = R.dimen.dimen_10),
+                        start = dimensionResource(id = R.dimen.dimen_10)
+                    )
+                )
                 SettingsMenuGroupContent(
                     onUserInteraction = onUserInteraction,
                     items = listOf(state.tempDimen, state.windSpeed, state.pressure)
@@ -106,7 +137,7 @@ fun SettingsMenuGroupContent(
     RoundedCardItem(
         modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_10))
     ) {
-        Column(modifier = Modifier.padding(10.dp)) {
+        Column(modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_10))) {
             items.forEach { item ->
                 val onItemCLick: () -> Unit = {
                     onUserInteraction(
@@ -116,8 +147,8 @@ fun SettingsMenuGroupContent(
                 Row(
                     modifier = Modifier
                         .padding(
-                            horizontal = dimensionResource(id = R.dimen.dimen_8),
-                            vertical = dimensionResource(id = R.dimen.dimen_4)
+                            horizontal = dimensionResource(id = R.dimen.dimen_10),
+                            vertical = dimensionResource(id = R.dimen.dimen_8)
                         )
                         .fillMaxWidth()
                         .clickable(
@@ -140,7 +171,7 @@ fun SettingsMenuGroupContent(
                         modifier = Modifier.rotate(90f),
                         painter = painterResource(id = R.drawable.ic_arrow_24),
                         contentDescription = "",
-                        tint = EveryweatherTheme.colors.textColorPrimary//todo color
+                        tint = EveryweatherTheme.colors.textColorPrimary
                     )
                 }
             }
@@ -163,10 +194,10 @@ fun DarkModePickerContent(
         onOptionSelected(darkMode)
         onUserInteraction(SettingsUserInteraction.ChangeDarkMode(darkMode = darkMode))
     }
-    Column {
+    Column(modifier = Modifier.padding(10.dp)) {
         radioOptions.forEach { darkMode ->
             Row(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .selectable(
                         role = Role.RadioButton,
@@ -175,7 +206,8 @@ fun DarkModePickerContent(
                             onPickMode(darkMode)
                         }
                     )
-                    .padding(horizontal = 16.dp)
+                    .padding(vertical = dimensionResource(id = R.dimen.dimen_4)),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 AppRadioButton(isSelected = darkMode == selectedOption) {
                     onPickMode(darkMode)
@@ -204,10 +236,10 @@ fun LanguagePickerContent(
         onOptionSelected(language)
         onUserInteraction(SettingsUserInteraction.ChangeLanguage(lang = language))
     }
-    Column {
+    Column(modifier = Modifier.padding(10.dp)) {
         radioOptions.forEach { language ->
             Row(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .selectable(
                         role = Role.RadioButton,
@@ -216,7 +248,8 @@ fun LanguagePickerContent(
                             onPickMode(language)
                         }
                     )
-                    .padding(horizontal = 16.dp)
+                    .padding(vertical = dimensionResource(id = R.dimen.dimen_4)),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 AppRadioButton(isSelected = language == selectedOption) {
                     onPickMode(language)
@@ -244,10 +277,10 @@ fun TemperaturePickerContent(
         onOptionSelected(temperatureDimension)
         onUserInteraction(SettingsUserInteraction.ChangeTemperatureDimension(tempDimen = temperatureDimension))
     }
-    Column {
+    Column(modifier = Modifier.padding(10.dp)) {
         radioOptions.forEach { temperatureDimension ->
             Row(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .selectable(
                         role = Role.RadioButton,
@@ -256,7 +289,8 @@ fun TemperaturePickerContent(
                             onPickMode(temperatureDimension)
                         }
                     )
-                    .padding(horizontal = 16.dp)
+                    .padding(vertical = dimensionResource(id = R.dimen.dimen_4)),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 AppRadioButton(isSelected = temperatureDimension == selectedOption) {
                     onPickMode(temperatureDimension)
@@ -284,10 +318,10 @@ fun DistancePickerContent(
         onOptionSelected(distanceDimension)
         onUserInteraction(SettingsUserInteraction.ChangeDistanceDimension(distanceDimen = distanceDimension))
     }
-    Column {
+    Column(modifier = Modifier.padding(10.dp)) {
         radioOptions.forEach { distanceDimension ->
             Row(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .selectable(
                         role = Role.RadioButton,
@@ -296,7 +330,8 @@ fun DistancePickerContent(
                             onPickMode(distanceDimension)
                         }
                     )
-                    .padding(horizontal = 16.dp)
+                    .padding(vertical = dimensionResource(id = R.dimen.dimen_4)),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 AppRadioButton(isSelected = distanceDimension == selectedOption) {
                     onPickMode(distanceDimension)
@@ -325,10 +360,10 @@ fun PressurePickerContent(
         onOptionSelected(pressureDimen)
         onUserInteraction(SettingsUserInteraction.ChangePressureDimension(pressureDimen = pressureDimen))
     }
-    Column {
+    Column(modifier = Modifier.padding(10.dp)) {
         radioOptions.forEach { pressureDimen ->
             Row(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .selectable(
                         role = Role.RadioButton,
@@ -337,7 +372,8 @@ fun PressurePickerContent(
                             onPickMode(pressureDimen)
                         }
                     )
-                    .padding(horizontal = 16.dp)
+                    .padding(vertical = dimensionResource(id = R.dimen.dimen_4)),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 AppRadioButton(isSelected = pressureDimen == selectedOption) {
                     onPickMode(pressureDimen)

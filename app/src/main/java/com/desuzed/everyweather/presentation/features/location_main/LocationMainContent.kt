@@ -54,12 +54,21 @@ fun LocationMainContent(
         ) {
             Column(modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_10))) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    //todo DESIGN
+                    IconButton(
+                        modifier = Modifier.size(33.dp),
+                        onClick = { onUserInteraction(LocationUserInteraction.OnBackClick) },
+                        content = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_round_arrow_back),
+                                contentDescription = "",
+                                tint = EveryweatherTheme.colors.textColorPrimary
+                            )
+                        }
+                    )
                     OutlinedEditText(
                         text = state.geoText,
                         modifier = Modifier
                             .padding(
-                                start = dimensionResource(id = R.dimen.dimen_10),
                                 top = dimensionResource(id = R.dimen.dimen_10),
                                 bottom = dimensionResource(id = R.dimen.dimen_10),
                             )
@@ -75,7 +84,7 @@ fun LocationMainContent(
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_settings),
                                 contentDescription = "",
-                                tint = EveryweatherTheme.colors.secondary//todo color
+                                tint = EveryweatherTheme.colors.secondary
                             )
                         }
                     )

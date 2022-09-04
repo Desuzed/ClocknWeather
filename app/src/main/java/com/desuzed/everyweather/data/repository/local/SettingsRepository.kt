@@ -20,7 +20,6 @@ class SettingsRepository(private val context: Context) {
 
     val lang: Flow<Language> = getFlowOf(KEY_LANGUAGE, Lang.RU.lang).map { langId ->
         val langValueId = when (langId) {
-            //todo mapping
             "RU" -> R.string.russian
             else -> R.string.english
         }
@@ -58,7 +57,7 @@ class SettingsRepository(private val context: Context) {
 
     val tempDimen: Flow<Temperature> =
         getFlowOf(KEY_TEMPERATURE_DIMENSION, TempDimen.CELCIUS.dimensionName).map { tempDimenId ->
-            val tempValueId = when (tempDimenId) { //todo mapping
+            val tempValueId = when (tempDimenId) {
                 "FAHRENHEIT" -> R.string.fahrenheit
                 else -> R.string.celcius
             }
@@ -96,7 +95,7 @@ class SettingsRepository(private val context: Context) {
 
     val darkMode: Flow<DarkTheme> =
         getFlowOf(KEY_DARK_MODE, DarkMode.SYSTEM.mode).map { darkModeId ->
-            val darkThemeValueId = when (darkModeId) {//todo mapping
+            val darkThemeValueId = when (darkModeId) {
                 "ON" -> R.string.on
                 "OFF" -> R.string.off
                 else -> R.string.system

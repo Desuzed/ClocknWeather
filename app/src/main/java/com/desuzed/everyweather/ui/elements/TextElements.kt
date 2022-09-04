@@ -11,12 +11,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Card
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -139,7 +135,8 @@ fun UltraLargeBoldText(
 fun LargeBoldText(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = EveryweatherTheme.colors.textColorPrimary
+    color: Color = EveryweatherTheme.colors.textColorPrimary,
+    textAlign: TextAlign? = null,
 ) {
     Text(
         modifier = modifier,
@@ -147,6 +144,7 @@ fun LargeBoldText(
         style = EveryweatherTheme.typography.textBoldLarge,
         maxLines = 1,
         color = color,
+        textAlign = textAlign,
     )
 }
 
@@ -269,17 +267,19 @@ fun OutlinedEditText(
 ) {
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+    var isSearchButtonEnabled by remember { mutableStateOf(false) }
+
     OutlinedTextField(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         value = text,
-        onValueChange = onTextChanged,
+        onValueChange = {
+            isSearchButtonEnabled = it.trim().isNotEmpty()
+            onTextChanged(it)
+        },
         maxLines = 1,
         textStyle = EveryweatherTheme.typography.text,
         placeholder = {
-            HintEditText(
-                text = hint
-            )
+            HintEditText(text = hint)
         },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -289,17 +289,27 @@ fun OutlinedEditText(
             cursorColor = EveryweatherTheme.colors.secondary,
         ),
         trailingIcon = {
-            Image(//todo clickable, handle state disabled/enabled
-                painter = painterResource(id = R.drawable.ic_round_search),
-                colorFilter = ColorFilter.tint(EveryweatherTheme.colors.editTextStrokeColor),
-                contentDescription = "",
+            IconButton(
+                onClick = onSearchClick,
+                enabled = isSearchButtonEnabled,
+                content = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_round_search),
+                        contentDescription = "",
+                        tint = if (isSearchButtonEnabled) {
+                            EveryweatherTheme.colors.secondary
+                        } else {
+                            EveryweatherTheme.colors.editTextStrokeColor
+                        }
+                    )
+                }
             )
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = {
             keyboard?.hide()
             focusManager.clearFocus()
-            if (text.isNotEmpty()) onSearchClick()          //todo хендлить ошибку пустого текста?
+            if (text.trim().isNotEmpty()) onSearchClick()
         })
     )
 }

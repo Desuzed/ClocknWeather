@@ -50,6 +50,10 @@ fun Fragment.addOnBackPressedCallback() {
     )
 }
 
+fun Fragment.onBackClick() {
+    findNavController().navigateUp()
+}
+
 inline fun <T> Fragment.collect(
     source: Flow<T>,
     crossinline consumer: suspend (T) -> Unit

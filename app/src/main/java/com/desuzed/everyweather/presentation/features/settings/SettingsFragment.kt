@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.util.addOnBackPressedCallback
 import com.desuzed.everyweather.util.collect
+import com.desuzed.everyweather.util.onBackClick
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : Fragment() {
@@ -38,9 +39,7 @@ class SettingsFragment : Fragment() {
 
     private fun onNewAction(action: SettingsAction) {
         when (action) {
-            is SettingsAction.ChangeDarkMode -> TODO()
-            is SettingsAction.ChangeLanguage -> TODO()
-            SettingsAction.NavigateBack -> TODO()
+            SettingsAction.NavigateBack -> onBackClick()
         }
     }
 

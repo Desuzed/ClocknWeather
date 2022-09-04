@@ -37,6 +37,7 @@ class LocationViewModel(
             LocationUserInteraction.FindOnMap -> setAction(LocationMainAction.ShowMapFragment)
             LocationUserInteraction.MyLocation -> setAction(LocationMainAction.MyLocation)
             LocationUserInteraction.Settings -> setAction(LocationMainAction.NavigateToSettings)
+            LocationUserInteraction.OnBackClick -> setAction(LocationMainAction.NavigateBack)
         }
     }
 

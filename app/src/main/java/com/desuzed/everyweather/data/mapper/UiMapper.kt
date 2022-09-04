@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.data.repository.local
+package com.desuzed.everyweather.data.mapper
 
 import android.content.Context
 import com.desuzed.everyweather.domain.model.WeatherResponse

@@ -60,5 +60,6 @@
     <string name="ms">м/с</string>
     <string name="mmhg">мм рт.ст</string>
     <string name="mb">мбар</string>
+    <string name="settings">Настройки</string>
 
 </resources>

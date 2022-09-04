@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.repository.local.UiMapper
+import com.desuzed.everyweather.data.mapper.UiMapper
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysMainInfo
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
 import com.desuzed.everyweather.ui.elements.BoldText
@@ -70,19 +70,20 @@ fun NextDaysBottomSheetContent(
                     .fillMaxSize()
                     .padding(
                         top = dimensionResource(id = R.dimen.dimen_20),
-                        start = dimensionResource(id = R.dimen.dimen_4),
-                        end = dimensionResource(id = R.dimen.dimen_4),
-                        bottom = dimensionResource(id = R.dimen.dimen_8),
+                        start = dimensionResource(id = R.dimen.dimen_10),
+                        end = dimensionResource(id = R.dimen.dimen_10),
                     )
             ) {
                 val nextDaysWeather = mappedWeatherUi.value
                 if (nextDaysWeather != null) {
+                    val indexOfLastItem = nextDaysWeather.size - 1
                     LazyColumn(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                    ) { //todo разобраться с паддингами и тенями от карточки
+                        modifier = Modifier.fillMaxHeight()
+                    ) {
                         items(items = nextDaysWeather) { forecastItem ->
-                            ForecastListItem(dayItem = forecastItem)
+                            val isLastElement =
+                                nextDaysWeather.indexOf(forecastItem) == indexOfLastItem
+                            ForecastListItem(dayItem = forecastItem, isLastItem = isLastElement)
                         }
                     }
                 }
@@ -96,12 +97,16 @@ fun NextDaysBottomSheetContent(
 @Composable
 fun ForecastListItem(
     dayItem: NextDaysUi,
+    isLastItem: Boolean,
 ) {
-    //Todo подумать как можно сделать чтобы клик отрабатывался не на всю карточку, а на верхнюю область
     var isExpanded by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
-            .padding(top = dimensionResource(id = R.dimen.dimen_4))
+            .padding(
+                top = dimensionResource(id = R.dimen.dimen_4),
+                bottom = if (isLastItem) dimensionResource(id = R.dimen.dimen_8)
+                else dimensionResource(id = R.dimen.dimen_0),
+            )
             .fillMaxSize()
             .clickable { isExpanded = !isExpanded },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),

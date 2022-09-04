@@ -80,6 +80,11 @@ class WeatherMainFragment : Fragment() {
         arguments?.remove(USER_LOCATION)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onUserInteraction(WeatherUserInteraction.Refresh)
+    }
+
     companion object {
         const val QUERY_KEY = "QUERY"
         const val USER_LOCATION = "USER_LOCATION"

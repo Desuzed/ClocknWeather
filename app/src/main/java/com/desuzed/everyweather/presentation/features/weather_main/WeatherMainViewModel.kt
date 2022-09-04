@@ -13,6 +13,7 @@ import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.util.ActionResultProvider
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
@@ -132,12 +133,11 @@ class WeatherMainViewModel(
                     copy(
                         isAddButtonEnabled = !isLocationSaved,
                         weatherData = result,
-                        isLoading = false
                     )
                 }
-            } else {
-                setState { copy(isLoading = false) }
+                delay(300)
             }
+            setState { copy(isLoading = false) }
         }
     }
 

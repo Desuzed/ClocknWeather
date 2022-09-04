@@ -29,6 +29,7 @@ class SettingsViewModel(
             is SettingsUserInteraction.ChangePressureDimension -> onPressureDimen(interaction.pressureDimen)
             is SettingsUserInteraction.ShowSettingDialog -> showSettingsDialog(interaction.type)
             SettingsUserInteraction.DismissDialog -> hideDialog()
+            SettingsUserInteraction.OnBackClick -> setAction(SettingsAction.NavigateBack)
         }
     }
 
