@@ -12,17 +12,17 @@
     <string name="feels_like">Ощущается:</string>
     <string name="enter_location_name">Введите название местоположения</string>
     <string name="your_current_location_not_found">Ваше текущее местоположение не найдено</string>
-    <string name="api_key_error">Извините, разработчик имеет трудности с поставщиком информации о погоде. Повторите попытку позже.</string>
-    <string name="q_not_provided">Возможно, Вы написали неверное местоположение. Оно не должно быть пустым.</string>
-    <string name="no_location_found">Ничего не найдено по Вашему запросу. Пожалуйста, повторите попытку.</string>
+    <string name="api_key_error">Извините, разработчик имеет трудности с поставщиком информации о погоде. Повторите попытку позже</string>
+    <string name="q_not_provided">Возможно, Вы написали неверное местоположение. Оно не должно быть пустым</string>
+    <string name="no_location_found">Ничего не найдено по Вашему запросу:\n%s\nПожалуйста, повторите попытку</string>
     <string name="api_request_is_invalid">Ссылка запроса не верная.</string>
-    <string name="internal_app_error">Извините, что-то пошло не так. Внутренняя ошибка приложения.</string>
-    <string name="unknown_app_error">Извините, что-то пошло не так. Неизвестная ошибка приложения.</string>
-    <string name="check_internet_connection">Проверьте интернет соединение.</string>
-    <string name="field_must_not_be_empty">Поля не должны быть пустыми.</string>
+    <string name="internal_app_error">Извините, что-то пошло не так. Внутренняя ошибка приложения</string>
+    <string name="unknown_app_error">Извините, что-то пошло не так. Неизвестная ошибка приложения</string>
+    <string name="check_internet_connection">Проверьте интернет соединение</string>
+    <string name="field_must_not_be_empty">Поля не должны быть пустыми</string>
     <string name="next_days_forecast">Погода на следующие дни</string>
-    <string name="no_data_to_load">Нет информации для загрузки.</string>
-    <string name="location_permissions_are_not_granted">Нет разрешений на доступ к Вашему местоположению.</string>
+    <string name="no_data_to_load">Нет информации для загрузки</string>
+    <string name="location_permissions_are_not_granted">Нет разрешений на доступ к Вашему местоположению</string>
     <string name="your_saved_cities_list_is_empty">Ваш список сохраненных местоположений пуст. Загрузите погоду и сохраните место с экрана погоды.</string>
     <string name="no_weather_data_is_loaded_header">Нет загруженной погоды. \nПожалуйста, попробуйте следующее:</string>
     <string name="no_weather_data_is_loaded">\t-Проверьте интернет соединение\n\t-Проверьте разрешение на местоположение. (Это нужно для загрузки погоды Вашего местоположения)\n\t-Перейдите на экран \"Местоположения\" и введите название города</string>
@@ -43,7 +43,7 @@
     <string name="delete">Удалить?</string>
     <string name="wrong_server_result">Извините, получен неверный результат от поставщика погоды. Пожалуйста, повторите снова.</string>
     <string name="server_error">Извините, ошибка сервера. Попытайтесь снова.</string>
-    <string name="looking_for_your_location">Поиск вашего местоположения...</string>
+    <string name="looking_for_your_location">Поиск вашего местоположения…</string>
     <string name="dark_mode">Тёмная тема</string>
     <string name="language">Язык</string>
     <string name="temperature_dimension">Температура</string>
@@ -61,5 +61,6 @@
     <string name="mmhg">мм рт.ст</string>
     <string name="mb">мбар</string>
     <string name="settings">Настройки</string>
+    <string name="retry">Повторить</string>
 
 </resources>

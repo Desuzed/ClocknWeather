@@ -55,7 +55,6 @@ class MainActivityViewModel(
         }
     }
 
-    //todo менять в префсах константу языка после того как меняешь в настройках телефона
     fun onLanguage(appLanguage: String?) {
         viewModelScope.launch {
             val lang = when (appLanguage) {
@@ -66,12 +65,12 @@ class MainActivityViewModel(
         }
     }
 
+    fun isFirstRun() = sharedPrefsProvider.isFirstRunApp()
+
     private fun collectLanguage(lang: Language) {
         val lowercaseLang = lang.id.lowercase()
         setState { copy(lang = lowercaseLang) }
         setAction(MainActivityAction.ChangeLanguage(lowercaseLang))
     }
-
-    fun isFirstRun() = sharedPrefsProvider.isFirstRunApp()
 
 }

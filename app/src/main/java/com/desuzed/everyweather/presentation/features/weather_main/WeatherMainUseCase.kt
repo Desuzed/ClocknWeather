@@ -35,7 +35,7 @@ class WeatherMainUseCase(
                 val apiError = apiErrorMapper.mapFromEntity(response.body)
                 ResultForecast(
                     sharedPrefsProvider.loadForecastFromCache(),
-                    actionResultProvider.parseCode(apiError.error.code)
+                    actionResultProvider.parseCode(errorCode = apiError.error.code, query = query)
                 )
             }
             is NetworkResponse.NetworkError -> ResultForecast(
@@ -49,7 +49,10 @@ class WeatherMainUseCase(
         }
     }
 
-    private suspend fun getForecast(query: String, lang: String): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> {
+    private suspend fun getForecast(
+        query: String,
+        lang: String
+    ): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> {
         sharedPrefsProvider.saveQuery(query)
         return remoteDataSource.getForecast(query, lang.lowercase())
     }

@@ -12,7 +12,10 @@ import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
-import com.desuzed.everyweather.util.*
+import com.desuzed.everyweather.util.addOnBackPressedCallback
+import com.desuzed.everyweather.util.collect
+import com.desuzed.everyweather.util.navigate
+import com.desuzed.everyweather.util.onBackClick
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -43,7 +46,7 @@ class LocationFragment : Fragment() {
 
     private fun onNewAction(action: LocationMainAction) {
         when (action) {
-            is LocationMainAction.ShowToast -> toast(action.message)//todo избавиться от тостов
+            is LocationMainAction.ShowSnackbar -> showSnackbar(action.message)
             is LocationMainAction.NavigateToWeather -> navigateToWeatherFragment(bundleOf(action.key to action.query))
             LocationMainAction.MyLocation -> onMyLocationClick()
             LocationMainAction.ShowMapFragment -> showMapBotSheet()
@@ -68,5 +71,10 @@ class LocationFragment : Fragment() {
 
     private fun navigateToSettingsFragment() {
         navigate(R.id.action_locationFragment_to_settingsFragment)
+    }
+
+    private fun showSnackbar(message: String) {
+        if (message.isEmpty()) return
+        (activity as MainActivity).showSnackbar(message = message)
     }
 }

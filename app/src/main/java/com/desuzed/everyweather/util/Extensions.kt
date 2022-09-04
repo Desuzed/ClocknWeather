@@ -3,14 +3,17 @@ package com.desuzed.everyweather.util
 import android.content.Context
 import android.content.res.Resources.getSystem
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.BaseTransientBottomBar.ANIMATION_MODE_SLIDE
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 
@@ -24,18 +27,6 @@ fun Fragment.navigate(directions: Int, bundle: Bundle? = null) {
             controller.navigate(directions)
         } else controller.navigate(directions, bundle)
     }
-}
-
-fun Fragment.toast(message: String) {
-    if (message.isEmpty()) {
-        return
-    }
-    Toast.makeText(
-        requireContext(),
-        message,
-        Toast.LENGTH_LONG
-    )
-        .show()
 }
 
 fun Fragment.addOnBackPressedCallback() {
@@ -73,6 +64,22 @@ inline fun <T> AppCompatActivity.collect(
         source.collect {
             consumer(it)
         }
+    }
+}
+
+fun AppCompatActivity.snackbar(
+    text: String,
+    root: View,
+    @StringRes actionStringId: Int,
+    onActionClick: () -> Unit,
+) {
+    Snackbar.make(this, root, text, Snackbar.LENGTH_LONG).apply {
+        setAction(actionStringId) {
+            onActionClick()
+            dismiss()
+        }
+        animationMode = ANIMATION_MODE_SLIDE
+        show()
     }
 }
 

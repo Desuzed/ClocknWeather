@@ -5,7 +5,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.os.ConfigurationCompat
@@ -15,6 +15,7 @@ import com.desuzed.everyweather.databinding.ActivityMainBinding
 import com.desuzed.everyweather.domain.model.UserLatLng
 import com.desuzed.everyweather.util.LocationHandler
 import com.desuzed.everyweather.util.collect
+import com.desuzed.everyweather.util.snackbar
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -47,6 +48,19 @@ class MainActivity : AppCompatActivity() {
 
     //todo рефакторинг на нормальное взаимодействие
     fun getUserLatLngFlow(): SharedFlow<UserLatLng?> = viewModel.userLatLng.asSharedFlow()
+
+    fun showSnackbar(
+        message: String,
+        @StringRes actionStringId: Int = R.string.ok,
+        onActionClick: () -> Unit = {}
+    ) {
+        snackbar(
+            text = message,
+            root = binding.root,
+            actionStringId = actionStringId,
+            onActionClick = onActionClick
+        )
+    }
 
     private fun requestLocationPermissions() {
         //if (locationHandler.permissionsGranted()) return
@@ -97,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onNewMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        showSnackbar(message = message)
     }
 
     private fun onNewAction(action: MainActivityAction) {

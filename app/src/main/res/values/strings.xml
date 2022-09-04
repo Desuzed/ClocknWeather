@@ -13,24 +13,23 @@
     <string name="feels_like">Fells like:</string>
     <string name="enter_location_name">Enter location name</string>
     <string name="your_current_location_not_found">Your current location not found</string>
-    <!--    <string name="powered_by">Powered by: <a href="https://www.weatherapi.com/">Weather API</a></string>-->
     <string name="powered_by" translatable="false">Powered by: Weather API</string>
     <string name="uri" translatable="false">https://www.weatherapi.com/</string>
 
-    <string name="api_key_error">Sorry, developer has problems with weather information provider. Retry later.</string>
+    <string name="api_key_error">Sorry, developer has problems with weather information provider. Retry later</string>
 
-    <string name="q_not_provided">You must have typed wrong location. It must not be empty.</string>
-    <string name="no_location_found">No location found matching your request. Please, try again.</string>
+    <string name="q_not_provided">You must have typed wrong location. It must not be empty</string>
+    <string name="no_location_found">No location found matching your request:\n%s\nPlease, try again</string>
     <string name="api_request_is_invalid">Weather provider request url is invalid.</string>
-    <string name="internal_app_error">Sorry, something went wrong. Internal application error.</string>
-    <string name="unknown_app_error">Sorry, something went wrong. Unknown application error.</string>
-    <string name="wrong_server_result">Sorry, we have received wrong result from weather provider. Please, retry again.</string>
-    <string name="server_error">Sorry, server error. Please, retry again.</string>
-    <string name="check_internet_connection">Сheck internet connection.</string>
-    <string name="field_must_not_be_empty">Field must not be empty.</string>
+    <string name="internal_app_error">Sorry, something went wrong. Internal application error</string>
+    <string name="unknown_app_error">Sorry, something went wrong. Unknown application error</string>
+    <string name="wrong_server_result">Sorry, we have received wrong result from weather provider. Please, retry again</string>
+    <string name="server_error">Sorry, server error. Please, retry again</string>
+    <string name="check_internet_connection">Check internet connection</string>
+    <string name="field_must_not_be_empty">Field must not be empty</string>
     <string name="next_days_forecast">Next days forecast</string>
-    <string name="no_data_to_load">No data to load.</string>
-    <string name="location_permissions_are_not_granted">Location permissions are not granted.</string>
+    <string name="no_data_to_load">No data to load</string>
+    <string name="location_permissions_are_not_granted">Location permissions are not granted</string>
     <string name="your_saved_cities_list_is_empty">Your saved cities list is empty. Load weather data and add your location from weather screen.</string>
     <string name="no_weather_data_is_loaded_header">No weather data is loaded. \nPlease, try following:</string>
     <string name="no_weather_data_is_loaded">\t-Check internet connection
@@ -53,6 +52,7 @@
     <string name="mmhg">mmHg</string>
     <string name="inch">inch</string>
     <string name="delete">Delete?</string>
+    <string name="retry">Retry</string>
     <string name="mb">mb</string>
     <string name="delimiter" translatable="false">|</string>
     <string name="looking_for_your_location">Looking for your location…</string>

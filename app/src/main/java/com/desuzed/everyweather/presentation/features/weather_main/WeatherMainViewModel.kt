@@ -3,6 +3,7 @@ package com.desuzed.everyweather.presentation.features.weather_main
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.data.repository.local.SettingsRepository
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.ActionResult
 import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
@@ -26,7 +27,7 @@ class WeatherMainViewModel(
 ) :
     BaseViewModel<WeatherState, WeatherMainAction>(WeatherState()) {
 
-    private val messageFlow = MutableSharedFlow<String>(
+    private val messageFlow = MutableSharedFlow<ActionResult>(
         replay = 0,
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -40,12 +41,7 @@ class WeatherMainViewModel(
         collect(settingsRepository.tempDimen, ::collectTemperature)
         collect(settingsRepository.lang, ::collectLanguage)
         collect(settingsRepository.pressureDimen, ::collectPressure)
-
-        viewModelScope.launch {
-            messageFlow.collect {
-                setAction(WeatherMainAction.ShowToast(it))
-            }
-        }
+        collect(messageFlow, ::collectActionResult)
     }
 
     fun getForecast(query: String) {
@@ -54,19 +50,17 @@ class WeatherMainViewModel(
             val fetchedForecast =
                 useCase.fetchForecastOrErrorMessage(query, state.value.lang.id.lowercase())
             val weatherResponse = fetchedForecast.weatherResponse
-            val message = fetchedForecast.message
-            if (weatherResponse != null) {
-                val isLocationSaved = isLocationSaved(weatherResponse)
-                setState {
-                    copy(
-                        weatherData = weatherResponse,
-                        isLoading = false,
-                        isAddButtonEnabled = !isLocationSaved,
-                    )
-                }
-                return@launch
-            } else if (message != null) {
-                messageFlow.emit(message)
+            val actionResult = fetchedForecast.actionResult
+            val isLocationSaved = weatherResponse?.let { isLocationSaved(it) }
+            setState {
+                copy(
+                    weatherData = weatherResponse,
+                    isLoading = false,
+                    isAddButtonEnabled = isLocationSaved?.not() ?: false,
+                )
+            }
+            if (actionResult != null) {
+                messageFlow.emit(actionResult)
                 setState {
                     copy(
                         isLoading = false,
@@ -145,6 +139,9 @@ class WeatherMainViewModel(
         val query = sharedPrefsProvider.loadQuery()
         setState { copy(query = query) }
     }
+
+    private fun collectActionResult(actionResult: ActionResult) =
+        setAction(WeatherMainAction.ShowSnackbar(actionResult))
 
     private fun collectWindSpeed(windSpeed: WindSpeed) = setState { copy(windSpeed = windSpeed) }
 

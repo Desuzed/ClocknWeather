@@ -59,13 +59,13 @@ class LocationViewModel(
         }
 
     private fun onSuccess(code: Int) {
-        val message = actionResultProvider.parseCode(code)
-        setAction(LocationMainAction.ShowToast(message))
+        val message = actionResultProvider.parseCode(code).message
+        setAction(LocationMainAction.ShowSnackbar(message))
     }
 
     private fun onError(code: Int) {
-        val message = actionResultProvider.parseCode(code)
-        setAction(LocationMainAction.ShowToast(message))
+        val message = actionResultProvider.parseCode(code).message
+        setAction(LocationMainAction.ShowSnackbar(message))
     }
 
     private fun onNewLocations(locationsList: List<FavoriteLocationDto>) {

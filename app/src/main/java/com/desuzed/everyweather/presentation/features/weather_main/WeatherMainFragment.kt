@@ -9,11 +9,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.domain.model.ActionResult
+import com.desuzed.everyweather.domain.model.ActionType
 import com.desuzed.everyweather.domain.model.UserLatLng
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.navigate
-import com.desuzed.everyweather.util.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WeatherMainFragment : Fragment() {
@@ -42,7 +43,6 @@ class WeatherMainFragment : Fragment() {
         collect(viewModel.action, ::onNewAction)
     }
 
-    //todo сделать через fragmentResult????
     private var loadForecastByUserLocation = false
     private fun resolveArguments() {
         loadForecastByUserLocation = arguments?.getBoolean(USER_LOCATION) ?: false
@@ -59,7 +59,7 @@ class WeatherMainFragment : Fragment() {
 
     private fun onNewAction(action: WeatherMainAction) {
         when (action) {
-            is WeatherMainAction.ShowToast -> toast(action.message)//todo избавиться от тостов
+            is WeatherMainAction.ShowSnackbar -> showSnackbar(action.actionResult)
             WeatherMainAction.NavigateToLocation -> navigate(R.id.action_weatherFragment_to_locationFragment)
             WeatherMainAction.NavigateToNextDaysWeather -> navigate(R.id.action_weatherFragment_to_nextDaysBottomSheet)
         }
@@ -72,6 +72,31 @@ class WeatherMainFragment : Fragment() {
                 getQueryForecast(location.toString())
             }
         }
+    }
+
+    private fun showSnackbar(actionResult: ActionResult) {
+        if (actionResult.message.isEmpty()) {
+            return
+        }
+        val onClick: () -> Unit
+        val buttonTextId: Int
+        when (actionResult.actionType) {
+            ActionType.OK -> {
+                onClick = {}
+                buttonTextId = R.string.ok
+            }
+            ActionType.RETRY -> {
+                buttonTextId = R.string.retry
+                onClick = {
+                    viewModel.onUserInteraction(WeatherUserInteraction.Refresh)
+                }
+            }
+        }
+        (activity as MainActivity).showSnackbar(
+            message = actionResult.message,
+            actionStringId = buttonTextId,
+            onActionClick = onClick
+        )
     }
 
     override fun onDestroyView() {
