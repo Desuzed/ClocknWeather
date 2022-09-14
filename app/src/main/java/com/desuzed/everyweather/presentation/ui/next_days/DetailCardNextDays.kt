@@ -2,11 +2,11 @@ package com.desuzed.everyweather.presentation.ui.next_days
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.ForecastDay
 import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.weather.ForecastDay
 import com.desuzed.everyweather.presentation.ui.base.DetailCard
 import com.desuzed.everyweather.util.DecimalFormatter
 import com.desuzed.everyweather.util.DecimalFormatter.MBAR_TO_MMHG_MULTIPLIER

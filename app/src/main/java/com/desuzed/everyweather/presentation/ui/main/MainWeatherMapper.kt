@@ -1,10 +1,10 @@
 package com.desuzed.everyweather.presentation.ui.main
 
 import android.content.res.Resources
-import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.weather.WeatherResponse
 import com.desuzed.everyweather.presentation.ui.HourUi
 
 class MainWeatherMapper(

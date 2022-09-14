@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.mapper
 
 import com.desuzed.everyweather.data.network.dto.weatherApi.LocationDto
-import com.desuzed.everyweather.domain.model.Location
+import com.desuzed.everyweather.domain.model.weather.Location
 import com.desuzed.everyweather.util.EntityMapper
 
 class LocationMapper : EntityMapper<LocationDto, Location> {

@@ -1,10 +1,10 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
-import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.weather.WeatherResponse
 
 data class WeatherState(
     val weatherData: WeatherResponse? = null,

@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.domain.model
+package com.desuzed.everyweather.domain.model.weather
 
 class ApiError(val error: Error) {
 

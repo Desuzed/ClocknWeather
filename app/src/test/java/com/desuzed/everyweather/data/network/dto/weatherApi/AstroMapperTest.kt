@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.domain.model.Astro
+import com.desuzed.everyweather.data.mapper.AstroMapper
+import com.desuzed.everyweather.domain.model.weather.Astro
 import junit.framework.TestCase
 import org.junit.Test
 

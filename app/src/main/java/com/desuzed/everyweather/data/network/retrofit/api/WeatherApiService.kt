@@ -1,8 +1,9 @@
-package com.desuzed.everyweather.data.network.retrofit
+package com.desuzed.everyweather.data.network.retrofit.api
 
 import com.desuzed.everyweather.BuildConfig
 import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
+import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

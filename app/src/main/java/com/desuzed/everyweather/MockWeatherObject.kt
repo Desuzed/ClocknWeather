@@ -1,7 +1,7 @@
 package com.desuzed.everyweather
 
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
-import com.desuzed.everyweather.domain.model.*
+import com.desuzed.everyweather.domain.model.weather.*
 
 object MockWeatherObject {
     val weather = WeatherResponse(

@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.mapper
 
 import com.desuzed.everyweather.data.network.dto.weatherApi.AstroDto
-import com.desuzed.everyweather.domain.model.Astro
+import com.desuzed.everyweather.domain.model.weather.Astro
 import com.desuzed.everyweather.util.DateFormatter
 import com.desuzed.everyweather.util.EntityMapper
 

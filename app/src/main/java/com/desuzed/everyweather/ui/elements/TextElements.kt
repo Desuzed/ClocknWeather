@@ -3,10 +3,7 @@ package com.desuzed.everyweather.ui.elements
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
@@ -24,6 +21,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -34,7 +32,12 @@ import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserIn
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
 @Composable
-fun BoldText(text: String, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
+fun BoldText(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    onClick: () -> Unit = {}
+) {
     val interactionSource = remember { MutableInteractionSource() }
     Text(
         modifier = modifier.clickable(
@@ -45,6 +48,7 @@ fun BoldText(text: String, modifier: Modifier = Modifier, onClick: () -> Unit = 
         text = text,
         style = EveryweatherTheme.typography.h3,
         color = EveryweatherTheme.colors.textColorPrimary,
+        textAlign = textAlign,
     )
 }
 
@@ -218,39 +222,42 @@ fun LocationText(text: String, onUserInteraction: (WeatherUserInteraction) -> Un
 }
 
 @Composable
-fun LinkText(modifier: Modifier) {
-
+fun LinkText(
+    modifier: Modifier,
+    inputText: String,
+    url: String,
+    startIndex: Int,
+    endIndex: Int,
+    style: TextStyle = EveryweatherTheme.typography.textMediumAnnotated,
+    spannableStringColor: Color = EveryweatherTheme.colors.secondary,
+    onClick: () -> Unit
+) {
     val mAnnotatedLinkString = buildAnnotatedString {
-
-        val inputStr = stringResource(id = R.string.powered_by)
-
-        val startIndex = inputStr.indexOf("W")
-        val endIndex = startIndex + 11
-        append(inputStr)
+        append(inputText)
         addStyle(
             style = SpanStyle(
-                color = EveryweatherTheme.colors.secondary,
+                color = spannableStringColor,
                 textDecoration = TextDecoration.Underline
             ), start = startIndex, end = endIndex
         )
         addStringAnnotation(
             tag = "URL",
-            annotation = stringResource(id = R.string.uri),
+            annotation = url,
             start = startIndex,
             end = endIndex
         )
-
     }
     val uriHandler = LocalUriHandler.current
     ClickableText(
         text = mAnnotatedLinkString,
         modifier = modifier,
-        style = EveryweatherTheme.typography.textMediumAnnotated,
+        style = style,
         onClick = {
             mAnnotatedLinkString
                 .getStringAnnotations("URL", it, it)
                 .firstOrNull()?.let { stringAnnotation ->
                     uriHandler.openUri(stringAnnotation.item)
+                    onClick.invoke()
                 }
         }
     )
@@ -261,6 +268,7 @@ fun LinkText(modifier: Modifier) {
 fun OutlinedEditText(
     text: String,
     hint: String,
+    isLoading: Boolean,
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     onSearchClick: () -> Unit
@@ -289,21 +297,29 @@ fun OutlinedEditText(
             cursorColor = EveryweatherTheme.colors.secondary,
         ),
         trailingIcon = {
-            IconButton(
-                onClick = onSearchClick,
-                enabled = isSearchButtonEnabled,
-                content = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_round_search),
-                        contentDescription = "",
-                        tint = if (isSearchButtonEnabled) {
-                            EveryweatherTheme.colors.secondary
-                        } else {
-                            EveryweatherTheme.colors.editTextStrokeColor
-                        }
-                    )
-                }
-            )
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.dimen_26)),
+                    strokeWidth = dimensionResource(id = R.dimen.dimen_3),
+                    color = EveryweatherTheme.colors.secondary
+                )
+            } else {
+                IconButton(
+                    onClick = onSearchClick,
+                    enabled = isSearchButtonEnabled,
+                    content = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_round_search),
+                            contentDescription = "",
+                            tint = if (isSearchButtonEnabled) {
+                                EveryweatherTheme.colors.secondary
+                            } else {
+                                EveryweatherTheme.colors.editTextStrokeColor
+                            }
+                        )
+                    }
+                )
+            }
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = {

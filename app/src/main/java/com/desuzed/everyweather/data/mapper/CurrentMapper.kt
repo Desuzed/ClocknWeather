@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.mapper
 
 import com.desuzed.everyweather.data.network.dto.weatherApi.CurrentDto
-import com.desuzed.everyweather.domain.model.Current
+import com.desuzed.everyweather.domain.model.weather.Current
 import com.desuzed.everyweather.util.EntityMapper
 
 class CurrentMapper : EntityMapper<CurrentDto, Current> {

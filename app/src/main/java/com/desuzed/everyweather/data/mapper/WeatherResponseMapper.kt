@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.mapper
 
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
-import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherResponse
 import com.desuzed.everyweather.util.EntityMapper
 
 class WeatherResponseMapper(

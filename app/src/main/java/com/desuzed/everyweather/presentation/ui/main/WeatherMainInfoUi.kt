@@ -2,9 +2,9 @@ package com.desuzed.everyweather.presentation.ui.main
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.weather.WeatherResponse
 import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 

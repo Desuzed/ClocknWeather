@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.presentation.features.locatation_map
 
-import com.desuzed.everyweather.domain.model.Location
+import com.desuzed.everyweather.domain.model.weather.Location
 import com.google.android.gms.maps.model.LatLng
 
 data class MapState(

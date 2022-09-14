@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.repository.local
 
 import android.content.Context
-import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherResponse
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.google.gson.Gson
 

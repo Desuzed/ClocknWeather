@@ -3,7 +3,7 @@ package com.desuzed.everyweather.data.room
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.desuzed.everyweather.domain.model.Location
+import com.desuzed.everyweather.domain.model.weather.Location
 import com.desuzed.everyweather.util.DecimalFormatter
 
 @Entity(tableName = "favorite_location_table")

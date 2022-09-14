@@ -7,6 +7,7 @@ import com.desuzed.everyweather.presentation.features.settings.SettingsViewModel
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainViewModel
 import com.desuzed.everyweather.presentation.features.weather_next_days.NextDaysViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -23,14 +24,16 @@ val viewModelModule = module {
     viewModel {
         LocationViewModel(
             roomProvider = get(),
-            actionResultProvider = get(),
+            actionResultProvider = get(named(geoResultProviderName)),
+            locationUseCase = get(),
+            settingsRepository = get(),
         )
     }
     viewModel {
         WeatherMainViewModel(
             useCase = get(),
             sharedPrefsProvider = get(),
-            actionResultProvider = get(),
+            actionResultProvider = get(named(weatherResultProviderName)),
             roomProvider = get(),
             settingsRepository = get(),
         )

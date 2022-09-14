@@ -225,7 +225,17 @@ fun BottomDetailWeather(
                 onClick = { onUserInteraction(WeatherUserInteraction.NextDays) },
                 text = stringResource(id = R.string.next_days_forecast)
             )
-            LinkText(Modifier.padding(bottom = dimensionResource(id = R.dimen.dimen_20)))
+            val inputText = stringResource(id = R.string.powered_by)
+            val startIndex = inputText.indexOf(":") + 2
+            val redirectionMessage = stringResource(id = R.string.redirection)
+            LinkText(
+                modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.dimen_20)),
+                inputText = inputText,
+                url = stringResource(id = R.string.uri),
+                startIndex = startIndex,
+                endIndex = startIndex + 11,
+                onClick = { onUserInteraction(WeatherUserInteraction.Redirection(redirectionMessage)) }
+            )
         }
     }
 

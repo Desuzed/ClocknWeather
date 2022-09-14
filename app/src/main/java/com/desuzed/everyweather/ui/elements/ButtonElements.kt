@@ -47,8 +47,9 @@ fun RoundedButton(modifier: Modifier = Modifier, onClick: () -> Unit, text: Stri
 }
 
 @Composable
-fun AppRadioButton(isSelected: Boolean, onClick: () -> Unit) {
+fun AppRadioButton(modifier: Modifier = Modifier, isSelected: Boolean, onClick: () -> Unit) {
     RadioButton(
+        modifier = modifier,
         colors = RadioButtonDefaults.colors(
             selectedColor = EveryweatherTheme.colors.secondary,
             unselectedColor = EveryweatherTheme.colors.secondary,

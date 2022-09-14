@@ -6,6 +6,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.desuzed.everyweather.R
 
@@ -52,6 +53,7 @@ data class EveryweatherTypography(
         fontWeight = FontWeight.Light,
         fontSize = 16.sp,
         lineHeight = 23.sp,
+        textAlign = TextAlign.Center
     ),
     val textMediumBold: TextStyle = TextStyle(
         fontFamily = montserratRegularBold,

@@ -43,9 +43,14 @@ fun AppAlertDialog(title: String, onPositiveButtonClick: () -> Unit, onDismiss: 
 
 
 @Composable
-fun AppDialog(onDismiss: () -> Unit, content: @Composable () -> Unit) {
+fun AppDialog(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    content: @Composable () -> Unit
+) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
+            modifier = modifier,
             color = EveryweatherTheme.colors.onSurface,
             shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         ) {

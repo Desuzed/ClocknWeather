@@ -17,6 +17,7 @@ data class EveryweatherColors(
     val secondaryGradientStart: Color,
     val secondaryGradientEnd: Color,
     val bottomDialogBackground: Color,
+    val urlLinkTextColor: Color,
     val textBg: Color = Gray30Alpha,
 )
 
@@ -61,6 +62,7 @@ val LightColorPalette = EveryweatherColors(
     secondaryGradientStart = White,
     secondaryGradientEnd = White,
     bottomDialogBackground = White,
+    urlLinkTextColor = Indigo700customized,
 )
 
 val DarkColorPalette = EveryweatherColors(
@@ -77,6 +79,7 @@ val DarkColorPalette = EveryweatherColors(
     secondaryGradientStart = SecondaryGradientNightStart,
     secondaryGradientEnd = SecondaryGradientNightEnd,
     bottomDialogBackground = AlmostBlack,
+    urlLinkTextColor = LightBlue50customized,
 )
 
 val LocalAppColors = staticCompositionLocalOf<EveryweatherColors> {

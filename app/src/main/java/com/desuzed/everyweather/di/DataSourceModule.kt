@@ -34,7 +34,7 @@ val localDataSourceModule = module {
     }
 
     single<RemoteDataSource> {
-        RemoteDataSourceImpl(api = get())
+        RemoteDataSourceImpl(weatherApi = get(), locationIqApi = get())
     }
 
     single<SettingsRepository> {

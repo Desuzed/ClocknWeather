@@ -2,12 +2,12 @@ package com.desuzed.everyweather.presentation.ui
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.Hour
-import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.weather.Hour
+import com.desuzed.everyweather.domain.model.weather.WeatherResponse
 import com.desuzed.everyweather.util.DateFormatter
 import com.desuzed.everyweather.util.DecimalFormatter
 import kotlin.math.roundToInt

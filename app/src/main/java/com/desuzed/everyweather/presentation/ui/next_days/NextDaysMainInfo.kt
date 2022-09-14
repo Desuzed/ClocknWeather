@@ -2,10 +2,10 @@ package com.desuzed.everyweather.presentation.ui.next_days
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.ForecastDay
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.weather.ForecastDay
 import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 

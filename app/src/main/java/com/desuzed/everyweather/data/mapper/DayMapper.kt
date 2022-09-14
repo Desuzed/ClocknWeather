@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.mapper
 
 import com.desuzed.everyweather.data.network.dto.weatherApi.DayDto
-import com.desuzed.everyweather.domain.model.Day
+import com.desuzed.everyweather.domain.model.weather.Day
 import com.desuzed.everyweather.util.EntityMapper
 
 class DayMapper : EntityMapper<DayDto, Day> {

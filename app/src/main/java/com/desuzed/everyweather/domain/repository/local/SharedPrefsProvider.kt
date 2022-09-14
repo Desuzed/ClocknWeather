@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.domain.repository.local
 
-import com.desuzed.everyweather.domain.model.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherResponse
 
 interface SharedPrefsProvider {
     fun saveForecastToCache(weatherResponse: WeatherResponse)

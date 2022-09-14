@@ -5,4 +5,5 @@ sealed interface WeatherUserInteraction {
     object NextDays : WeatherUserInteraction
     object SaveLocation : WeatherUserInteraction
     object Refresh : WeatherUserInteraction
+    class Redirection(val message: String) : WeatherUserInteraction
 }

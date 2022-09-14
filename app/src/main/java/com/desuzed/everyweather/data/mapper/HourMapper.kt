@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.mapper
 
 import com.desuzed.everyweather.data.network.dto.weatherApi.HourDto
-import com.desuzed.everyweather.domain.model.Hour
+import com.desuzed.everyweather.domain.model.weather.Hour
 import com.desuzed.everyweather.util.EntityMapper
 
 class HourMapper : EntityMapper<HourDto, Hour> {

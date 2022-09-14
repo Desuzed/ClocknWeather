@@ -4,15 +4,15 @@ import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.data.repository.local.SettingsRepository
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.ActionResult
-import com.desuzed.everyweather.domain.model.WeatherResponse
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.weather.WeatherResponse
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
-import com.desuzed.everyweather.util.ActionResultProvider
+import com.desuzed.everyweather.util.action_result.ActionResultProvider
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,7 +27,7 @@ class WeatherMainViewModel(
 ) :
     BaseViewModel<WeatherState, WeatherMainAction>(WeatherState()) {
 
-    private val messageFlow = MutableSharedFlow<ActionResult>(
+    private val actionResultFlow = MutableSharedFlow<ActionResult>(
         replay = 0,
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -41,7 +41,7 @@ class WeatherMainViewModel(
         collect(settingsRepository.tempDimen, ::collectTemperature)
         collect(settingsRepository.lang, ::collectLanguage)
         collect(settingsRepository.pressureDimen, ::collectPressure)
-        collect(messageFlow, ::collectActionResult)
+        collect(actionResultFlow, ::collectActionResult)
     }
 
     fun getForecast(query: String) {
@@ -60,7 +60,7 @@ class WeatherMainViewModel(
                 )
             }
             if (actionResult != null) {
-                messageFlow.emit(actionResult)
+                actionResultFlow.emit(actionResult)
                 setState {
                     copy(
                         isLoading = false,
@@ -77,6 +77,11 @@ class WeatherMainViewModel(
             WeatherUserInteraction.NextDays -> setAction(WeatherMainAction.NavigateToNextDaysWeather)
             WeatherUserInteraction.Refresh -> getForecast(state.value.query)
             WeatherUserInteraction.SaveLocation -> saveLocation()
+            is WeatherUserInteraction.Redirection -> setAction(
+                WeatherMainAction.ShowSnackbar(
+                    ActionResult(message = userInteraction.message)
+                )
+            )
         }
     }
 
@@ -97,14 +102,14 @@ class WeatherMainViewModel(
     private fun onError(code: Int) {
         viewModelScope.launch {
             val message = actionResultProvider.parseCode(code)
-            messageFlow.emit(message)
+            actionResultFlow.emit(message)
         }
     }
 
     private fun onSuccess(code: Int) {
         val message = actionResultProvider.parseCode(code)
         viewModelScope.launch {
-            messageFlow.emit(message)
+            actionResultFlow.emit(message)
             setState {
                 copy(isAddButtonEnabled = false)
             }

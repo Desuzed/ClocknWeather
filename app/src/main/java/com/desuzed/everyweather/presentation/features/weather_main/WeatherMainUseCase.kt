@@ -5,10 +5,10 @@ import com.desuzed.everyweather.data.mapper.WeatherResponseMapper
 import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
 import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
-import com.desuzed.everyweather.domain.model.ResultForecast
+import com.desuzed.everyweather.domain.model.weather.ResultForecast
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.domain.repository.remote.RemoteDataSource
-import com.desuzed.everyweather.util.ActionResultProvider
+import com.desuzed.everyweather.util.action_result.ActionResultProvider
 
 class WeatherMainUseCase(
     private val sharedPrefsProvider: SharedPrefsProvider,

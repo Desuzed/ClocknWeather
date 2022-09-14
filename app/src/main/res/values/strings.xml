@@ -13,11 +13,15 @@
     <string name="feels_like">Fells like:</string>
     <string name="enter_location_name">Enter location name</string>
     <string name="your_current_location_not_found">Your current location not found</string>
+    <string name="results_were_found">Results found: %d</string>
+    <string name="redirection">Redirection…</string>
     <string name="powered_by" translatable="false">Powered by: Weather API</string>
+    <string name="search_by" translatable="false">Search by LocationIQ.com</string>
     <string name="uri" translatable="false">https://www.weatherapi.com/</string>
+    <string name="location_search_url" translatable="false">https://locationiq.com</string>
 
     <string name="api_key_error">Sorry, developer has problems with weather information provider. Retry later</string>
-
+    <string name="geo_api_error">Sorry, developer has problems with geocoding information provider. Retry later</string>
     <string name="q_not_provided">You must have typed wrong location. It must not be empty</string>
     <string name="no_location_found">No location found matching your request:\n%s\nPlease, try again</string>
     <string name="api_request_is_invalid">Weather provider request url is invalid.</string>
@@ -74,5 +78,6 @@
     <string name="system">System</string>
     <string name="fahrenheit" translatable="false">°F</string>
     <string name="celcius" translatable="false">°C</string>
+    <string name="retry_again">Please, retry again</string>
 
 </resources>

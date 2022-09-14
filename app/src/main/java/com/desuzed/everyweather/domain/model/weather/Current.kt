@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.domain.model
+package com.desuzed.everyweather.domain.model.weather
 
 class Current(
     val tempC: Float,
