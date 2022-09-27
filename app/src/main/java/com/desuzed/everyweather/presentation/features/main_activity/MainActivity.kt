@@ -22,6 +22,7 @@ import com.desuzed.everyweather.domain.model.settings.DarkMode
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.setAppLocaleAndReturnContext
 import com.desuzed.everyweather.util.snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         handleFirstEnterApp()
         bind()
         collectData()
-        //FirebaseAnalytics.getInstance(this).logEvent("test", null)//todo firebase events analytics
+        FirebaseAnalytics.getInstance(this).logEvent("test", null)//todo firebase events analytics
     }
 
     override fun onRequestPermissionsResult(

@@ -22,6 +22,7 @@ class App : Application() {
                 repositoryModule,
                 utilModule,
                 viewModelModule,
+                analyticsModule,
             )
         }
     }

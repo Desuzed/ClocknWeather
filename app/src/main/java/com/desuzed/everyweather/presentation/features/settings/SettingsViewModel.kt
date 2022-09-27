@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.settings
 
 import androidx.lifecycle.viewModelScope
+import com.desuzed.everyweather.analytics.SettingsAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.domain.model.settings.*
 import com.desuzed.everyweather.presentation.base.BaseViewModel
@@ -9,8 +10,8 @@ import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val settingsDataStore: SettingsDataStore,
-) :
-    BaseViewModel<SettingsState, SettingsAction>(SettingsState()) {
+    private val analytics: SettingsAnalytics,
+) : BaseViewModel<SettingsState, SettingsAction>(SettingsState()) {
 
     init {
         collect(settingsDataStore.darkMode, ::collectDarkTheme)
@@ -21,6 +22,7 @@ class SettingsViewModel(
     }
 
     fun onUserInteraction(interaction: SettingsUserInteraction) {
+        analytics.onUserInteraction(interaction)
         when (interaction) {
             is SettingsUserInteraction.ChangeLanguage -> onLanguage(interaction.lang)
             is SettingsUserInteraction.ChangeDarkMode -> onDarkMode(interaction.darkMode)

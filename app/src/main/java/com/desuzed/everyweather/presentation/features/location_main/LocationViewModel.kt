@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.location_main
 
 import androidx.lifecycle.viewModelScope
+import com.desuzed.everyweather.analytics.LocationMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
 import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
@@ -20,6 +21,7 @@ class LocationViewModel(
     private val actionResultProvider: ActionResultProvider,
     private val locationRepository: LocationRepository,
     private val userLocationProvider: UserLocationProvider,
+    private val analytics: LocationMainAnalytics,
     settingsDataStore: SettingsDataStore,
 ) :
     BaseViewModel<LocationMainState, LocationMainAction>(LocationMainState()) {
@@ -41,6 +43,7 @@ class LocationViewModel(
     }
 
     fun onUserInteraction(userInteraction: LocationUserInteraction) {
+        analytics.onUserInteraction(userInteraction)
         when (userInteraction) {
             is LocationUserInteraction.DeleteFavoriteLocation -> deleteFavoriteLocation(
                 userInteraction.favoriteLocationDto

@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import androidx.lifecycle.viewModelScope
+import com.desuzed.everyweather.analytics.WeatherMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
@@ -23,6 +24,7 @@ class WeatherMainViewModel(
     private val sharedPrefsProvider: SharedPrefsProvider,
     private val actionResultProvider: ActionResultProvider,
     private val roomProvider: RoomProvider,
+    private val analytics: WeatherMainAnalytics,
     settingsDataStore: SettingsDataStore,
 ) :
     BaseViewModel<WeatherState, WeatherMainAction>(WeatherState()) {
@@ -75,6 +77,7 @@ class WeatherMainViewModel(
     }
 
     fun onUserInteraction(userInteraction: WeatherUserInteraction) {
+        analytics.onUserInteraction(userInteraction)
         when (userInteraction) {
             WeatherUserInteraction.Location -> setAction(WeatherMainAction.NavigateToLocation)
             WeatherUserInteraction.NextDays -> setAction(WeatherMainAction.NavigateToNextDaysWeather)

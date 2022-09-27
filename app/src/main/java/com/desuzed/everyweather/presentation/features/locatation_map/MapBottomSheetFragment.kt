@@ -27,9 +27,7 @@ class MapBottomSheetFragment : BottomSheetDialogFragment() {
             val state by viewModel.state.collectAsState()
             MapLocationContent(
                 state = state,
-                onNewLocation = viewModel::onNewLocationPicked,
-                onNewLocationConfirm = viewModel::onNewLocationConfirm,
-                onDismiss = viewModel::onDismiss,
+                onUserInteraction = viewModel::onUserInteraction
             )
         }
         isNestedScrollingEnabled = true

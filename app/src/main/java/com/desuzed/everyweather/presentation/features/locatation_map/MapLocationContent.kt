@@ -21,9 +21,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun MapLocationContent(
     state: MapState,
-    onNewLocation: (LatLng) -> Unit,
-    onNewLocationConfirm: () -> Unit,
-    onDismiss: () -> Unit,
+    onUserInteraction: (MapUserInteraction) -> Unit,
 ) {
     EveryweatherTheme {
         Surface(
@@ -64,7 +62,7 @@ fun MapLocationContent(
                             .fillMaxSize()
                             .padding(top = dimensionResource(id = R.dimen.dimen_10)),
                         cameraPositionState = cameraPositionState,
-                        onMapClick = onNewLocation
+                        onMapClick = { onUserInteraction(MapUserInteraction.NewLocationPicked(it)) }
                     ) {
                         val showNewMarker =
                             state.newPickedLocation != null && state.loadNewLocationWeather
@@ -82,8 +80,8 @@ fun MapLocationContent(
                     if (state.shouldShowDialog)
                         AppAlertDialog(
                             title = stringResource(id = R.string.load_weather_of_this_location),
-                            onPositiveButtonClick = onNewLocationConfirm,
-                            onDismiss = onDismiss,
+                            onPositiveButtonClick = { onUserInteraction(MapUserInteraction.NewLocationConfirm) },
+                            onDismiss = { onUserInteraction(MapUserInteraction.DismissDialog) },
                         )
                 }
             }

@@ -42,12 +42,7 @@ private fun PreviewSettingsContent() {
     )
 }
 
-//todo history weather
 //todo contact to developer
-//todo locationHandling
-//todo change theme?????
-//todo notifications
-//todo delete all cache
 //todo widgets
 //todo notifications?????
 @Composable

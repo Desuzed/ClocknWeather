@@ -12,7 +12,10 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel {
-        MapLocationViewModel(sharedPrefsProvider = get())
+        MapLocationViewModel(
+            sharedPrefsProvider = get(),
+            analytics = get(),
+        )
     }
     viewModel {
         MainActivityViewModel(
@@ -29,6 +32,7 @@ val viewModelModule = module {
             locationRepository = get(),
             settingsDataStore = get(),
             userLocationProvider = get(),
+            analytics = get(),
         )
     }
     viewModel {
@@ -38,6 +42,7 @@ val viewModelModule = module {
             actionResultProvider = get(named(weatherResultProviderName)),
             roomProvider = get(),
             settingsDataStore = get(),
+            analytics = get(),
         )
     }
     viewModel {
@@ -48,7 +53,10 @@ val viewModelModule = module {
     }
 
     viewModel {
-        SettingsViewModel(settingsDataStore = get())
+        SettingsViewModel(
+            settingsDataStore = get(),
+            analytics = get(),
+        )
     }
 
 }
