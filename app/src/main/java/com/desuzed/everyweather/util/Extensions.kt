@@ -1,5 +1,6 @@
 package com.desuzed.everyweather.util
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources.getSystem
 import android.os.Bundle
@@ -83,13 +84,14 @@ fun AppCompatActivity.snackbar(
     }
 }
 
-fun Context.setAppLocale(language: String): Context {
+fun Activity.setAppLocaleAndReturnContext(language: String, newBase: Context): Context {
     val locale = Locale(language)
     Locale.setDefault(locale)
-    val config = resources.configuration
+    val res = newBase.resources
+    val config = res.configuration
     config.setLocale(locale)
     config.setLayoutDirection(locale)
-    return createConfigurationContext(config)
+    return newBase.createConfigurationContext(config)
 }
 
 val Int.toIntDp: Int get() = (this / getSystem().displayMetrics.density).toInt()

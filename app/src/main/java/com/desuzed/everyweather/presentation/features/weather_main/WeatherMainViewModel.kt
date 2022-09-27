@@ -1,7 +1,8 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.data.repository.local.SettingsRepository
+import com.desuzed.everyweather.data.repository.local.SettingsDataStore
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.ActionResult
 import com.desuzed.everyweather.domain.model.settings.Language
@@ -12,18 +13,17 @@ import com.desuzed.everyweather.domain.model.weather.WeatherResponse
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
-import com.desuzed.everyweather.util.action_result.ActionResultProvider
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 class WeatherMainViewModel(
-    private val useCase: WeatherMainUseCase,
+    private val weatherRepository: WeatherRepository,
     private val sharedPrefsProvider: SharedPrefsProvider,
     private val actionResultProvider: ActionResultProvider,
     private val roomProvider: RoomProvider,
-    settingsRepository: SettingsRepository,
+    settingsDataStore: SettingsDataStore,
 ) :
     BaseViewModel<WeatherState, WeatherMainAction>(WeatherState()) {
 
@@ -37,10 +37,10 @@ class WeatherMainViewModel(
         getCachedForecast()
         loadCachedQuery()
 
-        collect(settingsRepository.distanceDimen, ::collectWindSpeed)
-        collect(settingsRepository.tempDimen, ::collectTemperature)
-        collect(settingsRepository.lang, ::collectLanguage)
-        collect(settingsRepository.pressureDimen, ::collectPressure)
+        collect(settingsDataStore.distanceDimen, ::collectWindSpeed)
+        collect(settingsDataStore.tempDimen, ::collectTemperature)
+        collect(settingsDataStore.lang, ::collectLanguage)
+        collect(settingsDataStore.pressureDimen, ::collectPressure)
         collect(actionResultFlow, ::collectActionResult)
     }
 
@@ -48,7 +48,10 @@ class WeatherMainViewModel(
         viewModelScope.launch {
             setState { copy(isLoading = true, query = query) }
             val fetchedForecast =
-                useCase.fetchForecastOrErrorMessage(query, state.value.lang.id.lowercase())
+                weatherRepository.fetchForecastOrErrorMessage(
+                    query,
+                    state.value.lang.id.lowercase()
+                )
             val weatherResponse = fetchedForecast.weatherResponse
             val actionResult = fetchedForecast.actionResult
             val isLocationSaved = weatherResponse?.let { isLocationSaved(it) }

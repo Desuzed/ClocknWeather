@@ -11,4 +11,5 @@ data class LocationMainState(
     val geoResponses: List<GeoResponse>? = null,
     val isLoading: Boolean = false,
     val showPickerDialog: Boolean = false,
+    val showRequireLocationPermissionsDialog: Boolean = false,
 )

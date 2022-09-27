@@ -7,4 +7,5 @@ object Config {
     const val weatherApiName = "weatherApi"
     const val locationIqApi = "locationIqApi"
     const val TIMEOUT = 30L
+    var lang = ""
 }

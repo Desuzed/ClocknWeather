@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.presentation.features.weather_next_days
 
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.data.repository.local.SettingsRepository
+import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
@@ -12,14 +12,14 @@ import kotlinx.coroutines.launch
 
 class NextDaysViewModel(
     private val sharedPrefsProvider: SharedPrefsProvider,
-    settingsRepository: SettingsRepository,
+    settingsDataStore: SettingsDataStore,
 ) :
     BaseViewModel<NextDaysState, NextDaysAction>(NextDaysState()) {
     init {
-        collect(settingsRepository.distanceDimen, ::collectWindSpeed)
-        collect(settingsRepository.tempDimen, ::collectTemperature)
-        collect(settingsRepository.lang, ::collectLanguage)
-        collect(settingsRepository.pressureDimen, ::collectPressure)
+        collect(settingsDataStore.distanceDimen, ::collectWindSpeed)
+        collect(settingsDataStore.tempDimen, ::collectTemperature)
+        collect(settingsDataStore.lang, ::collectLanguage)
+        collect(settingsDataStore.pressureDimen, ::collectPressure)
 
         viewModelScope.launch {
             val cachedForecast = sharedPrefsProvider.loadForecastFromCache()

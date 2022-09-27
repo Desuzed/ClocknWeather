@@ -11,7 +11,7 @@
     <string name="saved_locations">Сохраненные места</string>
     <string name="feels_like">Ощущается:</string>
     <string name="enter_location_name">Введите название местоположения</string>
-    <string name="your_current_location_not_found">Ваше текущее местоположение не найдено</string>
+    <string name="your_current_location_not_found">Ваше текущее местоположение не найдено. Проверьте включено ли местоположение</string>
     <string name="api_key_error">Извините, разработчик имеет трудности с поставщиком информации о погоде. Повторите попытку позже</string>
     <string name="geo_api_error">Извините, разработчик имеет трудности с поставщиком геокодинга. Повторите попытку позже</string>
     <string name="q_not_provided">Возможно, Вы написали неверное местоположение. Оно не должно быть пустым</string>
@@ -24,7 +24,7 @@
     <string name="field_must_not_be_empty">Поля не должны быть пустыми</string>
     <string name="next_days_forecast">Погода на следующие дни</string>
     <string name="no_data_to_load">Нет информации для загрузки</string>
-    <string name="location_permissions_are_not_granted">Нет разрешений на доступ к Вашему местоположению</string>
+    <string name="location_permissions_are_not_granted">Нет разрешений на доступ к Вашему местоположению. Вы можете дать доступ в меню настроек приложений на устройстве</string>
     <string name="your_saved_cities_list_is_empty">Ваш список сохраненных местоположений пуст. Загрузите погоду и сохраните место с экрана погоды.</string>
     <string name="no_weather_data_is_loaded_header">Нет загруженной погоды. \nПожалуйста, попробуйте следующее:</string>
     <string name="no_weather_data_is_loaded">\t-Проверьте интернет соединение\n\t-Проверьте разрешение на местоположение. (Это нужно для загрузки погоды Вашего местоположения)\n\t-Перейдите на экран \"Местоположения\" и введите название города</string>
@@ -66,5 +66,8 @@
     <string name="retry">Повторить</string>
     <string name="results_were_found">Нашлось результатов: %d</string>
     <string name="redirection">Перенаправляем…</string>
+    <string name="require_location_permissions_title">Требуются разрешения на геопозицию для загрузки погоды по Вашему местоположению.</string>
+    <string name="require_location_permissions_description">Для предоставления доступа к геопозиции зайдите в раздел \"О приложении\" на Вашем устройстве, в разделе \"Разрешения приложений\" предоставьте разрешение к местоположению.</string>
+    <string name="allow">Разрешить</string>
 
 </resources>

@@ -17,36 +17,38 @@ val viewModelModule = module {
     viewModel {
         MainActivityViewModel(
             networkConnection = get(),
-            settingsRepository = get(),
+            settingsDataStore = get(),
             sharedPrefsProvider = get(),
+            userLocationProvider = get(),
         )
     }
     viewModel {
         LocationViewModel(
             roomProvider = get(),
             actionResultProvider = get(named(geoResultProviderName)),
-            locationUseCase = get(),
-            settingsRepository = get(),
+            locationRepository = get(),
+            settingsDataStore = get(),
+            userLocationProvider = get(),
         )
     }
     viewModel {
         WeatherMainViewModel(
-            useCase = get(),
+            weatherRepository = get(),
             sharedPrefsProvider = get(),
             actionResultProvider = get(named(weatherResultProviderName)),
             roomProvider = get(),
-            settingsRepository = get(),
+            settingsDataStore = get(),
         )
     }
     viewModel {
         NextDaysViewModel(
             sharedPrefsProvider = get(),
-            settingsRepository = get(),
+            settingsDataStore = get(),
         )
     }
 
     viewModel {
-        SettingsViewModel(settingsRepository = get())
+        SettingsViewModel(settingsDataStore = get())
     }
 
 }

@@ -10,4 +10,5 @@ sealed interface LocationMainAction {
     object ShowMapFragment : LocationMainAction
     object NavigateToSettings : LocationMainAction
     object NavigateBack : LocationMainAction
+    object RequestLocationPermissions : LocationMainAction
 }

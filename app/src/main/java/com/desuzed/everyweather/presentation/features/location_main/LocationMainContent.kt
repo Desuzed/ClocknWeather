@@ -95,6 +95,9 @@ fun LocationMainContent(
                     }
                 )
             }
+            if (state.showRequireLocationPermissionsDialog) {
+                RequirePermissionsDialogContent(onUserInteraction)
+            }
             if (state.locations.isEmpty()) {
                 RegularText(
                     text = stringResource(id = R.string.your_saved_cities_list_is_empty),
@@ -103,6 +106,52 @@ fun LocationMainContent(
                         .align(Alignment.Center)
                         .fillMaxWidth()
                         .padding(dimensionResource(id = R.dimen.dimen_20))
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun RequirePermissionsDialogContent(
+    onUserInteraction: (LocationUserInteraction) -> Unit,
+) {
+    val onDismiss = {
+        onUserInteraction(LocationUserInteraction.DismissLocationPermissionsDialog)
+    }
+    AppDialog(
+        modifier = Modifier,
+        onDismiss = onDismiss
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(dimensionResource(id = R.dimen.dimen_20))
+                .fillMaxWidth()
+        ) {
+            BoldText(
+                text = stringResource(id = R.string.require_location_permissions_title),
+                textAlign = TextAlign.Center
+            )
+            RegularText(
+                modifier = Modifier.padding(top = dimensionResource(id = R.dimen.dimen_10)),
+                text = stringResource(id = R.string.require_location_permissions_description),
+                textAlign = TextAlign.Center
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(id = R.dimen.dimen_20)),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RegularText(
+                    text = stringResource(id = R.string.cancel),
+                    onClick = onDismiss
+                )
+                RoundedButton(
+                    text = stringResource(id = R.string.allow),
+                    onClick = { onUserInteraction(LocationUserInteraction.RequestLocationPermissions) }
                 )
             }
         }

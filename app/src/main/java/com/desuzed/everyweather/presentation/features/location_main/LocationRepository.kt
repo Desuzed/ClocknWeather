@@ -2,11 +2,11 @@ package com.desuzed.everyweather.presentation.features.location_main
 
 import com.desuzed.everyweather.data.mapper.LocationResponseMapper
 import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
 import com.desuzed.everyweather.domain.model.location.geo.ResultGeo
 import com.desuzed.everyweather.domain.repository.remote.RemoteDataSource
-import com.desuzed.everyweather.util.action_result.ActionResultProvider
 
-class LocationUseCase(
+class LocationRepository(
     private val remoteDataSource: RemoteDataSource,
     private val actionResultProvider: ActionResultProvider,
 ) {

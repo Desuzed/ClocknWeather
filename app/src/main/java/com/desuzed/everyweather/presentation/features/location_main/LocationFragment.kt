@@ -54,13 +54,22 @@ class LocationFragment : Fragment() {
             LocationMainAction.ShowMapFragment -> showMapBotSheet()
             LocationMainAction.NavigateToSettings -> navigateToSettingsFragment()
             LocationMainAction.NavigateBack -> onBackClick()
+            LocationMainAction.RequestLocationPermissions -> requestLocationPermissions()
         }
     }
 
     private fun onMyLocationClick() {
-        (activity as MainActivity).locationHandler.findUserLocation()
-        val bundle = bundleOf(WeatherMainFragment.USER_LOCATION to true)
-        navigateToWeatherFragment(bundle)
+        if (viewModel.areLocationPermissionsGranted()) {
+            (activity as MainActivity).findUserLocation()
+            val bundle = bundleOf(WeatherMainFragment.USER_LOCATION to true)
+            navigateToWeatherFragment(bundle)
+        } else {
+            viewModel.launchRequireLocationPermissionsDialog()
+        }
+    }
+
+    private fun requestLocationPermissions() {
+        (activity as MainActivity).requestLocationPermissions()
     }
 
     private fun showMapBotSheet() {

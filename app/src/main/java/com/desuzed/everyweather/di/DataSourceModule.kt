@@ -2,7 +2,7 @@ package com.desuzed.everyweather.di
 
 import androidx.room.Room
 import com.desuzed.everyweather.data.repository.local.RoomProviderImpl
-import com.desuzed.everyweather.data.repository.local.SettingsRepository
+import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.local.SharedPrefsProviderImpl
 import com.desuzed.everyweather.data.repository.remote.RemoteDataSourceImpl
 import com.desuzed.everyweather.data.room.RoomDbApp
@@ -37,8 +37,8 @@ val localDataSourceModule = module {
         RemoteDataSourceImpl(weatherApi = get(), locationIqApi = get())
     }
 
-    single<SettingsRepository> {
-        SettingsRepository(context = androidApplication())
+    single<SettingsDataStore> {
+        SettingsDataStore(context = androidApplication())
     }
 
 }

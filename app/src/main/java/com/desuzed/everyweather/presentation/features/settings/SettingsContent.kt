@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
@@ -28,8 +29,8 @@ import com.desuzed.everyweather.ui.elements.*
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
 @Preview(
+    device = Devices.NEXUS_7,
     showBackground = true,
-    widthDp = 400,
     uiMode = Configuration.UI_MODE_NIGHT_NO,
     name = "PreviewLocationMainContent"
 )
@@ -40,12 +41,15 @@ private fun PreviewSettingsContent() {
         onUserInteraction = {},
     )
 }
+
 //todo history weather
 //todo contact to developer
 //todo locationHandling
 //todo change theme?????
 //todo notifications
 //todo delete all cache
+//todo widgets
+//todo notifications?????
 @Composable
 fun SettingsContent(
     state: SettingsState,
@@ -67,7 +71,9 @@ fun SettingsContent(
                         textAlign = TextAlign.Center
                     )
                     IconButton(
-                        modifier = Modifier.size(dimensionResource(id = R.dimen.dimen_34)).padding(start = dimensionResource(id = R.dimen.dimen_10)),
+                        modifier = Modifier
+                            .size(dimensionResource(id = R.dimen.dimen_34))
+                            .padding(start = dimensionResource(id = R.dimen.dimen_10)),
                         onClick = { onUserInteraction(SettingsUserInteraction.OnBackClick) },
                         content = {
                             Icon(

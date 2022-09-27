@@ -7,12 +7,13 @@
     <string name="set_place_on_map">Set place on map</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="allow">Allow</string>
     <string name="load_weather_of_this_location">Load weather of this location?</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="saved_locations">Saved locations</string>
     <string name="feels_like">Fells like:</string>
     <string name="enter_location_name">Enter location name</string>
-    <string name="your_current_location_not_found">Your current location not found</string>
+    <string name="your_current_location_not_found">Your current location not found. Check your phone location settings</string>
     <string name="results_were_found">Results found: %d</string>
     <string name="redirection">Redirection…</string>
     <string name="powered_by" translatable="false">Powered by: Weather API</string>
@@ -33,7 +34,9 @@
     <string name="field_must_not_be_empty">Field must not be empty</string>
     <string name="next_days_forecast">Next days forecast</string>
     <string name="no_data_to_load">No data to load</string>
-    <string name="location_permissions_are_not_granted">Location permissions are not granted</string>
+    <string name="require_location_permissions_title">Location permissions are required to load weather of your location.</string>
+    <string name="require_location_permissions_description">To grant permissions, navigate to \"App info\" on your device, after that go to \"Permissions\" and allow location permissions.</string>
+    <string name="location_permissions_are_not_granted">Location permissions are not granted. You can navigate to device\'s application settings menu and grant permissions</string>
     <string name="your_saved_cities_list_is_empty">Your saved cities list is empty. Load weather data and add your location from weather screen.</string>
     <string name="no_weather_data_is_loaded_header">No weather data is loaded. \nPlease, try following:</string>
     <string name="no_weather_data_is_loaded">\t-Check internet connection

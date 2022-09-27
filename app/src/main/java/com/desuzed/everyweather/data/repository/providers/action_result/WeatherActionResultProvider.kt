@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.util.action_result
+package com.desuzed.everyweather.data.repository.providers.action_result
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R

@@ -11,7 +11,7 @@ import com.desuzed.everyweather.domain.model.settings.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class SettingsRepository(private val context: Context) {
+class SettingsDataStore(private val context: Context) {
     private val Context.dataStore by preferencesDataStore(name = SETTINGS_PREFS)
 
     suspend fun setLanguage(lang: Lang) = edit { preferences ->

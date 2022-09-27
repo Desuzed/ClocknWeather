@@ -1,14 +1,14 @@
-package com.desuzed.everyweather.util.action_result
+package com.desuzed.everyweather.data.repository.providers.action_result
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.DELETED
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.NO_DATA
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.NO_INTERNET
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.SAVED
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.UNKNOWN
 import com.desuzed.everyweather.domain.model.ActionResult
 import com.desuzed.everyweather.domain.model.ActionType
-import com.desuzed.everyweather.util.action_result.ActionResultProvider.Companion.DELETED
-import com.desuzed.everyweather.util.action_result.ActionResultProvider.Companion.NO_DATA
-import com.desuzed.everyweather.util.action_result.ActionResultProvider.Companion.NO_INTERNET
-import com.desuzed.everyweather.util.action_result.ActionResultProvider.Companion.SAVED
-import com.desuzed.everyweather.util.action_result.ActionResultProvider.Companion.UNKNOWN
 
 abstract class BaseActionResultProvider(private val resources: Resources) : ActionResultProvider {
     override fun parseCode(errorCode: Int, query: String): ActionResult {

@@ -1,7 +1,9 @@
 package com.desuzed.everyweather.presentation.features.location_main
 
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.data.repository.local.SettingsRepository
+import com.desuzed.everyweather.data.repository.local.SettingsDataStore
+import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.ActionResult
 import com.desuzed.everyweather.domain.model.location.geo.GeoResponse
@@ -9,7 +11,6 @@ import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
-import com.desuzed.everyweather.util.action_result.ActionResultProvider
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -17,8 +18,9 @@ import kotlinx.coroutines.launch
 class LocationViewModel(
     private val roomProvider: RoomProvider,
     private val actionResultProvider: ActionResultProvider,
-    private val locationUseCase: LocationUseCase,
-    settingsRepository: SettingsRepository,
+    private val locationRepository: LocationRepository,
+    private val userLocationProvider: UserLocationProvider,
+    settingsDataStore: SettingsDataStore,
 ) :
     BaseViewModel<LocationMainState, LocationMainAction>(LocationMainState()) {
 
@@ -30,7 +32,7 @@ class LocationViewModel(
 
     init {
         collect(roomProvider.getAllLocations(), ::onNewLocations)
-        collect(settingsRepository.lang, ::collectLanguage)
+        collect(settingsDataStore.lang, ::collectLanguage)
         collect(actionResultFlow, ::collectActionResult)
     }
 
@@ -61,13 +63,25 @@ class LocationViewModel(
             LocationUserInteraction.Settings -> setAction(LocationMainAction.NavigateToSettings)
             LocationUserInteraction.OnBackClick -> setAction(LocationMainAction.NavigateBack)
             LocationUserInteraction.DismissLocationPicker -> setState { copy(showPickerDialog = false) }
+            LocationUserInteraction.DismissLocationPermissionsDialog -> setState {
+                copy(
+                    showRequireLocationPermissionsDialog = false
+                )
+            }
+            LocationUserInteraction.RequestLocationPermissions -> onRequestPermissions()
         }
+    }
+
+    fun areLocationPermissionsGranted(): Boolean = userLocationProvider.arePermissionsGranted()
+
+    fun launchRequireLocationPermissionsDialog() {
+        setState { copy(showRequireLocationPermissionsDialog = true) }
     }
 
     private fun findTypedLocation() {
         viewModelScope.launch {
             setState { copy(isLoading = true) }
-            val resultGeo = locationUseCase.fetchGeocodingResultOrError(
+            val resultGeo = locationRepository.fetchGeocodingResultOrError(
                 state.value.geoText,
                 state.value.lang.id.lowercase()
             )
@@ -84,6 +98,11 @@ class LocationViewModel(
             }
         }
 
+    }
+
+    private fun onRequestPermissions() {
+        setAction(LocationMainAction.RequestLocationPermissions)
+        setState { copy(showRequireLocationPermissionsDialog = false) }
     }
 
     private fun onConfirmLocation(geoResponse: GeoResponse) {

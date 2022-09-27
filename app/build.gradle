@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "com.desuzed.everyweather"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 3
         versionName "1.0.2"
 
@@ -39,14 +39,12 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.0.5"
+        kotlinCompilerExtensionVersion "1.3.1"
     }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
 
     def nav_version = "2.4.2"
 
@@ -69,9 +67,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-ads:20.5.0'
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    //Пришлось добавить зависимость lifecycle т.к appCompat 1.5.1 без неё не работает
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -87,13 +86,12 @@ dependencies {
     implementation 'androidx.compose.ui:ui-tooling:1.1.1'
 
     //Koin
-    def koin_version= "3.2.0"
+    def koin_version = "3.2.0"
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
 
-    implementation "androidx.room:room-ktx:2.3.0"
-    kapt "androidx.room:room-compiler:2.3.0"
-    androidTestImplementation "androidx.room:room-testing:2.3.0"
+    implementation "androidx.room:room-ktx:2.4.3"
+    kapt "androidx.room:room-compiler:2.4.3"
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
 }

@@ -1,23 +1,23 @@
 package com.desuzed.everyweather.presentation.features.settings
 
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.data.repository.local.SettingsRepository
+import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.domain.model.settings.*
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val settingsRepository: SettingsRepository,
+    private val settingsDataStore: SettingsDataStore,
 ) :
     BaseViewModel<SettingsState, SettingsAction>(SettingsState()) {
 
     init {
-        collect(settingsRepository.darkMode, ::collectDarkTheme)
-        collect(settingsRepository.lang, ::collectLanguage)
-        collect(settingsRepository.distanceDimen, ::collectWindSpeed)
-        collect(settingsRepository.tempDimen, ::collectTemperature)
-        collect(settingsRepository.pressureDimen, ::collectPressure)
+        collect(settingsDataStore.darkMode, ::collectDarkTheme)
+        collect(settingsDataStore.lang, ::collectLanguage)
+        collect(settingsDataStore.distanceDimen, ::collectWindSpeed)
+        collect(settingsDataStore.tempDimen, ::collectTemperature)
+        collect(settingsDataStore.pressureDimen, ::collectPressure)
     }
 
     fun onUserInteraction(interaction: SettingsUserInteraction) {
@@ -43,22 +43,21 @@ class SettingsViewModel(
 
     private fun onDarkMode(darkMode: DarkMode) {
         viewModelScope.launch {
-            settingsRepository.setDarkMode(darkMode)
+            settingsDataStore.setDarkMode(darkMode)
             hideDialog()
         }
     }
 
     private fun onLanguage(lang: Lang) {
         viewModelScope.launch {
-            settingsRepository.setLanguage(lang)
-            delay(500)
+            settingsDataStore.setLanguage(lang)
             hideDialog()
         }
     }
 
     private fun onDistanceDimen(distanceDimen: DistanceDimen) {
         viewModelScope.launch {
-            settingsRepository.setDistanceDimension(distanceDimen)
+            settingsDataStore.setDistanceDimension(distanceDimen)
             delay(500)
             hideDialog()
         }
@@ -66,7 +65,7 @@ class SettingsViewModel(
 
     private fun onTemperatureDimen(tempDimen: TempDimen) {
         viewModelScope.launch {
-            settingsRepository.setTemperatureDimension(tempDimen)
+            settingsDataStore.setTemperatureDimension(tempDimen)
             delay(500)
             hideDialog()
         }
@@ -74,7 +73,7 @@ class SettingsViewModel(
 
     private fun onPressureDimen(pressureDimen: PressureDimen) {
         viewModelScope.launch {
-            settingsRepository.setPressureDimension(pressureDimen)
+            settingsDataStore.setPressureDimension(pressureDimen)
             delay(500)
             hideDialog()
         }
