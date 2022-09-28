@@ -11,7 +11,7 @@ class WeatherActionResultProvider(private val resources: Resources) :
         return when (errorCode) {
             500, 501 -> ActionResult(
                 message = resources.getString(R.string.wrong_server_result),
-                ActionType.RETRY
+                actionType = ActionType.RETRY
             )
             in 502..530 -> ActionResult(
                 message = resources.getString(R.string.server_error),

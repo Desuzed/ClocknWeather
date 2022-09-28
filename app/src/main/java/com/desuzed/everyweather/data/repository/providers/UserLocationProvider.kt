@@ -49,6 +49,7 @@ class UserLocationProvider(
                     } else {
                         val actionError = ActionResult(
                             message = getString(R.string.your_current_location_not_found),
+                            messageId = R.string.your_current_location_not_found,
                             actionType = ActionType.RETRY
                         )
                         _userLocationFlow.value = UserLocationResult(actionResult = actionError)
@@ -58,6 +59,7 @@ class UserLocationProvider(
         } else {
             val actionError = ActionResult(
                 message = getString(R.string.location_permissions_are_not_granted),
+                messageId = R.string.location_permissions_are_not_granted,
                 actionType = ActionType.OK
             )
             _userLocationFlow.value = UserLocationResult(actionResult = actionError)
