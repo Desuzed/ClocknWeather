@@ -45,15 +45,15 @@ class SettingsViewModel(
 
     private fun onDarkMode(darkMode: DarkMode) {
         viewModelScope.launch {
-            settingsDataStore.setDarkMode(darkMode)
             hideDialog()
+            settingsDataStore.setDarkMode(darkMode)
         }
     }
 
     private fun onLanguage(lang: Lang) {
         viewModelScope.launch {
-            settingsDataStore.setLanguage(lang)
             hideDialog()
+            settingsDataStore.setLanguage(lang)
         }
     }
 

@@ -20,20 +20,25 @@ import java.util.*
 
 fun Fragment.navigate(directions: Int, bundle: Bundle? = null) {
     val controller = findNavController()
-    val currentDestination =
-        (controller.currentDestination as? FragmentNavigator.Destination)?.className
-            ?: (controller.currentDestination as? DialogFragmentNavigator.Destination)?.className
-    if (currentDestination == this.javaClass.name) {
+    if (isTargetDestination()) {
         if (bundle == null) {
             controller.navigate(directions)
         } else controller.navigate(directions, bundle)
     }
 }
 
+fun Fragment.isTargetDestination(): Boolean {
+    val controller = findNavController()
+    val currentDestination =
+        (controller.currentDestination as? FragmentNavigator.Destination)?.className
+            ?: (controller.currentDestination as? DialogFragmentNavigator.Destination)?.className
+    return currentDestination == this.javaClass.name
+}
+
 fun Fragment.addOnBackPressedCallback() {
     val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            findNavController().navigateUp()
+            onBackClick()
         }
     }
     requireActivity().onBackPressedDispatcher.addCallback(
@@ -43,7 +48,9 @@ fun Fragment.addOnBackPressedCallback() {
 }
 
 fun Fragment.onBackClick() {
-    findNavController().navigateUp()
+    if (isTargetDestination()) {
+        findNavController().navigateUp()
+    }
 }
 
 inline fun <T> Fragment.collect(

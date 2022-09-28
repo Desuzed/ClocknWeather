@@ -23,8 +23,7 @@ class LocationViewModel(
     private val userLocationProvider: UserLocationProvider,
     private val analytics: LocationMainAnalytics,
     settingsDataStore: SettingsDataStore,
-) :
-    BaseViewModel<LocationMainState, LocationMainAction>(LocationMainState()) {
+) : BaseViewModel<LocationMainState, LocationMainAction>(LocationMainState()) {
 
     private val actionResultFlow = MutableSharedFlow<ActionResult>(
         replay = 0,
@@ -67,9 +66,7 @@ class LocationViewModel(
             LocationUserInteraction.OnBackClick -> setAction(LocationMainAction.NavigateBack)
             LocationUserInteraction.DismissLocationPicker -> setState { copy(showPickerDialog = false) }
             LocationUserInteraction.DismissLocationPermissionsDialog -> setState {
-                copy(
-                    showRequireLocationPermissionsDialog = false
-                )
+                copy(showRequireLocationPermissionsDialog = false)
             }
             LocationUserInteraction.RequestLocationPermissions -> onRequestPermissions()
         }
