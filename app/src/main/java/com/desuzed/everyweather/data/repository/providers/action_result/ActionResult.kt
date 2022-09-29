@@ -1,8 +1,7 @@
-package com.desuzed.everyweather.domain.model
+package com.desuzed.everyweather.data.repository.providers.action_result
 
 data class ActionResult(
-    val message: String,
-    val messageId: Int? = null,
+    val code: Int,
     val actionType: ActionType = ActionType.OK
 )
 

@@ -10,8 +10,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.ActionResult
-import com.desuzed.everyweather.domain.model.ActionType
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionType
+import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
+import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
 import com.desuzed.everyweather.util.addOnBackPressedCallback
@@ -48,7 +49,7 @@ class LocationFragment : Fragment() {
 
     private fun onNewAction(action: LocationMainAction) {
         when (action) {
-            is LocationMainAction.ShowSnackbar -> showSnackbarWithAction(action.action)
+            is LocationMainAction.ShowSnackbar -> showSnackbar(action.queryResult)
             is LocationMainAction.NavigateToWeather -> navigateToWeatherFragment(bundleOf(action.key to action.query))
             LocationMainAction.MyLocation -> onMyLocationClick()
             LocationMainAction.ShowMapFragment -> showMapBotSheet()
@@ -84,13 +85,12 @@ class LocationFragment : Fragment() {
         navigate(R.id.action_locationFragment_to_settingsFragment)
     }
 
-    private fun showSnackbarWithAction(action: ActionResult) {
-        if (action.message.isEmpty()) {
-            return
-        }
+    private fun showSnackbar(queryResult: QueryResult) {
+        val provider = GeoActionResultProvider(resources)
+        val message = provider.parseCode(queryResult.code, queryResult.query)
         val onClick: () -> Unit
         val buttonTextId: Int
-        when (action.actionType) {
+        when (queryResult.actionType) {
             ActionType.OK -> {
                 onClick = {}
                 buttonTextId = R.string.ok
@@ -103,7 +103,7 @@ class LocationFragment : Fragment() {
             }
         }
         (activity as MainActivity).showSnackbar(
-            message = action.message,
+            message = message,
             actionStringId = buttonTextId,
             onActionClick = onClick
         )

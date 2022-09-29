@@ -244,7 +244,6 @@ fun GeoLocationsPickerContent(
     Column {
         val inputText = stringResource(id = R.string.search_by)
         val startIndex = inputText.indexOf("L")
-        val redirectionMessage = stringResource(id = R.string.redirection)
         LinkText(
             modifier = Modifier
                 .fillMaxWidth()
@@ -261,7 +260,7 @@ fun GeoLocationsPickerContent(
                 textAlign = TextAlign.Center
             ),
             spannableStringColor = EveryweatherTheme.colors.urlLinkTextColor,
-            onClick = { onUserInteraction(LocationUserInteraction.Redirection(redirectionMessage)) }
+            onClick = { onUserInteraction(LocationUserInteraction.Redirection) }
         )
         BoldText(
             text = stringResource(id = R.string.results_were_found, geoList.size),

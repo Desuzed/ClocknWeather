@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.WeatherMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
+import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
-import com.desuzed.everyweather.domain.model.ActionResult
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
@@ -22,14 +22,13 @@ import kotlinx.coroutines.launch
 class WeatherMainViewModel(
     private val weatherRepository: WeatherRepository,
     private val sharedPrefsProvider: SharedPrefsProvider,
-    private val actionResultProvider: ActionResultProvider,
     private val roomProvider: RoomProvider,
     private val analytics: WeatherMainAnalytics,
     settingsDataStore: SettingsDataStore,
 ) :
     BaseViewModel<WeatherState, WeatherMainAction>(WeatherState()) {
 
-    private val actionResultFlow = MutableSharedFlow<ActionResult>(
+    private val queryResultFlow = MutableSharedFlow<QueryResult>(
         replay = 0,
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -43,7 +42,7 @@ class WeatherMainViewModel(
         collect(settingsDataStore.tempDimen, ::collectTemperature)
         collect(settingsDataStore.lang, ::collectLanguage)
         collect(settingsDataStore.pressureDimen, ::collectPressure)
-        collect(actionResultFlow, ::collectActionResult)
+        collect(queryResultFlow, ::collectActionResult)
     }
 
     fun getForecast(query: String) {
@@ -55,7 +54,7 @@ class WeatherMainViewModel(
                     state.value.lang.id.lowercase()
                 )
             val weatherResponse = fetchedForecast.weatherResponse
-            val actionResult = fetchedForecast.actionResult
+            val actionResult = fetchedForecast.queryResult
             val isLocationSaved = weatherResponse?.let { isLocationSaved(it) }
             setState {
                 copy(
@@ -65,7 +64,7 @@ class WeatherMainViewModel(
                 )
             }
             if (actionResult != null) {
-                actionResultFlow.emit(actionResult)
+                queryResultFlow.emit(actionResult)
                 setState {
                     copy(
                         isLoading = false,
@@ -83,11 +82,9 @@ class WeatherMainViewModel(
             WeatherUserInteraction.NextDays -> setAction(WeatherMainAction.NavigateToNextDaysWeather)
             WeatherUserInteraction.Refresh -> getForecast(state.value.query)
             WeatherUserInteraction.SaveLocation -> saveLocation()
-            is WeatherUserInteraction.Redirection -> setAction(
-                WeatherMainAction.ShowSnackbar(
-                    ActionResult(message = userInteraction.message)
-                )
-            )
+            WeatherUserInteraction.Redirection -> viewModelScope.launch {
+                queryResultFlow.emit(QueryResult(ActionResultProvider.REDIRECTION))
+            }
         }
     }
 
@@ -107,15 +104,13 @@ class WeatherMainViewModel(
 
     private fun onError(code: Int) {
         viewModelScope.launch {
-            val message = actionResultProvider.parseCode(code)
-            actionResultFlow.emit(message)
+            queryResultFlow.emit(QueryResult(code = code))
         }
     }
 
     private fun onSuccess(code: Int) {
-        val message = actionResultProvider.parseCode(code)
         viewModelScope.launch {
-            actionResultFlow.emit(message)
+            queryResultFlow.emit(QueryResult(code = code))
             setState {
                 copy(isAddButtonEnabled = false)
             }
@@ -151,8 +146,8 @@ class WeatherMainViewModel(
         setState { copy(query = query) }
     }
 
-    private fun collectActionResult(actionResult: ActionResult) =
-        setAction(WeatherMainAction.ShowSnackbar(actionResult))
+    private fun collectActionResult(queryResult: QueryResult) =
+        setAction(WeatherMainAction.ShowSnackbar(queryResult))
 
     private fun collectWindSpeed(windSpeed: WindSpeed) = setState { copy(windSpeed = windSpeed) }
 

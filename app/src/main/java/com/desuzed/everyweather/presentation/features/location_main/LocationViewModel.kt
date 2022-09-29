@@ -5,8 +5,8 @@ import com.desuzed.everyweather.analytics.LocationMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
 import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
+import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
-import com.desuzed.everyweather.domain.model.ActionResult
 import com.desuzed.everyweather.domain.model.location.geo.GeoResponse
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
@@ -18,14 +18,13 @@ import kotlinx.coroutines.launch
 
 class LocationViewModel(
     private val roomProvider: RoomProvider,
-    private val actionResultProvider: ActionResultProvider,
     private val locationRepository: LocationRepository,
     private val userLocationProvider: UserLocationProvider,
     private val analytics: LocationMainAnalytics,
     settingsDataStore: SettingsDataStore,
 ) : BaseViewModel<LocationMainState, LocationMainAction>(LocationMainState()) {
 
-    private val actionResultFlow = MutableSharedFlow<ActionResult>(
+    private val queryResultFlow = MutableSharedFlow<QueryResult>(
         replay = 0,
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -34,7 +33,7 @@ class LocationViewModel(
     init {
         collect(roomProvider.getAllLocations(), ::onNewLocations)
         collect(settingsDataStore.lang, ::collectLanguage)
-        collect(actionResultFlow, ::collectActionResult)
+        collect(queryResultFlow, ::collectQueryResult)
     }
 
     fun onNewGeoText(text: String) {
@@ -54,11 +53,9 @@ class LocationViewModel(
                     key = WeatherMainFragment.QUERY_KEY
                 )
             )
-            is LocationUserInteraction.Redirection -> setAction(
-                LocationMainAction.ShowSnackbar(
-                    ActionResult(message = userInteraction.message)
-                )
-            )
+            LocationUserInteraction.Redirection -> viewModelScope.launch {
+                queryResultFlow.emit(QueryResult(code = ActionResultProvider.REDIRECTION))
+            }
             LocationUserInteraction.FindByQuery -> findTypedLocation()
             LocationUserInteraction.FindOnMap -> setAction(LocationMainAction.ShowMapFragment)
             LocationUserInteraction.MyLocation -> setAction(LocationMainAction.MyLocation)
@@ -92,9 +89,9 @@ class LocationViewModel(
                     showPickerDialog = true
                 )
             }
-            val resultAction = resultGeo.actionResult
+            val resultAction = resultGeo.queryResult
             if (resultAction != null) {
-                actionResultFlow.emit(resultAction)
+                queryResultFlow.emit(resultAction)
             }
         }
 
@@ -122,14 +119,12 @@ class LocationViewModel(
             else onError(ActionResultProvider.FAIL)
         }
 
-    private fun onSuccess(code: Int) {
-        val message = actionResultProvider.parseCode(code).message
-        setAction(LocationMainAction.ShowSnackbar(ActionResult(message = message)))
+    private suspend fun onSuccess(code: Int) {
+        queryResultFlow.emit(QueryResult(code))
     }
 
-    private fun onError(code: Int) {
-        val message = actionResultProvider.parseCode(code).message
-        setAction(LocationMainAction.ShowSnackbar(ActionResult(message = message)))
+    private suspend fun onError(code: Int) {
+        queryResultFlow.emit(QueryResult(code))
     }
 
     private fun onNewLocations(locationsList: List<FavoriteLocationDto>) {
@@ -138,6 +133,7 @@ class LocationViewModel(
 
     private fun collectLanguage(language: Language) = setState { copy(lang = language) }
 
-    private fun collectActionResult(actionResult: ActionResult) =
-        setAction(LocationMainAction.ShowSnackbar(actionResult))
+    private fun collectQueryResult(queryResult: QueryResult) =
+        setAction(LocationMainAction.ShowSnackbar(queryResult))
+
 }

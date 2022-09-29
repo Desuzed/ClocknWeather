@@ -1,8 +1,8 @@
 package com.desuzed.everyweather.domain.model.location.geo
 
-import com.desuzed.everyweather.domain.model.ActionResult
+import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
 
 data class ResultGeo(
     val geoResponse: List<GeoResponse>?,
-    val actionResult: ActionResult?
+    val queryResult: QueryResult?
 )

@@ -9,8 +9,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.ActionResult
-import com.desuzed.everyweather.domain.model.ActionType
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionType
+import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
+import com.desuzed.everyweather.data.repository.providers.action_result.WeatherActionResultProvider
 import com.desuzed.everyweather.domain.model.UserLatLng
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.util.collect
@@ -59,7 +60,7 @@ class WeatherMainFragment : Fragment() {
 
     private fun onNewAction(action: WeatherMainAction) {
         when (action) {
-            is WeatherMainAction.ShowSnackbar -> showSnackbar(action.actionResult)
+            is WeatherMainAction.ShowSnackbar -> showSnackbar(action.queryResult)
             WeatherMainAction.NavigateToLocation -> navigate(R.id.action_weatherFragment_to_locationFragment)
             WeatherMainAction.NavigateToNextDaysWeather -> navigate(R.id.action_weatherFragment_to_nextDaysBottomSheet)
         }
@@ -74,13 +75,12 @@ class WeatherMainFragment : Fragment() {
         }
     }
 
-    private fun showSnackbar(actionResult: ActionResult) {
-        if (actionResult.message.isEmpty()) {
-            return
-        }
+    private fun showSnackbar(queryResult: QueryResult) {
+        val provider = WeatherActionResultProvider(resources)
+        val message = provider.parseCode(queryResult.code, queryResult.query)
         val onClick: () -> Unit
         val buttonTextId: Int
-        when (actionResult.actionType) {
+        when (queryResult.actionType) {
             ActionType.OK -> {
                 onClick = {}
                 buttonTextId = R.string.ok
@@ -93,7 +93,7 @@ class WeatherMainFragment : Fragment() {
             }
         }
         (activity as MainActivity).showSnackbar(
-            message = actionResult.message,
+            message = message,
             actionStringId = buttonTextId,
             onActionClick = onClick
         )

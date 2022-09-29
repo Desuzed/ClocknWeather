@@ -4,11 +4,11 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.ActionResult
-import com.desuzed.everyweather.domain.model.ActionType
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResult
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionType
+import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider.Companion.LOCATION_NOT_FOUND
+import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider.Companion.NO_LOCATION_PERMISSIONS
 import com.desuzed.everyweather.domain.model.UserLatLng
 import com.desuzed.everyweather.domain.model.UserLatLngMapper
 import com.desuzed.everyweather.domain.model.location.UserLocationResult
@@ -48,8 +48,7 @@ class UserLocationProvider(
                         lookingForLocation = null
                     } else {
                         val actionError = ActionResult(
-                            message = getString(R.string.your_current_location_not_found),
-                            messageId = R.string.your_current_location_not_found,
+                            code = LOCATION_NOT_FOUND,
                             actionType = ActionType.RETRY
                         )
                         _userLocationFlow.value = UserLocationResult(actionResult = actionError)
@@ -58,8 +57,7 @@ class UserLocationProvider(
                 }
         } else {
             val actionError = ActionResult(
-                message = getString(R.string.location_permissions_are_not_granted),
-                messageId = R.string.location_permissions_are_not_granted,
+                code = NO_LOCATION_PERMISSIONS,
                 actionType = ActionType.OK
             )
             _userLocationFlow.value = UserLocationResult(actionResult = actionError)
@@ -82,8 +80,6 @@ class UserLocationProvider(
 
     private fun shouldRefreshUserLocation(userLatLng: UserLatLng): Boolean =
         System.currentTimeMillis() - userLatLng.time > 1000 * 60
-
-    private fun getString(@StringRes idRes: Int): String = context.resources.getString(idRes)
 
     companion object {
         private const val GRANTED = PackageManager.PERMISSION_GRANTED

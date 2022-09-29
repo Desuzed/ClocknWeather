@@ -12,7 +12,7 @@ sealed interface LocationUserInteraction {
     object RequestLocationPermissions : LocationUserInteraction
     object DismissLocationPicker : LocationUserInteraction
     object DismissLocationPermissionsDialog : LocationUserInteraction
-    class Redirection(val message: String) : LocationUserInteraction
+    object Redirection : LocationUserInteraction
     class FavoriteLocation(val favoriteLocationDto: FavoriteLocationDto) : LocationUserInteraction
     class ConfirmFoundLocation(val geo: GeoResponse) : LocationUserInteraction
     class DeleteFavoriteLocation(

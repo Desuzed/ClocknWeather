@@ -2,34 +2,17 @@ package com.desuzed.everyweather.data.repository.providers.action_result
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.ActionResult
-import com.desuzed.everyweather.domain.model.ActionType
 
-class GeoActionResultProvider(
-    private val resources: Resources
-) : BaseActionResultProvider(resources) {
-    override fun parseCode(errorCode: Int, query: String): ActionResult {
+class GeoActionResultProvider(resources: Resources) : BaseActionResultProvider(resources) {
+    override fun parseCode(errorCode: Int, query: String): String {
         return when (errorCode) {
-            MISSING_PARAMS -> ActionResult(
-                message = resources.getString(R.string.no_location_found, query),
-                actionType = ActionType.RETRY
-            )
-            INVALID_TOKEN -> ActionResult(
-                message = resources.getString(R.string.geo_api_error),
-                actionType = ActionType.RETRY
-            )
-            ACCESS_RESTRICTED -> ActionResult(
-                message = resources.getString(R.string.geo_api_error),
-                actionType = ActionType.RETRY
-            )
-            RATE_LIMIT -> ActionResult(
-                message = resources.getString(R.string.retry_again),
-                actionType = ActionType.RETRY
-            )
-            UNABLE_TO_GEOCODE -> ActionResult(
-                message = resources.getString(R.string.no_location_found, query),
-                actionType = ActionType.RETRY
-            )
+            MISSING_PARAMS -> getString(R.string.no_location_found, query)
+            INVALID_TOKEN -> getString(R.string.geo_api_error)
+            ACCESS_RESTRICTED -> getString(R.string.geo_api_error)
+            RATE_LIMIT -> getString(R.string.retry_again)
+            UNABLE_TO_GEOCODE -> getString(R.string.no_location_found, query)
+            NO_LOCATION_PERMISSIONS -> getString(R.string.your_current_location_not_found)
+            LOCATION_NOT_FOUND -> getString(R.string.location_permissions_are_not_granted)
             else -> super.parseCode(errorCode, query)
         }
     }
@@ -40,5 +23,8 @@ class GeoActionResultProvider(
         private const val ACCESS_RESTRICTED = 403
         private const val UNABLE_TO_GEOCODE = 404
         private const val RATE_LIMIT = 429
+        const val NO_LOCATION_PERMISSIONS = 900
+        const val LOCATION_NOT_FOUND = 901
+
     }
 }

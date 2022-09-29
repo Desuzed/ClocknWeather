@@ -3,7 +3,7 @@ package com.desuzed.everyweather.presentation.features.main_activity
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
-import com.desuzed.everyweather.domain.model.ActionResult
+import com.desuzed.everyweather.data.repository.providers.action_result.ActionResult
 import com.desuzed.everyweather.domain.model.UserLatLng
 import com.desuzed.everyweather.domain.model.location.UserLocationResult
 import com.desuzed.everyweather.domain.model.settings.DarkMode
@@ -17,9 +17,8 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-//todo refactor
 class MainActivityViewModel(
-    private val networkConnection: NetworkConnection,
+    networkConnection: NetworkConnection,
     private val settingsDataStore: SettingsDataStore,
     private val sharedPrefsProvider: SharedPrefsProvider,
     private val userLocationProvider: UserLocationProvider,
