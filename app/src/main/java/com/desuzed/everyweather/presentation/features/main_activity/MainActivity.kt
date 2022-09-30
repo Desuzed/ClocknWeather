@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.StringRes
@@ -101,7 +102,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        val lang = newConfig.locales[0].language
+        val lang = getLocale().language
         viewModel.onLanguage(lang)
         super.onConfigurationChanged(newConfig)
     }
@@ -161,7 +162,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeAppLanguage(lang: String) {
         val locale = Locale(lang)
-        if (locale == resources.configuration.locales[0] || lang.isEmpty()) {
+        val currentLocale = getLocale()
+        if (locale == currentLocale || lang.isEmpty()) {
             return
         }
         Config.lang = lang
@@ -175,6 +177,14 @@ class MainActivity : AppCompatActivity() {
         val view: View = binding.root
         setContentView(view)
     }
+
+    private fun getLocale(): Locale =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            resources.configuration.locales[0]
+        } else {
+            resources.configuration.locale
+        }
+
 
     override fun attachBaseContext(newBase: Context) {
         val language = Config.lang

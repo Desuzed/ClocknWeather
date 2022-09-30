@@ -3,6 +3,7 @@ package com.desuzed.everyweather.util
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources.getSystem
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -98,7 +99,12 @@ fun Activity.setAppLocaleAndReturnContext(language: String, newBase: Context): C
     val config = res.configuration
     config.setLocale(locale)
     config.setLayoutDirection(locale)
-    return newBase.createConfigurationContext(config)
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        newBase.createConfigurationContext(config)
+    } else {
+        res.updateConfiguration(config, res.displayMetrics)
+        newBase
+    }
 }
 
 val Int.toIntDp: Int get() = (this / getSystem().displayMetrics.density).toInt()
