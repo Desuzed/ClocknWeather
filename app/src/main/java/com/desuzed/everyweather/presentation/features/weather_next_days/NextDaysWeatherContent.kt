@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -103,6 +104,7 @@ fun ForecastListItem(
     isLastItem: Boolean,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
     Card(
         modifier = Modifier
             .padding(
@@ -111,7 +113,9 @@ fun ForecastListItem(
                 else dimensionResource(id = R.dimen.dimen_0),
             )
             .fillMaxSize()
-            .clickable { isExpanded = !isExpanded },
+            .clickable(interactionSource = interactionSource, indication = null) {
+                isExpanded = !isExpanded
+            },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         backgroundColor = EveryweatherTheme.colors.tertiary,
         elevation = dimensionResource(id = R.dimen.dimen_8)

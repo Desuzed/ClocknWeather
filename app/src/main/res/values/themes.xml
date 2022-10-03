@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.Everyweather" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/button_color_light</item>
@@ -11,6 +11,7 @@
         <item name="snackbarStyle">@style/SnackBarStyle</item>
         <item name="snackbarButtonStyle">@style/SnackbarButton</item>
         <item name="snackbarTextViewStyle">@style/SnackbarText</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
     <!--Splash screen theme-->

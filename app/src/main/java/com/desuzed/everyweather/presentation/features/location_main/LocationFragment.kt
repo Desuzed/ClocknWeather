@@ -86,6 +86,10 @@ class LocationFragment : Fragment() {
     }
 
     private fun showSnackbar(queryResult: QueryResult) {
+        if (queryResult.code == GeoActionResultProvider.RATE_LIMIT) {
+            navigateToWeatherFragment(bundleOf(WeatherMainFragment.QUERY_KEY to queryResult.query))
+            return
+        }
         val provider = GeoActionResultProvider(resources)
         val message = provider.parseCode(queryResult.code, queryResult.query)
         val onClick: () -> Unit

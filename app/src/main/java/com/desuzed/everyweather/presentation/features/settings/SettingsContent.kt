@@ -42,9 +42,6 @@ private fun PreviewSettingsContent() {
     )
 }
 
-//todo contact to developer
-//todo widgets
-//todo notifications?????
 @Composable
 fun SettingsContent(
     state: SettingsState,

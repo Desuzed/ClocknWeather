@@ -25,8 +25,7 @@ class WeatherMainViewModel(
     private val roomProvider: RoomProvider,
     private val analytics: WeatherMainAnalytics,
     settingsDataStore: SettingsDataStore,
-) :
-    BaseViewModel<WeatherState, WeatherMainAction>(WeatherState()) {
+) : BaseViewModel<WeatherState, WeatherMainAction>(WeatherState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
         replay = 0,

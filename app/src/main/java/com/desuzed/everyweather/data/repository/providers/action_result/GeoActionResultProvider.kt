@@ -22,7 +22,7 @@ class GeoActionResultProvider(resources: Resources) : BaseActionResultProvider(r
         private const val INVALID_TOKEN = 401
         private const val ACCESS_RESTRICTED = 403
         private const val UNABLE_TO_GEOCODE = 404
-        private const val RATE_LIMIT = 429
+        const val RATE_LIMIT = 429
         const val NO_LOCATION_PERMISSIONS = 900
         const val LOCATION_NOT_FOUND = 901
 
