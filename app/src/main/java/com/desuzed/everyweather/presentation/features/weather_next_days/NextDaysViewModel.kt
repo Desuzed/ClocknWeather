@@ -8,13 +8,13 @@ import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
+import com.desuzed.everyweather.presentation.base.UserInteraction
 import kotlinx.coroutines.launch
 
 class NextDaysViewModel(
     private val sharedPrefsProvider: SharedPrefsProvider,
     settingsDataStore: SettingsDataStore,
-) :
-    BaseViewModel<NextDaysState, NextDaysAction>(NextDaysState()) {
+) : BaseViewModel<NextDaysState, NextDaysAction, UserInteraction>(NextDaysState()) {
     init {
         collect(settingsDataStore.distanceDimen, ::collectWindSpeed)
         collect(settingsDataStore.tempDimen, ::collectTemperature)

@@ -20,7 +20,7 @@ class SettingsDataStore(private val context: Context) {
 
     val lang: Flow<Language> = getFlowOf(KEY_LANGUAGE, Lang.RU.lang).map { langId ->
         val langValueId = when (langId) {
-            "RU" -> R.string.russian
+            Lang.RU.lang -> R.string.russian
             else -> R.string.english
         }
         Language(
@@ -40,8 +40,8 @@ class SettingsDataStore(private val context: Context) {
             DistanceDimen.METRIC_KMH.dimensionName
         ).map { distanceDimenId ->
             val distValueId = when (distanceDimenId) {
-                "IMPERIAL" -> R.string.mph
-                "METRIC_MS" -> R.string.ms
+                DistanceDimen.IMPERIAL.dimensionName -> R.string.mph
+                DistanceDimen.METRIC_MS.dimensionName -> R.string.ms
                 else -> R.string.kmh
             }
             WindSpeed(
@@ -58,7 +58,7 @@ class SettingsDataStore(private val context: Context) {
     val tempDimen: Flow<Temperature> =
         getFlowOf(KEY_TEMPERATURE_DIMENSION, TempDimen.CELCIUS.dimensionName).map { tempDimenId ->
             val tempValueId = when (tempDimenId) {
-                "FAHRENHEIT" -> R.string.fahrenheit
+                TempDimen.FAHRENHEIT.dimensionName -> R.string.fahrenheit
                 else -> R.string.celcius
             }
             Temperature(
@@ -77,8 +77,8 @@ class SettingsDataStore(private val context: Context) {
         PressureDimen.MILLIMETERS.dimensionName
     ).map { pressureDimenId ->
         val pressureValueId = when (pressureDimenId) {
-            "MILLIBAR" -> R.string.mb
-            "INCHES" -> R.string.inch
+            PressureDimen.MILLIBAR.dimensionName -> R.string.mb
+            PressureDimen.INCHES.dimensionName -> R.string.inch
             else -> R.string.mmhg
 
         }
@@ -96,8 +96,8 @@ class SettingsDataStore(private val context: Context) {
     val darkMode: Flow<DarkTheme> =
         getFlowOf(KEY_DARK_MODE, DarkMode.SYSTEM.mode).map { darkModeId ->
             val darkThemeValueId = when (darkModeId) {
-                "ON" -> R.string.on
-                "OFF" -> R.string.off
+                DarkMode.ON.mode -> R.string.on
+                DarkMode.OFF.mode -> R.string.off
                 else -> R.string.system
             }
             DarkTheme(

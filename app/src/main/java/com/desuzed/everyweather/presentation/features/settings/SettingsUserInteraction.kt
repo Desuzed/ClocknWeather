@@ -1,8 +1,9 @@
 package com.desuzed.everyweather.presentation.features.settings
 
 import com.desuzed.everyweather.domain.model.settings.*
+import com.desuzed.everyweather.presentation.base.UserInteraction
 
-sealed interface SettingsUserInteraction {
+sealed interface SettingsUserInteraction : UserInteraction {
     object DismissDialog : SettingsUserInteraction
     object OnBackClick : SettingsUserInteraction
     class ShowSettingDialog(val type: SettingsType) : SettingsUserInteraction

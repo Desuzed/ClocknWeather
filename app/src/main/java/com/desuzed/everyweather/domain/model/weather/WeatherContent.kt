@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.domain.model.weather
 
 
-class WeatherResponse(
+data class WeatherContent(
     val location: Location,
 
     val current: Current,

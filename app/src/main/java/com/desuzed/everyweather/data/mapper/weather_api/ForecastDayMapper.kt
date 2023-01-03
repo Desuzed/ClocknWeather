@@ -1,8 +1,8 @@
-package com.desuzed.everyweather.data.mapper
+package com.desuzed.everyweather.data.mapper.weather_api
 
+import com.desuzed.everyweather.data.mapper.EntityMapper
 import com.desuzed.everyweather.data.network.dto.weatherApi.ForecastDayDto
 import com.desuzed.everyweather.domain.model.weather.ForecastDay
-import com.desuzed.everyweather.util.EntityMapper
 
 class ForecastDayMapper(
     private val dayMapper: DayMapper,
@@ -12,11 +12,11 @@ class ForecastDayMapper(
     override fun mapFromEntity(entity: ForecastDayDto): ForecastDay {
         val listHour = entity.hourDto?.map(hourMapper::mapFromEntity)
         return ForecastDay(
-            entity.date,
-            entity.dateEpoch,
-            dayMapper.mapFromEntity(entity.day!!),
-            astroMapper.mapFromEntity(entity.astroDto!!),
-            listHour ?: emptyList()
+            date = entity.date,
+            dateEpoch = entity.dateEpoch,
+            day = dayMapper.mapFromEntity(entity.day!!),
+            astro = astroMapper.mapFromEntity(entity.astroDto!!),
+            hourForecast = listHour ?: emptyList()
         )
     }
 }

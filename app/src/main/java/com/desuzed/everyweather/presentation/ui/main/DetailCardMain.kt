@@ -6,14 +6,14 @@ import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
-import com.desuzed.everyweather.domain.model.weather.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.presentation.ui.base.DetailCard
 import com.desuzed.everyweather.util.DecimalFormatter
 
 class DetailCardMain(
     windSpeed: WindSpeed,
     pressureDimen: Pressure,
-    response: WeatherResponse,
+    response: WeatherContent,
     res: Resources,
 ) : DetailCard() {
 

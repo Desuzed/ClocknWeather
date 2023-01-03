@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.data.repository.local
 
 import android.content.Context
-import com.desuzed.everyweather.domain.model.weather.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.google.gson.Gson
 
@@ -9,17 +9,17 @@ class SharedPrefsProviderImpl(context: Context) : SharedPrefsProvider {
 
     private val sp = context.getSharedPreferences(S_PREF_NAME, Context.MODE_PRIVATE)
 
-    override fun saveForecastToCache(weatherResponse: WeatherResponse) {
-        val gson = Gson().toJson(weatherResponse)
+    override fun saveForecastToCache(weatherContent: WeatherContent) {
+        val gson = Gson().toJson(weatherContent)
         sp
             .edit()
             .putString(WEATHER_API, gson)
             .apply()
     }
 
-    override fun loadForecastFromCache(): WeatherResponse? {
+    override fun loadForecastFromCache(): WeatherContent? {
         val savedForecast = sp.getString(WEATHER_API, null)
-        return Gson().fromJson(savedForecast, WeatherResponse::class.java)
+        return Gson().fromJson(savedForecast, WeatherContent::class.java)
     }
 
     override fun saveQuery(query: String) {

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel <S, A> (initState : S) : ViewModel() {
+abstract class BaseViewModel<S, A, I : UserInteraction>(initState: S) : ViewModel() {
     private val _state = MutableStateFlow(initState)
     val state: StateFlow<S> = _state.asStateFlow()
 
@@ -20,6 +20,10 @@ abstract class BaseViewModel <S, A> (initState : S) : ViewModel() {
         viewModelScope.launch {
             _action.emit(action)
         }
+    }
+
+    open fun onUserInteraction(interaction: I) {
+
     }
 
     inline fun <T> collect(source: Flow<T>, crossinline consumer: suspend (T) -> Unit) {

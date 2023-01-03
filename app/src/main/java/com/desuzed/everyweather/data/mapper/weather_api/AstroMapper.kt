@@ -1,9 +1,9 @@
-package com.desuzed.everyweather.data.mapper
+package com.desuzed.everyweather.data.mapper.weather_api
 
+import com.desuzed.everyweather.data.mapper.EntityMapper
 import com.desuzed.everyweather.data.network.dto.weatherApi.AstroDto
 import com.desuzed.everyweather.domain.model.weather.Astro
 import com.desuzed.everyweather.util.DateFormatter
-import com.desuzed.everyweather.util.EntityMapper
 
 class AstroMapper : EntityMapper<AstroDto, Astro> {
 
@@ -19,9 +19,14 @@ class AstroMapper : EntityMapper<AstroDto, Astro> {
             val moonrise = DateFormatter.format(DateFormatter.timePattern, apiMoonrise)
             val moonset = DateFormatter.format(DateFormatter.timePattern, apiMoonset)
 
-            Astro(sunrise, sunset, moonrise, moonset)
+            Astro(sunrise = sunrise, sunset = sunset, moonrise = moonrise, moonset = moonset)
         } catch (e: Exception) {
-            Astro(entity.sunrise, entity.sunset, entity.moonrise, entity.moonset)
+            Astro(
+                sunrise = entity.sunrise,
+                sunset = entity.sunset,
+                moonrise = entity.moonrise,
+                moonset = entity.moonset
+            )
         }
 
     }

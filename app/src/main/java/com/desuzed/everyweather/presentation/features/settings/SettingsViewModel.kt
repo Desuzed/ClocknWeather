@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(
     private val settingsDataStore: SettingsDataStore,
     private val analytics: SettingsAnalytics,
-) : BaseViewModel<SettingsState, SettingsAction>(SettingsState()) {
+) : BaseViewModel<SettingsState, SettingsAction, SettingsUserInteraction>(SettingsState()) {
 
     init {
         collect(settingsDataStore.darkMode, ::collectDarkTheme)
@@ -21,7 +21,7 @@ class SettingsViewModel(
         collect(settingsDataStore.pressureDimen, ::collectPressure)
     }
 
-    fun onUserInteraction(interaction: SettingsUserInteraction) {
+    override fun onUserInteraction(interaction: SettingsUserInteraction) {
         analytics.onUserInteraction(interaction)
         when (interaction) {
             is SettingsUserInteraction.ChangeLanguage -> onLanguage(interaction.lang)

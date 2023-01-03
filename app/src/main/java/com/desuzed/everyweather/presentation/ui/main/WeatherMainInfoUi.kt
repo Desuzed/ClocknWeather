@@ -4,13 +4,14 @@ import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.settings.Temperature
-import com.desuzed.everyweather.domain.model.weather.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
+import com.desuzed.everyweather.util.Constants.HTTPS_SCHEME
 import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 
 class WeatherMainInfoUi(
     temperature: Temperature,
-    response: WeatherResponse,
+    response: WeatherContent,
     res: Resources,
 ) {
 
@@ -28,7 +29,7 @@ class WeatherMainInfoUi(
 
     init {
         val current = response.current
-        iconUrl = "https:${current.icon}"
+        iconUrl = "$HTTPS_SCHEME${current.icon}"
         date = DateFormatter.format(
             pattern = DateFormatter.datePattern,
             timeInMills = localTime,

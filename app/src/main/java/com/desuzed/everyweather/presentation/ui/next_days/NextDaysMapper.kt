@@ -5,7 +5,7 @@ import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
-import com.desuzed.everyweather.domain.model.weather.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.presentation.ui.HourUi
 
 class NextDaysMapper(
@@ -16,7 +16,7 @@ class NextDaysMapper(
     private val pressure: Pressure,
 ) {
 
-    fun mapToNextDaysList(entity: WeatherResponse): List<NextDaysUi> {
+    fun mapToNextDaysList(entity: WeatherContent): List<NextDaysUi> {
         val timezone = entity.location.timezone
         val resultList = entity.forecastDay.map {
             val hourUiList = it.hourForecast.map { hour ->

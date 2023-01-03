@@ -1,5 +1,6 @@
 package com.desuzed.everyweather.data.network.retrofit
 
+import com.desuzed.everyweather.domain.model.network.NetworkResponse
 import okhttp3.Request
 import okhttp3.ResponseBody
 import okio.Timeout

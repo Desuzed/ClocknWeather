@@ -15,10 +15,4 @@ class AstroDto {
     @SerializedName("moonset")
     var moonset: String = ""
 
-    @SerializedName("moon_phase")
-    var moonPhase: String = ""
-
-    @SerializedName("moon_illumination")
-    var moonIllumination: String = ""
-
 }

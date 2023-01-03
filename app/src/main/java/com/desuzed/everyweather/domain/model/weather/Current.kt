@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.domain.model.weather
 
-class Current(
+data class Current(
     val tempC: Float,
 
     val tempF: Float,
@@ -12,10 +12,6 @@ class Current(
     val windSpeedKph: Float,
 
     val windSpeedMph: Float,
-
-    val windDegree: Int,
-
-    val windDir: String,
 
     val pressureMb: Float,
 

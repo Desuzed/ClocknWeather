@@ -23,7 +23,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberAsyncImagePainter
-import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.mapper.UiMapper
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysMainInfo
@@ -33,6 +32,7 @@ import com.desuzed.everyweather.ui.elements.CardDetailDayItem
 import com.desuzed.everyweather.ui.elements.HourItemContent
 import com.desuzed.everyweather.ui.elements.RegularText
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.MockWeatherObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

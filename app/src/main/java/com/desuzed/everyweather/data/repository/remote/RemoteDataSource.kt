@@ -4,9 +4,9 @@ import com.desuzed.everyweather.data.network.dto.location_iq.LocationIqError
 import com.desuzed.everyweather.data.network.dto.location_iq.LocationResult
 import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
-import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
 import com.desuzed.everyweather.data.network.retrofit.api.LocationIqApi
 import com.desuzed.everyweather.data.network.retrofit.api.WeatherApiService
+import com.desuzed.everyweather.domain.model.network.NetworkResponse
 import com.desuzed.everyweather.domain.repository.remote.RemoteDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

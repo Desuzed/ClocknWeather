@@ -15,11 +15,11 @@ import androidx.core.os.ConfigurationCompat
 import androidx.core.view.isVisible
 import com.desuzed.everyweather.Config
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResult
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionType
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
 import com.desuzed.everyweather.databinding.ActivityMainBinding
-import com.desuzed.everyweather.domain.model.UserLatLng
+import com.desuzed.everyweather.domain.model.location.UserLatLng
+import com.desuzed.everyweather.domain.model.result.ActionResult
+import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.settings.DarkMode
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.setAppLocaleAndReturnContext

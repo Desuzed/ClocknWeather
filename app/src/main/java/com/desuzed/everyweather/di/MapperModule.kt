@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.di
 
-import com.desuzed.everyweather.data.mapper.*
+import com.desuzed.everyweather.data.mapper.weather_api.*
 import org.koin.dsl.module
 
 val mapperModule = module {

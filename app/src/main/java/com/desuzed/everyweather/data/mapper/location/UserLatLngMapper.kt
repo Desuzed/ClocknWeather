@@ -1,15 +1,8 @@
-package com.desuzed.everyweather.domain.model
+package com.desuzed.everyweather.data.mapper.location
 
 import android.location.Location
-import com.desuzed.everyweather.util.EntityMapper
-
-class UserLatLng(val lat: Float, val lon: Float, val time: Long) {
-
-    override fun toString(): String {
-        return "$lat, $lon"
-    }
-
-}
+import com.desuzed.everyweather.data.mapper.EntityMapper
+import com.desuzed.everyweather.domain.model.location.UserLatLng
 
 class UserLatLngMapper : EntityMapper<Location, UserLatLng> {
     override fun mapFromEntity(entity: Location): UserLatLng {

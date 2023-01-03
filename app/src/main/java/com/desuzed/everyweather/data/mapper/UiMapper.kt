@@ -5,7 +5,7 @@ import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
-import com.desuzed.everyweather.domain.model.weather.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.presentation.ui.main.MainWeatherMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysMapper
@@ -22,7 +22,7 @@ class UiMapper(
 ) {
     private val resources = context.resources
 
-    suspend fun mapToNextDaysUi(response: WeatherResponse): List<NextDaysUi> =
+    suspend fun mapToNextDaysUi(response: WeatherContent): List<NextDaysUi> =
         withContext(Dispatchers.IO) {
             NextDaysMapper(
                 language = language,
@@ -33,7 +33,7 @@ class UiMapper(
             ).mapToNextDaysList(response)
         }
 
-    suspend fun mapToMainWeatherUi(response: WeatherResponse): WeatherMainUi =
+    suspend fun mapToMainWeatherUi(response: WeatherContent): WeatherMainUi =
         withContext(Dispatchers.IO) {
             MainWeatherMapper(
                 resources = resources,

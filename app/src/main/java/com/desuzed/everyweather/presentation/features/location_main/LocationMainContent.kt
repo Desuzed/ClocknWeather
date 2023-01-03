@@ -20,12 +20,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.location.geo.GeoResponse
 import com.desuzed.everyweather.ui.elements.*
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.MockWeatherObject
 
 @Preview(
     showBackground = true,
@@ -66,7 +66,7 @@ fun LocationMainContent(
                 id = R.drawable.ic_my_location,
                 modifier = Modifier
                     .padding(
-                        horizontal = dimensionResource(id = R.dimen.dimen_20),
+                        horizontal = dimensionResource(id = R.dimen.dimen_10),
                         vertical = dimensionResource(id = R.dimen.dimen_100)
                     )
                     .align(Alignment.BottomEnd),

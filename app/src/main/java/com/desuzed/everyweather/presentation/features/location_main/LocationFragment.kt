@@ -10,9 +10,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionType
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
-import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
+import com.desuzed.everyweather.domain.model.result.ActionType
+import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
 import com.desuzed.everyweather.util.addOnBackPressedCallback

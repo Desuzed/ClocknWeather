@@ -4,12 +4,12 @@ import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.LocationMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
-import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.location.geo.GeoResponse
+import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
 import kotlinx.coroutines.channels.BufferOverflow
@@ -22,7 +22,7 @@ class LocationViewModel(
     private val userLocationProvider: UserLocationProvider,
     private val analytics: LocationMainAnalytics,
     settingsDataStore: SettingsDataStore,
-) : BaseViewModel<LocationMainState, LocationMainAction>(LocationMainState()) {
+) : BaseViewModel<LocationMainState, LocationMainAction, LocationUserInteraction>(LocationMainState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
         replay = 0,
@@ -40,16 +40,16 @@ class LocationViewModel(
         setState { copy(geoText = text) }
     }
 
-    fun onUserInteraction(userInteraction: LocationUserInteraction) {
-        analytics.onUserInteraction(userInteraction)
-        when (userInteraction) {
+    override fun onUserInteraction(interaction: LocationUserInteraction) {
+        analytics.onUserInteraction(interaction)
+        when (interaction) {
             is LocationUserInteraction.DeleteFavoriteLocation -> deleteFavoriteLocation(
-                userInteraction.favoriteLocationDto
+                interaction.favoriteLocationDto
             )
-            is LocationUserInteraction.ConfirmFoundLocation -> onConfirmLocation(userInteraction.geo)
+            is LocationUserInteraction.ConfirmFoundLocation -> onConfirmLocation(interaction.geo)
             is LocationUserInteraction.FavoriteLocation -> setAction(
                 LocationMainAction.NavigateToWeather(
-                    query = userInteraction.favoriteLocationDto.toQuery(),
+                    query = interaction.favoriteLocationDto.toQuery(),
                     key = WeatherMainFragment.QUERY_KEY
                 )
             )

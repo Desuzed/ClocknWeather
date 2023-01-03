@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.presentation.features.location_main
 
-import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
+import com.desuzed.everyweather.domain.model.result.QueryResult
 
 sealed interface LocationMainAction {
     class ShowSnackbar(val queryResult: QueryResult) : LocationMainAction

@@ -1,13 +1,13 @@
-package com.desuzed.everyweather.data.repository.providers.action_result
+package com.desuzed.everyweather.domain.repository.provider
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.DELETED
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.NO_DATA
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.NO_INTERNET
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.REDIRECTION
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.SAVED
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider.Companion.UNKNOWN
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.DELETED
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.NO_DATA
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.NO_INTERNET
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.REDIRECTION
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.SAVED
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.UNKNOWN
 
 abstract class BaseActionResultProvider(private val resources: Resources) : ActionResultProvider {
     override fun getString(id: Int): String = resources.getString(id)

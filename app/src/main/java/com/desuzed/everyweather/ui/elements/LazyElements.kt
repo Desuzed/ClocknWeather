@@ -17,13 +17,13 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberAsyncImagePainter
-import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.presentation.ui.HourUi
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.MockWeatherObject
 
 @Composable
 fun HourItemContent(hourItem: HourUi) {

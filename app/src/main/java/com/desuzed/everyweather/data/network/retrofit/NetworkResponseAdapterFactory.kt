@@ -1,5 +1,6 @@
 package com.desuzed.everyweather.data.network.retrofit
 
+import com.desuzed.everyweather.domain.model.network.NetworkResponse
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Retrofit

@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.domain.model.weather
 
-class Day(
+data class Day(
     val maxTempC: Float,
 
     val maxTempF: Float,
@@ -21,12 +21,7 @@ class Day(
 
     val popRain: Int,
 
-    val popSnow: Int,
-
     val text: String,
 
     val icon: String
-) {
-
-    // var pop : Int = (popRain + popSnow)/2
-}
+)

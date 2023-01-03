@@ -15,7 +15,6 @@ class Location(
 
     val localtimeEpoch: Long,
 
-    val localtime: String
 ){
     /**
      * toString made for showing correct text

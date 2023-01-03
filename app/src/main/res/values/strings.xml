@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">Everyweather</string>
     <string name="weather">Weather</string>
     <string name="dot_temperature" translatable="false">°</string>
+    <string name="percent" translatable="false">%</string>
     <string name="current_location">Current location</string>
     <string name="search_hint">Search</string>
     <string name="set_place_on_map">Set place on map</string>

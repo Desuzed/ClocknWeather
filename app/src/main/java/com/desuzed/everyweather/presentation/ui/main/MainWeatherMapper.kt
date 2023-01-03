@@ -4,7 +4,7 @@ import android.content.res.Resources
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
-import com.desuzed.everyweather.domain.model.weather.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.presentation.ui.HourUi
 
 class MainWeatherMapper(
@@ -14,7 +14,7 @@ class MainWeatherMapper(
     private val resources: Resources
 ) {
 
-    fun mapToMainWeatherUi(response: WeatherResponse): WeatherMainUi {
+    fun mapToMainWeatherUi(response: WeatherContent): WeatherMainUi {
         val weatherMainInfo = WeatherMainInfoUi(
             temperature = temperature,
             response = response,

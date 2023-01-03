@@ -1,15 +1,15 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
-import com.desuzed.everyweather.data.mapper.ApiErrorMapper
-import com.desuzed.everyweather.data.mapper.WeatherResponseMapper
+import com.desuzed.everyweather.data.mapper.weather_api.ApiErrorMapper
+import com.desuzed.everyweather.data.mapper.weather_api.WeatherResponseMapper
 import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
 import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
-import com.desuzed.everyweather.data.network.retrofit.NetworkResponse
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionType
-import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
+import com.desuzed.everyweather.domain.model.network.NetworkResponse
+import com.desuzed.everyweather.domain.model.result.ActionType
+import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.model.weather.ResultForecast
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.domain.repository.remote.RemoteDataSource
 
 class WeatherRepository(
@@ -22,7 +22,7 @@ class WeatherRepository(
     suspend fun fetchForecastOrErrorMessage(query: String, lang: String): ResultForecast {
         if (query.isEmpty()) {
             return ResultForecast(
-                weatherResponse = null,
+                weatherContent = null,
                 queryResult = QueryResult(code = ActionResultProvider.NO_DATA, query = query),
             )
         }
@@ -35,7 +35,7 @@ class WeatherRepository(
             is NetworkResponse.ApiError -> {
                 val apiError = apiErrorMapper.mapFromEntity(response.body)
                 ResultForecast(
-                    weatherResponse = sharedPrefsProvider.loadForecastFromCache(),
+                    weatherContent = sharedPrefsProvider.loadForecastFromCache(),
                     queryResult = QueryResult(
                         code = apiError.error.code,
                         query = query,
@@ -44,7 +44,7 @@ class WeatherRepository(
                 )
             }
             is NetworkResponse.NetworkError -> ResultForecast(
-                weatherResponse = sharedPrefsProvider.loadForecastFromCache(),
+                weatherContent = sharedPrefsProvider.loadForecastFromCache(),
                 queryResult = QueryResult(
                     code = ActionResultProvider.NO_INTERNET,
                     query = query,
@@ -52,7 +52,7 @@ class WeatherRepository(
                 ),
             )
             is NetworkResponse.UnknownError -> ResultForecast(
-                weatherResponse = sharedPrefsProvider.loadForecastFromCache(),
+                weatherContent = sharedPrefsProvider.loadForecastFromCache(),
                 queryResult = QueryResult(
                     code = ActionResultProvider.UNKNOWN,
                     query = query,

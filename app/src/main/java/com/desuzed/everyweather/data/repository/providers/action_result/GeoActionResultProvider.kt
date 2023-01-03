@@ -2,6 +2,7 @@ package com.desuzed.everyweather.data.repository.providers.action_result
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.domain.repository.provider.BaseActionResultProvider
 
 class GeoActionResultProvider(resources: Resources) : BaseActionResultProvider(resources) {
     override fun parseCode(errorCode: Int, query: String): String {
@@ -11,8 +12,8 @@ class GeoActionResultProvider(resources: Resources) : BaseActionResultProvider(r
             ACCESS_RESTRICTED -> getString(R.string.geo_api_error)
             RATE_LIMIT -> getString(R.string.retry_again)
             UNABLE_TO_GEOCODE -> getString(R.string.no_location_found, query)
-            NO_LOCATION_PERMISSIONS -> getString(R.string.your_current_location_not_found)
-            LOCATION_NOT_FOUND -> getString(R.string.location_permissions_are_not_granted)
+            NO_LOCATION_PERMISSIONS -> getString(R.string.location_permissions_are_not_granted)
+            LOCATION_NOT_FOUND -> getString(R.string.your_current_location_not_found)
             else -> super.parseCode(errorCode, query)
         }
     }

@@ -2,6 +2,7 @@ package com.desuzed.everyweather.data.repository.providers.action_result
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.domain.repository.provider.BaseActionResultProvider
 
 class WeatherActionResultProvider(resources: Resources) :
     BaseActionResultProvider(resources) {

@@ -6,6 +6,7 @@ import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.weather.ForecastDay
+import com.desuzed.everyweather.util.Constants.HTTPS_SCHEME
 import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 
@@ -24,7 +25,7 @@ class NextDaysMainInfo(
 
     init {
         val day = forecastDay.day
-        iconUrl = "https:${day.icon}"
+        iconUrl = "$HTTPS_SCHEME${day.icon}"
         date = DateFormatter.format(
             pattern = DateFormatter.fullDatePattern,
             timeInMills = forecastDay.dateEpoch,

@@ -4,10 +4,10 @@ import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
-import com.desuzed.everyweather.domain.model.weather.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
 
 data class NextDaysState(
-    val weather: WeatherResponse? = null,
+    val weather: WeatherContent? = null,
     val isExpanded: Boolean = false,
     val windSpeed: WindSpeed = WindSpeed("", 0, 0),
     val temperature: Temperature = Temperature("", 0, 0),

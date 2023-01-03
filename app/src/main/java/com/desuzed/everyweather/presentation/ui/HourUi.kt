@@ -7,7 +7,8 @@ import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.domain.model.weather.Hour
-import com.desuzed.everyweather.domain.model.weather.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
+import com.desuzed.everyweather.util.Constants.HTTPS_SCHEME
 import com.desuzed.everyweather.util.DateFormatter
 import com.desuzed.everyweather.util.DecimalFormatter
 import kotlin.math.roundToInt
@@ -47,16 +48,15 @@ class HourUi(
         }
         val formattedWindSpeed = DecimalFormatter.formatFloat(windHour)
         wind = "$formattedWindSpeed " + res.getString(windSpeed.valueStringId)
-        iconUrl = "https:${hour.icon}"
+        iconUrl = "$HTTPS_SCHEME${hour.icon}"
         rotation = hour.windDegree.toFloat() - 180
     }
 
     companion object {
-
         /**
          *  Generates list for HourAdapter since current time and plus next 24 items
          */
-        fun generateCurrentDayList(response: WeatherResponse): List<Hour> {
+        fun generateCurrentDayList(response: WeatherContent): List<Hour> {
             val hour = DateFormatter.format(
                 pattern = DateFormatter.hourPattern,
                 timeInMills = response.location.localtimeEpoch,

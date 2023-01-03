@@ -2,7 +2,7 @@ package com.desuzed.everyweather.presentation.features.locatation_map
 
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.MapLocationAnalytics
-import com.desuzed.everyweather.domain.model.UserLatLng
+import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.google.android.gms.maps.model.LatLng
@@ -12,10 +12,9 @@ import kotlinx.coroutines.launch
 class MapLocationViewModel(
     private val sharedPrefsProvider: SharedPrefsProvider,
     private val analytics: MapLocationAnalytics
-) :
-    BaseViewModel<MapState, MapAction>(MapState()) {
+) : BaseViewModel<MapState, MapAction, MapUserInteraction>(MapState()) {
 
-    fun onUserInteraction(interaction: MapUserInteraction) {
+    override fun onUserInteraction(interaction: MapUserInteraction) {
         analytics.onUserInteraction(interaction)
         when (interaction) {
             is MapUserInteraction.NewLocationPicked -> onNewLocationPicked(interaction.location)
@@ -36,7 +35,6 @@ class MapLocationViewModel(
         setState { copy(shouldShowDialog = false) }
     }
 
-    //todo refactoring userLatLng
     private fun onNewLocationConfirm() {
         viewModelScope.launch {
             setState { copy(shouldShowDialog = false, loadNewLocationWeather = true) }

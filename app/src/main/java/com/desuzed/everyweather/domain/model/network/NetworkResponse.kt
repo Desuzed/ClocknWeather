@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.data.network.retrofit
+package com.desuzed.everyweather.domain.model.network
 
 import java.io.IOException
 

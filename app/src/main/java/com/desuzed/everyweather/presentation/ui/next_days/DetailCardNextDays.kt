@@ -57,10 +57,11 @@ class DetailCardNextDays(
             PressureDimen.INCHES -> forecastDay.hourForecast[0].pressureInch
         }
         val formattedPressure = DecimalFormatter.formatFloat(pressureValue)
-        pop = "${forecastDay.day.popRain}%, " + precipitation
+        val percent = res.getString(R.string.percent)
+        pop = "${forecastDay.day.popRain}$percent, " + precipitation
         wind = windValue + res.getString(windSpeed.valueStringId)
         pressure = "$formattedPressure " + res.getString(pressureDimen.valueStringId)
-        humidity = "${day.avgHumidity}%"
+        humidity = "${day.avgHumidity}$percent"
         sun = "${astro.sunrise}\n${astro.sunset}"
         moon = "${astro.moonrise}\n${astro.moonset}"
     }

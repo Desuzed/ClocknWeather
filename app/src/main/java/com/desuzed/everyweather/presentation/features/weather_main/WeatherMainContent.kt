@@ -20,13 +20,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.desuzed.everyweather.MockWeatherObject
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.mapper.UiMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainInfoUi
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.ui.elements.*
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.MockWeatherObject
 import com.desuzed.everyweather.util.toIntDp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
