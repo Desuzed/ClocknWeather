@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionType
-import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
 import com.desuzed.everyweather.data.repository.providers.action_result.WeatherActionResultProvider
-import com.desuzed.everyweather.domain.model.UserLatLng
+import com.desuzed.everyweather.domain.model.location.UserLatLng
+import com.desuzed.everyweather.domain.model.result.ActionType
+import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.navigate
@@ -39,16 +40,17 @@ class WeatherMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        resolveArguments()
         collect((activity as MainActivity).getUserLatLngFlow(), ::onNewLocation)
         collect(viewModel.action, ::onNewAction)
+        resolveArguments()
     }
 
-    private var loadForecastByUserLocation = false
+    //private var loadForecastByUserLocation = false
     private fun resolveArguments() {
-        loadForecastByUserLocation = arguments?.getBoolean(USER_LOCATION) ?: false
+        // loadForecastByUserLocation = arguments?.getBoolean(USER_LOCATION) ?: false
         val query = arguments?.getString(QUERY_KEY)
         if (!query.isNullOrEmpty()) {
+            Log.e("LOCATION", "resolveArguments: ")
             getQueryForecast(query)
             arguments?.remove(QUERY_KEY)
         }
@@ -67,12 +69,14 @@ class WeatherMainFragment : Fragment() {
     }
 
     private fun onNewLocation(location: UserLatLng?) {
-        if (!loadForecastByUserLocation) return
-        else {
-            if (location != null) {
-                getQueryForecast(location.toString())
-            }
+        Log.e("LOCATION", "onNewLocation: $location")
+
+//        if (!loadForecastByUserLocation) return
+//        else {
+        if (location != null) {
+            getQueryForecast(location.toString())
         }
+        //       }
     }
 
     private fun showSnackbar(queryResult: QueryResult) {
@@ -101,12 +105,12 @@ class WeatherMainFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        loadForecastByUserLocation = false
+        // loadForecastByUserLocation = false
         arguments?.remove(USER_LOCATION)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         viewModel.onUserInteraction(WeatherUserInteraction.Refresh)
     }
 

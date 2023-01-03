@@ -4,17 +4,19 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.util.Log
 import androidx.core.content.ContextCompat
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResult
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionType
+import com.desuzed.everyweather.data.mapper.location.UserLatLngMapper
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider.Companion.LOCATION_NOT_FOUND
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider.Companion.NO_LOCATION_PERMISSIONS
-import com.desuzed.everyweather.domain.model.UserLatLng
-import com.desuzed.everyweather.domain.model.UserLatLngMapper
+import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.location.UserLocationResult
+import com.desuzed.everyweather.domain.model.result.ActionResult
+import com.desuzed.everyweather.domain.model.result.ActionType
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,38 +32,41 @@ class UserLocationProvider(
     private val _userLocationFlow = MutableStateFlow<UserLocationResult?>(null)
     val userLocationFlow: Flow<UserLocationResult?> = _userLocationFlow.asStateFlow()
 
-    fun findUserLocation() {
-        val shouldRefreshLocation =
-            _userLocationFlow.value?.userLatLng?.let { shouldRefreshUserLocation(it) }
+    private val cancellationTokenSource = CancellationTokenSource()
+
+    fun findUserLocation(): Boolean {
+        val oldValue = _userLocationFlow.value?.userLatLng
+        val shouldRefreshLocation = oldValue?.let { shouldRefreshUserLocation(it) }
         if (shouldRefreshLocation == false || lookingForLocation != null) {
-            return
+            val newValue = UserLocationResult(userLatLng = oldValue)
+            _userLocationFlow.value = newValue
+            return false
         }
         if (arePermissionsGranted()) {
             lookingForLocation = fusedLocationClient.getCurrentLocation(
-                LocationRequest.PRIORITY_HIGH_ACCURACY,
-                null
+                LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY,
+                cancellationTokenSource.token
             )
+                .addOnCanceledListener {
+                    onNull()
+                }
                 .addOnSuccessListener { location ->
                     if (location != null) {
-                        val result = UserLatLngMapper().mapFromEntity(location)
-                        _userLocationFlow.value = UserLocationResult(userLatLng = result)
-                        lookingForLocation = null
+                        onSuccess(location)
                     } else {
-                        val actionError = ActionResult(
-                            code = LOCATION_NOT_FOUND,
-                            actionType = ActionType.RETRY
-                        )
-                        _userLocationFlow.value = UserLocationResult(actionResult = actionError)
-                        lookingForLocation = null
+                        onNull()
                     }
+                    stopLookingForLocation()
                 }
+            return true
         } else {
             val actionError = ActionResult(
                 code = NO_LOCATION_PERMISSIONS,
                 actionType = ActionType.OK
             )
             _userLocationFlow.value = UserLocationResult(actionResult = actionError)
-            lookingForLocation = null
+            stopLookingForLocation()
+            return false
         }
     }
 
@@ -76,6 +81,36 @@ class UserLocationProvider(
             COARSE_LOCATION
         )
         return permissionFine == GRANTED || permissionCoarse == GRANTED
+    }
+
+    fun onCancel() {
+        cancellationTokenSource.cancel()
+    }
+
+    private fun stopLookingForLocation() {
+        // lookingForLocation = null
+    }
+
+    private fun onSuccess(location: Location) {
+        Log.e(
+            "LOCATION",
+            "addOnSuccessListener, NOT NULL: ${cancellationTokenSource.token.isCancellationRequested} , ${cancellationTokenSource.token}",
+        )
+        val result = UserLatLngMapper().mapFromEntity(location)
+        _userLocationFlow.value = UserLocationResult(userLatLng = result)
+    }
+
+    private fun onNull() {
+        Log.e(
+            "LOCATION",
+            "addOnSuccessListener, NULL: ${cancellationTokenSource.token.isCancellationRequested} , ${cancellationTokenSource.token}",
+        )
+
+        val actionError = ActionResult(
+            code = LOCATION_NOT_FOUND,
+            actionType = ActionType.RETRY
+        )
+        _userLocationFlow.value = UserLocationResult(actionResult = actionError)
     }
 
     private fun shouldRefreshUserLocation(userLatLng: UserLatLng): Boolean =

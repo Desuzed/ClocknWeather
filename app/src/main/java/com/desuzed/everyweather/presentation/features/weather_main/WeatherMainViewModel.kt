@@ -1,18 +1,19 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.WeatherMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
-import com.desuzed.everyweather.data.repository.providers.action_result.ActionResultProvider
-import com.desuzed.everyweather.data.repository.providers.action_result.QueryResult
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
-import com.desuzed.everyweather.domain.model.weather.WeatherResponse
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
@@ -25,7 +26,7 @@ class WeatherMainViewModel(
     private val roomProvider: RoomProvider,
     private val analytics: WeatherMainAnalytics,
     settingsDataStore: SettingsDataStore,
-) : BaseViewModel<WeatherState, WeatherMainAction>(WeatherState()) {
+) : BaseViewModel<WeatherState, WeatherMainAction, WeatherUserInteraction>(WeatherState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
         replay = 0,
@@ -52,7 +53,7 @@ class WeatherMainViewModel(
                     query,
                     state.value.lang.id.lowercase()
                 )
-            val weatherResponse = fetchedForecast.weatherResponse
+            val weatherResponse = fetchedForecast.weatherContent
             val actionResult = fetchedForecast.queryResult
             val isLocationSaved = weatherResponse?.let { isLocationSaved(it) }
             setState {
@@ -74,9 +75,9 @@ class WeatherMainViewModel(
         }
     }
 
-    fun onUserInteraction(userInteraction: WeatherUserInteraction) {
-        analytics.onUserInteraction(userInteraction)
-        when (userInteraction) {
+    override fun onUserInteraction(interaction: WeatherUserInteraction) {
+        analytics.onUserInteraction(interaction)
+        when (interaction) {
             WeatherUserInteraction.Location -> setAction(WeatherMainAction.NavigateToLocation)
             WeatherUserInteraction.NextDays -> setAction(WeatherMainAction.NavigateToNextDaysWeather)
             WeatherUserInteraction.Refresh -> getForecast(state.value.query)
@@ -117,12 +118,13 @@ class WeatherMainViewModel(
 
     }
 
-    private suspend fun isLocationSaved(response: WeatherResponse): Boolean {
+    private suspend fun isLocationSaved(response: WeatherContent): Boolean {
         val latLonKey = FavoriteLocationDto.generateKey(response.location)
         return roomProvider.containsPrimaryKey(latLonKey)
     }
 
     private fun getCachedForecast() {
+        Log.e("LOCATION", "getCachedForecast: ")
         viewModelScope.launch {
             setState { copy(isLoading = true) }
             val result = sharedPrefsProvider.loadForecastFromCache()
