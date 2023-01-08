@@ -14,13 +14,11 @@ import com.desuzed.everyweather.data.repository.providers.action_result.GeoActio
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
 import com.desuzed.everyweather.util.addOnBackPressedCallback
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.navigate
 import com.desuzed.everyweather.util.onBackClick
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class LocationFragment : Fragment() {
     private val viewModel by viewModel<LocationViewModel>()
@@ -62,8 +60,7 @@ class LocationFragment : Fragment() {
     private fun onMyLocationClick() {
         if (viewModel.areLocationPermissionsGranted()) {
             (activity as MainActivity).findUserLocation()
-            val bundle = bundleOf(WeatherMainFragment.USER_LOCATION to true)
-            navigateToWeatherFragment(bundle)
+            navigateToWeatherFragment()
         } else {
             viewModel.launchRequireLocationPermissionsDialog()
         }
@@ -77,7 +74,7 @@ class LocationFragment : Fragment() {
         navigate(R.id.action_locationFragment_to_mapBottomSheetFragment)
     }
 
-    private fun navigateToWeatherFragment(bundle: Bundle) {
+    private fun navigateToWeatherFragment(bundle: Bundle? = null) {
         navigate(R.id.action_locationFragment_to_weatherFragment, bundle)
     }
 
@@ -86,10 +83,6 @@ class LocationFragment : Fragment() {
     }
 
     private fun showSnackbar(queryResult: QueryResult) {
-        if (queryResult.code == GeoActionResultProvider.RATE_LIMIT) {
-            navigateToWeatherFragment(bundleOf(WeatherMainFragment.QUERY_KEY to queryResult.query))
-            return
-        }
         val provider = GeoActionResultProvider(resources)
         val message = provider.parseCode(queryResult.code, queryResult.query)
         val onClick: () -> Unit

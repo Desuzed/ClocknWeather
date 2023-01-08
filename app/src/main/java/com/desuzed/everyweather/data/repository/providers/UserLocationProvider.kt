@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.desuzed.everyweather.data.mapper.location.UserLatLngMapper
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider.Companion.LOCATION_NOT_FOUND
@@ -32,7 +31,7 @@ class UserLocationProvider(
     private val _userLocationFlow = MutableStateFlow<UserLocationResult?>(null)
     val userLocationFlow: Flow<UserLocationResult?> = _userLocationFlow.asStateFlow()
 
-    private val cancellationTokenSource = CancellationTokenSource()
+    private var cancellationTokenSource: CancellationTokenSource? = null
 
     fun findUserLocation(): Boolean {
         val oldValue = _userLocationFlow.value?.userLatLng
@@ -43,12 +42,13 @@ class UserLocationProvider(
             return false
         }
         if (arePermissionsGranted()) {
+            val newCancellationSource = CancellationTokenSource()
+            cancellationTokenSource = newCancellationSource
             lookingForLocation = fusedLocationClient.getCurrentLocation(
                 LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY,
-                cancellationTokenSource.token
+                newCancellationSource.token
             )
                 .addOnCanceledListener {
-                    onNull()
                 }
                 .addOnSuccessListener { location ->
                     if (location != null) {
@@ -84,28 +84,22 @@ class UserLocationProvider(
     }
 
     fun onCancel() {
-        cancellationTokenSource.cancel()
+        stopLookingForLocation()
+        onNull()
     }
 
     private fun stopLookingForLocation() {
-        // lookingForLocation = null
+        cancellationTokenSource?.cancel()
+        cancellationTokenSource = null
+        lookingForLocation = null
     }
 
     private fun onSuccess(location: Location) {
-        Log.e(
-            "LOCATION",
-            "addOnSuccessListener, NOT NULL: ${cancellationTokenSource.token.isCancellationRequested} , ${cancellationTokenSource.token}",
-        )
         val result = UserLatLngMapper().mapFromEntity(location)
         _userLocationFlow.value = UserLocationResult(userLatLng = result)
     }
 
     private fun onNull() {
-        Log.e(
-            "LOCATION",
-            "addOnSuccessListener, NULL: ${cancellationTokenSource.token.isCancellationRequested} , ${cancellationTokenSource.token}",
-        )
-
         val actionError = ActionResult(
             code = LOCATION_NOT_FOUND,
             actionType = ActionType.RETRY
@@ -114,9 +108,10 @@ class UserLocationProvider(
     }
 
     private fun shouldRefreshUserLocation(userLatLng: UserLatLng): Boolean =
-        System.currentTimeMillis() - userLatLng.time > 1000 * 60
+        System.currentTimeMillis() - userLatLng.time > SIXTY_SECONDS
 
     companion object {
+        private const val SIXTY_SECONDS = 60_000
         private const val GRANTED = PackageManager.PERMISSION_GRANTED
         private const val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
         private const val COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION

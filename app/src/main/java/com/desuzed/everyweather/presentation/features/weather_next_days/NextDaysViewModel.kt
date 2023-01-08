@@ -20,7 +20,10 @@ class NextDaysViewModel(
         collect(settingsDataStore.tempDimen, ::collectTemperature)
         collect(settingsDataStore.lang, ::collectLanguage)
         collect(settingsDataStore.pressureDimen, ::collectPressure)
+        getCachedForecast()
+    }
 
+    private fun getCachedForecast() {
         viewModelScope.launch {
             val cachedForecast = sharedPrefsProvider.loadForecastFromCache()
             setState { copy(weather = cachedForecast) }

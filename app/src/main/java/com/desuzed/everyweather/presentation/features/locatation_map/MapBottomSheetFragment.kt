@@ -51,7 +51,4 @@ class MapBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }

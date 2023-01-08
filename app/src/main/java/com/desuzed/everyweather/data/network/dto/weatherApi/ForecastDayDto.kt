@@ -2,19 +2,15 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 
 import com.google.gson.annotations.SerializedName
 
-class ForecastDayDto {
+data class ForecastDayDto(
     @SerializedName("date")
-    var date: String = ""
-
+    val date: String = "",
     @SerializedName("date_epoch")
-    var dateEpoch: Long = 0
-
+    val dateEpoch: Long = 0,
     @SerializedName("day")
-    var day: DayDto? = null
-
+    val day: DayDto? = null,
     @SerializedName("astro")
-    var astroDto: AstroDto? = null
-
+    val astroDto: AstroDto? = null,
     @SerializedName("hour")
-    var hourDto: ArrayList<HourDto>? = null
-}
+    val hourDto: ArrayList<HourDto>? = null,
+)

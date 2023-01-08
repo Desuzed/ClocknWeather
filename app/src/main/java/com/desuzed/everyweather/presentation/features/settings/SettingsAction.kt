@@ -1,5 +1,5 @@
 package com.desuzed.everyweather.presentation.features.settings
 
-sealed interface SettingsAction{
+sealed interface SettingsAction {
     object NavigateBack : SettingsAction
 }

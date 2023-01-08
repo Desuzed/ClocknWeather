@@ -3,15 +3,15 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 import com.google.gson.annotations.SerializedName
 
 
-class ErrorDtoWeatherApi {
+data class ErrorDtoWeatherApi(
     @SerializedName("error")
-    var error: Error? = null
+    val error: Error? = null,
+)
 
-    class Error {
-        @SerializedName("code")
-        var code = 0
+data class Error(
+    @SerializedName("code")
+    val code: Int = 0,
 
-        @SerializedName("message")
-        var message: String = ""
-    }
-}
+    @SerializedName("message")
+    val message: String = "",
+)

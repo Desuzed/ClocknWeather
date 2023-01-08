@@ -2,39 +2,27 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 
 import com.google.gson.annotations.SerializedName
 
-class DayDto {
-
+data class DayDto(
     @SerializedName("maxtemp_c")
-    var maxTempC = 0f
-
+    val maxTempC: Float = 0f,
     @SerializedName("maxtemp_f")
-    var maxTempF = 0f
-
+    val maxTempF: Float = 0f,
     @SerializedName("mintemp_c")
-    var minTempC = 0f
-
+    val minTempC: Float = 0f,
     @SerializedName("mintemp_f")
-    var minTempF = 0f
-
+    val minTempF: Float = 0f,
     @SerializedName("maxwind_kph")
-    var maxWindKph = 0f
-
+    val maxWindKph: Float = 0f,
     @SerializedName("maxwind_mph")
-    var maxWindMph = 0f
-
+    val maxWindMph: Float = 0f,
     @SerializedName("totalprecip_mm")
-    var totalPrecipMm = 0f
-
+    val totalPrecipMm: Float = 0f,
     @SerializedName("totalprecip_in")
-    var totalPrecipInch = 0f
-
+    val totalPrecipInch: Float = 0f,
     @SerializedName("avghumidity")
-    var avgHumidity = 0f
-
+    val avgHumidity: Float = 0f,
     @SerializedName("daily_chance_of_rain")
-    var popRain: Int = 0
-
+    val popRain: Int = 0,
     @SerializedName("condition")
-    var conditionDto: ConditionDto? = null
-
-}
+    val conditionDto: ConditionDto? = null,
+)

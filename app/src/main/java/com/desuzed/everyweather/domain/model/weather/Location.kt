@@ -1,21 +1,14 @@
 package com.desuzed.everyweather.domain.model.weather
 
-class Location(
+data class Location(
     val name: String,
-
     val region: String,
-
     val country: String,
-
     val lat: Float,
-
     val lon: Float,
-
     val timezone: String,
-
     val localtimeEpoch: Long,
-
-){
+) {
     /**
      * toString made for showing correct text
      */

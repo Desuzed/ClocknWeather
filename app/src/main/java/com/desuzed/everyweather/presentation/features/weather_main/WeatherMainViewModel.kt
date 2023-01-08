@@ -1,9 +1,9 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.WeatherMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
+import com.desuzed.everyweather.data.repository.weather.WeatherRepository
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.model.settings.Language
@@ -124,7 +124,6 @@ class WeatherMainViewModel(
     }
 
     private fun getCachedForecast() {
-        Log.e("LOCATION", "getCachedForecast: ")
         viewModelScope.launch {
             setState { copy(isLoading = true) }
             val result = sharedPrefsProvider.loadForecastFromCache()

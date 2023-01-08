@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.presentation.features.weather_main
+package com.desuzed.everyweather.data.repository.weather
 
 import com.desuzed.everyweather.data.mapper.weather_api.ApiErrorMapper
 import com.desuzed.everyweather.data.mapper.weather_api.WeatherResponseMapper

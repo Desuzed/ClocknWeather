@@ -60,7 +60,7 @@ class SettingsViewModel(
     private fun onDistanceDimen(distanceDimen: DistanceDimen) {
         viewModelScope.launch {
             settingsDataStore.setDistanceDimension(distanceDimen)
-            delay(500)
+            delay(DELAY_500_MS)
             hideDialog()
         }
     }
@@ -68,7 +68,7 @@ class SettingsViewModel(
     private fun onTemperatureDimen(tempDimen: TempDimen) {
         viewModelScope.launch {
             settingsDataStore.setTemperatureDimension(tempDimen)
-            delay(500)
+            delay(DELAY_500_MS)
             hideDialog()
         }
     }
@@ -76,7 +76,7 @@ class SettingsViewModel(
     private fun onPressureDimen(pressureDimen: PressureDimen) {
         viewModelScope.launch {
             settingsDataStore.setPressureDimension(pressureDimen)
-            delay(500)
+            delay(DELAY_500_MS)
             hideDialog()
         }
     }
@@ -99,6 +99,10 @@ class SettingsViewModel(
 
     private fun collectPressure(pressure: Pressure) = setState {
         copy(pressure = pressure)
+    }
+
+    private companion object {
+        private const val DELAY_500_MS = 500L
     }
 
 }

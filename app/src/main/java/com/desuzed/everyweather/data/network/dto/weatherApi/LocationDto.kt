@@ -2,29 +2,21 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 
 import com.google.gson.annotations.SerializedName
 
-class LocationDto {
+data class LocationDto(
     @SerializedName("name")
-    var name: String = ""
-
+    val name: String = "",
     @SerializedName("region")
-    var region: String= ""
-
+    val region: String = "",
     @SerializedName("country")
-    var country: String= ""
-
+    val country: String = "",
     @SerializedName("lat")
-    var lat = 0f
-
+    val lat: Float = 0f,
     @SerializedName("lon")
-    var lon = 0f
-
+    val lon: Float = 0f,
     @SerializedName("tz_id")
-    var timeZone: String = ""
-
+    val timeZone: String = "",
     @SerializedName("localtime_epoch")
-    var localtimeEpoch: Long = 0
-
+    val localtimeEpoch: Long = 0,
     @SerializedName("localtime")
-    var localtime: String = ""
-
-}
+    val localtime: String = ""
+)

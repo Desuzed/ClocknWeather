@@ -14,7 +14,6 @@ import androidx.compose.ui.window.Dialog
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
-
 @Composable
 fun AppAlertDialog(title: String, onPositiveButtonClick: () -> Unit, onDismiss: () -> Unit) {
     AppDialog(onDismiss = onDismiss) {
@@ -28,8 +27,8 @@ fun AppAlertDialog(title: String, onPositiveButtonClick: () -> Unit, onDismiss: 
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = dimensionResource(id = R.dimen.dimen_20)),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 RegularText(text = stringResource(id = R.string.cancel), onClick = onDismiss)
                 RoundedButton(

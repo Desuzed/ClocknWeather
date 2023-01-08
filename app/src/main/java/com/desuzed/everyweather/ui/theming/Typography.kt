@@ -18,7 +18,6 @@ private val montserratRegularBold = FontFamily(
     Font(R.font.montserrat_semi_bold, FontWeight.Black)
 )
 
-
 data class EveryweatherTypography(
     val h3: TextStyle = TextStyle(
         fontFamily = montserratRegularBold,

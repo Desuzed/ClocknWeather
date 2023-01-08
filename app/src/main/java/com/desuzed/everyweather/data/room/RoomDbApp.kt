@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(entities = [FavoriteLocationDto::class], version = 1, exportSchema = false)
-abstract class RoomDbApp : RoomDatabase () {
+abstract class RoomDbApp : RoomDatabase() {
 
     abstract fun favoriteLocationDAO(): FavoriteLocationDAO
 

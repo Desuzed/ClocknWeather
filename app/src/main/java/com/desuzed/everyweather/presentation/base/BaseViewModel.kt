@@ -22,9 +22,7 @@ abstract class BaseViewModel<S, A, I : UserInteraction>(initState: S) : ViewMode
         }
     }
 
-    open fun onUserInteraction(interaction: I) {
-
-    }
+    open fun onUserInteraction(interaction: I) {}
 
     inline fun <T> collect(source: Flow<T>, crossinline consumer: suspend (T) -> Unit) {
         viewModelScope.launch {

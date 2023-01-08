@@ -57,7 +57,7 @@ inline fun <T> Fragment.collect(
     source: Flow<T>,
     crossinline consumer: suspend (T) -> Unit
 ) {
-    lifecycleScope.launchWhenCreated {
+    viewLifecycleOwner.lifecycleScope.launchWhenCreated {
         source.collect {
             consumer(it)
         }

@@ -1,7 +1,6 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,12 +44,9 @@ class WeatherMainFragment : Fragment() {
         resolveArguments()
     }
 
-    //private var loadForecastByUserLocation = false
     private fun resolveArguments() {
-        // loadForecastByUserLocation = arguments?.getBoolean(USER_LOCATION) ?: false
         val query = arguments?.getString(QUERY_KEY)
         if (!query.isNullOrEmpty()) {
-            Log.e("LOCATION", "resolveArguments: ")
             getQueryForecast(query)
             arguments?.remove(QUERY_KEY)
         }
@@ -69,14 +65,9 @@ class WeatherMainFragment : Fragment() {
     }
 
     private fun onNewLocation(location: UserLatLng?) {
-        Log.e("LOCATION", "onNewLocation: $location")
-
-//        if (!loadForecastByUserLocation) return
-//        else {
         if (location != null) {
             getQueryForecast(location.toString())
         }
-        //       }
     }
 
     private fun showSnackbar(queryResult: QueryResult) {
@@ -103,12 +94,6 @@ class WeatherMainFragment : Fragment() {
         )
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // loadForecastByUserLocation = false
-        arguments?.remove(USER_LOCATION)
-    }
-
     override fun onStart() {
         super.onStart()
         viewModel.onUserInteraction(WeatherUserInteraction.Refresh)
@@ -116,7 +101,6 @@ class WeatherMainFragment : Fragment() {
 
     companion object {
         const val QUERY_KEY = "QUERY"
-        const val USER_LOCATION = "USER_LOCATION"
     }
 
 }

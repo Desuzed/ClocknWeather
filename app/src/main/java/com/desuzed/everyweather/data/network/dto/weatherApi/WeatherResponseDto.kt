@@ -2,14 +2,11 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 
 import com.google.gson.annotations.SerializedName
 
-class WeatherResponseDto {
+data class WeatherResponseDto(
     @SerializedName("location")
-    var locationDto: LocationDto? = null
-
+    val locationDto: LocationDto? = null,
     @SerializedName("current")
-    var currentDto: CurrentDto? = null
-
+    val currentDto: CurrentDto? = null,
     @SerializedName("forecast")
-    var forecastDto: ForecastDto? = null
-
-}
+    val forecastDto: ForecastDto? = null,
+)

@@ -2,17 +2,13 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 
 import com.google.gson.annotations.SerializedName
 
-class AstroDto {
+data class AstroDto(
     @SerializedName("sunrise")
-    var sunrise: String = ""
-
+    val sunrise: String = "",
     @SerializedName("sunset")
-    var sunset: String = ""
-
+    val sunset: String = "",
     @SerializedName("moonrise")
-    var moonrise: String = ""
-
+    val moonrise: String = "",
     @SerializedName("moonset")
-    var moonset: String = ""
-
-}
+    val moonset: String = "",
+)

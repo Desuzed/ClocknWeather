@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.presentation.features.location_main
+package com.desuzed.everyweather.data.repository.location
 
 import com.desuzed.everyweather.data.mapper.location.LocationResponseMapper
 import com.desuzed.everyweather.domain.model.location.geo.ResultGeo

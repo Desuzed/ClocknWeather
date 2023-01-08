@@ -20,9 +20,9 @@ class GeoActionResultProvider(resources: Resources) : BaseActionResultProvider(r
 
     companion object {
         private const val MISSING_PARAMS = 400
-        private const val INVALID_TOKEN = 401
-        private const val ACCESS_RESTRICTED = 403
         private const val UNABLE_TO_GEOCODE = 404
+        const val INVALID_TOKEN = 401
+        const val ACCESS_RESTRICTED = 403
         const val RATE_LIMIT = 429
         const val NO_LOCATION_PERMISSIONS = 900
         const val LOCATION_NOT_FOUND = 901

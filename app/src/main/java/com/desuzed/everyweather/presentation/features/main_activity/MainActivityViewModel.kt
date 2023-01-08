@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.presentation.features.main_activity
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
@@ -14,12 +13,14 @@ import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.presentation.base.UserInteraction
+import com.desuzed.everyweather.util.Constants.LANG_RU_LOWERCASE
 import com.desuzed.everyweather.util.NetworkConnection
+import com.desuzed.everyweather.util.Timer
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class MainActivityViewModel(
     networkConnection: NetworkConnection,
@@ -51,6 +52,8 @@ class MainActivityViewModel(
     )
     val messageFlow: Flow<ActionResult> = _messageFlow.asSharedFlow()
 
+    private var timerJob: Job? = null
+
     init {
         collect(settingsDataStore.lang, ::collectLanguage)
         collect(settingsDataStore.darkMode, ::collectDarkTheme)
@@ -60,7 +63,7 @@ class MainActivityViewModel(
     fun onLanguage(appLanguage: String?) {
         viewModelScope.launch {
             val lang = when (appLanguage) {
-                "ru" -> Lang.RU
+                LANG_RU_LOWERCASE -> Lang.RU
                 else -> Lang.EN
             }
             settingsDataStore.setLanguage(lang)
@@ -71,7 +74,13 @@ class MainActivityViewModel(
         val shouldToggle = userLocationProvider.findUserLocation()
         toggleLookingForLocation(shouldToggle)
         if (shouldToggle) {
-
+            timerJob = viewModelScope.launch {
+                Timer.timerFlow(TIMER_DURATION).onCompletion {
+                    if (it !is CancellationException) {
+                        cancelLookingForLocation()
+                    }
+                }.collect()
+            }
         }
     }
 
@@ -79,7 +88,7 @@ class MainActivityViewModel(
 
     fun isFirstRun() = sharedPrefsProvider.isFirstRunApp()
 
-    fun cancelLookingForLocation() {
+    private fun cancelLookingForLocation() {
         userLocationProvider.onCancel()
     }
 
@@ -96,12 +105,12 @@ class MainActivityViewModel(
 
     private fun collectUserLocationResult(result: UserLocationResult?) {
         viewModelScope.launch {
-            Log.e("LOCATION", "collectUserLocationResult: $result")
             if (result?.userLatLng != null) {
                 _userLatLng.emit(result.userLatLng)
             } else if (result?.actionResult != null) {
                 postMessage(result.actionResult)
             }
+            cancelTimerJob()
             toggleLookingForLocation(false)
         }
 
@@ -113,10 +122,19 @@ class MainActivityViewModel(
         }
     }
 
+    private fun cancelTimerJob() {
+        timerJob?.cancel()
+        timerJob = null
+    }
+
     private fun toggleLookingForLocation(state: Boolean) {
         viewModelScope.launch {
             _isLookingForLocation.emit(state)
         }
+    }
+
+    private companion object {
+        private const val TIMER_DURATION = 20
     }
 
 }

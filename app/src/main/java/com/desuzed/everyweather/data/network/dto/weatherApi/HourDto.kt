@@ -2,36 +2,25 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 
 import com.google.gson.annotations.SerializedName
 
-class HourDto {
-
+data class HourDto(
     @SerializedName("time_epoch")
-    var timeEpoch: Long = 0
-
+    val timeEpoch: Long = 0,
     @SerializedName("temp_c")
-    var tempC = 0f
-
+    val tempC: Float = 0f,
     @SerializedName("temp_f")
-    var tempF = 0f
-
+    val tempF: Float = 0f,
     @SerializedName("condition")
-    var conditionDto: ConditionDto? = null
-
+    val conditionDto: ConditionDto? = null,
     @SerializedName("wind_kph")
-    var windSpeedKph = 0f
-
+    val windSpeedKph: Float = 0f,
     @SerializedName("wind_mph")
-    var windSpeedMph = 0f
-
+    val windSpeedMph: Float = 0f,
     @SerializedName("wind_degree")
-    var windDegree: Int = 0
-
+    val windDegree: Int = 0,
     @SerializedName("pressure_mb")
-    var pressureMb = 0f
-
+    val pressureMb: Float = 0f,
     @SerializedName("pressure_in")
-    var pressureInch = 0f
-
+    val pressureInch: Float = 0f,
     @SerializedName("humidity")
-    var humidity: Int = 0
-
-}
+    val humidity: Int = 0,
+)

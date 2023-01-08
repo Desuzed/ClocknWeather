@@ -3,7 +3,9 @@ package com.desuzed.everyweather.presentation.features.location_main
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.LocationMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
+import com.desuzed.everyweather.data.repository.location.LocationRepository
 import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
+import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
 import com.desuzed.everyweather.domain.model.location.geo.GeoResponse
 import com.desuzed.everyweather.domain.model.result.QueryResult
@@ -133,7 +135,22 @@ class LocationViewModel(
 
     private fun collectLanguage(language: Language) = setState { copy(lang = language) }
 
-    private fun collectQueryResult(queryResult: QueryResult) =
-        setAction(LocationMainAction.ShowSnackbar(queryResult))
+    private fun collectQueryResult(queryResult: QueryResult) {
+        if (shouldIgnoreError(queryResult.code)) {
+            setAction(
+                LocationMainAction.NavigateToWeather(
+                    query = queryResult.query,
+                    key = WeatherMainFragment.QUERY_KEY,
+                )
+            )
+        } else {
+            setAction(LocationMainAction.ShowSnackbar(queryResult))
+        }
+    }
+
+    private fun shouldIgnoreError(code: Int): Boolean =
+        code == GeoActionResultProvider.RATE_LIMIT
+                || code == GeoActionResultProvider.ACCESS_RESTRICTED
+                || code == GeoActionResultProvider.INVALID_TOKEN
 
 }
