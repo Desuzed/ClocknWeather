@@ -1,23 +1,21 @@
 package com.desuzed.everyweather.presentation.features.location_main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
-import com.desuzed.everyweather.util.addOnBackPressedCallback
-import com.desuzed.everyweather.util.collect
-import com.desuzed.everyweather.util.navigate
-import com.desuzed.everyweather.util.onBackClick
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
+import com.desuzed.everyweather.util.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LocationFragment : Fragment() {
@@ -43,12 +41,18 @@ class LocationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         addOnBackPressedCallback()
         collect(viewModel.action, ::onNewAction)
+        setArgumentObserver(MAP_LOCATION_ARGS) {
+            Log.e("ARGS", "LOCATION resolveArguments: $it")
+            if (it.isNotBlank()) {
+                viewModel.onUserInteraction(LocationUserInteraction.NavigateToWeather(it))
+            }
+        }
     }
 
     private fun onNewAction(action: LocationMainAction) {
         when (action) {
             is LocationMainAction.ShowSnackbar -> showSnackbar(action.queryResult)
-            is LocationMainAction.NavigateToWeather -> navigateToWeatherFragment(bundleOf(action.key to action.query))
+            is LocationMainAction.NavigateToWeather -> navigateToWeatherFragment(action.query)
             LocationMainAction.MyLocation -> onMyLocationClick()
             LocationMainAction.ShowMapFragment -> showMapBotSheet()
             LocationMainAction.NavigateToSettings -> navigateToSettingsFragment()
@@ -60,7 +64,7 @@ class LocationFragment : Fragment() {
     private fun onMyLocationClick() {
         if (viewModel.areLocationPermissionsGranted()) {
             (activity as MainActivity).findUserLocation()
-            navigateToWeatherFragment()
+            onBackClick()
         } else {
             viewModel.launchRequireLocationPermissionsDialog()
         }
@@ -74,8 +78,9 @@ class LocationFragment : Fragment() {
         navigate(R.id.action_locationFragment_to_mapBottomSheetFragment)
     }
 
-    private fun navigateToWeatherFragment(bundle: Bundle? = null) {
-        navigate(R.id.action_locationFragment_to_weatherFragment, bundle)
+    private fun navigateToWeatherFragment(value: String) {
+        //todo или разобраться почему на экране погоды не получает query от карты или прокидывать через вью модель и преференсы стор
+        navigateBackWithParameter(WeatherMainFragment.QUERY_KEY, value)
     }
 
     private fun navigateToSettingsFragment() {
@@ -104,6 +109,10 @@ class LocationFragment : Fragment() {
             actionStringId = buttonTextId,
             onActionClick = onClick
         )
+    }
+
+    companion object {
+        const val MAP_LOCATION_ARGS = "MAP_LOCATION_ARGS"
     }
 
 }

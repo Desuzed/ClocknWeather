@@ -16,6 +16,7 @@ sealed interface LocationUserInteraction : UserInteraction {
     object Redirection : LocationUserInteraction
     class FavoriteLocation(val favoriteLocationDto: FavoriteLocationDto) : LocationUserInteraction
     class ConfirmFoundLocation(val geo: GeoResponse) : LocationUserInteraction
+    class NavigateToWeather(val query: String) : LocationUserInteraction
     class DeleteFavoriteLocation(
         val favoriteLocationDto: FavoriteLocationDto
     ) : LocationUserInteraction

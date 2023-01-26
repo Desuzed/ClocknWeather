@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
-import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.WeatherMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.weather.WeatherRepository
@@ -18,7 +17,6 @@ import com.desuzed.everyweather.presentation.base.BaseViewModel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 
 class WeatherMainViewModel(
     private val weatherRepository: WeatherRepository,
@@ -46,7 +44,7 @@ class WeatherMainViewModel(
     }
 
     fun getForecast(query: String) {
-        viewModelScope.launch {
+        launch {
             setState { copy(isLoading = true, query = query) }
             val fetchedForecast =
                 weatherRepository.fetchForecastOrErrorMessage(
@@ -82,14 +80,14 @@ class WeatherMainViewModel(
             WeatherUserInteraction.NextDays -> setAction(WeatherMainAction.NavigateToNextDaysWeather)
             WeatherUserInteraction.Refresh -> getForecast(state.value.query)
             WeatherUserInteraction.SaveLocation -> saveLocation()
-            WeatherUserInteraction.Redirection -> viewModelScope.launch {
+            WeatherUserInteraction.Redirection -> launch {
                 queryResultFlow.emit(QueryResult(ActionResultProvider.REDIRECTION))
             }
         }
     }
 
     private fun saveLocation() {
-        viewModelScope.launch {
+        launch {
             if (state.value.weatherData == null) {
                 onError(ActionResultProvider.FAIL)
                 return@launch
@@ -103,13 +101,13 @@ class WeatherMainViewModel(
     }
 
     private fun onError(code: Int) {
-        viewModelScope.launch {
+        launch {
             queryResultFlow.emit(QueryResult(code = code))
         }
     }
 
     private fun onSuccess(code: Int) {
-        viewModelScope.launch {
+        launch {
             queryResultFlow.emit(QueryResult(code = code))
             setState {
                 copy(isAddButtonEnabled = false)
@@ -124,7 +122,7 @@ class WeatherMainViewModel(
     }
 
     private fun getCachedForecast() {
-        viewModelScope.launch {
+        launch {
             setState { copy(isLoading = true) }
             val result = sharedPrefsProvider.loadForecastFromCache()
             if (result != null) {

@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.presentation.features.location_main
 
-import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.LocationMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.location.LocationRepository
@@ -13,10 +12,9 @@ import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.repository.local.RoomProvider
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 
 class LocationViewModel(
     private val roomProvider: RoomProvider,
@@ -49,15 +47,9 @@ class LocationViewModel(
                 interaction.favoriteLocationDto
             )
             is LocationUserInteraction.ConfirmFoundLocation -> onConfirmLocation(interaction.geo)
-            is LocationUserInteraction.FavoriteLocation -> setAction(
-                LocationMainAction.NavigateToWeather(
-                    query = interaction.favoriteLocationDto.toQuery(),
-                    key = WeatherMainFragment.QUERY_KEY
-                )
-            )
-            LocationUserInteraction.Redirection -> viewModelScope.launch {
-                queryResultFlow.emit(QueryResult(code = ActionResultProvider.REDIRECTION))
-            }
+            is LocationUserInteraction.FavoriteLocation -> onFavoriteLocation(interaction.favoriteLocationDto)
+            is LocationUserInteraction.NavigateToWeather -> navigateToWeatherWithDelay(interaction.query)
+            LocationUserInteraction.Redirection -> redirectToLocationApiPage()
             LocationUserInteraction.FindByQuery -> findTypedLocation()
             LocationUserInteraction.FindOnMap -> setAction(LocationMainAction.ShowMapFragment)
             LocationUserInteraction.MyLocation -> setAction(LocationMainAction.MyLocation)
@@ -78,7 +70,7 @@ class LocationViewModel(
     }
 
     private fun findTypedLocation() {
-        viewModelScope.launch {
+        launch {
             setState { copy(isLoading = true) }
             val resultGeo = locationRepository.fetchGeocodingResultOrError(
                 state.value.geoText,
@@ -108,14 +100,13 @@ class LocationViewModel(
         setAction(
             LocationMainAction.NavigateToWeather(
                 query = "${geoResponse.lat},${geoResponse.lon}",
-                key = WeatherMainFragment.QUERY_KEY
             )
         )
         setState { copy(geoText = "", geoResponses = null) }
     }
 
     private fun deleteFavoriteLocation(favoriteLocationDto: FavoriteLocationDto) =
-        viewModelScope.launch {
+        launch {
             val deleted = roomProvider.deleteItem(favoriteLocationDto)
             if (deleted) onSuccess(ActionResultProvider.DELETED)
             else onError(ActionResultProvider.FAIL)
@@ -140,11 +131,31 @@ class LocationViewModel(
             setAction(
                 LocationMainAction.NavigateToWeather(
                     query = queryResult.query,
-                    key = WeatherMainFragment.QUERY_KEY,
                 )
             )
         } else {
             setAction(LocationMainAction.ShowSnackbar(queryResult))
+        }
+    }
+
+    private fun navigateToWeatherWithDelay(query: String) {
+        launch {
+            delay(200)
+            setAction(LocationMainAction.NavigateToWeather(query))
+        }
+    }
+
+    private fun onFavoriteLocation(location: FavoriteLocationDto) {
+        setAction(
+            LocationMainAction.NavigateToWeather(
+                query = location.toQuery(),
+            )
+        )
+    }
+
+    private fun redirectToLocationApiPage() {
+        launch {
+            queryResultFlow.emit(QueryResult(code = ActionResultProvider.REDIRECTION))
         }
     }
 

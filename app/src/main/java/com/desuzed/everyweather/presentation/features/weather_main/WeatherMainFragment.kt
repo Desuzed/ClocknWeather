@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.navigate
+import com.desuzed.everyweather.util.setArgumentObserver
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WeatherMainFragment : Fragment() {
@@ -39,16 +41,19 @@ class WeatherMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        resolveArguments()
         collect((activity as MainActivity).getUserLatLngFlow(), ::onNewLocation)
         collect(viewModel.action, ::onNewAction)
-        resolveArguments()
     }
 
     private fun resolveArguments() {
-        val query = arguments?.getString(QUERY_KEY)
-        if (!query.isNullOrEmpty()) {
-            getQueryForecast(query)
-            arguments?.remove(QUERY_KEY)
+        Log.e("ARGS", "setOberver WEATHER:")
+        setArgumentObserver(QUERY_KEY) {
+            Log.e("ARGS", "resolveArguments: $it")
+            //todo запускается позжде чем query от рефреша
+            if (it.isNotBlank()) {
+                getQueryForecast(it)
+            }
         }
     }
 
@@ -96,6 +101,7 @@ class WeatherMainFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        Log.e("ARGS", "onStart START WEATHER:")
         viewModel.onUserInteraction(WeatherUserInteraction.Refresh)
     }
 

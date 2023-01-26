@@ -2,6 +2,7 @@ package com.desuzed.everyweather.presentation.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -19,6 +20,12 @@ abstract class BaseViewModel<S, A, I : UserInteraction>(initState: S) : ViewMode
     protected fun setAction(action: A) {
         viewModelScope.launch {
             _action.emit(action)
+        }
+    }
+
+    protected fun launch(block: suspend CoroutineScope.() -> Unit) {
+        viewModelScope.launch {
+            block()
         }
     }
 

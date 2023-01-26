@@ -23,7 +23,24 @@ fun Fragment.navigate(directions: Int, bundle: Bundle? = null) {
     if (isTargetDestination()) {
         if (bundle == null) {
             controller.navigate(directions)
-        } else controller.navigate(directions, bundle)
+        } else {
+            controller.navigate(directions, bundle)
+        }
+    }
+}
+
+fun Fragment.navigateBackWithParameter(key: String, value: String) {
+    findNavController().apply {
+        previousBackStackEntry?.savedStateHandle?.set(key, value)
+        navigateUp()
+    }
+}
+
+fun Fragment.setArgumentObserver(key: String, consumer: (String) -> Unit) {
+    val savedState = findNavController().currentBackStackEntry?.savedStateHandle
+    savedState?.getLiveData<String>(key)?.observe(viewLifecycleOwner) {
+        consumer(it)
+        savedState.remove<String>(key)
     }
 }
 
