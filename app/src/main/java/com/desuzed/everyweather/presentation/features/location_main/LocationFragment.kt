@@ -1,7 +1,6 @@
 package com.desuzed.everyweather.presentation.features.location_main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,6 @@ class LocationFragment : Fragment() {
         addOnBackPressedCallback()
         collect(viewModel.action, ::onNewAction)
         setArgumentObserver(MAP_LOCATION_ARGS) {
-            Log.e("ARGS", "LOCATION resolveArguments: $it")
             if (it.isNotBlank()) {
                 viewModel.onUserInteraction(LocationUserInteraction.NavigateToWeather(it))
             }
@@ -79,7 +77,6 @@ class LocationFragment : Fragment() {
     }
 
     private fun navigateToWeatherFragment(value: String) {
-        //todo или разобраться почему на экране погоды не получает query от карты или прокидывать через вью модель и преференсы стор
         navigateBackWithParameter(WeatherMainFragment.QUERY_KEY, value)
     }
 

@@ -1,7 +1,6 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,10 +46,7 @@ class WeatherMainFragment : Fragment() {
     }
 
     private fun resolveArguments() {
-        Log.e("ARGS", "setOberver WEATHER:")
         setArgumentObserver(QUERY_KEY) {
-            Log.e("ARGS", "resolveArguments: $it")
-            //todo запускается позжде чем query от рефреша
             if (it.isNotBlank()) {
                 getQueryForecast(it)
             }
@@ -97,12 +93,6 @@ class WeatherMainFragment : Fragment() {
             actionStringId = buttonTextId,
             onActionClick = onClick
         )
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.e("ARGS", "onStart START WEATHER:")
-        viewModel.onUserInteraction(WeatherUserInteraction.Refresh)
     }
 
     companion object {

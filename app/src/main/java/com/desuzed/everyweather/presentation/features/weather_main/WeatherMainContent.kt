@@ -1,5 +1,6 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -50,6 +51,7 @@ private fun PreviewWeatherMainContent() {
     )
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun WeatherMainContent(
     state: WeatherState,

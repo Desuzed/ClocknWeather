@@ -1,9 +1,9 @@
 package com.desuzed.everyweather.presentation.features.weather_next_days
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun NextDaysBottomSheetContent(
     state: NextDaysState,
@@ -98,6 +100,7 @@ fun NextDaysBottomSheetContent(
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ForecastListItem(
     dayItem: NextDaysUi,
@@ -106,19 +109,20 @@ fun ForecastListItem(
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
     Card(
+        onClick = {
+            isExpanded = !isExpanded
+        },
+        interactionSource = interactionSource,
         modifier = Modifier
             .padding(
                 top = dimensionResource(id = R.dimen.dimen_4),
                 bottom = if (isLastItem) dimensionResource(id = R.dimen.dimen_8)
                 else dimensionResource(id = R.dimen.dimen_0),
             )
-            .fillMaxSize()
-            .clickable(interactionSource = interactionSource, indication = null) {
-                isExpanded = !isExpanded
-            },
+            .fillMaxSize(),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         backgroundColor = EveryweatherTheme.colors.tertiary,
-        elevation = dimensionResource(id = R.dimen.dimen_8)
+        elevation = dimensionResource(id = R.dimen.dimen_8),
     ) {
         Column(
             modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.dimen_10)),

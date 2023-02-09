@@ -35,6 +35,7 @@ class WeatherMainViewModel(
     init {
         getCachedForecast()
         loadCachedQuery()
+        onUserInteraction(WeatherUserInteraction.Refresh)
 
         collect(settingsDataStore.distanceDimen, ::collectWindSpeed)
         collect(settingsDataStore.tempDimen, ::collectTemperature)
