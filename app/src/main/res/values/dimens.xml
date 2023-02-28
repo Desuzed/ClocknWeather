@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_8">8dp</dimen>
-    <dimen name="margin_10">10dp</dimen>
-    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="dimen_0">0dp</dimen>
+    <dimen name="dimen_3">3dp</dimen>
+    <dimen name="dimen_4">4dp</dimen>
+    <dimen name="dimen_8">8dp</dimen>
+    <dimen name="dimen_10">10dp</dimen>
+    <dimen name="dimen_12">12dp</dimen>
+    <dimen name="dimen_16">16dp</dimen>
+    <dimen name="dimen_20">20dp</dimen>
+    <dimen name="dimen_26">26dp</dimen>
+    <dimen name="dimen_33">33dp</dimen>
+    <dimen name="dimen_34">34dp</dimen>
+    <dimen name="dimen_40">40dp</dimen>
+    <dimen name="dimen_50">50dp</dimen>
+    <dimen name="dimen_60">60dp</dimen>
+    <dimen name="dimen_100">100dp</dimen>
+    <dimen name="dimen_210">210dp</dimen>
+    <dimen name="dimen_350">350dp</dimen>
     <dimen name="corner_radius_16">16dp</dimen>
+    <dimen name="corner_radius_30">30dp</dimen>
 </resources>

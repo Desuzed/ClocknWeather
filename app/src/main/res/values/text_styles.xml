@@ -20,37 +20,4 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-
-    <style name="TextViewStyle.TextBold" >
-        <item name="fontFamily">@font/montserrat_semi_bold</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextViewStyle.TextLarge" >
-        <item name="android:lines">1</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextViewStyle.Place" >
-        <item name="android:ellipsize">end</item>
-        <item name="android:lines">1</item>
-        <item name="drawableEndCompat">@drawable/ic_edit_location</item>
-    </style>
-
-    <style name="AppEditText" parent="Base.Widget.AppCompat.EditText" >
-        <item name="fontFamily">@font/montserrat_regular_ru</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:inputType">text</item>
-        <item name="android:imeOptions">actionSearch</item>
-        <item name="android:lines">1</item>
-        <item name="android:hint">@string/enter_location_name</item>
-        <item name="drawableLeftCompat">@drawable/ic_search</item>
-
-
-<!--        <item name="android:textColorHighlight">@color/white</item>-->
-
-    </style>
-
 </resources>

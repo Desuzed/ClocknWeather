@@ -1,73 +1,26 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.model.entity.Hour
-import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 
-class HourDto {
-
+data class HourDto(
     @SerializedName("time_epoch")
-    var timeEpoch: Long = 0
-
-    @SerializedName("time")
-    var time: String = ""
-
+    val timeEpoch: Long = 0,
     @SerializedName("temp_c")
-    var temp = 0f
-
+    val tempC: Float = 0f,
+    @SerializedName("temp_f")
+    val tempF: Float = 0f,
     @SerializedName("condition")
-    var conditionDto: ConditionDto? = null
-
+    val conditionDto: ConditionDto? = null,
     @SerializedName("wind_kph")
-    var windSpeed = 0f
-
+    val windSpeedKph: Float = 0f,
+    @SerializedName("wind_mph")
+    val windSpeedMph: Float = 0f,
     @SerializedName("wind_degree")
-    var windDegree: Int = 0
-
-    @SerializedName("wind_dir")
-    var windDir: String = ""
-
+    val windDegree: Int = 0,
     @SerializedName("pressure_mb")
-    var pressureMb = 0f
-
-    @SerializedName("precip_mm")
-    var precipMm = 0f
-
+    val pressureMb: Float = 0f,
+    @SerializedName("pressure_in")
+    val pressureInch: Float = 0f,
     @SerializedName("humidity")
-    var humidity: Int = 0
-
-    @SerializedName("cloud")
-    var cloud: Int = 0
-
-    @SerializedName("feelslike_c")
-    var feelsLike = 0f
-
-    @SerializedName("chance_of_rain")
-    var chanceOfRain: Int = 0
-
-    @SerializedName("chance_of_snow")
-    var chanceOfSnow: Int = 0
-
-    @SerializedName("vis_km")
-    var vis = 0f
-
-    @SerializedName("uv")
-    var uv = 0f
-
-    @SerializedName("gust_kph")
-    var gust = 0f
-}
-
-class HourMapper : EntityMapper<HourDto, Hour> {
-    override fun mapFromEntity(entity: HourDto): Hour {
-        return Hour(
-            entity.timeEpoch,
-            entity.temp,
-            entity.conditionDto?.text.toString(),
-            entity.conditionDto?.icon.toString(),
-            entity.windSpeed,
-            entity.windDegree,
-            entity.pressureMb
-        )
-    }
-}
+    val humidity: Int = 0,
+)

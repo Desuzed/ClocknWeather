@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.data.room
 
-import com.desuzed.everyweather.model.entity.Location
+import com.desuzed.everyweather.domain.model.weather.Location
 import junit.framework.TestCase
 
 class FavoriteLocationDtoTest : TestCase() {
@@ -48,7 +48,6 @@ class FavoriteLocationDtoTest : TestCase() {
                 43.19f, 132.02f,
                 "timezone",
                 10,
-                "localTime"
             )
         val expected = "43.2,132.1"
 

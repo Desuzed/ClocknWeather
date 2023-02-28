@@ -1,70 +1,30 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.model.entity.Current
-import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 
-class CurrentDto {
-    @SerializedName("last_updated_epoch")
-    var lastUpdatedEpoch: Long = 0
-
-    @SerializedName("last_updated")
-    var lastUpdated: String = ""
-
+data class CurrentDto(
     @SerializedName("temp_c")
-    var temp = 0f
-
+    val tempC: Float = 0f,
+    @SerializedName("temp_f")
+    val tempF: Float = 0f,
     @SerializedName("condition")
-    var conditionDto: ConditionDto? = null
-
+    val conditionDto: ConditionDto? = null,
     @SerializedName("wind_kph")
-    var windSpeed = 0f
-
-    @SerializedName("wind_degree")
-    var windDegree: Int = 0
-
-    @SerializedName("wind_dir")
-    var windDir: String = ""
-
+    val windSpeedKph: Float = 0f,
+    @SerializedName("wind_mph")
+    val windSpeedMph: Float = 0f,
     @SerializedName("pressure_mb")
-    var pressureMb = 0f
-
+    val pressureMb: Float = 0f,
+    @SerializedName("pressure_in")
+    val pressureInch: Float = 0f,
     @SerializedName("precip_mm")
-    var precipMm = 0f
-
+    val precipMm: Float = 0f,
+    @SerializedName("precip_in")
+    val precipInch: Float = 0f,
     @SerializedName("humidity")
-    var humidity: Int = 0
-
-    @SerializedName("cloud")
-    var cloud: Int = 0
-
+    val humidity: Int = 0,
     @SerializedName("feelslike_c")
-    var feelsLike = 0f
-
-    @SerializedName("vis_km")
-    var vis = 0f
-
-    @SerializedName("uv")
-    var uv = 0f
-
-    @SerializedName("gust_kph")
-    var gust = 0f
-
-}
-
-class CurrentMapper : EntityMapper<CurrentDto, Current> {
-    override fun mapFromEntity(entity: CurrentDto): Current {
-        return Current(
-            entity.temp,
-            entity.conditionDto?.text.toString(),
-            entity.conditionDto?.icon.toString(),
-            entity.windSpeed,
-            entity.windDegree,
-            entity.windDir,
-            entity.pressureMb,
-            entity.precipMm,
-            entity.humidity,
-            entity.feelsLike
-        )
-    }
-}
+    val feelsLikeC: Float = 0f,
+    @SerializedName("feelslike_f")
+    val feelsLikeF: Float = 0f,
+)

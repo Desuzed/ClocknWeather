@@ -1,25 +1,17 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.model.entity.ApiError
-import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 
 
-class ErrorDtoWeatherApi {
+data class ErrorDtoWeatherApi(
     @SerializedName("error")
-    var error: Error? = null
+    val error: Error? = null,
+)
 
-    class Error {
-        @SerializedName("code")
-        var code = 0
+data class Error(
+    @SerializedName("code")
+    val code: Int = 0,
 
-        @SerializedName("message")
-        var message: String = ""
-    }
-}
-
-class ApiErrorMapper : EntityMapper<ErrorDtoWeatherApi, ApiError> {
-    override fun mapFromEntity(entity: ErrorDtoWeatherApi): ApiError {
-        return ApiError(ApiError.Error(entity.error!!.code, entity.error!!.message))
-    }
-}
+    @SerializedName("message")
+    val message: String = "",
+)

@@ -1,59 +1,28 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.model.entity.Day
-import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 
-class DayDto {
-
+data class DayDto(
     @SerializedName("maxtemp_c")
-    var maxTemp = 0f
-
+    val maxTempC: Float = 0f,
+    @SerializedName("maxtemp_f")
+    val maxTempF: Float = 0f,
     @SerializedName("mintemp_c")
-    var minTemp = 0f
-
-    @SerializedName("avgtemp_c")
-    var avgTemp = 0f
-
+    val minTempC: Float = 0f,
+    @SerializedName("mintemp_f")
+    val minTempF: Float = 0f,
     @SerializedName("maxwind_kph")
-    var maxWind = 0f
-
+    val maxWindKph: Float = 0f,
+    @SerializedName("maxwind_mph")
+    val maxWindMph: Float = 0f,
     @SerializedName("totalprecip_mm")
-    var totalPrecip = 0f
-
-    @SerializedName("avgvis_km")
-    var avgVis = 0f
-
+    val totalPrecipMm: Float = 0f,
+    @SerializedName("totalprecip_in")
+    val totalPrecipInch: Float = 0f,
     @SerializedName("avghumidity")
-    var avgHumidity = 0f
-
+    val avgHumidity: Float = 0f,
     @SerializedName("daily_chance_of_rain")
-    var popRain: Int = 0
-
-    @SerializedName("daily_chance_of_snow")
-    var popSnow: Int = 0
-
+    val popRain: Int = 0,
     @SerializedName("condition")
-    var conditionDto: ConditionDto? = null
-
-    @SerializedName("uv")
-    var uv = 0f
-
-    var pop : Int = (popRain + popSnow)/2
-}
-
-class DayMapper : EntityMapper<DayDto, Day> {
-    override fun mapFromEntity(entity: DayDto): Day {
-        return Day(
-            entity.maxTemp,
-            entity.minTemp,
-            entity.maxWind,
-            entity.totalPrecip,
-            entity.avgHumidity,
-            entity.popRain,
-            entity.popSnow,
-            entity.conditionDto?.text.toString(),
-            entity.conditionDto?.icon.toString()
-        )
-    }
-}
+    val conditionDto: ConditionDto? = null,
+)

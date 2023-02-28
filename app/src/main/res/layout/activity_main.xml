@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:theme="@style/Theme.Everyweather"
-    tools:context=".view.MainActivity">
+    tools:context=".presentation.features.main_activity.MainActivity">
 
     <TextView
         android:id="@+id/tvInternetConnection"
@@ -19,41 +19,49 @@
         android:background="?attr/backgroundError"
         tools:visibility="visible" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultNavHost="true"
-        android:layout_weight="98"
+        android:layout_weight="1"
         app:navGraph="@navigation/nav_graph" />
 
-
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/geoProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:indeterminate="true"
-        android:layout_weight="1"
-        />
-
-    <TextView
-        android:id="@+id/tvLookingForLocation"
+    <LinearLayout
+        android:id="@+id/geoLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        style="@style/TextViewStyle.TextNormal"
-        android:text="@string/looking_for_your_location"
-        />
-<!--    <com.google.android.gms.ads.AdView-->
-<!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
-<!--        android:id="@+id/adView"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        ads:layout_constraintStart_toStartOf="parent"-->
-<!--        ads:layout_constraintEnd_toEndOf="parent"-->
-<!--        ads:layout_constraintBottom_toBottomOf="parent"-->
-<!--        ads:adSize="BANNER"-->
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:paddingVertical="4dp">
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/geoProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+        <TextView
+            android:id="@+id/tvLookingForLocation"
+            style="@style/TextViewStyle.TextNormal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/looking_for_your_location" />
+    </LinearLayout>
+
+
+    <!--    <com.google.android.gms.ads.AdView-->
+    <!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+    <!--        android:id="@+id/adView"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        ads:layout_constraintStart_toStartOf="parent"-->
+    <!--        ads:layout_constraintEnd_toEndOf="parent"-->
+    <!--        ads:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        ads:adSize="BANNER"-->
 <!--        ads:adUnitId="ca-app-pub-4078708975391072/5042377495">-->
 <!--    </com.google.android.gms.ads.AdView>-->
 

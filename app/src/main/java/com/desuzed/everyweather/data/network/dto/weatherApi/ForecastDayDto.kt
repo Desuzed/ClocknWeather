@@ -1,39 +1,16 @@
 package com.desuzed.everyweather.data.network.dto.weatherApi
 
-import com.desuzed.everyweather.model.entity.ForecastDay
-import com.desuzed.everyweather.model.entity.Hour
-import com.desuzed.everyweather.util.EntityMapper
 import com.google.gson.annotations.SerializedName
 
-class ForecastDayDto {
+data class ForecastDayDto(
     @SerializedName("date")
-    var date: String = ""
-
+    val date: String = "",
     @SerializedName("date_epoch")
-    var dateEpoch: Long = 0
-
+    val dateEpoch: Long = 0,
     @SerializedName("day")
-    var day: DayDto? = null
-
+    val day: DayDto? = null,
     @SerializedName("astro")
-    var astroDto: AstroDto? = null
-
+    val astroDto: AstroDto? = null,
     @SerializedName("hour")
-    var hourDto: ArrayList<HourDto>? = null
-}
-
-class ForecastDayMapper : EntityMapper<ForecastDayDto, ForecastDay> {
-    override fun mapFromEntity(entity: ForecastDayDto): ForecastDay {
-        val listHour = mutableListOf<Hour>()
-        entity.hourDto?.forEach {
-            listHour.add(HourMapper().mapFromEntity(it))
-        }
-        return ForecastDay(
-            entity.date,
-            entity.dateEpoch,
-            DayMapper().mapFromEntity(entity.day!!),
-            AstroMapper().mapFromEntity(entity.astroDto!!),
-            listHour
-        )
-    }
-}
+    val hourDto: ArrayList<HourDto>? = null,
+)

@@ -2,14 +2,11 @@ package com.desuzed.everyweather.data.network.dto.weatherApi
 
 import com.google.gson.annotations.SerializedName
 
-class ConditionDto {
+data class ConditionDto(
     @SerializedName("text")
-    var text: String = ""
-
+    val text: String = "",
     @SerializedName("icon")
-    var icon: String = ""
-
+    val icon: String = "",
     @SerializedName("code")
-    var code: Int = 0
-
-}
+    val code: Int = 0,
+)
