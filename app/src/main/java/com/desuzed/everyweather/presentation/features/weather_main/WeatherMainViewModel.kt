@@ -35,13 +35,13 @@ class WeatherMainViewModel(
     init {
         getCachedForecast()
         loadCachedQuery()
-        onUserInteraction(WeatherUserInteraction.Refresh)
 
         collect(settingsDataStore.distanceDimen, ::collectWindSpeed)
         collect(settingsDataStore.tempDimen, ::collectTemperature)
         collect(settingsDataStore.lang, ::collectLanguage)
         collect(settingsDataStore.pressureDimen, ::collectPressure)
         collect(queryResultFlow, ::collectActionResult)
+        onUserInteraction(WeatherUserInteraction.Refresh)
     }
 
     fun getForecast(query: String) {
