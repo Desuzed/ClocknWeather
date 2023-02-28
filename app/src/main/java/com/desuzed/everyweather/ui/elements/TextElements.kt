@@ -57,6 +57,8 @@ fun RegularText(
     text: String,
     modifier: Modifier = Modifier,
     textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Ellipsis,
+    maxLines: Int = Int.MAX_VALUE,
     onClick: () -> Unit = {}
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -70,6 +72,8 @@ fun RegularText(
         style = EveryweatherTheme.typography.text,
         color = EveryweatherTheme.colors.textColorPrimary,
         textAlign = textAlign,
+        maxLines = maxLines,
+        overflow = overflow,
     )
 }
 

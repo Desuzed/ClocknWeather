@@ -48,7 +48,6 @@ class FavoriteLocationDtoTest : TestCase() {
                 43.19f, 132.02f,
                 "timezone",
                 10,
-                "localTime"
             )
         val expected = "43.2,132.1"
 

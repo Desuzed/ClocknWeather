@@ -156,11 +156,12 @@ fun TopAreaDayItem(nextDaysMainInfo: NextDaysMainInfo, isExpanded: Boolean) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
+            modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_8))
         ) {
             BoldText(text = nextDaysMainInfo.date)
-            RegularText(text = nextDaysMainInfo.description)
+            RegularText(text = nextDaysMainInfo.description, maxLines = 1)
         }
         MaxMinTempWithImg(nextDaysMainInfo = nextDaysMainInfo, isExpanded)
     }

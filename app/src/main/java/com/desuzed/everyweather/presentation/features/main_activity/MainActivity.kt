@@ -41,15 +41,6 @@ class MainActivity : AppCompatActivity() {
         collectData()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        findUserLocation()
-    }
-
     fun getUserLatLngFlow(): Flow<UserLatLng?> = viewModel.userLatLng
 
     fun showSnackbar(
