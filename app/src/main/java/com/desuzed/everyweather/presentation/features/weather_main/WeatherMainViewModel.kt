@@ -23,7 +23,7 @@ class WeatherMainViewModel(
     private val sharedPrefsProvider: SharedPrefsProvider,
     private val roomProvider: RoomProvider,
     private val analytics: WeatherMainAnalytics,
-    settingsDataStore: SettingsDataStore,
+    private val settingsDataStore: SettingsDataStore,
 ) : BaseViewModel<WeatherState, WeatherMainAction, WeatherUserInteraction>(WeatherState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(

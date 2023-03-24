@@ -4,7 +4,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/weatherFragment">
 
-
     <fragment
         android:id="@+id/weatherFragment"
         android:name="com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment"
@@ -13,13 +12,15 @@
             android:id="@+id/action_weatherFragment_to_nextDaysBottomSheet"
             app:destination="@id/nextDaysBottomSheet" />
         <action
+            android:id="@+id/action_weatherFragment_to_updateAppFragment"
+            app:destination="@+id/inAppUpdateBottomSheet" />
+        <action
             android:id="@+id/action_weatherFragment_to_locationFragment"
             app:destination="@id/locationFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            />
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <dialog
         android:id="@+id/mapBottomSheetFragment"
@@ -61,5 +62,8 @@
         android:id="@+id/settingsFragment"
         android:name="com.desuzed.everyweather.presentation.features.settings.SettingsFragment"
         android:label="SettingsFragment" />
-
+    <dialog
+        android:id="@+id/inAppUpdateBottomSheet"
+        android:name="com.desuzed.everyweather.presentation.features.in_app_update.InAppUpdateBottomSheet"
+        android:label="InAppUpdateBottomSheet" />
 </navigation>

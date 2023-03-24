@@ -21,6 +21,8 @@ import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.ActionResult
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.settings.DarkMode
+import com.desuzed.everyweather.presentation.features.shared.SharedState
+import com.desuzed.everyweather.presentation.features.shared.SharedViewModel
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.setAppLocaleAndReturnContext
 import com.desuzed.everyweather.util.snackbar
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val locationCode = 100
     private val viewModel by viewModel<MainActivityViewModel>()
+    private val sharedViewModel by viewModel<SharedViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Everyweather)//todo поменять сплешскрин на компоуз версию чтобы не видеть белый фон при входе в приложение
@@ -76,6 +79,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        sharedViewModel.startListeningForUpdates()
+        super.onStart()
+    }
+
     private fun changeDarkMode(darkMode: DarkMode) {
         val mode = when (darkMode) {
             DarkMode.ON -> MODE_NIGHT_YES
@@ -108,6 +116,7 @@ class MainActivity : AppCompatActivity() {
         collect(viewModel.isLookingForLocation, ::isLookingForLocation)
         collect(viewModel.messageFlow, ::onNewActionResult)
         collect(viewModel.action, ::onNewAction)
+        collect(sharedViewModel.state, ::onDownloadingUpdateProgress)
     }
 
     private fun onNewNetworkState(networkState: Boolean) {
@@ -185,6 +194,12 @@ class MainActivity : AppCompatActivity() {
             newBase
         }
         super.attachBaseContext(newContext)
+    }
+
+    private fun onDownloadingUpdateProgress(sharedState: SharedState) {
+        binding.appUpdateLayout.isVisible = sharedState.isUpdateLoading
+        binding.appUpdateProgressBar.max = sharedState.totalBytes.toInt()
+        binding.appUpdateProgressBar.progress = sharedState.bytesDownloaded.toInt()
     }
 
 }

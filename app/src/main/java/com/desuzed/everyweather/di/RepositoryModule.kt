@@ -1,7 +1,8 @@
 package com.desuzed.everyweather.di
 
-import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
 import com.desuzed.everyweather.data.repository.location.LocationRepository
+import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
+import com.desuzed.everyweather.data.repository.providers.app_update.AppUpdateProvider
 import com.desuzed.everyweather.data.repository.weather.WeatherRepository
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
@@ -25,4 +26,7 @@ val repositoryModule = module {
         UserLocationProvider(androidApplication())
     }
 
+    single {
+        AppUpdateProvider(androidApplication())
+    }
 }
