@@ -7,16 +7,18 @@ import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
+import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
+import com.desuzed.everyweather.presentation.features.shared.SharedViewModel
 import com.desuzed.everyweather.util.collect
-import com.desuzed.everyweather.util.navigateBackWithParameter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class InAppUpdateBottomSheet : BottomSheetDialogFragment() {
     private val viewModel by viewModel<InAppUpdateViewModel>()
-    private val isReadyToUpdate: Boolean by lazy {
-        arguments?.getBoolean(IS_UPDATE_READY_TAG) ?: false
+    private val sharedViewModel by viewModel<SharedViewModel>()
+    private val status: InAppUpdateStatus by lazy {
+        arguments?.getParcelable(IN_APP_UPDATE_STATUS_KEY)
+            ?: InAppUpdateStatus.READY_TO_LAUNCH_UPDATE
     }
 
     override fun onCreateView(
@@ -37,24 +39,35 @@ class InAppUpdateBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         collect(viewModel.action, ::onNewAction)
-        viewModel.initState(isReadyToUpdate)
+        viewModel.resolveStatus(status)
+    }
+
+    fun setUpdateStatus(status: InAppUpdateStatus) {
+        arguments = Bundle().apply {
+            putParcelable(IN_APP_UPDATE_STATUS_KEY, status)
+        }
     }
 
     private fun onNewAction(action: InAppUpdateAction) {
         when (action) {
             InAppUpdateAction.Dismiss -> dismiss()
-            InAppUpdateAction.UpdateApplication -> navigateBackWithParameter(
-                WeatherMainFragment.IN_APP_UPDATE,
-                WeatherMainFragment.START_UPDATE,
-            )
-            InAppUpdateAction.InstallUpdate -> navigateBackWithParameter(
-                WeatherMainFragment.IN_APP_UPDATE,
-                WeatherMainFragment.INSTALL_UPDATE,
-            )
+            InAppUpdateAction.InstallUpdate -> installUpdate()
+            InAppUpdateAction.UpdateApplication -> startDownloadingUpdate()
         }
     }
 
-    companion object {
-        const val IS_UPDATE_READY_TAG = "IS_UPDATE_READY_TAG"
+    private fun startDownloadingUpdate() {
+        sharedViewModel.startUpdate(requireActivity())
+        dismiss()
     }
+
+    private fun installUpdate() {
+        sharedViewModel.completeUpdate()
+        dismiss()
+    }
+
+    companion object {
+        private const val IN_APP_UPDATE_STATUS_KEY = "IN_APP_UPDATE_STATUS_KEY"
+    }
+
 }

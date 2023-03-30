@@ -1,7 +1,6 @@
 package com.desuzed.everyweather.presentation.features.shared
 
 import android.app.Activity
-import android.util.Log
 import com.desuzed.everyweather.data.repository.providers.app_update.AppUpdateProvider
 import com.desuzed.everyweather.domain.model.app_update.AppUpdateState
 import com.desuzed.everyweather.presentation.base.BaseViewModel
@@ -12,14 +11,6 @@ class SharedViewModel(
 ) : BaseViewModel<SharedState, SharedAction, UserInteraction>(SharedState(0, 0, false)) {
 
     init {
-//        val c = 30_000_000L
-//        launch {
-//            for (i: Long in 1..c step 10_0000) {
-//                onDownloadingUpdateProgress(AppUpdateState.Downloading(c, i, true))
-//                delay(10)
-//            }
-//            updateReadyToComplete()
-//        }
         collect(appUpdateProvider.appUpdateState, ::onAppUpdateState)
     }
 
@@ -40,8 +31,6 @@ class SharedViewModel(
     }
 
     private fun onAppUpdateState(appUpdateState: AppUpdateState?) {
-        Log.e("UPDATE", "onAppUpdateState: appUpdateState = $appUpdateState")
-
         when (appUpdateState) {
             is AppUpdateState.Downloading -> onDownloadingUpdateProgress(appUpdateState)
             AppUpdateState.ReadyToInstall -> updateReadyToComplete()

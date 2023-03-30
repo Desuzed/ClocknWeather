@@ -17,10 +17,13 @@ import com.desuzed.everyweather.Config
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
 import com.desuzed.everyweather.databinding.ActivityMainBinding
+import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
 import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.ActionResult
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.settings.DarkMode
+import com.desuzed.everyweather.presentation.features.in_app_update.InAppUpdateBottomSheet
+import com.desuzed.everyweather.presentation.features.shared.SharedAction
 import com.desuzed.everyweather.presentation.features.shared.SharedState
 import com.desuzed.everyweather.presentation.features.shared.SharedViewModel
 import com.desuzed.everyweather.util.collect
@@ -32,7 +35,6 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val locationCode = 100
     private val viewModel by viewModel<MainActivityViewModel>()
     private val sharedViewModel by viewModel<SharedViewModel>()
 
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         handleFirstEnterApp()
         bind()
         collectData()
+        sharedViewModel.startListeningForUpdates()
     }
 
     fun getUserLatLngFlow(): Flow<UserLatLng?> = viewModel.userLatLng
@@ -49,13 +52,13 @@ class MainActivity : AppCompatActivity() {
     fun showSnackbar(
         message: String,
         @StringRes actionStringId: Int = R.string.ok,
-        onActionClick: () -> Unit = {}
+        onActionClick: () -> Unit = {},
     ) {
         snackbar(
             text = message,
             root = binding.root,
             actionStringId = actionStringId,
-            onActionClick = onActionClick
+            onActionClick = onActionClick,
         )
     }
 
@@ -74,14 +77,9 @@ class MainActivity : AppCompatActivity() {
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION
                     ),
-                    locationCode
+                    LOCATION_CODE
                 )
         }
-    }
-
-    override fun onStart() {
-        sharedViewModel.startListeningForUpdates()
-        super.onStart()
     }
 
     private fun changeDarkMode(darkMode: DarkMode) {
@@ -117,6 +115,12 @@ class MainActivity : AppCompatActivity() {
         collect(viewModel.messageFlow, ::onNewActionResult)
         collect(viewModel.action, ::onNewAction)
         collect(sharedViewModel.state, ::onDownloadingUpdateProgress)
+        collect(sharedViewModel.action) {
+            when (it) {
+                SharedAction.UpdateAvailableDialog -> showUpdateDialog(InAppUpdateStatus.READY_TO_LAUNCH_UPDATE)
+                SharedAction.UpdateReadyToInstallDialog -> showUpdateDialog(InAppUpdateStatus.READY_TO_INSTALL)
+            }
+        }
     }
 
     private fun onNewNetworkState(networkState: Boolean) {
@@ -126,6 +130,15 @@ class MainActivity : AppCompatActivity() {
     private fun isLookingForLocation(isLooking: Boolean) {
         with(binding) {
             geoLayout.isVisible = isLooking
+        }
+    }
+
+    private fun showUpdateDialog(status: InAppUpdateStatus) {
+        if (supportFragmentManager.findFragmentByTag(IN_APP_UPDATE_DIALOG_TAG) == null) {
+            InAppUpdateBottomSheet().apply {
+                setUpdateStatus(status)
+                show(supportFragmentManager, IN_APP_UPDATE_DIALOG_TAG)
+            }
         }
     }
 
@@ -197,9 +210,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onDownloadingUpdateProgress(sharedState: SharedState) {
-        binding.appUpdateLayout.isVisible = sharedState.isUpdateLoading
-        binding.appUpdateProgressBar.max = sharedState.totalBytes.toInt()
-        binding.appUpdateProgressBar.progress = sharedState.bytesDownloaded.toInt()
+        with(binding) {
+            appUpdateLayout.isVisible = sharedState.isUpdateLoading
+            appUpdateProgressBar.max = sharedState.totalBytes.toInt()
+            appUpdateProgressBar.progress = sharedState.bytesDownloaded.toInt()
+        }
+    }
+
+    companion object {
+        private const val IN_APP_UPDATE_DIALOG_TAG = "IN_APP_UPDATE_DIALOG_TAG"
+        private const val LOCATION_CODE = 100
     }
 
 }

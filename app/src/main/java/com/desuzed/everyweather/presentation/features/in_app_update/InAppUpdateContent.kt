@@ -123,5 +123,5 @@ fun InAppUpdateContent(
 )
 @Composable
 private fun PreviewNextDaysBottomSheetContent() {
-    InAppUpdateContent(InAppUpdateState(), {})
+    InAppUpdateContent(InAppUpdateState()) {}
 }
