@@ -33,6 +33,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454593026360:android:851d53070b3f5c5bd289cd",
+        "android_client_info": {
+          "package_name": "com.desuzed.everyweather.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454593026360-v0r375691js784clq6dibnkgrvbqekvo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzpxXEELgFcqMSj8lWit1uFcLv53-fviI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454593026360-v0r375691js784clq6dibnkgrvbqekvo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
