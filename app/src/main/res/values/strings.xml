@@ -89,5 +89,6 @@
     <string name="fahrenheit" translatable="false">°F</string>
     <string name="celcius" translatable="false">°C</string>
     <string name="retry_again">Please, retry again</string>
+    <string name="update_available_update_in_background_button">Update in background</string>
 
 </resources>

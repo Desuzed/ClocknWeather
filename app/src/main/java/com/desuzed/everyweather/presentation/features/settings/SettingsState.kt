@@ -1,5 +1,6 @@
 package com.desuzed.everyweather.presentation.features.settings
 
+import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
 import com.desuzed.everyweather.domain.model.settings.*
 
 data class SettingsState(
@@ -9,4 +10,5 @@ data class SettingsState(
     val tempDimen: Temperature = Temperature("", 0, 0),
     val pressure: Pressure = Pressure("", 0, 0),
     val showDialogType: SettingsType? = null,
+    val updateStatus: InAppUpdateStatus? = null,
 )

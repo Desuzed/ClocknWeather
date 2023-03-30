@@ -12,6 +12,8 @@ class SettingsAnalytics(context: Context) : Analytics(context = context) {
             is SettingsUserInteraction.ChangeLanguage -> logEvent(CHANGE_LANG)
             is SettingsUserInteraction.ChangePressureDimension -> logEvent(CHANGE_PRESSURE)
             is SettingsUserInteraction.ChangeTemperatureDimension -> logEvent(CHANGE_TEMPERATURE)
+            is SettingsUserInteraction.ReadyToLaunchUpdate -> logEvent(LAUNCH_UPDATE)
+            is SettingsUserInteraction.ReadyToInstall -> logEvent(INSTALL_UPDATE)
             else -> {}
         }
     }
@@ -22,5 +24,7 @@ class SettingsAnalytics(context: Context) : Analytics(context = context) {
         private const val CHANGE_TEMPERATURE = "settings_change_temp"
         private const val CHANGE_DISTANCE = "settings_change_distance"
         private const val CHANGE_PRESSURE = "settings_change_pressure"
+        private const val LAUNCH_UPDATE = "settings_launch_update"
+        private const val INSTALL_UPDATE = "settings_install_update"
     }
 }
