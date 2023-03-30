@@ -69,5 +69,14 @@
     <string name="require_location_permissions_title">Требуются разрешения на геопозицию для загрузки погоды по Вашему местоположению.</string>
     <string name="require_location_permissions_description">Для предоставления доступа к геопозиции зайдите в раздел \"О приложении\" на Вашем устройстве, в разделе \"Разрешения приложений\" предоставьте разрешение к местоположению.</string>
     <string name="allow">Разрешить</string>
+    <string name="update_available_title">Доступно обновление</string>
+    <string name="update_available_description">Обновить приложение в фоне?</string>
+    <string name="update_available_later_button">Напомнить позже</string>
+    <string name="update_available_update_button">Обновить сейчас</string>
+    <string name="should_install_update_description">Установить обновление сейчас?</string>
+    <string name="update_install_button">Установить</string>
+    <string name="update_dismiss_button">Пропустить</string>
+    <string name="update_ready_to_install_title">Обновление готово к установке</string>
+    <string name="downloading_update">Скачивание обновления…</string>
 
 </resources>

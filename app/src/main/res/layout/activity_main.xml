@@ -52,6 +52,30 @@
             android:text="@string/looking_for_your_location" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/appUpdateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="4dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/appUpdateProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="false" />
+
+        <TextView
+            android:id="@+id/appUpdateLayoutTextView"
+            style="@style/TextViewStyle.TextNormal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/downloading_update" />
+    </LinearLayout>
+
 
     <!--    <com.google.android.gms.ads.AdView-->
     <!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->

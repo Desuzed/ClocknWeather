@@ -81,6 +81,17 @@ inline fun <T> Fragment.collect(
     }
 }
 
+inline fun <T> Fragment.collectWhenResumed(
+    source: Flow<T>,
+    crossinline consumer: suspend (T) -> Unit
+) {
+    viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+        source.collect {
+            consumer(it)
+        }
+    }
+}
+
 inline fun <T> AppCompatActivity.collect(
     source: Flow<T>,
     crossinline consumer: suspend (T) -> Unit
