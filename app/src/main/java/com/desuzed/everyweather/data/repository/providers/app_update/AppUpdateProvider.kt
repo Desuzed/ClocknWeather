@@ -26,12 +26,12 @@ class AppUpdateProvider(private val context: Context) {
     private val updateListener: InstallStateUpdatedListener = InstallStateUpdatedListener { state ->
         when (state.installStatus()) {
             InstallStatus.DOWNLOADED -> {
-                setReadyToInstall()
                 setProgressState(
                     progress = 0,
                     totalBytes = 0,
                     isLoading = false,
                 )
+                setReadyToInstall()
             }
             InstallStatus.DOWNLOADING -> {
                 setProgressState(

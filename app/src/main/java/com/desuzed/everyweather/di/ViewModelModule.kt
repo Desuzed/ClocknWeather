@@ -55,11 +55,14 @@ val viewModelModule = module {
         SettingsViewModel(
             settingsDataStore = get(),
             analytics = get(),
+            appUpdateProvider = get(),
         )
     }
 
     viewModel {
-        InAppUpdateViewModel()
+        InAppUpdateViewModel(
+            analytics = get(),
+        )
     }
 
     viewModel {

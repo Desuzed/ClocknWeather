@@ -12,4 +12,6 @@ sealed interface SettingsUserInteraction : UserInteraction {
     class ChangeDistanceDimension(val distanceDimen: DistanceDimen) : SettingsUserInteraction
     class ChangeTemperatureDimension(val tempDimen: TempDimen) : SettingsUserInteraction
     class ChangePressureDimension(val pressureDimen: PressureDimen) : SettingsUserInteraction
+    object ReadyToLaunchUpdate : SettingsUserInteraction
+    object ReadyToInstall : SettingsUserInteraction
 }

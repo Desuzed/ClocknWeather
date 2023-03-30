@@ -3,6 +3,9 @@ package com.desuzed.everyweather.presentation.features.settings
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.SettingsAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
+import com.desuzed.everyweather.data.repository.providers.app_update.AppUpdateProvider
+import com.desuzed.everyweather.domain.model.app_update.AppUpdateState
+import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
 import com.desuzed.everyweather.domain.model.settings.*
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import kotlinx.coroutines.delay
@@ -11,6 +14,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(
     private val settingsDataStore: SettingsDataStore,
     private val analytics: SettingsAnalytics,
+    private val appUpdateProvider: AppUpdateProvider,
 ) : BaseViewModel<SettingsState, SettingsAction, SettingsUserInteraction>(SettingsState()) {
 
     init {
@@ -19,6 +23,7 @@ class SettingsViewModel(
         collect(settingsDataStore.distanceDimen, ::collectWindSpeed)
         collect(settingsDataStore.tempDimen, ::collectTemperature)
         collect(settingsDataStore.pressureDimen, ::collectPressure)
+        collect(appUpdateProvider.appUpdateState, ::onAppUpdateState)
     }
 
     override fun onUserInteraction(interaction: SettingsUserInteraction) {
@@ -32,6 +37,8 @@ class SettingsViewModel(
             is SettingsUserInteraction.ShowSettingDialog -> showSettingsDialog(interaction.type)
             SettingsUserInteraction.DismissDialog -> hideDialog()
             SettingsUserInteraction.OnBackClick -> setAction(SettingsAction.NavigateBack)
+            SettingsUserInteraction.ReadyToLaunchUpdate -> showUpdateDialog()
+            SettingsUserInteraction.ReadyToInstall -> showInstallDialog()
         }
     }
 
@@ -41,6 +48,18 @@ class SettingsViewModel(
 
     private fun hideDialog() {
         setState { copy(showDialogType = null) }
+    }
+
+    private fun showUpdateDialog() {
+        setAction(
+            SettingsAction.ShowUpdateDialog(InAppUpdateStatus.READY_TO_LAUNCH_UPDATE)
+        )
+    }
+
+    private fun showInstallDialog() {
+        setAction(
+            SettingsAction.ShowReadyToInstallDialog(InAppUpdateStatus.READY_TO_INSTALL)
+        )
     }
 
     private fun onDarkMode(darkMode: DarkMode) {
@@ -99,6 +118,20 @@ class SettingsViewModel(
 
     private fun collectPressure(pressure: Pressure) = setState {
         copy(pressure = pressure)
+    }
+
+    private fun onAppUpdateState(appUpdateState: AppUpdateState?) {
+        when (appUpdateState) {
+            AppUpdateState.UpdateAvailable -> {
+                setState { copy(updateStatus = InAppUpdateStatus.READY_TO_LAUNCH_UPDATE) }
+            }
+            AppUpdateState.ReadyToInstall -> {
+                setState { copy(updateStatus = InAppUpdateStatus.READY_TO_INSTALL) }
+            }
+            else -> {
+                setState { copy(updateStatus = null) }
+            }
+        }
     }
 
     private companion object {

@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showUpdateDialog(status: InAppUpdateStatus) {
+    fun showUpdateDialog(status: InAppUpdateStatus) {
         if (supportFragmentManager.findFragmentByTag(IN_APP_UPDATE_DIALOG_TAG) == null) {
             InAppUpdateBottomSheet().apply {
                 setUpdateStatus(status)

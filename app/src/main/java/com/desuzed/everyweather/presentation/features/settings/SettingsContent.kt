@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
 import com.desuzed.everyweather.domain.model.settings.*
 import com.desuzed.everyweather.ui.elements.*
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
@@ -37,7 +38,7 @@ import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 @Composable
 private fun PreviewSettingsContent() {
     SettingsContent(
-        state = SettingsState(),
+        state = SettingsState(updateStatus = InAppUpdateStatus.READY_TO_INSTALL),
         onUserInteraction = {},
     )
 }
@@ -98,6 +99,7 @@ fun SettingsContent(
                     onUserInteraction = onUserInteraction,
                     items = listOf(state.tempDimen, state.windSpeed, state.pressure)
                 )
+                SettingsAppUpdateContent(state.updateStatus, onUserInteraction)
                 val onDismissCallback: () -> Unit = {
                     onUserInteraction(SettingsUserInteraction.DismissDialog)
                 }
@@ -122,6 +124,50 @@ fun SettingsContent(
             }
         }
 
+    }
+}
+
+@Composable
+fun SettingsAppUpdateContent(
+    updateStatus: InAppUpdateStatus?,
+    onUserInteraction: (SettingsUserInteraction) -> Unit,
+) {
+    if (updateStatus != null) {
+        val userInteraction: SettingsUserInteraction
+        val titleTextId: Int
+        val buttonTextId: Int
+        when (updateStatus) {
+            InAppUpdateStatus.READY_TO_LAUNCH_UPDATE -> {
+                userInteraction = SettingsUserInteraction.ReadyToLaunchUpdate
+                titleTextId = R.string.update_available_title
+                buttonTextId = R.string.update_available_update_in_background_button
+            }
+            InAppUpdateStatus.READY_TO_INSTALL -> {
+                userInteraction = SettingsUserInteraction.ReadyToInstall
+                titleTextId = R.string.update_ready_to_install_title
+                buttonTextId = R.string.update_install_button
+            }
+        }
+        MediumText(
+            text = stringResource(id = titleTextId),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = dimensionResource(id = R.dimen.dimen_10),
+                    end = dimensionResource(id = R.dimen.dimen_10),
+                    top = dimensionResource(id = R.dimen.dimen_33),
+                )
+        )
+        RoundedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(id = R.dimen.dimen_10)),
+            onClick = {
+                onUserInteraction(userInteraction)
+            },
+            text = stringResource(id = buttonTextId),
+        )
     }
 }
 

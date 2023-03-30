@@ -73,6 +73,7 @@
     <string name="update_available_description">Обновить приложение в фоне?</string>
     <string name="update_available_later_button">Напомнить позже</string>
     <string name="update_available_update_button">Обновить сейчас</string>
+    <string name="update_available_update_in_background_button">Обновить в фоне</string>
     <string name="should_install_update_description">Установить обновление сейчас?</string>
     <string name="update_install_button">Установить</string>
     <string name="update_dismiss_button">Пропустить</string>
