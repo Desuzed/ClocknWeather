@@ -6,20 +6,16 @@ import com.desuzed.everyweather.presentation.base.BaseViewModel
 class InAppUpdateViewModel :
     BaseViewModel<InAppUpdateState, InAppUpdateAction, InAppUpdateUserInteraction>(InAppUpdateState()) {
 
-    fun initState(isReadyToInstall: Boolean) {
-        val status = when (isReadyToInstall) {
-            true -> InAppUpdateStatus.READY_TO_INSTALL
-            false -> InAppUpdateStatus.READY_TO_LAUNCH_UPDATE
-        }
-        setState { copy(updateStatus = status) }
-    }
-
     override fun onUserInteraction(interaction: InAppUpdateUserInteraction) {
         val action = when (interaction) {
-            InAppUpdateUserInteraction.AgreedToUpdate -> InAppUpdateAction.UpdateApplication
             InAppUpdateUserInteraction.Dismiss -> InAppUpdateAction.Dismiss
             InAppUpdateUserInteraction.AgreedToInstallUpdate -> InAppUpdateAction.InstallUpdate
+            InAppUpdateUserInteraction.AgreedToUpdate -> InAppUpdateAction.UpdateApplication
         }
         setAction(action)
+    }
+
+    fun resolveStatus(status: InAppUpdateStatus) {
+        setState { copy(updateStatus = status) }
     }
 }

@@ -3,7 +3,6 @@ package com.desuzed.everyweather.data.repository.providers.app_update
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import com.desuzed.everyweather.domain.model.app_update.AppUpdateState
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -25,7 +24,6 @@ class AppUpdateProvider(private val context: Context) {
 
     @SuppressLint("SwitchIntDef")
     private val updateListener: InstallStateUpdatedListener = InstallStateUpdatedListener { state ->
-        Log.e("UPDATE", ": state listener = $state")
         when (state.installStatus()) {
             InstallStatus.DOWNLOADED -> {
                 setReadyToInstall()
@@ -47,9 +45,7 @@ class AppUpdateProvider(private val context: Context) {
     }
 
     fun startListeningForUpdates() {
-        Log.e("UPDATE", "startListeningForUpdates: ")
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            Log.e("UPDATE", "startListeningForUpdates: appUpdateInfo = $$appUpdateInfo")
             if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                 setReadyToInstall()
             } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
@@ -66,8 +62,6 @@ class AppUpdateProvider(private val context: Context) {
     }
 
     fun startUpdate(activity: Activity) {
-        Log.e("UPDATE", "startUpdate: ")
-
         appUpdateManager.startUpdateFlowForResult(
             appUpdateInfo ?: return,
             AppUpdateType.FLEXIBLE,
@@ -78,24 +72,18 @@ class AppUpdateProvider(private val context: Context) {
     }
 
     private fun subscribeOnAppUpdateProgress() {
-        Log.e("UPDATE", "subscribeOnAppUpdateProgress: ")
-
         appUpdateManager.registerListener(updateListener)
     }
 
     private fun unsubscribeOnAppUpdate() {
-        Log.e("UPDATE", "unsubscribeOnAppUpdate: ")
-
         appUpdateManager.unregisterListener(updateListener)
     }
 
     private fun setReadyToInstall() {
-        Log.e("UPDATE", "setReadyToInstall: ")
         _appUpdateState.value = AppUpdateState.ReadyToInstall
     }
 
     private fun setUpdateAvailable() {
-        Log.e("UPDATE", "setUpdateAvailable: ")
         _appUpdateState.value = AppUpdateState.UpdateAvailable
     }
 
