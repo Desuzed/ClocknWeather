@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.app.ActivityCompat
 import androidx.core.os.ConfigurationCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import com.desuzed.everyweather.Config
 import com.desuzed.everyweather.R
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Everyweather)//todo поменять сплешскрин на компоуз версию чтобы не видеть белый фон при входе в приложение
         super.onCreate(savedInstanceState)
+        handleEdgeToEdge()
         handleFirstEnterApp()
         bind()
         collectData()
@@ -215,6 +217,10 @@ class MainActivity : AppCompatActivity() {
             appUpdateProgressBar.max = sharedState.totalBytes.toInt()
             appUpdateProgressBar.progress = sharedState.bytesDownloaded.toInt()
         }
+    }
+
+    private fun handleEdgeToEdge() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
     companion object {

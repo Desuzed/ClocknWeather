@@ -62,16 +62,7 @@ fun LocationMainContent(
                 onGeoTextChanged = onGeoTextChanged,
                 showDeleteDialog = showDeleteDialog,
             )
-            FloatingButton(
-                id = R.drawable.ic_my_location,
-                modifier = Modifier
-                    .padding(
-                        horizontal = dimensionResource(id = R.dimen.dimen_10),
-                        vertical = dimensionResource(id = R.dimen.dimen_100)
-                    )
-                    .align(Alignment.BottomEnd),
-                onClick = { onUserInteraction(LocationUserInteraction.MyLocation) },
-            )
+
             if (state.showPickerDialog && state.geoResponses != null) {
                 AppDialog(
                     modifier = Modifier.fillMaxHeight(fraction = 0.9f),
@@ -108,6 +99,18 @@ fun LocationMainContent(
                         .padding(dimensionResource(id = R.dimen.dimen_20))
                 )
             }
+            FloatingButton(
+                id = R.drawable.ic_my_location,
+                modifier = Modifier
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.dimen_10),
+                        vertical = dimensionResource(id = R.dimen.dimen_100)
+                    )
+                    .navigationBarsPadding()
+                    .imePadding()
+                    .align(Alignment.BottomEnd),
+                onClick = { onUserInteraction(LocationUserInteraction.MyLocation) },
+            )
         }
     }
 }
@@ -165,7 +168,11 @@ fun LocationMainPageContent(
     onGeoTextChanged: (text: String) -> Unit,
     showDeleteDialog: MutableState<FavoriteLocationDto?>
 ) {
-    Column(modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_10))) {
+    Column(
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(dimensionResource(id = R.dimen.dimen_10))
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(
                 modifier = Modifier.size(dimensionResource(id = R.dimen.dimen_33)),
@@ -228,7 +235,9 @@ fun LocationMainPageContent(
         RoundedButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = dimensionResource(id = R.dimen.dimen_10)),
+                .padding(horizontal = dimensionResource(id = R.dimen.dimen_10))
+                .navigationBarsPadding()
+                .imePadding(),
             onClick = { onUserInteraction(LocationUserInteraction.FindOnMap) },
             text = stringResource(id = R.string.find_on_map)
         )

@@ -141,6 +141,7 @@ fun WeatherHeaderInfo(
         Column(
             modifier = Modifier
                 .padding(dimensionResource(id = R.dimen.dimen_20))
+                .statusBarsPadding()
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_10))
@@ -230,7 +231,9 @@ fun BottomDetailWeather(
             val inputText = stringResource(id = R.string.powered_by)
             val startIndex = inputText.indexOf(":") + 2
             LinkText(
-                modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.dimen_20)),
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .padding(bottom = dimensionResource(id = R.dimen.dimen_20)),
                 inputText = inputText,
                 url = stringResource(id = R.string.uri),
                 startIndex = startIndex,
