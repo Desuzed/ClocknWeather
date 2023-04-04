@@ -52,12 +52,17 @@ fun SettingsContent(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .navigationBarsPadding()
                 .padding(dimensionResource(id = R.dimen.dimen_10))
         ) {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
             ) {
-                Box(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.dimen_10))) {
+                Box(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .padding(vertical = dimensionResource(id = R.dimen.dimen_10))
+                ) {
                     LargeBoldText(
                         text = stringResource(id = R.string.settings),
                         modifier = Modifier.fillMaxWidth(),
