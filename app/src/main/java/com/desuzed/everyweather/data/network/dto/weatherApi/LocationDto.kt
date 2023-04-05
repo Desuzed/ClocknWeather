@@ -10,9 +10,9 @@ data class LocationDto(
     @SerializedName("country")
     val country: String = "",
     @SerializedName("lat")
-    val lat: Float = 0f,
+    val lat: Double = 0.0,
     @SerializedName("lon")
-    val lon: Float = 0f,
+    val lon: Double = 0.0,
     @SerializedName("tz_id")
     val timeZone: String = "",
     @SerializedName("localtime_epoch")

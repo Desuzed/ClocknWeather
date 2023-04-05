@@ -1,6 +1,10 @@
 package com.desuzed.everyweather.domain.model.location
 
-data class UserLatLng(val lat: Float, val lon: Float, val time: Long) {
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class UserLatLng(val lat: Double, val lon: Double, val time: Long) : Parcelable {
 
     override fun toString(): String {
         return "$lat, $lon"

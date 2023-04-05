@@ -4,6 +4,7 @@ import com.desuzed.everyweather.analytics.WeatherMainAnalytics
 import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.weather.WeatherRepository
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.domain.model.settings.Pressure
@@ -44,13 +45,14 @@ class WeatherMainViewModel(
         onUserInteraction(WeatherUserInteraction.Refresh)
     }
 
-    fun getForecast(query: String) {
+    fun getForecast(query: String, userLatLng: UserLatLng? = null) {
         launch {
             setState { copy(isLoading = true, query = query) }
             val fetchedForecast =
                 weatherRepository.fetchForecastOrErrorMessage(
-                    query,
-                    state.value.lang.id.lowercase()
+                    query = query,
+                    lang = state.value.lang.id.lowercase(),
+                    userLatLng = userLatLng,
                 )
             val weatherResponse = fetchedForecast.weatherContent
             val actionResult = fetchedForecast.queryResult

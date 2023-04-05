@@ -8,8 +8,8 @@ object MockWeatherObject {
         name = "Location name",
         region = "region location",
         country = "country",
-        lat = 100.5f,
-        lon = 200.1f,
+        lat = 100.5,
+        lon = 200.1,
         timezone = "Moscow/russia",
         localtimeEpoch = 10000000,
     )

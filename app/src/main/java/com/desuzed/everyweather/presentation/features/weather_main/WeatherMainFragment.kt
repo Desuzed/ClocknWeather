@@ -46,10 +46,13 @@ class WeatherMainFragment : Fragment() {
     }
 
     private fun resolveArguments() {
-        setArgumentObserver(QUERY_KEY) {
+        setArgumentObserver<String>(QUERY_KEY) {
             if (it.isNotBlank()) {
                 getQueryForecast(it)
             }
+        }
+        setArgumentObserver<UserLatLng>(LAT_LNG_KEY) {
+            viewModel.getForecast(it.toString(), it)
         }
     }
 
@@ -97,6 +100,7 @@ class WeatherMainFragment : Fragment() {
 
     companion object {
         const val QUERY_KEY = "QUERY"
+        const val LAT_LNG_KEY = "LAT_LNG"
     }
 
 }
