@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
+import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
@@ -40,10 +41,8 @@ class LocationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         addOnBackPressedCallback()
         collect(viewModel.action, ::onNewAction)
-        setArgumentObserver(MAP_LOCATION_ARGS) {
-            if (it.isNotBlank()) {
-                viewModel.onUserInteraction(LocationUserInteraction.NavigateToWeather(it))
-            }
+        setArgumentObserver<UserLatLng>(MAP_LOCATION_ARGS) {
+            viewModel.onUserInteraction(LocationUserInteraction.NavigateToWeather(it))
         }
     }
 
@@ -56,6 +55,7 @@ class LocationFragment : Fragment() {
             LocationMainAction.NavigateToSettings -> navigateToSettingsFragment()
             LocationMainAction.NavigateBack -> onBackClick()
             LocationMainAction.RequestLocationPermissions -> requestLocationPermissions()
+            is LocationMainAction.NavigateToWeatherWithLatLng -> toWeatherFromMap(action.latLng)
         }
     }
 
@@ -78,6 +78,10 @@ class LocationFragment : Fragment() {
 
     private fun navigateToWeatherFragment(value: String) {
         navigateBackWithParameter(WeatherMainFragment.QUERY_KEY, value)
+    }
+
+    private fun toWeatherFromMap(value: UserLatLng) {
+        navigateBackWithParameter(WeatherMainFragment.LAT_LNG_KEY, value)
     }
 
     private fun navigateToSettingsFragment() {

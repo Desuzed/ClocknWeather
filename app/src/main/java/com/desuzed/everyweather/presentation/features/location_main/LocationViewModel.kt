@@ -6,6 +6,7 @@ import com.desuzed.everyweather.data.repository.location.LocationRepository
 import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.location.geo.GeoResponse
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.model.settings.Language
@@ -48,7 +49,7 @@ class LocationViewModel(
             )
             is LocationUserInteraction.ConfirmFoundLocation -> onConfirmLocation(interaction.geo)
             is LocationUserInteraction.FavoriteLocation -> onFavoriteLocation(interaction.favoriteLocationDto)
-            is LocationUserInteraction.NavigateToWeather -> navigateToWeatherWithDelay(interaction.query)
+            is LocationUserInteraction.NavigateToWeather -> navigateToWeatherWithDelay(interaction.latLng)
             LocationUserInteraction.Redirection -> redirectToLocationApiPage()
             LocationUserInteraction.FindByQuery -> findTypedLocation()
             LocationUserInteraction.FindOnMap -> setAction(LocationMainAction.ShowMapFragment)
@@ -138,10 +139,10 @@ class LocationViewModel(
         }
     }
 
-    private fun navigateToWeatherWithDelay(query: String) {
+    private fun navigateToWeatherWithDelay(latLng: UserLatLng) {
         launch {
             delay(200)
-            setAction(LocationMainAction.NavigateToWeather(query))
+            setAction(LocationMainAction.NavigateToWeatherWithLatLng(latLng))
         }
     }
 

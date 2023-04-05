@@ -29,16 +29,16 @@ fun Fragment.navigate(directions: Int, bundle: Bundle? = null) {
     }
 }
 
-fun Fragment.navigateBackWithParameter(key: String, value: String) {
+fun <V> Fragment.navigateBackWithParameter(key: String, value: V) {
     findNavController().apply {
         previousBackStackEntry?.savedStateHandle?.set(key, value)
         navigateUp()
     }
 }
 
-fun Fragment.setArgumentObserver(key: String, consumer: (String) -> Unit) {
+fun <V> Fragment.setArgumentObserver(key: String, consumer: (V) -> Unit) {
     val savedState = findNavController().currentBackStackEntry?.savedStateHandle
-    savedState?.getLiveData<String>(key)?.observe(viewLifecycleOwner) {
+    savedState?.getLiveData<V>(key)?.observe(viewLifecycleOwner) {
         consumer(it)
         savedState.remove<String>(key)
     }

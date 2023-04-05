@@ -6,6 +6,6 @@ import com.desuzed.everyweather.domain.model.location.UserLatLng
 
 class UserLatLngMapper : EntityMapper<Location, UserLatLng> {
     override fun mapFromEntity(entity: Location): UserLatLng {
-        return UserLatLng(entity.latitude.toFloat(), entity.longitude.toFloat(), entity.time)
+        return UserLatLng(entity.latitude, entity.longitude, entity.time)
     }
 }

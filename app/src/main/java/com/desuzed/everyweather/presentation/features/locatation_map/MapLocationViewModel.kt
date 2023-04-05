@@ -40,11 +40,11 @@ class MapLocationViewModel(
             val latLng = state.value.newPickedLocation
             if (latLng != null) {
                 val userLatLng = UserLatLng(
-                    latLng.latitude.toFloat(),
-                    latLng.longitude.toFloat(),
+                    latLng.latitude,
+                    latLng.longitude,
                     System.currentTimeMillis()
                 )
-                setAction(MapAction.NavigateToWeather(userLatLng.toString()))
+                setAction(MapAction.NavigateToWeather(userLatLng))
             }
             setState { copy(newPickedLocation = null, loadNewLocationWeather = false) }
         }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
+import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.presentation.features.location_main.LocationFragment
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.navigateBackWithParameter
@@ -37,13 +38,13 @@ class MapBottomSheetFragment : BottomSheetDialogFragment() {
         collect(viewModel.action, ::onNewAction)
     }
 
-    private fun navigateToMainFragment(query: String) {
+    private fun navigateToMainFragment(query: UserLatLng) {
         navigateBackWithParameter(LocationFragment.MAP_LOCATION_ARGS, query)
     }
 
     private fun onNewAction(action: MapAction) {
         when (action) {
-            is MapAction.NavigateToWeather -> navigateToMainFragment(action.query)
+            is MapAction.NavigateToWeather -> navigateToMainFragment(action.latLng)
         }
     }
 

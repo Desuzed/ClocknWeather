@@ -43,7 +43,7 @@ fun MapLocationContent(
                     )
             ) {
                 val oldMarker = if (state.location != null) {
-                    LatLng(state.location.lat.toDouble(), state.location.lon.toDouble())
+                    LatLng(state.location.lat, state.location.lon)
                 } else null
                 val cameraPositionState = rememberCameraPositionState {
                     if (oldMarker != null)
@@ -62,7 +62,9 @@ fun MapLocationContent(
                             .fillMaxSize()
                             .padding(top = dimensionResource(id = R.dimen.dimen_10)),
                         cameraPositionState = cameraPositionState,
-                        onMapClick = { onUserInteraction(MapUserInteraction.NewLocationPicked(it)) }
+                        onMapClick = {
+                            onUserInteraction(MapUserInteraction.NewLocationPicked(it))
+                        }
                     ) {
                         val showNewMarker =
                             state.newPickedLocation != null && state.loadNewLocationWeather

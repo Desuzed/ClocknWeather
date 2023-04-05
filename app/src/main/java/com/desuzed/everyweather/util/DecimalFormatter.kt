@@ -13,7 +13,7 @@ object DecimalFormatter {
 
     fun formatFloat(value: Float): String = String.format(Locale.ENGLISH, precision, value)
 
-    fun formatFloatWithRoundingMode(value: Float): String {
+    fun formatFloatWithRoundingMode(value: Double): String {
         val decimalFormat = DecimalFormat(decimalPattern, DecimalFormatSymbols(Locale.ENGLISH))
         decimalFormat.roundingMode = RoundingMode.CEILING
         return decimalFormat.format(value)
