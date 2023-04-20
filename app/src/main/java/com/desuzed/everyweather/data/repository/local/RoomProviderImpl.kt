@@ -20,6 +20,12 @@ class RoomProviderImpl(private val favoriteLocationDAO: FavoriteLocationDAO) : R
             deleted > 0
         }
 
+    override suspend fun updateLocation(favoriteLocationDto: FavoriteLocationDto): Boolean =
+        withContext(Dispatchers.IO) {
+            val deleted = favoriteLocationDAO.updateLocation(favoriteLocationDto)
+            deleted > 0
+        }
+
 
     override suspend fun containsPrimaryKey(latLon: String): Boolean =
         withContext(Dispatchers.IO) {

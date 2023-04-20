@@ -57,6 +57,7 @@ fun RegularText(
     text: String,
     modifier: Modifier = Modifier,
     textAlign: TextAlign? = null,
+    color: Color = EveryweatherTheme.colors.textColorPrimary,
     overflow: TextOverflow = TextOverflow.Ellipsis,
     maxLines: Int = Int.MAX_VALUE,
     onClick: () -> Unit = {}
@@ -70,7 +71,7 @@ fun RegularText(
         ),
         text = text,
         style = EveryweatherTheme.typography.text,
-        color = EveryweatherTheme.colors.textColorPrimary,
+        color = color,
         textAlign = textAlign,
         maxLines = maxLines,
         overflow = overflow,
@@ -144,6 +145,7 @@ fun LargeBoldText(
     modifier: Modifier = Modifier,
     text: String,
     color: Color = EveryweatherTheme.colors.textColorPrimary,
+    overflow: TextOverflow = TextOverflow.Clip,
     textAlign: TextAlign? = null,
 ) {
     Text(
@@ -153,16 +155,21 @@ fun LargeBoldText(
         maxLines = 1,
         color = color,
         textAlign = textAlign,
+        overflow = overflow,
     )
 }
 
 @Composable
-fun HintEditText(text: String, modifier: Modifier = Modifier) {
+fun HintEditText(
+    text: String,
+    color: Color = EveryweatherTheme.colors.editTextStrokeColor,
+    modifier: Modifier = Modifier,
+) {
     Text(
         modifier = modifier,
         text = text,
         style = EveryweatherTheme.typography.textMedium,
-        color = EveryweatherTheme.colors.editTextStrokeColor,
+        color = color,
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
     )
@@ -269,37 +276,45 @@ fun LinkText(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun OutlinedEditText(
+fun OutlinedIconEditText(
     text: String,
     hint: String,
     isLoading: Boolean,
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onSearchClick: () -> Unit
+    iconResId: Int,
+    maxLines: Int = 1,
+    accentColor: Color = EveryweatherTheme.colors.secondary,
+    textColor: Color = EveryweatherTheme.colors.editTextStrokeColor,
+    backgroundColor: Color = Color.Transparent,
+    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(
+        textColor = EveryweatherTheme.colors.textColorPrimary,
+        focusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
+        unfocusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
+        cursorColor = EveryweatherTheme.colors.secondary,
+        backgroundColor = backgroundColor
+    ),
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
+    onIconClick: () -> Unit,
 ) {
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    var isSearchButtonEnabled by remember { mutableStateOf(false) }
+    var isIconButtonEnabled by remember { mutableStateOf(text.trim().isNotEmpty()) }
 
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(),
         value = text,
         onValueChange = {
-            isSearchButtonEnabled = it.trim().isNotEmpty()
+            isIconButtonEnabled = it.trim().isNotEmpty()
             onTextChanged(it)
         },
-        maxLines = 1,
+        maxLines = maxLines,
         textStyle = EveryweatherTheme.typography.text,
         placeholder = {
-            HintEditText(text = hint)
+            HintEditText(text = hint, color = textColor)
         },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = EveryweatherTheme.colors.textColorPrimary,
-            focusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
-            unfocusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
-            cursorColor = EveryweatherTheme.colors.secondary,
-        ),
+        colors = colors,
         trailingIcon = {
             if (isLoading) {
                 CircularProgressIndicator(
@@ -309,14 +324,14 @@ fun OutlinedEditText(
                 )
             } else {
                 IconButton(
-                    onClick = onSearchClick,
-                    enabled = isSearchButtonEnabled,
+                    onClick = onIconClick,
+                    enabled = isIconButtonEnabled,
                     content = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_round_search),
+                            painter = painterResource(id = iconResId),
                             contentDescription = "",
-                            tint = if (isSearchButtonEnabled) {
-                                EveryweatherTheme.colors.secondary
+                            tint = if (isIconButtonEnabled) {
+                                accentColor
                             } else {
                                 EveryweatherTheme.colors.editTextStrokeColor
                             }
@@ -325,11 +340,11 @@ fun OutlinedEditText(
                 )
             }
         },
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardOptions = keyboardOptions,
         keyboardActions = KeyboardActions(onSearch = {
             keyboard?.hide()
             focusManager.clearFocus()
-            if (text.trim().isNotEmpty()) onSearchClick()
+            if (text.trim().isNotEmpty()) onIconClick()
         })
     )
 }
