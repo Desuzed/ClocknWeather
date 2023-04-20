@@ -6,10 +6,12 @@ import com.desuzed.everyweather.domain.model.settings.Language
 
 data class LocationMainState(
     val geoText: String = "",
+    val editLocationText: String = "",
     val locations: List<FavoriteLocationDto> = emptyList(),
     val lang: Language = Language("", 0, 0),
     val geoResponses: List<GeoResponse>? = null,
     val isLoading: Boolean = false,
     val showPickerDialog: Boolean = false,
+    val showEditLocationDialog: FavoriteLocationDto? = null,
     val showRequireLocationPermissionsDialog: Boolean = false,
 )

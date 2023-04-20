@@ -15,6 +15,9 @@ interface FavoriteLocationDAO {
     @Delete
     suspend fun deleteItem(favoriteLocationDto: FavoriteLocationDto): Int
 
+    @Update
+    suspend fun updateLocation(favoriteLocationDto: FavoriteLocationDto): Int
+
     @Query("DELETE FROM favorite_location_table")
     suspend fun deleteAll()
 

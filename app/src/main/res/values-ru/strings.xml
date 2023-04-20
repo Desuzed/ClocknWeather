@@ -24,6 +24,7 @@
     <string name="field_must_not_be_empty">Поля не должны быть пустыми</string>
     <string name="next_days_forecast">Погода на следующие дни</string>
     <string name="no_data_to_load">Нет информации для загрузки</string>
+    <string name="enter_name">Введите название</string>
     <string name="location_permissions_are_not_granted">Нет разрешений на доступ к Вашему местоположению. Вы можете дать доступ в меню настроек приложений на устройстве</string>
     <string name="your_saved_cities_list_is_empty">Ваш список сохраненных местоположений пуст. Загрузите погоду и сохраните место с экрана погоды.</string>
     <string name="no_weather_data_is_loaded_header">Нет загруженной погоды. \nПожалуйста, попробуйте следующее:</string>
@@ -79,5 +80,8 @@
     <string name="update_dismiss_button">Пропустить</string>
     <string name="update_ready_to_install_title">Обновление готово к установке</string>
     <string name="downloading_update">Скачивание обновления…</string>
+    <string name="name_updated">Название обновлено</string>
+    <string name="change_location_name">Здесь вы можете изменить название сохранённого места</string>
+    <string name="set_default_name">По умолчанию</string>
 
 </resources>

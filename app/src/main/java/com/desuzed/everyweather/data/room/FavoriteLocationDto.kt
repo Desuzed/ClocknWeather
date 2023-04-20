@@ -17,6 +17,7 @@ data class FavoriteLocationDto(
     @ColumnInfo(name = "country") val country: String,
     @ColumnInfo(name = "lat") val lat: String,
     @ColumnInfo(name = "lon") val lon: String,
+    @ColumnInfo(name = "custom_name", defaultValue = "") val customName: String = "",
 ) {
     override fun toString(): String {
         return if (region.isNotEmpty()) {
@@ -40,7 +41,7 @@ data class FavoriteLocationDto(
                 location.region,
                 location.country,
                 location.lat.toString(),
-                location.lon.toString()
+                location.name,
             )
         }
     }

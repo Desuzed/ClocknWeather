@@ -95,8 +95,8 @@ class WeatherMainViewModel(
                 onError(ActionResultProvider.FAIL)
                 return@launch
             }
-            val favoriteLocationDto =
-                FavoriteLocationDto.buildFavoriteLocationObj(state.value.weatherData!!.location)
+            val favoriteLocationDto = FavoriteLocationDto
+                .buildFavoriteLocationObj(state.value.weatherData!!.location)
             val inserted = roomProvider.insert(favoriteLocationDto)
             if (inserted) onSuccess(ActionResultProvider.SAVED)
             else onError(ActionResultProvider.FAIL)

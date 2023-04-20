@@ -8,6 +8,7 @@ import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.REDIRECTION
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.SAVED
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.UNKNOWN
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.UPDATED
 
 abstract class BaseActionResultProvider(private val resources: Resources) : ActionResultProvider {
     override fun getString(id: Int): String = resources.getString(id)
@@ -16,6 +17,7 @@ abstract class BaseActionResultProvider(private val resources: Resources) : Acti
         return when (errorCode) {
             SAVED -> resources.getString(R.string.saved)
             DELETED -> getString(R.string.deleted)
+            UPDATED -> getString(R.string.name_updated)
             NO_DATA -> getString(R.string.no_data_to_load)
             NO_INTERNET -> getString(R.string.check_internet_connection)
             UNKNOWN -> getString(R.string.unknown_app_error)
@@ -38,6 +40,7 @@ interface ActionResultProvider {
         const val UNKNOWN = 12
         const val SAVED = 1
         const val DELETED = 2
+        const val UPDATED = 4
         const val REDIRECTION = 3
         const val FAIL = -1
     }

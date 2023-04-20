@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.desuzed.everyweather.R
@@ -39,6 +41,7 @@ private fun PreviewWeatherMainContent() {
         state = LocationMainState(locations = MockWeatherObject.locations),
         onUserInteraction = {},
         onGeoTextChanged = {},
+        onNewEditLocationText = {},
     )
 }
 
@@ -47,6 +50,7 @@ fun LocationMainContent(
     state: LocationMainState,
     onUserInteraction: (LocationUserInteraction) -> Unit,
     onGeoTextChanged: (text: String) -> Unit,
+    onNewEditLocationText: (text: String) -> Unit,
 ) {
     EveryweatherTheme {
         val showDeleteDialog = remember { mutableStateOf<FavoriteLocationDto?>(null) }
@@ -88,6 +92,14 @@ fun LocationMainContent(
             }
             if (state.showRequireLocationPermissionsDialog) {
                 RequirePermissionsDialogContent(onUserInteraction)
+            }
+            if (state.showEditLocationDialog != null) {
+                EditLocationDialogContent(
+                    editLocationText = state.editLocationText,
+                    onNewEditLocationText = onNewEditLocationText,
+                    location = state.showEditLocationDialog,
+                    onUserInteraction = onUserInteraction,
+                )
             }
             if (state.locations.isEmpty()) {
                 RegularText(
@@ -162,6 +174,62 @@ fun RequirePermissionsDialogContent(
 }
 
 @Composable
+fun EditLocationDialogContent(
+    editLocationText: String,
+    onNewEditLocationText: (text: String) -> Unit,
+    location: FavoriteLocationDto,
+    onUserInteraction: (LocationUserInteraction) -> Unit,
+) {
+    val onDismiss = {
+        onUserInteraction(LocationUserInteraction.ToggleEditFavoriteLocationDialog(null))
+    }
+    AppDialog(
+        modifier = Modifier,
+        onDismiss = onDismiss,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(dimensionResource(id = R.dimen.dimen_20))
+                .fillMaxWidth()
+        ) {
+            MediumText(
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                maxLines = Int.MAX_VALUE,
+                text = stringResource(id = R.string.change_location_name),
+            )
+            OutlinedIconEditText(
+                text = editLocationText,
+                modifier = Modifier
+                    .padding(vertical = dimensionResource(id = R.dimen.dimen_20)),
+                hint = stringResource(id = R.string.enter_name),
+                onTextChanged = onNewEditLocationText,
+                backgroundColor = EveryweatherTheme.colors.editTextBg,
+                isLoading = false,
+                iconResId = R.drawable.ic_round_save_24,
+            ) {
+                onUserInteraction(
+                    LocationUserInteraction.UpdateFavoriteLocation(
+                        favoriteLocationDto = location,
+                    )
+                )
+            }
+            RegularText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(id = R.dimen.dimen_10)),
+                textAlign = TextAlign.End,
+                color = EveryweatherTheme.colors.urlLinkTextColor,
+                text = stringResource(id = R.string.set_default_name),
+                onClick = {
+                    onUserInteraction(LocationUserInteraction.SetDefaultLocationName(location))
+                }
+            )
+        }
+    }
+}
+
+@Composable
 fun LocationMainPageContent(
     state: LocationMainState,
     onUserInteraction: (LocationUserInteraction) -> Unit,
@@ -185,7 +253,7 @@ fun LocationMainPageContent(
                     )
                 }
             )
-            OutlinedEditText(
+            OutlinedIconEditText(
                 text = state.geoText,
                 modifier = Modifier
                     .padding(
@@ -195,8 +263,10 @@ fun LocationMainPageContent(
                     .weight(1f),
                 hint = stringResource(id = R.string.search_hint),
                 onTextChanged = onGeoTextChanged,
-                onSearchClick = { onUserInteraction(LocationUserInteraction.FindByQuery) },
-                isLoading = state.isLoading
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                onIconClick = { onUserInteraction(LocationUserInteraction.FindByQuery) },
+                isLoading = state.isLoading,
+                iconResId = R.drawable.ic_round_search,
             )
             IconButton(
                 modifier = Modifier.size(dimensionResource(id = R.dimen.dimen_50)),
@@ -228,7 +298,12 @@ fun LocationMainPageContent(
                             )
                         )
                     },
-                    onLongClick = { showDeleteDialog.value = it }
+                    onLongClick = { showDeleteDialog.value = it },
+                    onEditClick = {
+                        onUserInteraction(
+                            LocationUserInteraction.ToggleEditFavoriteLocationDialog(it)
+                        )
+                    }
                 )
             }
         }
@@ -288,7 +363,6 @@ fun GeoLocationsPickerContent(
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     MediumText(
                         modifier = Modifier.padding(
                             vertical = dimensionResource(id = R.dimen.dimen_10),

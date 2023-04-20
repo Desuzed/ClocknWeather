@@ -32,6 +32,7 @@ class LocationFragment : Fragment() {
                     state = state,
                     onUserInteraction = viewModel::onUserInteraction,
                     onGeoTextChanged = viewModel::onNewGeoText,
+                    onNewEditLocationText = viewModel::onNewEditLocationText,
                 )
             }
         }

@@ -18,7 +18,12 @@ sealed interface LocationUserInteraction : UserInteraction {
     class FavoriteLocation(val favoriteLocationDto: FavoriteLocationDto) : LocationUserInteraction
     class ConfirmFoundLocation(val geo: GeoResponse) : LocationUserInteraction
     class NavigateToWeather(val latLng: UserLatLng) : LocationUserInteraction
+    class ToggleEditFavoriteLocationDialog(val item: FavoriteLocationDto?) : LocationUserInteraction
+    class SetDefaultLocationName(val item: FavoriteLocationDto) : LocationUserInteraction
     class DeleteFavoriteLocation(
         val favoriteLocationDto: FavoriteLocationDto
     ) : LocationUserInteraction
+
+    class UpdateFavoriteLocation(val favoriteLocationDto: FavoriteLocationDto) :
+        LocationUserInteraction
 }

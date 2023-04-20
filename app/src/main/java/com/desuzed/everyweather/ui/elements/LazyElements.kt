@@ -6,6 +6,8 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +17,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.R
@@ -75,7 +78,8 @@ fun HourItemContent(hourItem: HourUi) {
 fun LocationItemContent(
     item: FavoriteLocationDto,
     onClick: (FavoriteLocationDto) -> Unit,
-    onLongClick: (FavoriteLocationDto) -> Unit
+    onLongClick: (FavoriteLocationDto) -> Unit,
+    onEditClick: (FavoriteLocationDto) -> Unit,
 ) {
     EveryweatherTheme {
         Card(
@@ -88,19 +92,33 @@ fun LocationItemContent(
             backgroundColor = EveryweatherTheme.colors.onSurface,
             elevation = dimensionResource(id = R.dimen.dimen_4)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(dimensionResource(id = R.dimen.dimen_10))
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onLongPress = { onLongClick(item) },
-                            onTap = { onClick(item) }
-                        )
-                    }
-            ) {
-                LargeBoldText(text = item.cityName)
-                MediumText(text = item.toString())
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(dimensionResource(id = R.dimen.dimen_10))
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onLongPress = { onLongClick(item) },
+                                onTap = { onClick(item) }
+                            )
+                        }
+                ) {
+                    LargeBoldText(
+                        text = item.customName.ifBlank { item.cityName },
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    MediumText(text = item.toString())
+                }
+                IconButton(onClick = { onEditClick(item) }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_edit_location),
+                        tint = EveryweatherTheme.colors.textColorPrimary,
+                        contentDescription = ""
+                    )
+                }
             }
+
         }
     }
 }
@@ -115,7 +133,7 @@ fun LocationItemContent(
 fun PreviewLocationItemContent() {
     LocationItemContent(
         item = FavoriteLocationDto("", "London", "RegionName", "England", "", ""),
-        {}, {})
+        {}, {}, {})
 }
 
 @Preview(

@@ -41,6 +41,10 @@ class LocationViewModel(
         setState { copy(geoText = text) }
     }
 
+    fun onNewEditLocationText(text: String) {
+        setState { copy(editLocationText = text) }
+    }
+
     override fun onUserInteraction(interaction: LocationUserInteraction) {
         analytics.onUserInteraction(interaction)
         when (interaction) {
@@ -61,6 +65,15 @@ class LocationViewModel(
                 copy(showRequireLocationPermissionsDialog = false)
             }
             LocationUserInteraction.RequestLocationPermissions -> onRequestPermissions()
+            is LocationUserInteraction.UpdateFavoriteLocation -> updateFavoriteLocation(interaction.favoriteLocationDto)
+            is LocationUserInteraction.ToggleEditFavoriteLocationDialog -> setState {
+                copy(
+                    showEditLocationDialog = interaction.item,
+                    editLocationText = interaction.item?.customName
+                        ?.ifEmpty { interaction.item.cityName } ?: "",
+                )
+            }
+            is LocationUserInteraction.SetDefaultLocationName -> setDefaultLocationName(interaction.item)
         }
     }
 
@@ -112,6 +125,33 @@ class LocationViewModel(
             if (deleted) onSuccess(ActionResultProvider.DELETED)
             else onError(ActionResultProvider.FAIL)
         }
+
+    private fun updateFavoriteLocation(favoriteLocationDto: FavoriteLocationDto) {
+        launch {
+            setState { copy(showEditLocationDialog = null) }
+            val inputText = state.value.editLocationText
+            val locationToSave = favoriteLocationDto.copy(customName = inputText)
+            val updated = roomProvider.updateLocation(locationToSave)
+            if (updated) {
+                onSuccess(ActionResultProvider.UPDATED)
+            } else {
+                onError(ActionResultProvider.FAIL)
+            }
+        }
+    }
+
+    private fun setDefaultLocationName(favoriteLocationDto: FavoriteLocationDto) {
+        launch {
+            setState { copy(showEditLocationDialog = null) }
+            val locationToSave = favoriteLocationDto.copy(customName = favoriteLocationDto.cityName)
+            val updated = roomProvider.updateLocation(locationToSave)
+            if (updated) {
+                onSuccess(ActionResultProvider.UPDATED)
+            } else {
+                onError(ActionResultProvider.FAIL)
+            }
+        }
+    }
 
     private suspend fun onSuccess(code: Int) {
         queryResultFlow.emit(QueryResult(code))
