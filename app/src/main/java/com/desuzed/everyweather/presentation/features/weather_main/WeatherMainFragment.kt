@@ -14,6 +14,7 @@ import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
+import com.desuzed.everyweather.presentation.features.weather_main.ui.WeatherMainContent
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.navigate
 import com.desuzed.everyweather.util.setArgumentObserver
@@ -84,6 +85,7 @@ class WeatherMainFragment : Fragment() {
                 onClick = {}
                 buttonTextId = R.string.ok
             }
+
             ActionType.RETRY -> {
                 buttonTextId = R.string.retry
                 onClick = {
