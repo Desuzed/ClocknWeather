@@ -3,9 +3,8 @@
     package="com.desuzed.everyweather">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-<!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name="com.desuzed.everyweather.App"
@@ -18,7 +17,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4078708975391072~9538550922"/>
+            android:value="ca-app-pub-4078708975391072~9538550922" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -31,18 +30,16 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:theme="@style/SplashTheme"
-            android:configChanges="layoutDirection|locale"
             android:name="com.desuzed.everyweather.presentation.features.main_activity.MainActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:configChanges="layoutDirection|locale"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:exported="true">
+            android:theme="@style/SplashTheme"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-<!--            <meta-data android:name="android.app.searchable"-->
-<!--                android:resource="@xml/searchable" />-->
         </activity>
     </application>
 

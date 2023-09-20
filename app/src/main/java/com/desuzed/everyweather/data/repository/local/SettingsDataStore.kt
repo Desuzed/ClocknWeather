@@ -7,7 +7,17 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.settings.*
+import com.desuzed.everyweather.domain.model.settings.DarkMode
+import com.desuzed.everyweather.domain.model.settings.DarkTheme
+import com.desuzed.everyweather.domain.model.settings.DistanceDimen
+import com.desuzed.everyweather.domain.model.settings.Lang
+import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Pressure
+import com.desuzed.everyweather.domain.model.settings.PressureDimen
+import com.desuzed.everyweather.domain.model.settings.SettingUiItem
+import com.desuzed.everyweather.domain.model.settings.TempDimen
+import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -87,6 +97,54 @@ class SettingsDataStore(private val context: Context) {
             categoryStringId = R.string.pressure,
             valueStringId = pressureValueId,
         )
+    }
+
+    fun getLanguageItemsList(): List<SettingUiItem<Lang>> {
+        return Lang.values().toList().map {
+            when (it) {
+                Lang.RU -> SettingUiItem(it, R.string.russian)
+                Lang.EN -> SettingUiItem(it, R.string.english)
+            }
+        }
+    }
+
+    fun getDistanceItemsList(): List<SettingUiItem<DistanceDimen>> {
+        return DistanceDimen.values().toList().map {
+            when (it) {
+                DistanceDimen.METRIC_KMH -> SettingUiItem(it, R.string.kmh)
+                DistanceDimen.METRIC_MS -> SettingUiItem(it, R.string.ms)
+                DistanceDimen.IMPERIAL -> SettingUiItem(it, R.string.mph)
+            }
+        }
+    }
+
+    fun getDarkModeItemsList(): List<SettingUiItem<DarkMode>> {
+        return DarkMode.values().toList().map {
+            when (it) {
+                DarkMode.ON -> SettingUiItem(it, R.string.on)
+                DarkMode.OFF -> SettingUiItem(it, R.string.off)
+                DarkMode.SYSTEM -> SettingUiItem(it, R.string.system)
+            }
+        }
+    }
+
+    fun getTemperatureItemsList(): List<SettingUiItem<TempDimen>> {
+        return TempDimen.values().toList().map {
+            when (it) {
+                TempDimen.FAHRENHEIT -> SettingUiItem(it, R.string.fahrenheit)
+                TempDimen.CELCIUS -> SettingUiItem(it, R.string.celcius)
+            }
+        }
+    }
+
+    fun getPressureItemsList(): List<SettingUiItem<PressureDimen>> {
+        return PressureDimen.values().toList().map {
+            when (it) {
+                PressureDimen.MILLIBAR -> SettingUiItem(it, R.string.mb)
+                PressureDimen.MILLIMETERS -> SettingUiItem(it, R.string.mmhg)
+                PressureDimen.INCHES -> SettingUiItem(it, R.string.inch)
+            }
+        }
     }
 
     suspend fun setDarkMode(mode: DarkMode) = edit { preferences ->

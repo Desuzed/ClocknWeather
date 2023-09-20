@@ -13,9 +13,15 @@ import com.desuzed.everyweather.data.repository.providers.action_result.GeoActio
 import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.result.QueryResult
+import com.desuzed.everyweather.presentation.features.location_main.ui.LocationMainContent
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
-import com.desuzed.everyweather.util.*
+import com.desuzed.everyweather.util.addOnBackPressedCallback
+import com.desuzed.everyweather.util.collect
+import com.desuzed.everyweather.util.navigate
+import com.desuzed.everyweather.util.navigateBackWithParameter
+import com.desuzed.everyweather.util.onBackClick
+import com.desuzed.everyweather.util.setArgumentObserver
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LocationFragment : Fragment() {
@@ -43,6 +49,7 @@ class LocationFragment : Fragment() {
         addOnBackPressedCallback()
         collect(viewModel.action, ::onNewAction)
         setArgumentObserver<UserLatLng>(MAP_LOCATION_ARGS) {
+            //todo: back with result https://medium.com/@desilio/navigate-back-with-result-with-jetpack-compose-e91e6a6847c9
             viewModel.onUserInteraction(LocationUserInteraction.NavigateToWeather(it))
         }
     }
@@ -99,6 +106,7 @@ class LocationFragment : Fragment() {
                 onClick = {}
                 buttonTextId = R.string.ok
             }
+
             ActionType.RETRY -> {
                 buttonTextId = R.string.retry
                 onClick = {
