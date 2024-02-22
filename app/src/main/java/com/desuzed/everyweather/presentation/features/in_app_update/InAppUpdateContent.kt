@@ -1,8 +1,14 @@
 package com.desuzed.everyweather.presentation.features.in_app_update
 
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -13,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
+import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.RegularText
 import com.desuzed.everyweather.ui.elements.RoundedButton
@@ -55,6 +61,7 @@ fun InAppUpdateContent(
                         positiveButtonTextId = R.string.update_available_update_button
                         positiveButtonInteraction = InAppUpdateUserInteraction.AgreedToUpdate
                     }
+
                     InAppUpdateStatus.READY_TO_INSTALL -> {
                         titleId = R.string.update_ready_to_install_title
                         descriptionId = R.string.should_install_update_description
@@ -88,8 +95,7 @@ fun InAppUpdateContent(
                             )
                     )
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceAround,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -98,14 +104,12 @@ fun InAppUpdateContent(
                                 onUserInteraction(
                                     InAppUpdateUserInteraction.Dismiss
                                 )
-                            },
-                            text = stringResource(id = negativeButtonTextId)
+                            }, text = stringResource(id = negativeButtonTextId)
                         )
                         RoundedButton(
                             onClick = {
                                 onUserInteraction(positiveButtonInteraction)
-                            },
-                            text = stringResource(id = positiveButtonTextId)
+                            }, text = stringResource(id = positiveButtonTextId)
                         )
                     }
                 }
@@ -115,12 +119,7 @@ fun InAppUpdateContent(
     }
 }
 
-@Preview(
-    showBackground = true,
-    widthDp = 400,
-    uiMode = UI_MODE_NIGHT_NO,
-    name = "InAppUpdateContenttPreview"
-)
+@AppPreview
 @Composable
 private fun PreviewNextDaysBottomSheetContent() {
     InAppUpdateContent(InAppUpdateState()) {}

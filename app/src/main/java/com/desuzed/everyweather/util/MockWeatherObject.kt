@@ -1,7 +1,14 @@
 package com.desuzed.everyweather.util
 
 import com.desuzed.everyweather.data.room.FavoriteLocationDto
-import com.desuzed.everyweather.domain.model.weather.*
+import com.desuzed.everyweather.domain.model.weather.Astro
+import com.desuzed.everyweather.domain.model.weather.Current
+import com.desuzed.everyweather.domain.model.weather.Day
+import com.desuzed.everyweather.domain.model.weather.ForecastDay
+import com.desuzed.everyweather.domain.model.weather.Hour
+import com.desuzed.everyweather.domain.model.weather.Location
+import com.desuzed.everyweather.domain.model.weather.WeatherContent
+import java.util.UUID
 
 object MockWeatherObject {
     val locationWeather = Location(
@@ -77,12 +84,21 @@ object MockWeatherObject {
         lon = ""
     )
     val locations = listOf(
-        locationDto,
-        locationDto,
-        locationDto,
-        locationDto,
-        locationDto,
-        locationDto,
-        locationDto
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
+        locationDto.copy(latLon = UUID.randomUUID().toString()),
     )
 }
