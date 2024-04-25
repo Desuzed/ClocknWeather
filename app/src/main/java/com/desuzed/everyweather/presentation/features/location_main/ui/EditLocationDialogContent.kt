@@ -9,7 +9,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.AppDialog
@@ -25,7 +25,7 @@ private fun Preview() {
     EveryweatherTheme {
         EditLocationDialogContent(
             editLocationText = EMPTY_STRING,
-            location = FavoriteLocationDto(
+            location = FavoriteLocation(
                 latLon = "11",
                 cityName = "22",
                 region = "region",
@@ -43,7 +43,7 @@ private fun Preview() {
 @Composable
 fun EditLocationDialogContent(
     editLocationText: String,
-    location: FavoriteLocationDto,
+    location: FavoriteLocation,
     onNewEditLocationText: (text: String) -> Unit,
     onUserInteraction: (LocationUserInteraction) -> Unit,
 ) {

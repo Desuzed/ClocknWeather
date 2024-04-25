@@ -1,9 +1,9 @@
 package com.desuzed.everyweather.presentation.features.weather_main
 
 import com.desuzed.everyweather.analytics.WeatherMainAnalytics
-import com.desuzed.everyweather.data.repository.local.SettingsDataStore
-import com.desuzed.everyweather.data.repository.weather.WeatherRepository
-import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.interactor.LocationInteractor
+import com.desuzed.everyweather.domain.interactor.WeatherInteractor
+import com.desuzed.everyweather.domain.interactor.WeatherSettingsInteractor
 import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.model.settings.Language
@@ -11,20 +11,19 @@ import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
-import com.desuzed.everyweather.domain.repository.local.RoomProvider
-import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
+import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class WeatherMainViewModel(
-    private val weatherRepository: WeatherRepository,
-    private val sharedPrefsProvider: SharedPrefsProvider,
-    private val roomProvider: RoomProvider,
+    private val weatherInteractor: WeatherInteractor,
+    private val locationInteractor: LocationInteractor,
     private val analytics: WeatherMainAnalytics,
-    private val settingsDataStore: SettingsDataStore,
+    private val weatherSettingsInteractor: WeatherSettingsInteractor,
+    private val systemSettingsRepository: SystemSettingsRepository,
 ) : BaseViewModel<WeatherState, WeatherMainAction, WeatherUserInteraction>(WeatherState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
@@ -37,10 +36,10 @@ class WeatherMainViewModel(
         getCachedForecast()
         loadCachedQuery()
 
-        collect(settingsDataStore.distanceDimen, ::collectWindSpeed)
-        collect(settingsDataStore.tempDimen, ::collectTemperature)
-        collect(settingsDataStore.lang, ::collectLanguage)
-        collect(settingsDataStore.pressureDimen, ::collectPressure)
+        collect(weatherSettingsInteractor.distanceDimen, ::collectWindSpeed)
+        collect(weatherSettingsInteractor.tempDimen, ::collectTemperature)
+        collect(systemSettingsRepository.lang, ::collectLanguage)
+        collect(weatherSettingsInteractor.pressureDimen, ::collectPressure)
         collect(queryResultFlow, ::collectActionResult)
         onUserInteraction(WeatherUserInteraction.Refresh)
     }
@@ -49,7 +48,7 @@ class WeatherMainViewModel(
         launch {
             setState { copy(isLoading = true, query = query) }
             val fetchedForecast =
-                weatherRepository.fetchForecastOrErrorMessage(
+                weatherInteractor.fetchForecastOrErrorMessage(
                     query = query,
                     lang = state.value.lang.id.lowercase(),
                     userLatLng = userLatLng,
@@ -91,15 +90,12 @@ class WeatherMainViewModel(
 
     private fun saveLocation() {
         launch {
-            if (state.value.weatherData == null) {
+            val isSaved = locationInteractor.saveLocationToDb(state.value.weatherData)
+            if (isSaved) {
+                onSuccess(ActionResultProvider.SAVED)
+            } else {
                 onError(ActionResultProvider.FAIL)
-                return@launch
             }
-            val favoriteLocationDto = FavoriteLocationDto
-                .buildFavoriteLocationObj(state.value.weatherData!!.location)
-            val inserted = roomProvider.insert(favoriteLocationDto)
-            if (inserted) onSuccess(ActionResultProvider.SAVED)
-            else onError(ActionResultProvider.FAIL)
         }
     }
 
@@ -119,15 +115,14 @@ class WeatherMainViewModel(
 
     }
 
-    private suspend fun isLocationSaved(response: WeatherContent): Boolean {
-        val latLonKey = FavoriteLocationDto.generateKey(response.location)
-        return roomProvider.containsPrimaryKey(latLonKey)
+    private suspend fun isLocationSaved(weatherContent: WeatherContent): Boolean {
+        return locationInteractor.isLocationSaved(weatherContent.location)
     }
 
     private fun getCachedForecast() {
         launch {
             setState { copy(isLoading = true) }
-            val result = sharedPrefsProvider.loadForecastFromCache()
+            val result = weatherInteractor.getCachedForecast()
             if (result != null) {
                 val isLocationSaved = isLocationSaved(result)
                 setState {
@@ -143,7 +138,7 @@ class WeatherMainViewModel(
     }
 
     private fun loadCachedQuery() {
-        val query = sharedPrefsProvider.loadQuery()
+        val query = weatherInteractor.loadCachedQuery()
         setState { copy(query = query) }
     }
 

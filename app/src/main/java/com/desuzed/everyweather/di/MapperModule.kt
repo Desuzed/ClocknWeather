@@ -1,6 +1,16 @@
 package com.desuzed.everyweather.di
 
-import com.desuzed.everyweather.data.mapper.weather_api.*
+import com.desuzed.everyweather.data.mapper.location.FavoriteLocationMapper
+import com.desuzed.everyweather.data.mapper.location.LocationResponseMapper
+import com.desuzed.everyweather.data.mapper.location.UserLatLngMapper
+import com.desuzed.everyweather.data.mapper.weather_api.ApiErrorMapper
+import com.desuzed.everyweather.data.mapper.weather_api.AstroMapper
+import com.desuzed.everyweather.data.mapper.weather_api.CurrentMapper
+import com.desuzed.everyweather.data.mapper.weather_api.DayMapper
+import com.desuzed.everyweather.data.mapper.weather_api.ForecastDayMapper
+import com.desuzed.everyweather.data.mapper.weather_api.HourMapper
+import com.desuzed.everyweather.data.mapper.weather_api.LocationMapper
+import com.desuzed.everyweather.data.mapper.weather_api.WeatherResponseMapper
 import org.koin.dsl.module
 
 val mapperModule = module {
@@ -24,5 +34,9 @@ val mapperModule = module {
             forecastDayMapper = get()
         )
     }
+
+    factory { LocationResponseMapper() }
+    factory { FavoriteLocationMapper() }
+    factory { UserLatLngMapper() }
 
 }

@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class UserLocationProvider(
     private val context: Context,
+    private val userLatLngMapper: UserLatLngMapper,
 ) {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
@@ -95,7 +96,7 @@ class UserLocationProvider(
     }
 
     private fun onSuccess(location: Location) {
-        val result = UserLatLngMapper().mapFromEntity(location)
+        val result = userLatLngMapper.mapFromEntity(location)
         _userLocationFlow.value = UserLocationResult(userLatLng = result)
     }
 

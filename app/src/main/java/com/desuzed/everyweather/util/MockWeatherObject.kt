@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.util
 
-import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.domain.model.weather.Astro
 import com.desuzed.everyweather.domain.model.weather.Current
 import com.desuzed.everyweather.domain.model.weather.Day
@@ -11,7 +11,7 @@ import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import java.util.UUID
 
 object MockWeatherObject {
-    val locationWeather = Location(
+    val weatherLocation = Location(
         name = "Location name",
         region = "region location",
         country = "country",
@@ -71,17 +71,18 @@ object MockWeatherObject {
         isExpanded = false
     )
     val weather = WeatherContent(
-        location = locationWeather,
+        location = weatherLocation,
         current = current,
         forecastDay = listOf(forecastDay, forecastDay, forecastDay, forecastDay)
     )
-    val locationDto = FavoriteLocationDto(
+    val locationDto = FavoriteLocation(
         latLon = "",
         cityName = "London",
         region = "London region",
         country = "United Kingdoms",
         lat = "",
-        lon = ""
+        lon = "",
+        customName = "",
     )
     val locations = listOf(
         locationDto.copy(latLon = UUID.randomUUID().toString()),

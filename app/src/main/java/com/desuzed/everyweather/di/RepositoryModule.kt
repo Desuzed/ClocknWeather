@@ -1,32 +1,44 @@
 package com.desuzed.everyweather.di
 
-import com.desuzed.everyweather.data.repository.location.LocationRepository
 import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
 import com.desuzed.everyweather.data.repository.providers.app_update.AppUpdateProvider
-import com.desuzed.everyweather.data.repository.weather.WeatherRepository
+import com.desuzed.everyweather.data.repository.remote.RemoteDataRepositoryImpl
+import com.desuzed.everyweather.data.repository.settings.SystemSettingsRepositoryImpl
+import com.desuzed.everyweather.data.repository.settings.WeatherSettingRepositoryImpl
+import com.desuzed.everyweather.domain.repository.remote.RemoteDataRepository
+import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
+import com.desuzed.everyweather.domain.repository.settings.WeatherSettingsRepository
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single {
-        WeatherRepository(
-            sharedPrefsProvider = get(),
-            remoteDataSource = get(),
-            weatherResponseMapper = get(),
-            apiErrorMapper = get(),
-        )
-    }
-    single {
-        LocationRepository(
-            remoteDataSource = get(),
-        )
-    }
 
     single {
-        UserLocationProvider(androidApplication())
+        UserLocationProvider(context = androidApplication(), userLatLngMapper = get())
     }
 
     single {
         AppUpdateProvider(androidApplication())
+    }
+
+    single<RemoteDataRepository> {
+        RemoteDataRepositoryImpl(
+            weatherApi = get(),
+            locationIqApi = get(),
+            weatherResponseMapper = get(),
+            apiErrorMapper = get(),
+            locationResponseMapper = get(),
+            sharedPrefsProvider = get(),
+            dispatcher = Dispatchers.IO,
+        )
+    }
+
+    single<WeatherSettingsRepository> {
+        WeatherSettingRepositoryImpl(datastoreProvider = get())
+    }
+
+    single<SystemSettingsRepository> {
+        SystemSettingsRepositoryImpl(datastoreProvider = get())
     }
 }

@@ -20,40 +20,38 @@ val viewModelModule = module {
     }
     viewModel {
         MainActivityViewModel(
-            networkConnection = get(),
-            settingsDataStore = get(),
-            sharedPrefsProvider = get(),
-            userLocationProvider = get(),
+            systemSettingsInteractor = get(),
+            systemInteractor = get(),
         )
     }
     viewModel {
         LocationViewModel(
-            roomProvider = get(),
-            locationRepository = get(),
-            settingsDataStore = get(),
+            locationInteractor = get(),
             userLocationProvider = get(),
             analytics = get(),
         )
     }
     viewModel {
         WeatherMainViewModel(
-            weatherRepository = get(),
-            sharedPrefsProvider = get(),
-            roomProvider = get(),
-            settingsDataStore = get(),
+            weatherInteractor = get(),
+            weatherSettingsInteractor = get(),
+            systemSettingsRepository = get(),
+            locationInteractor = get(),
             analytics = get(),
         )
     }
     viewModel {
         NextDaysViewModel(
             sharedPrefsProvider = get(),
-            settingsDataStore = get(),
+            weatherSettingsInteractor = get(),
+            systemSettingsRepository = get(),
         )
     }
 
     viewModel {
         SettingsViewModel(
-            settingsDataStore = get(),
+            weatherSerringsInteractor = get(),
+            systemSettingsRepository = get(),
             analytics = get(),
             appUpdateProvider = get(),
         )

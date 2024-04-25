@@ -13,10 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
 import com.desuzed.everyweather.ui.AppPreview
-import com.desuzed.everyweather.ui.elements.LocationItemContent
 import com.desuzed.everyweather.ui.elements.RoundedButton
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
@@ -40,12 +39,12 @@ private fun Preview() {
 
 @Composable
 fun LocationMainPageContent(
-    locations: List<FavoriteLocationDto>,
+    locations: List<FavoriteLocation>,
     isLoading: Boolean,
     geoText: String,
     onGeoTextChanged: (text: String) -> Unit,
     onUserInteraction: (LocationUserInteraction) -> Unit,
-    onShowDeleteDialog: (FavoriteLocationDto) -> Unit,
+    onShowDeleteDialog: (FavoriteLocation) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -71,7 +70,7 @@ fun LocationMainPageContent(
                     item = locationItem,
                     onClick = {
                         onUserInteraction(
-                            LocationUserInteraction.FavoriteLocation(
+                            LocationUserInteraction.FavoriteLocationClick(
                                 locationItem
                             )
                         )

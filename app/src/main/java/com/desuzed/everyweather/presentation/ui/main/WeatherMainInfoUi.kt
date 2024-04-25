@@ -50,6 +50,7 @@ class WeatherMainInfoUi(
                 currentTemperature = current.tempC
                 feelsLikeTemperature = current.feelsLikeC
             }
+
             TempDimen.FAHRENHEIT -> {
                 currentTemperature = current.tempF
                 feelsLikeTemperature = current.feelsLikeF

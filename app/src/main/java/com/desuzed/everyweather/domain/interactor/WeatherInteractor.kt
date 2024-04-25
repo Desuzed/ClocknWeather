@@ -1,24 +1,19 @@
-package com.desuzed.everyweather.data.repository.weather
+package com.desuzed.everyweather.domain.interactor
 
-import com.desuzed.everyweather.data.mapper.weather_api.ApiErrorMapper
-import com.desuzed.everyweather.data.mapper.weather_api.WeatherResponseMapper
-import com.desuzed.everyweather.data.network.dto.weatherApi.ErrorDtoWeatherApi
-import com.desuzed.everyweather.data.network.dto.weatherApi.WeatherResponseDto
 import com.desuzed.everyweather.domain.model.location.UserLatLng
-import com.desuzed.everyweather.domain.model.network.NetworkResponse
 import com.desuzed.everyweather.domain.model.result.ActionType
+import com.desuzed.everyweather.domain.model.result.FetchResult
 import com.desuzed.everyweather.domain.model.result.QueryResult
+import com.desuzed.everyweather.domain.model.weather.Error
 import com.desuzed.everyweather.domain.model.weather.ResultForecast
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
-import com.desuzed.everyweather.domain.repository.remote.RemoteDataSource
+import com.desuzed.everyweather.domain.repository.remote.RemoteDataRepository
 
-class WeatherRepository(
+class WeatherInteractor(
     private val sharedPrefsProvider: SharedPrefsProvider,
-    private val remoteDataSource: RemoteDataSource,
-    private val weatherResponseMapper: WeatherResponseMapper,
-    private val apiErrorMapper: ApiErrorMapper,
+    private val remoteDataRepository: RemoteDataRepository,
 ) {
 
     suspend fun fetchForecastOrErrorMessage(
@@ -32,42 +27,34 @@ class WeatherRepository(
                 queryResult = QueryResult(code = ActionResultProvider.NO_DATA, query = query),
             )
         }
-        return when (val response = getForecast(query, lang)) {
-            is NetworkResponse.Success -> {
-                val weatherResponse = weatherResponseMapper.mapFromEntity(response.body)
-                val resultContent = handleLatLonAndSaveForecast(weatherResponse, userLatLng, query)
+        return when (val resultData = getForecast(query, lang)) {
+            is FetchResult.Success -> {
+                val resultContent = handleLatLonAndSaveForecast(resultData.body, userLatLng, query)
                 ResultForecast(resultContent, null)
             }
-            is NetworkResponse.ApiError -> {
-                val apiError = apiErrorMapper.mapFromEntity(response.body)
+
+            is FetchResult.Failure -> {
                 ResultForecast(
                     weatherContent = sharedPrefsProvider.loadForecastFromCache(),
                     queryResult = QueryResult(
-                        code = apiError.error.code,
+                        code = resultData.error.code,
                         query = query,
                         actionType = ActionType.RETRY
                     ),
                 )
             }
-            is NetworkResponse.NetworkError -> ResultForecast(
-                weatherContent = sharedPrefsProvider.loadForecastFromCache(),
-                queryResult = QueryResult(
-                    code = ActionResultProvider.NO_INTERNET,
-                    query = query,
-                    actionType = ActionType.RETRY
-                ),
-            )
-            is NetworkResponse.UnknownError -> ResultForecast(
-                weatherContent = sharedPrefsProvider.loadForecastFromCache(),
-                queryResult = QueryResult(
-                    code = ActionResultProvider.UNKNOWN,
-                    query = query,
-                    actionType = ActionType.RETRY
-                ),
-            )
         }
     }
 
+    fun getCachedForecast() = sharedPrefsProvider.loadForecastFromCache()
+
+    fun loadCachedQuery() = sharedPrefsProvider.loadQuery()
+
+    /**
+     * Пофиксил баг из отзывов гугл плей маркета: маркер на карте отображался на неправильном месте
+     * при загрузке погоды, а был сдвинут. Это было связано с тем, что брались координаты местоположения
+     * от апи, и они очень неточные, 2 числа после запятой. Пришлось прокидывать полные координаты с карты
+     * */
     private fun handleLatLonAndSaveForecast(
         weatherContent: WeatherContent,
         userLatLng: UserLatLng?,
@@ -102,8 +89,7 @@ class WeatherRepository(
     private suspend fun getForecast(
         query: String,
         lang: String,
-    ): NetworkResponse<WeatherResponseDto, ErrorDtoWeatherApi> {
-        sharedPrefsProvider.saveQuery(query)
-        return remoteDataSource.getForecast(query, lang.lowercase())
-    }
+    ): FetchResult<WeatherContent, Error> =
+        remoteDataRepository.getForecast(query, lang.lowercase())
+
 }

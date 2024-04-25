@@ -2,8 +2,8 @@ package com.desuzed.everyweather.presentation.features.settings
 
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.analytics.SettingsAnalytics
-import com.desuzed.everyweather.data.repository.local.SettingsDataStore
 import com.desuzed.everyweather.data.repository.providers.app_update.AppUpdateProvider
+import com.desuzed.everyweather.domain.interactor.WeatherSettingsInteractor
 import com.desuzed.everyweather.domain.model.app_update.AppUpdateState
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
 import com.desuzed.everyweather.domain.model.settings.DarkMode
@@ -17,22 +17,24 @@ import com.desuzed.everyweather.domain.model.settings.SettingsType
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val settingsDataStore: SettingsDataStore,
+    private val weatherSerringsInteractor: WeatherSettingsInteractor,
+    private val systemSettingsRepository: SystemSettingsRepository,
     private val analytics: SettingsAnalytics,
     private val appUpdateProvider: AppUpdateProvider,
 ) : BaseViewModel<SettingsState, SettingsAction, SettingsUserInteraction>(SettingsState()) {
 
     init {
-        collect(settingsDataStore.darkMode, ::collectDarkTheme)
-        collect(settingsDataStore.lang, ::collectLanguage)
-        collect(settingsDataStore.distanceDimen, ::collectWindSpeed)
-        collect(settingsDataStore.tempDimen, ::collectTemperature)
-        collect(settingsDataStore.pressureDimen, ::collectPressure)
+        collect(systemSettingsRepository.darkMode, ::collectDarkTheme)
+        collect(systemSettingsRepository.lang, ::collectLanguage)
+        collect(weatherSerringsInteractor.distanceDimen, ::collectWindSpeed)
+        collect(weatherSerringsInteractor.tempDimen, ::collectTemperature)
+        collect(weatherSerringsInteractor.pressureDimen, ::collectPressure)
         collect(appUpdateProvider.appUpdateState, ::onAppUpdateState)
         initSettingItemsLists()
     }
@@ -76,20 +78,20 @@ class SettingsViewModel(
     private fun onDarkMode(darkMode: DarkMode) {
         viewModelScope.launch {
             hideDialog()
-            settingsDataStore.setDarkMode(darkMode)
+            systemSettingsRepository.setDarkMode(darkMode)
         }
     }
 
     private fun onLanguage(lang: Lang) {
         viewModelScope.launch {
             hideDialog()
-            settingsDataStore.setLanguage(lang)
+            systemSettingsRepository.setLanguage(lang)
         }
     }
 
     private fun onDistanceDimen(distanceDimen: DistanceDimen) {
         viewModelScope.launch {
-            settingsDataStore.setDistanceDimension(distanceDimen)
+            weatherSerringsInteractor.setDistanceDimension(distanceDimen)
             delay(DELAY_500_MS)
             hideDialog()
         }
@@ -97,7 +99,7 @@ class SettingsViewModel(
 
     private fun onTemperatureDimen(tempDimen: TempDimen) {
         viewModelScope.launch {
-            settingsDataStore.setTemperatureDimension(tempDimen)
+            weatherSerringsInteractor.setTemperatureDimension(tempDimen)
             delay(DELAY_500_MS)
             hideDialog()
         }
@@ -105,7 +107,7 @@ class SettingsViewModel(
 
     private fun onPressureDimen(pressureDimen: PressureDimen) {
         viewModelScope.launch {
-            settingsDataStore.setPressureDimension(pressureDimen)
+            weatherSerringsInteractor.setPressureDimension(pressureDimen)
             delay(DELAY_500_MS)
             hideDialog()
         }
@@ -134,11 +136,11 @@ class SettingsViewModel(
     private fun initSettingItemsLists() {
         setState {
             copy(
-                langDialogItems = settingsDataStore.getLanguageItemsList(),
-                darkModeDialogItems = settingsDataStore.getDarkModeItemsList(),
-                temperatureDialogItems = settingsDataStore.getTemperatureItemsList(),
-                distanceDialogItems = settingsDataStore.getDistanceItemsList(),
-                pressureDialogItems = settingsDataStore.getPressureItemsList(),
+                langDialogItems = systemSettingsRepository.getLanguageItemsList(),
+                darkModeDialogItems = systemSettingsRepository.getDarkModeItemsList(),
+                temperatureDialogItems = weatherSerringsInteractor.getTemperatureItemsList(),
+                distanceDialogItems = weatherSerringsInteractor.getDistanceItemsList(),
+                pressureDialogItems = weatherSerringsInteractor.getPressureItemsList(),
             )
         }
     }

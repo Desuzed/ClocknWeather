@@ -14,7 +14,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.presentation.features.location_main.LocationMainState
 import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
 import com.desuzed.everyweather.ui.AppPreview
@@ -47,7 +47,7 @@ fun LocationMainContent(
     onNewEditLocationText: (text: String) -> Unit,
 ) {
     EveryweatherTheme {
-        val showDeleteDialog = remember { mutableStateOf<FavoriteLocationDto?>(null) }
+        val showDeleteDialog = remember { mutableStateOf<FavoriteLocation?>(null) }
         GradientBox(
             colors = listOf(
                 EveryweatherTheme.colors.secondaryGradientStart,
