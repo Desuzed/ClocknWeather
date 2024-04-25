@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 
 class MapLocationViewModel(
     private val sharedPrefsProvider: SharedPrefsProvider,
-    private val analytics: MapLocationAnalytics
+    private val analytics: MapLocationAnalytics,
 ) : BaseViewModel<MapState, MapAction, MapUserInteraction>(MapState()) {
 
     override fun onUserInteraction(interaction: MapUserInteraction) {
@@ -40,9 +40,9 @@ class MapLocationViewModel(
             val latLng = state.value.newPickedLocation
             if (latLng != null) {
                 val userLatLng = UserLatLng(
-                    latLng.latitude,
-                    latLng.longitude,
-                    System.currentTimeMillis()
+                    lat = latLng.latitude,
+                    lon = latLng.longitude,
+                    time = System.currentTimeMillis(),
                 )
                 setAction(MapAction.NavigateToWeather(userLatLng))
             }

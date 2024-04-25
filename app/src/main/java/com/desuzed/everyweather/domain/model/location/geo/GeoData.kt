@@ -1,6 +1,6 @@
 package com.desuzed.everyweather.domain.model.location.geo
 
-data class GeoResponse(
+data class GeoData(
     val lat: String,
     val lon: String,
     val name: String,

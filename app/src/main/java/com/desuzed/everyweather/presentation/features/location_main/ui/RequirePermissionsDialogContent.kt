@@ -13,10 +13,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.AppDialog
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.RegularText
 import com.desuzed.everyweather.ui.elements.RoundedButton
+import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+
+@AppPreview
+@Composable
+private fun Preview() {
+    EveryweatherTheme {
+        RequirePermissionsDialogContent(onUserInteraction = {})
+    }
+}
 
 @Composable
 fun RequirePermissionsDialogContent(
@@ -27,7 +37,7 @@ fun RequirePermissionsDialogContent(
     }
     AppDialog(
         modifier = Modifier,
-        onDismiss = onDismiss
+        onDismiss = onDismiss,
     ) {
         Column(
             modifier = Modifier
@@ -36,12 +46,12 @@ fun RequirePermissionsDialogContent(
         ) {
             BoldText(
                 text = stringResource(id = R.string.require_location_permissions_title),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             RegularText(
                 modifier = Modifier.padding(top = dimensionResource(id = R.dimen.dimen_10)),
                 text = stringResource(id = R.string.require_location_permissions_description),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Row(
@@ -49,15 +59,17 @@ fun RequirePermissionsDialogContent(
                     .fillMaxWidth()
                     .padding(top = dimensionResource(id = R.dimen.dimen_20)),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 RegularText(
                     text = stringResource(id = R.string.cancel),
-                    onClick = onDismiss
+                    onClick = onDismiss,
                 )
                 RoundedButton(
                     text = stringResource(id = R.string.allow),
-                    onClick = { onUserInteraction(LocationUserInteraction.RequestLocationPermissions) }
+                    onClick = {
+                        onUserInteraction(LocationUserInteraction.RequestLocationPermissions)
+                    },
                 )
             }
         }

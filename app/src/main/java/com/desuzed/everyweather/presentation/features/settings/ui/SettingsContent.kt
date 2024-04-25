@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.presentation.features.settings
+package com.desuzed.everyweather.presentation.features.settings.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,9 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
-import com.desuzed.everyweather.presentation.features.settings.ui.SettingDialog
-import com.desuzed.everyweather.presentation.features.settings.ui.SettingsAppUpdateContent
-import com.desuzed.everyweather.presentation.features.settings.ui.SettingsMenuGroupContent
+import com.desuzed.everyweather.presentation.features.settings.SettingsState
+import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.LargeBoldText

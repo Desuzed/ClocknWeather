@@ -23,7 +23,7 @@ class UiMapper(
     private val resources = context.resources
 
     suspend fun mapToNextDaysUi(response: WeatherContent): List<NextDaysUi> =
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Default) {
             NextDaysMapper(
                 language = language,
                 windSpeed = windSpeed,
@@ -34,7 +34,7 @@ class UiMapper(
         }
 
     suspend fun mapToMainWeatherUi(response: WeatherContent): WeatherMainUi =
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Default) {
             MainWeatherMapper(
                 resources = resources,
                 windSpeed = windSpeed,

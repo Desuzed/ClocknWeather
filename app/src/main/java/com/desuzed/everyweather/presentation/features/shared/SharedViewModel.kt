@@ -5,10 +5,11 @@ import com.desuzed.everyweather.data.repository.providers.app_update.AppUpdatePr
 import com.desuzed.everyweather.domain.model.app_update.AppUpdateState
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.presentation.base.UserInteraction
+import com.desuzed.everyweather.util.Constants.ZERO_LONG
 
 class SharedViewModel(
     private val appUpdateProvider: AppUpdateProvider,
-) : BaseViewModel<SharedState, SharedAction, UserInteraction>(SharedState(0, 0, false)) {
+) : BaseViewModel<SharedState, SharedAction, UserInteraction>(SharedState()) {
 
     init {
         collect(appUpdateProvider.appUpdateState, ::onAppUpdateState)
@@ -53,8 +54,8 @@ class SharedViewModel(
         showUpdateReadyToInstallDialog()
         setState {
             copy(
-                totalBytes = 0,
-                bytesDownloaded = 0,
+                totalBytes = ZERO_LONG,
+                bytesDownloaded = ZERO_LONG,
                 isUpdateLoading = false,
             )
         }

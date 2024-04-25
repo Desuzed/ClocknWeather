@@ -162,8 +162,7 @@ class SettingsDataStore(private val context: Context) {
                 id = darkModeId,
                 categoryStringId = R.string.dark_mode,
                 valueStringId = darkThemeValueId,
-
-                )
+            )
         }
 
     private suspend inline fun edit(crossinline transform: suspend (MutablePreferences) -> Unit) {

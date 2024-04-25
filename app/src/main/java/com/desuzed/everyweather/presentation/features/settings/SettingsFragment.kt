@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
+import com.desuzed.everyweather.presentation.features.settings.ui.SettingsContent
 import com.desuzed.everyweather.util.addOnBackPressedCallback
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.collectAsStateWithLifecycle

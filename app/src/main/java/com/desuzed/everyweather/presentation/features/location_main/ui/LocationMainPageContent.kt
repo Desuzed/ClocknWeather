@@ -19,7 +19,8 @@ import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.LocationItemContent
 import com.desuzed.everyweather.ui.elements.RoundedButton
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
-import com.desuzed.everyweather.util.Constants
+import com.desuzed.everyweather.util.Constants.EMPTY_STRING
+import com.desuzed.everyweather.util.Constants.ONE_FLOAT
 import com.desuzed.everyweather.util.MockWeatherObject
 
 @AppPreview
@@ -29,7 +30,7 @@ private fun Preview() {
         LocationMainPageContent(
             locations = MockWeatherObject.locations,
             isLoading = false,
-            geoText = Constants.EMPTY_STRING,
+            geoText = EMPTY_STRING,
             onUserInteraction = {},
             onGeoTextChanged = {},
             onShowDeleteDialog = {},
@@ -59,7 +60,7 @@ fun LocationMainPageContent(
         )
         LazyColumn(
             modifier = Modifier
-                .weight(1f)
+                .weight(ONE_FLOAT)
                 .padding(
                     horizontal = dimensionResource(id = R.dimen.dimen_10),
                     vertical = dimensionResource(id = R.dimen.dimen_10)

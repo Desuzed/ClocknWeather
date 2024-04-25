@@ -28,13 +28,15 @@ import com.desuzed.everyweather.util.MockWeatherObject
 
 @AppPreview
 @Composable
-private fun PreviewWeatherMainContent() {
-    LocationMainContent(
-        state = LocationMainState(locations = MockWeatherObject.locations),
-        onUserInteraction = {},
-        onGeoTextChanged = {},
-        onNewEditLocationText = {},
-    )
+private fun Preview() {
+    EveryweatherTheme {
+        LocationMainContent(
+            state = LocationMainState(locations = MockWeatherObject.locations),
+            onUserInteraction = {},
+            onGeoTextChanged = {},
+            onNewEditLocationText = {},
+        )
+    }
 }
 
 @Composable
@@ -63,13 +65,13 @@ fun LocationMainContent(
                 }
             )
 
-            if (state.showPickerDialog && state.geoResponses != null) {
+            if (state.showPickerDialog && state.geoData != null) {
                 AppDialog(
                     modifier = Modifier.fillMaxHeight(fraction = 0.9f),
                     onDismiss = {
                         onUserInteraction(LocationUserInteraction.DismissLocationPicker)
                     }) {
-                    GeoLocationsPickerContent(state.geoResponses, onUserInteraction)
+                    GeoLocationsPickerContent(state.geoData, onUserInteraction)
                 }
             }
             if (showDeleteDialog.value != null) {

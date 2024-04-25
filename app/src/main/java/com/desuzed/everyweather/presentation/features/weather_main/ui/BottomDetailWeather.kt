@@ -10,19 +10,77 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.data.mapper.UiMapper
+import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Pressure
+import com.desuzed.everyweather.domain.model.settings.Temperature
+import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
+import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.CardDetailDayItem
 import com.desuzed.everyweather.ui.elements.GradientBox
 import com.desuzed.everyweather.ui.elements.HourItemContent
 import com.desuzed.everyweather.ui.elements.LinkText
 import com.desuzed.everyweather.ui.elements.RoundedButton
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.MockWeatherObject
+import kotlinx.coroutines.launch
+
+@AppPreview
+@Composable
+private fun Preview() {
+    EveryweatherTheme {
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+        val mappedWeatherUi = remember { mutableStateOf<WeatherMainUi?>(null) }
+        LaunchedEffect(key1 = Unit) {
+            scope.launch {
+                mappedWeatherUi.value = UiMapper(
+                    context = context,
+                    language = Language(
+                        id = "RU",
+                        categoryStringId = R.string.language,
+                        valueStringId = R.string.russian,
+                    ),
+                    windSpeed = WindSpeed(
+                        id = "IMPERIAL",
+                        categoryStringId = R.string.distance_dimension,
+                        valueStringId = R.string.mph,
+                    ),
+                    temperature = Temperature(
+                        id = "CELCIUS",
+                        categoryStringId = R.string.temperature_dimension,
+                        valueStringId = R.string.celcius,
+                    ),
+                    pressure = Pressure(
+                        id = "MILLIBAR",
+                        categoryStringId = R.string.pressure,
+                        valueStringId = R.string.mb,
+                    ),
+                ).mapToMainWeatherUi(MockWeatherObject.weather)
+            }
+        }
+        mappedWeatherUi.value?.let {
+            BottomDetailWeather(weatherUi = it, onUserInteraction = {})
+        }
+    }
+}
+
+private const val WEATHER_LINK_START_LETTER = ":"
+private const val WEATHER_LINK_START_INDEX = 2
+private const val WEATHER_LINK_LENGTH = 11
 
 @Composable
 fun BottomDetailWeather(
@@ -59,7 +117,11 @@ fun BottomDetailWeather(
                 text = stringResource(id = R.string.next_days_forecast)
             )
             val inputText = stringResource(id = R.string.powered_by)
-            val startIndex = inputText.indexOf(":") + 2
+            val startIndex by remember {
+                mutableStateOf(
+                    inputText.indexOf(WEATHER_LINK_START_LETTER) + WEATHER_LINK_START_INDEX
+                )
+            }
             LinkText(
                 modifier = Modifier
                     .navigationBarsPadding()
@@ -67,7 +129,7 @@ fun BottomDetailWeather(
                 inputText = inputText,
                 url = stringResource(id = R.string.uri),
                 startIndex = startIndex,
-                endIndex = startIndex + 11,
+                endIndex = startIndex + WEATHER_LINK_LENGTH,
                 onClick = { onUserInteraction(WeatherUserInteraction.Redirection) }
             )
         }

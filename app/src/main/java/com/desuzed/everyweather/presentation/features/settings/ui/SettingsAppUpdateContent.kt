@@ -10,8 +10,21 @@ import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
 import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.MediumText
 import com.desuzed.everyweather.ui.elements.RoundedButton
+import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+
+@AppPreview
+@Composable
+private fun Preview() {
+    EveryweatherTheme {
+        SettingsAppUpdateContent(
+            updateStatus = InAppUpdateStatus.READY_TO_INSTALL,
+            onUserInteraction = {},
+        )
+    }
+}
 
 @Composable
 fun SettingsAppUpdateContent(
@@ -19,24 +32,9 @@ fun SettingsAppUpdateContent(
     onUserInteraction: (SettingsUserInteraction) -> Unit,
 ) {
     if (updateStatus != null) {
-        val userInteraction: SettingsUserInteraction
-        val titleTextId: Int
-        val buttonTextId: Int
-        when (updateStatus) {
-            InAppUpdateStatus.READY_TO_LAUNCH_UPDATE -> {
-                userInteraction = SettingsUserInteraction.ReadyToLaunchUpdate
-                titleTextId = R.string.update_available_title
-                buttonTextId = R.string.update_available_update_in_background_button
-            }
-
-            InAppUpdateStatus.READY_TO_INSTALL -> {
-                userInteraction = SettingsUserInteraction.ReadyToInstall
-                titleTextId = R.string.update_ready_to_install_title
-                buttonTextId = R.string.update_install_button
-            }
-        }
+        val inAppUpdateUiParams = SettingsInAppUpdateUiParams.fromInAppUpdateStatus(updateStatus)
         MediumText(
-            text = stringResource(id = titleTextId),
+            text = stringResource(id = inAppUpdateUiParams.titleTextId),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -51,9 +49,9 @@ fun SettingsAppUpdateContent(
                 .fillMaxWidth()
                 .padding(vertical = dimensionResource(id = R.dimen.dimen_10)),
             onClick = {
-                onUserInteraction(userInteraction)
+                onUserInteraction(inAppUpdateUiParams.userInteraction)
             },
-            text = stringResource(id = buttonTextId),
+            text = stringResource(id = inAppUpdateUiParams.buttonTextId),
         )
     }
 }

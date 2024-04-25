@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
+import com.desuzed.everyweather.presentation.features.in_app_update.ui.InAppUpdateContent
 import com.desuzed.everyweather.presentation.features.shared.SharedViewModel
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.collectAsStateWithLifecycle

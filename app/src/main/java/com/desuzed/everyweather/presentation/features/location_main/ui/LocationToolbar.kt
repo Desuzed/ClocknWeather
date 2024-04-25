@@ -18,7 +18,8 @@ import com.desuzed.everyweather.presentation.features.location_main.LocationUser
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.OutlinedIconEditText
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
-import com.desuzed.everyweather.util.Constants
+import com.desuzed.everyweather.util.Constants.EMPTY_STRING
+import com.desuzed.everyweather.util.Constants.ONE_FLOAT
 
 @AppPreview
 @Composable
@@ -26,7 +27,7 @@ private fun Preview() {
     EveryweatherTheme {
         LocationToolbar(
             isLoading = false,
-            geoText = Constants.EMPTY_STRING,
+            geoText = EMPTY_STRING,
             onGeoTextChanged = {},
             onUserInteraction = {},
         )
@@ -47,8 +48,8 @@ fun LocationToolbar(
             content = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_round_arrow_back),
-                    contentDescription = Constants.EMPTY_STRING,
-                    tint = EveryweatherTheme.colors.textColorPrimary
+                    contentDescription = EMPTY_STRING,
+                    tint = EveryweatherTheme.colors.textColorPrimary,
                 )
             }
         )
@@ -59,7 +60,7 @@ fun LocationToolbar(
                     top = dimensionResource(id = R.dimen.dimen_10),
                     bottom = dimensionResource(id = R.dimen.dimen_10),
                 )
-                .weight(1f),
+                .weight(ONE_FLOAT),
             hint = stringResource(id = R.string.search_hint),
             onTextChanged = onGeoTextChanged,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -73,8 +74,8 @@ fun LocationToolbar(
             content = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_settings),
-                    contentDescription = Constants.EMPTY_STRING,
-                    tint = EveryweatherTheme.colors.secondary
+                    contentDescription = EMPTY_STRING,
+                    tint = EveryweatherTheme.colors.secondary,
                 )
             }
         )

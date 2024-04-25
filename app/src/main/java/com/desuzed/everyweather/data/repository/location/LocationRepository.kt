@@ -16,9 +16,10 @@ class LocationRepository(private val remoteDataSource: RemoteDataSource) {
                 val mappedResult = LocationResponseMapper().mapFromEntity(response.body)
                 ResultGeo(mappedResult, null)
             }
+
             is NetworkResponse.ApiError -> {
                 ResultGeo(
-                    geoResponse = null,
+                    geoData = null,
                     queryResult = QueryResult(
                         code = response.code,
                         query = query,
@@ -26,9 +27,10 @@ class LocationRepository(private val remoteDataSource: RemoteDataSource) {
                     ),
                 )
             }
+
             is NetworkResponse.NetworkError -> {
                 ResultGeo(
-                    geoResponse = null,
+                    geoData = null,
                     QueryResult(
                         code = ActionResultProvider.NO_INTERNET,
                         query = query,
@@ -36,9 +38,10 @@ class LocationRepository(private val remoteDataSource: RemoteDataSource) {
                     ),
                 )
             }
+
             is NetworkResponse.UnknownError -> {
                 ResultGeo(
-                    geoResponse = null,
+                    geoData = null,
                     QueryResult(
                         code = ActionResultProvider.UNKNOWN,
                         query = query,
