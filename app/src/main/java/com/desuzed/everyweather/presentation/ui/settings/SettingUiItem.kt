@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.domain.model.settings
+package com.desuzed.everyweather.presentation.ui.settings
 
 class SettingUiItem<S : Enum<*>>(
     val setting: S,

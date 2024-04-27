@@ -17,10 +17,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.settings.BaseSettingItem
-import com.desuzed.everyweather.domain.model.settings.DarkTheme
-import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.presentation.ui.settings.BaseSettingItem
+import com.desuzed.everyweather.presentation.ui.settings.DarkTheme
+import com.desuzed.everyweather.presentation.ui.settings.Language
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.MediumText

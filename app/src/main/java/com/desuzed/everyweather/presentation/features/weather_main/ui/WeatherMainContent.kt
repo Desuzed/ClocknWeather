@@ -21,9 +21,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.mapper.UiMapper
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherState
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.ui.UiMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.FloatingButton
@@ -64,10 +64,10 @@ fun WeatherMainContent(
                     state.weatherData?.let {
                         UiMapper(
                             context = context,
-                            language = state.lang,
-                            windSpeed = state.windSpeed,
-                            temperature = state.temperature,
-                            pressure = state.pressure,
+                            selectedLanguage = state.selectedLang,
+                            selectedDistanceDimen = state.windSpeed,
+                            selectedTemperature = state.temperature,
+                            selectedPressure = state.pressure,
                         ).mapToMainWeatherUi(it)
                     }
                 }

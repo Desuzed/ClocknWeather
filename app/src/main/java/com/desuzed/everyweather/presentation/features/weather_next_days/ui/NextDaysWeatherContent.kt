@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.mapper.UiMapper
 import com.desuzed.everyweather.presentation.features.weather_next_days.NextDaysState
+import com.desuzed.everyweather.presentation.ui.UiMapper
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
@@ -44,10 +44,10 @@ fun NextDaysBottomSheetContent(
                 state.weather?.let {
                     UiMapper(
                         context = context,
-                        windSpeed = state.windSpeed,
-                        temperature = state.temperature,
-                        language = state.language,
-                        pressure = state.pressure,
+                        selectedDistanceDimen = state.windSpeed,
+                        selectedTemperature = state.temperature,
+                        selectedLanguage = state.selectedLang,
+                        selectedPressure = state.pressure,
                     ).mapToNextDaysUi(it)
                 }
             }

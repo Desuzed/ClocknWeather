@@ -51,7 +51,7 @@ val viewModelModule = module {
     viewModel {
         SettingsViewModel(
             weatherSerringsInteractor = get(),
-            systemSettingsRepository = get(),
+            systemSettingsInteractor = get(),
             analytics = get(),
             appUpdateProvider = get(),
         )

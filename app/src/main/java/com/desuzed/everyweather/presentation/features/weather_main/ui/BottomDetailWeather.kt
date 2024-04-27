@@ -21,12 +21,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.mapper.UiMapper
-import com.desuzed.everyweather.domain.model.settings.Language
-import com.desuzed.everyweather.domain.model.settings.Pressure
-import com.desuzed.everyweather.domain.model.settings.Temperature
-import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.settings.DistanceDimen
+import com.desuzed.everyweather.domain.model.settings.Lang
+import com.desuzed.everyweather.domain.model.settings.PressureDimen
+import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.ui.UiMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.CardDetailDayItem
@@ -49,26 +49,10 @@ private fun Preview() {
             scope.launch {
                 mappedWeatherUi.value = UiMapper(
                     context = context,
-                    language = Language(
-                        id = "RU",
-                        categoryStringId = R.string.language,
-                        valueStringId = R.string.russian,
-                    ),
-                    windSpeed = WindSpeed(
-                        id = "IMPERIAL",
-                        categoryStringId = R.string.distance_dimension,
-                        valueStringId = R.string.mph,
-                    ),
-                    temperature = Temperature(
-                        id = "CELCIUS",
-                        categoryStringId = R.string.temperature_dimension,
-                        valueStringId = R.string.celcius,
-                    ),
-                    pressure = Pressure(
-                        id = "MILLIBAR",
-                        categoryStringId = R.string.pressure,
-                        valueStringId = R.string.mb,
-                    ),
+                    selectedLanguage = Lang.RU,
+                    selectedDistanceDimen = DistanceDimen.METRIC_KMH,
+                    selectedTemperature = TempDimen.CELCIUS,
+                    selectedPressure = PressureDimen.MILLIMETERS,
                 ).mapToMainWeatherUi(MockWeatherObject.weather)
             }
         }

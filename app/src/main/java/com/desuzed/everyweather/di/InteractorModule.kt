@@ -12,6 +12,7 @@ val interactorModule = module {
         WeatherInteractor(
             sharedPrefsProvider = get(),
             remoteDataRepository = get(),
+            systemSettingsRepository = get(),
         )
     }
     single {

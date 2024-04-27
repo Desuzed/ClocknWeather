@@ -7,9 +7,7 @@ import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.location.UserLocationResult
 import com.desuzed.everyweather.domain.model.result.ActionResult
 import com.desuzed.everyweather.domain.model.settings.DarkMode
-import com.desuzed.everyweather.domain.model.settings.DarkTheme
 import com.desuzed.everyweather.domain.model.settings.Lang
-import com.desuzed.everyweather.domain.model.settings.Language
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.presentation.base.UserInteraction
 import com.desuzed.everyweather.util.Constants.LANG_RU_LOWERCASE
@@ -88,14 +86,14 @@ class MainActivityViewModel(
 
     fun isFirstRun() = systemInteractor.isFirstRunApp()
 
-    private fun collectLanguage(lang: Language) {
-        val lowercaseLang = lang.id.lowercase()
+    private fun collectLanguage(lang: Lang) {
+        val lowercaseLang = lang.lang.lowercase()
         setState { copy(lang = lowercaseLang) }
         setAction(MainActivityAction.ChangeLanguage(lowercaseLang))
     }
 
-    private fun collectDarkTheme(theme: DarkTheme) {
-        val mode = DarkMode.valueOf(theme.id.uppercase())
+    private fun collectDarkTheme(darkMode: DarkMode) {
+        val mode = DarkMode.valueOf(darkMode.mode.uppercase())
         setAction(MainActivityAction.ChangeDarkMode(mode))
     }
 

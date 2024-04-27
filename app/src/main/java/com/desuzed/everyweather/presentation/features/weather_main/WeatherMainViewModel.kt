@@ -6,10 +6,10 @@ import com.desuzed.everyweather.domain.interactor.WeatherInteractor
 import com.desuzed.everyweather.domain.interactor.WeatherSettingsInteractor
 import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.QueryResult
-import com.desuzed.everyweather.domain.model.settings.Language
-import com.desuzed.everyweather.domain.model.settings.Pressure
-import com.desuzed.everyweather.domain.model.settings.Temperature
-import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.settings.DistanceDimen
+import com.desuzed.everyweather.domain.model.settings.Lang
+import com.desuzed.everyweather.domain.model.settings.PressureDimen
+import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
@@ -50,7 +50,6 @@ class WeatherMainViewModel(
             val fetchedForecast =
                 weatherInteractor.fetchForecastOrErrorMessage(
                     query = query,
-                    lang = state.value.lang.id.lowercase(),
                     userLatLng = userLatLng,
                 )
             val weatherResponse = fetchedForecast.weatherContent
@@ -145,15 +144,16 @@ class WeatherMainViewModel(
     private fun collectActionResult(queryResult: QueryResult) =
         setAction(WeatherMainAction.ShowSnackbar(queryResult))
 
-    private fun collectWindSpeed(windSpeed: WindSpeed) = setState { copy(windSpeed = windSpeed) }
+    private fun collectWindSpeed(windSpeed: DistanceDimen) =
+        setState { copy(windSpeed = windSpeed) }
 
-    private fun collectLanguage(language: Language) = setState { copy(lang = language) }
+    private fun collectLanguage(language: Lang) = setState { copy(selectedLang = language) }
 
-    private fun collectTemperature(temperature: Temperature) = setState {
+    private fun collectTemperature(temperature: TempDimen) = setState {
         copy(temperature = temperature)
     }
 
-    private fun collectPressure(pressure: Pressure) = setState {
+    private fun collectPressure(pressure: PressureDimen) = setState {
         copy(pressure = pressure)
     }
 }

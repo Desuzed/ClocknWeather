@@ -22,8 +22,10 @@ class LocationInteractor(
     private val systemSettingsRepository: SystemSettingsRepository,
 ) {
     suspend fun fetchGeocodingResultOrError(query: String): ResultGeo {
-        val lang =
-            systemSettingsRepository.lang.firstOrNull()?.id?.lowercase() ?: Lang.EN.lang.lowercase()
+        val lang = systemSettingsRepository
+            .lang
+            .firstOrNull()?.lang?.lowercase()
+            ?: Lang.EN.lang.lowercase()
         return when (val fetchResult = remoteDataRepository.forwardGeocoding(query, lang)) {
             is FetchResult.Success -> ResultGeo(fetchResult.body, null)
             is FetchResult.Failure -> ResultGeo(

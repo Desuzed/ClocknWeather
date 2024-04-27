@@ -2,10 +2,10 @@ package com.desuzed.everyweather.presentation.features.weather_next_days
 
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.domain.interactor.WeatherSettingsInteractor
-import com.desuzed.everyweather.domain.model.settings.Language
-import com.desuzed.everyweather.domain.model.settings.Pressure
-import com.desuzed.everyweather.domain.model.settings.Temperature
-import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.settings.DistanceDimen
+import com.desuzed.everyweather.domain.model.settings.Lang
+import com.desuzed.everyweather.domain.model.settings.PressureDimen
+import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
 import com.desuzed.everyweather.presentation.base.BaseViewModel
@@ -32,15 +32,16 @@ class NextDaysViewModel(
         }
     }
 
-    private fun collectWindSpeed(windSpeed: WindSpeed) = setState { copy(windSpeed = windSpeed) }
+    private fun collectWindSpeed(windSpeed: DistanceDimen) =
+        setState { copy(windSpeed = windSpeed) }
 
-    private fun collectLanguage(language: Language) = setState { copy(language = language) }
+    private fun collectLanguage(language: Lang) = setState { copy(selectedLang = language) }
 
-    private fun collectTemperature(temperature: Temperature) = setState {
+    private fun collectTemperature(temperature: TempDimen) = setState {
         copy(temperature = temperature)
     }
 
-    private fun collectPressure(pressure: Pressure) = setState {
+    private fun collectPressure(pressure: PressureDimen) = setState {
         copy(pressure = pressure)
     }
 }

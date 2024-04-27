@@ -2,18 +2,18 @@ package com.desuzed.everyweather.presentation.features.settings.ui
 
 import androidx.compose.runtime.Composable
 import com.desuzed.everyweather.domain.model.settings.DarkMode
-import com.desuzed.everyweather.domain.model.settings.DarkTheme
 import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.Lang
-import com.desuzed.everyweather.domain.model.settings.Language
-import com.desuzed.everyweather.domain.model.settings.Pressure
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
-import com.desuzed.everyweather.domain.model.settings.SettingUiItem
 import com.desuzed.everyweather.domain.model.settings.SettingsType
 import com.desuzed.everyweather.domain.model.settings.TempDimen
-import com.desuzed.everyweather.domain.model.settings.Temperature
-import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.presentation.ui.settings.DarkTheme
+import com.desuzed.everyweather.presentation.ui.settings.Language
+import com.desuzed.everyweather.presentation.ui.settings.Pressure
+import com.desuzed.everyweather.presentation.ui.settings.SettingUiItem
+import com.desuzed.everyweather.presentation.ui.settings.Temperature
+import com.desuzed.everyweather.presentation.ui.settings.WindSpeed
 import com.desuzed.everyweather.ui.elements.AppDialog
 
 @Composable

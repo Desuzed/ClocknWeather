@@ -1,10 +1,10 @@
-package com.desuzed.everyweather.data.mapper
+package com.desuzed.everyweather.presentation.ui
 
 import android.content.Context
-import com.desuzed.everyweather.domain.model.settings.Language
-import com.desuzed.everyweather.domain.model.settings.Pressure
-import com.desuzed.everyweather.domain.model.settings.Temperature
-import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.settings.DistanceDimen
+import com.desuzed.everyweather.domain.model.settings.Lang
+import com.desuzed.everyweather.domain.model.settings.PressureDimen
+import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.presentation.ui.main.MainWeatherMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
@@ -14,22 +14,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class UiMapper(
-    private val windSpeed: WindSpeed,
-    private val temperature: Temperature,
-    private val language: Language,
-    private val pressure: Pressure,
-    context: Context
+    private val selectedDistanceDimen: DistanceDimen,
+    private val selectedTemperature: TempDimen,
+    private val selectedLanguage: Lang,
+    private val selectedPressure: PressureDimen,
+    context: Context,
 ) {
     private val resources = context.resources
 
     suspend fun mapToNextDaysUi(response: WeatherContent): List<NextDaysUi> =
         withContext(Dispatchers.Default) {
             NextDaysMapper(
-                language = language,
-                windSpeed = windSpeed,
-                temperature = temperature,
+                language = selectedLanguage,
+                windSpeed = selectedDistanceDimen,
+                temperature = selectedTemperature,
                 resources = resources,
-                pressure = pressure,
+                pressure = selectedPressure,
             ).mapToNextDaysList(response)
         }
 
@@ -37,9 +37,9 @@ class UiMapper(
         withContext(Dispatchers.Default) {
             MainWeatherMapper(
                 resources = resources,
-                windSpeed = windSpeed,
-                temperature = temperature,
-                pressure = pressure,
+                windSpeed = selectedDistanceDimen,
+                temperature = selectedTemperature,
+                pressure = selectedPressure,
             ).mapToMainWeatherUi(response)
         }
 }

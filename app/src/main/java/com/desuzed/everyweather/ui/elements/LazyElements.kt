@@ -19,8 +19,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.settings.Temperature
-import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.settings.DistanceDimen
+import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.presentation.ui.HourUi
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
@@ -32,8 +32,8 @@ private fun Preview() {
     EveryweatherTheme {
         HourItemContent(
             HourUi(
-                windSpeed = WindSpeed("METRIC_KMH", 0, 0),
-                temperature = Temperature("CELCIUS", 0, 0),
+                windSpeed = DistanceDimen.METRIC_KMH,
+                temperature = TempDimen.CELCIUS,
                 hour = MockWeatherObject.weather.forecastDay[0].hourForecast[0],
                 timeZone = MockWeatherObject.weather.location.timezone,
                 res = LocalContext.current.resources,

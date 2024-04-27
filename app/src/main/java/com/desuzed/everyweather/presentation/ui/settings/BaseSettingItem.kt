@@ -1,4 +1,6 @@
-package com.desuzed.everyweather.domain.model.settings
+package com.desuzed.everyweather.presentation.ui.settings
+
+import com.desuzed.everyweather.domain.model.settings.SettingsType
 
 /**
  * @property id - айди настройки из Enum'a. Используется для сохранения в Shared prefs  в виде строки

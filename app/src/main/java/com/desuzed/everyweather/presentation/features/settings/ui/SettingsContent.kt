@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -22,6 +23,7 @@ import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
 import com.desuzed.everyweather.presentation.features.settings.SettingsState
 import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.presentation.ui.settings.SettingsMapper
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.LargeBoldText
@@ -41,6 +43,26 @@ fun SettingsContent(
     state: SettingsState,
     onUserInteraction: (SettingsUserInteraction) -> Unit,
 ) {
+    val settingsParams = remember(
+        state.selectedLang,
+        state.selectedMode,
+        state.selectedPressure,
+        state.selectedDistanceDimen,
+        state.selectedTempDimen,
+    ) {
+        SettingsMapper.getSettingsUiParams(
+            distanceDimenList = state.distanceDialogItems,
+            tempList = state.temperatureDialogItems,
+            pressureList = state.pressureDialogItems,
+            langList = state.langDialogItems,
+            darkModeList = state.darkModeDialogItems,
+            selectedMode = state.selectedMode,
+            selectedLang = state.selectedLang,
+            selectedDistanceDimen = state.selectedDistanceDimen,
+            selectedTempDimen = state.selectedTempDimen,
+            selectedPressureDimen = state.selectedPressure,
+        )
+    }
     EveryweatherTheme {
         Box(
             modifier = Modifier
@@ -84,7 +106,10 @@ fun SettingsContent(
                 )
                 SettingsMenuGroupContent(
                     onUserInteraction = onUserInteraction,
-                    items = listOf(state.lang, state.darkTheme)
+                    items = listOf(
+                        settingsParams.selectedLang,
+                        settingsParams.selectedMode,
+                    )
                 )
                 BoldText(
                     text = stringResource(id = R.string.dimension_settings),
@@ -95,21 +120,25 @@ fun SettingsContent(
                 )
                 SettingsMenuGroupContent(
                     onUserInteraction = onUserInteraction,
-                    items = listOf(state.tempDimen, state.windSpeed, state.pressure)
+                    items = listOf(
+                        settingsParams.selectedTemp,
+                        settingsParams.selectedDistance,
+                        settingsParams.selectedPressure,
+                    )
                 )
                 SettingsAppUpdateContent(state.updateStatus, onUserInteraction)
                 SettingDialog(
                     showDialogType = state.showDialogType,
-                    language = state.lang,
-                    windSpeed = state.windSpeed,
-                    temperature = state.tempDimen,
-                    darkTheme = state.darkTheme,
-                    pressure = state.pressure,
-                    langDialogItems = state.langDialogItems,
-                    darkModeDialogItems = state.darkModeDialogItems,
-                    temperatureDialogItems = state.temperatureDialogItems,
-                    distanceDialogItems = state.distanceDialogItems,
-                    pressureDialogItems = state.pressureDialogItems,
+                    language = settingsParams.selectedLang,
+                    windSpeed = settingsParams.selectedDistance,
+                    temperature = settingsParams.selectedTemp,
+                    darkTheme = settingsParams.selectedMode,
+                    pressure = settingsParams.selectedPressure,
+                    langDialogItems = settingsParams.systemSettingsList.languageList,
+                    darkModeDialogItems = settingsParams.systemSettingsList.darkModeList,
+                    temperatureDialogItems = settingsParams.weatherUiList.temperatureSettingsList,
+                    distanceDialogItems = settingsParams.weatherUiList.distanceSettingsList,
+                    pressureDialogItems = settingsParams.weatherUiList.pressureSettingsList,
                     onUserInteraction = onUserInteraction,
                     onDismiss = {
                         onUserInteraction(SettingsUserInteraction.DismissDialog)

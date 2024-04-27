@@ -4,21 +4,24 @@ import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.result.FetchResult
 import com.desuzed.everyweather.domain.model.result.QueryResult
+import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.weather.Error
 import com.desuzed.everyweather.domain.model.weather.ResultForecast
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.domain.repository.remote.RemoteDataRepository
+import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
+import kotlinx.coroutines.flow.firstOrNull
 
 class WeatherInteractor(
     private val sharedPrefsProvider: SharedPrefsProvider,
     private val remoteDataRepository: RemoteDataRepository,
+    private val systemSettingsRepository: SystemSettingsRepository,
 ) {
 
     suspend fun fetchForecastOrErrorMessage(
         query: String,
-        lang: String,
         userLatLng: UserLatLng? = null,
     ): ResultForecast {
         if (query.isEmpty()) {
@@ -27,6 +30,10 @@ class WeatherInteractor(
                 queryResult = QueryResult(code = ActionResultProvider.NO_DATA, query = query),
             )
         }
+        val lang = systemSettingsRepository
+            .lang
+            .firstOrNull()?.lang?.lowercase()
+            ?: Lang.EN.lang.lowercase()
         return when (val resultData = getForecast(query, lang)) {
             is FetchResult.Success -> {
                 val resultContent = handleLatLonAndSaveForecast(resultData.body, userLatLng, query)

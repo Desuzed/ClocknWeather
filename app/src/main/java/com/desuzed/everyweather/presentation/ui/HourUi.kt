@@ -4,18 +4,17 @@ import android.content.res.Resources
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.TempDimen
-import com.desuzed.everyweather.domain.model.settings.Temperature
-import com.desuzed.everyweather.domain.model.settings.WindSpeed
 import com.desuzed.everyweather.domain.model.weather.Hour
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
+import com.desuzed.everyweather.presentation.ui.settings.SettingsMapper
 import com.desuzed.everyweather.util.Constants.HTTPS_SCHEME
 import com.desuzed.everyweather.util.DateFormatter
 import com.desuzed.everyweather.util.DecimalFormatter
 import kotlin.math.roundToInt
 
 class HourUi(
-    windSpeed: WindSpeed,
-    temperature: Temperature,
+    windSpeed: DistanceDimen,
+    temperature: TempDimen,
     hour: Hour,
     timeZone: String,
     res: Resources
@@ -33,21 +32,19 @@ class HourUi(
             timeInMills = hour.timeEpoch,
             timeZone = timeZone,
         )
-
-        val tempDimen = TempDimen.valueOf(temperature.id.uppercase())
-        val tempHour = when (tempDimen) {
+        val tempHour = when (temperature) {
             TempDimen.CELCIUS -> hour.tempC.roundToInt()
             TempDimen.FAHRENHEIT -> hour.tempF.roundToInt()
         }
         temp = tempHour.toString() + res.getString(R.string.dot_temperature)
-        val windSpeedDimen = DistanceDimen.valueOf(windSpeed.id.uppercase())
-        val windHour = when (windSpeedDimen) {
+        val windHour = when (windSpeed) {
             DistanceDimen.METRIC_KMH -> hour.windSpeedKmh
             DistanceDimen.METRIC_MS -> hour.windSpeedKmh.times(DecimalFormatter.KPH_TO_MS_MULTIPLIER)
             DistanceDimen.IMPERIAL -> hour.windSpeedMph
         }
+        val windSpeedUi = SettingsMapper.getSelectedWindSpeed(windSpeed)
         val formattedWindSpeed = DecimalFormatter.formatFloat(windHour)
-        wind = "$formattedWindSpeed " + res.getString(windSpeed.valueStringId)
+        wind = "$formattedWindSpeed " + res.getString(windSpeedUi.valueStringId)
         iconUrl = "$HTTPS_SCHEME${hour.icon}"
         rotation = hour.windDegree.toFloat() - 180
     }
