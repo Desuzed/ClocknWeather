@@ -5,11 +5,13 @@ import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.weather.Hour
+import com.desuzed.everyweather.domain.model.weather.HourMappingException
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.presentation.ui.settings.SettingsMapper
 import com.desuzed.everyweather.util.Constants.HTTPS_SCHEME
 import com.desuzed.everyweather.util.DateFormatter
 import com.desuzed.everyweather.util.DecimalFormatter
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlin.math.roundToInt
 
 class HourUi(
@@ -60,9 +62,20 @@ class HourUi(
                 timeZone = response.location.timezone,
             ).toInt()
             val forecastDay = response.forecastDay
-            return forecastDay[0].hourForecast
-                .drop(hour)
-                .plus(forecastDay[1].hourForecast.take(hour))
+            return try {
+                forecastDay[0].hourForecast
+                    .drop(hour)
+                    .plus(forecastDay[1].hourForecast.take(hour))
+            } catch (e: IndexOutOfBoundsException) {
+                val error = HourMappingException(
+                    "Could not map hour weather. Cause:\nlocation = " +
+                            "${response.location.country}, ${response.location.region}, " +
+                            response.location.name +
+                            "\nlat lon = ${response.location.lat} ; ${response.location.lon}"
+                )
+                FirebaseCrashlytics.getInstance().recordException(error)
+                emptyList()
+            }
         }
     }
 

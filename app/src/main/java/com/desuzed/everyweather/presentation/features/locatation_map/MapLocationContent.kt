@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @AppPreview
@@ -87,13 +88,13 @@ fun MapLocationContent(
                             state.newPickedLocation != null && state.loadNewLocationWeather
                         if (oldMarker != null)
                             Marker(
-                                position = oldMarker,
+                                state = MarkerState(position = oldMarker),
                                 title = state.location?.name ?: EMPTY_STRING,
                                 visible = !showNewMarker,
                             )
                         if (showNewMarker)
                             Marker(
-                                position = state.newPickedLocation!!,
+                                state = MarkerState(position = state.newPickedLocation!!),
                             )
                     }
                     if (state.shouldShowDialog)

@@ -6,8 +6,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,8 +35,6 @@ import com.desuzed.everyweather.ui.elements.FloatingButton
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.MockWeatherObject
 import com.desuzed.everyweather.util.toIntDp
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,13 +50,17 @@ private fun PreviewWeatherMainContent() {
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WeatherMainContent(
     state: WeatherState,
     onUserInteraction: (WeatherUserInteraction) -> Unit,
 ) {
     EveryweatherTheme {
-        val refreshingState = rememberSwipeRefreshState(isRefreshing = state.isLoading)
+        val refreshingState = rememberPullRefreshState(
+            refreshing = state.isLoading,
+            onRefresh = { onUserInteraction(WeatherUserInteraction.Refresh) },
+        )
         val fabSize = dimensionResource(id = R.dimen.dimen_50)
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
@@ -73,49 +80,57 @@ fun WeatherMainContent(
                 }
             }
         }
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
             var fabPadding by remember { mutableStateOf(0.dp) }
-            SwipeRefresh(
-                state = refreshingState,
-                onRefresh = { onUserInteraction(WeatherUserInteraction.Refresh) },
-            ) {
-                val weatherUi = mappedWeatherUi.value
-                if (weatherUi != null) {
-                    Column(
+            val weatherUi = mappedWeatherUi.value
+            if (weatherUi != null) {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    WeatherHeaderInfo(
+                        mainInfoUi = weatherUi.mainInfo,
+                        onUserInteraction = onUserInteraction,
+                        refreshingState = refreshingState,
+                    ) { headerHeight ->
+                        fabPadding = headerHeight.toIntDp.dp - fabSize / 2
+                    }
+                    BottomDetailWeather(weatherUi, refreshingState, onUserInteraction)
+                }
+                if (state.isAddButtonEnabled) {
+                    FloatingButton(
                         modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        WeatherHeaderInfo(
-                            weatherUi.mainInfo,
-                            onUserInteraction
-                        ) { headerHeight ->
-                            fabPadding = headerHeight.toIntDp.dp - fabSize / 2
-                        }
-                        BottomDetailWeather(weatherUi, onUserInteraction)
-                    }
-                    if (state.isAddButtonEnabled) {
-                        FloatingButton(
-                            modifier = Modifier
-                                .padding(
-                                    top = fabPadding,
-                                    start = dimensionResource(id = R.dimen.dimen_20)
-                                )
-                                .size(size = fabSize),
-                            id = R.drawable.ic_round_add_location_24,
-                            onClick = { onUserInteraction(WeatherUserInteraction.SaveLocation) }
-                        )
-                    }
-                } else {
-                    if (!state.isLoading) {
-                        EmptyWeatherCard(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .verticalScroll(rememberScrollState()),
-                            onUserInteraction = onUserInteraction,
-                        )
-                    }
+                            .padding(
+                                top = fabPadding,
+                                start = dimensionResource(id = R.dimen.dimen_20)
+                            )
+                            .size(size = fabSize),
+                        id = R.drawable.ic_round_add_location_24,
+                        onClick = { onUserInteraction(WeatherUserInteraction.SaveLocation) }
+                    )
+                }
+            } else {
+                if (!state.isLoading) {
+                    EmptyWeatherCard(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .pullRefresh(refreshingState)
+                            .verticalScroll(rememberScrollState()),
+                        onUserInteraction = onUserInteraction,
+                    )
                 }
             }
+            PullRefreshIndicator(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .statusBarsPadding()
+                    .padding(top = dimensionResource(id = R.dimen.dimen_20)),
+                refreshing = state.isLoading,
+                state = refreshingState,
+                backgroundColor = EveryweatherTheme.colors.secondaryGradientStart,
+                contentColor = EveryweatherTheme.colors.secondary,
+            )
         }
     }
 }

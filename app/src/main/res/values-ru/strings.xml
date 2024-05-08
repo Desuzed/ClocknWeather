@@ -83,5 +83,6 @@
     <string name="name_updated">Название обновлено</string>
     <string name="change_location_name">Здесь вы можете изменить название сохранённого места</string>
     <string name="set_default_name">По умолчанию</string>
+    <string name="could_not_load_hourly_weather">Не удалось загрузить погоду по часам</string>
 
 </resources>
