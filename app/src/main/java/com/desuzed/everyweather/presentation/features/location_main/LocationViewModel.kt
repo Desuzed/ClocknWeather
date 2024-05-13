@@ -1,28 +1,24 @@
 package com.desuzed.everyweather.presentation.features.location_main
 
 import com.desuzed.everyweather.analytics.LocationMainAnalytics
-import com.desuzed.everyweather.data.repository.local.SettingsDataStore
-import com.desuzed.everyweather.data.repository.location.LocationRepository
 import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
-import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.interactor.LocationInteractor
+import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.domain.model.location.UserLatLng
-import com.desuzed.everyweather.domain.model.location.geo.GeoResponse
+import com.desuzed.everyweather.domain.model.location.geo.GeoData
 import com.desuzed.everyweather.domain.model.result.QueryResult
-import com.desuzed.everyweather.domain.model.settings.Language
-import com.desuzed.everyweather.domain.repository.local.RoomProvider
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
+import com.desuzed.everyweather.util.Constants.EMPTY_STRING
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class LocationViewModel(
-    private val roomProvider: RoomProvider,
-    private val locationRepository: LocationRepository,
+    private val locationInteractor: LocationInteractor,
     private val userLocationProvider: UserLocationProvider,
     private val analytics: LocationMainAnalytics,
-    settingsDataStore: SettingsDataStore,
 ) : BaseViewModel<LocationMainState, LocationMainAction, LocationUserInteraction>(LocationMainState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
@@ -32,8 +28,7 @@ class LocationViewModel(
     )
 
     init {
-        collect(roomProvider.getAllLocations(), ::onNewLocations)
-        collect(settingsDataStore.lang, ::collectLanguage)
+        collect(locationInteractor.getAllLocations(), ::onNewLocations)
         collect(queryResultFlow, ::collectQueryResult)
     }
 
@@ -51,8 +46,9 @@ class LocationViewModel(
             is LocationUserInteraction.DeleteFavoriteLocation -> deleteFavoriteLocation(
                 interaction.favoriteLocationDto
             )
+
             is LocationUserInteraction.ConfirmFoundLocation -> onConfirmLocation(interaction.geo)
-            is LocationUserInteraction.FavoriteLocation -> onFavoriteLocation(interaction.favoriteLocationDto)
+            is LocationUserInteraction.FavoriteLocationClick -> onFavoriteLocation(interaction.favoriteLocationDto)
             is LocationUserInteraction.NavigateToWeather -> navigateToWeatherWithDelay(interaction.latLng)
             LocationUserInteraction.Redirection -> redirectToLocationApiPage()
             LocationUserInteraction.FindByQuery -> findTypedLocation()
@@ -64,15 +60,17 @@ class LocationViewModel(
             LocationUserInteraction.DismissLocationPermissionsDialog -> setState {
                 copy(showRequireLocationPermissionsDialog = false)
             }
+
             LocationUserInteraction.RequestLocationPermissions -> onRequestPermissions()
             is LocationUserInteraction.UpdateFavoriteLocation -> updateFavoriteLocation(interaction.favoriteLocationDto)
             is LocationUserInteraction.ToggleEditFavoriteLocationDialog -> setState {
                 copy(
                     showEditLocationDialog = interaction.item,
                     editLocationText = interaction.item?.customName
-                        ?.ifEmpty { interaction.item.cityName } ?: "",
+                        ?.ifEmpty { interaction.item.cityName } ?: EMPTY_STRING,
                 )
             }
+
             is LocationUserInteraction.SetDefaultLocationName -> setDefaultLocationName(interaction.item)
         }
     }
@@ -86,13 +84,12 @@ class LocationViewModel(
     private fun findTypedLocation() {
         launch {
             setState { copy(isLoading = true) }
-            val resultGeo = locationRepository.fetchGeocodingResultOrError(
-                state.value.geoText,
-                state.value.lang.id.lowercase()
+            val resultGeo = locationInteractor.fetchGeocodingResultOrError(
+                query = state.value.geoText,
             )
             setState {
                 copy(
-                    geoResponses = resultGeo.geoResponse,
+                    geoData = resultGeo.geoData,
                     isLoading = false,
                     showPickerDialog = true
                 )
@@ -110,28 +107,31 @@ class LocationViewModel(
         setState { copy(showRequireLocationPermissionsDialog = false) }
     }
 
-    private fun onConfirmLocation(geoResponse: GeoResponse) {
+    private fun onConfirmLocation(geoData: GeoData) {
         setAction(
             LocationMainAction.NavigateToWeather(
-                query = "${geoResponse.lat},${geoResponse.lon}",
+                query = "${geoData.lat},${geoData.lon}",
             )
         )
-        setState { copy(geoText = "", geoResponses = null) }
+        setState { copy(geoText = EMPTY_STRING, geoData = null) }
     }
 
-    private fun deleteFavoriteLocation(favoriteLocationDto: FavoriteLocationDto) =
+    private fun deleteFavoriteLocation(favoriteLocationDto: FavoriteLocation) =
         launch {
-            val deleted = roomProvider.deleteItem(favoriteLocationDto)
-            if (deleted) onSuccess(ActionResultProvider.DELETED)
-            else onError(ActionResultProvider.FAIL)
+            val deleted = locationInteractor.deleteFavoriteLocation(favoriteLocationDto)
+            if (deleted) {
+                onSuccess(ActionResultProvider.DELETED)
+            } else {
+                onError(ActionResultProvider.FAIL)
+            }
         }
 
-    private fun updateFavoriteLocation(favoriteLocationDto: FavoriteLocationDto) {
+    private fun updateFavoriteLocation(favoriteLocationDto: FavoriteLocation) {
         launch {
             setState { copy(showEditLocationDialog = null) }
             val inputText = state.value.editLocationText
             val locationToSave = favoriteLocationDto.copy(customName = inputText)
-            val updated = roomProvider.updateLocation(locationToSave)
+            val updated = locationInteractor.updateLocation(locationToSave)
             if (updated) {
                 onSuccess(ActionResultProvider.UPDATED)
             } else {
@@ -140,11 +140,11 @@ class LocationViewModel(
         }
     }
 
-    private fun setDefaultLocationName(favoriteLocationDto: FavoriteLocationDto) {
+    private fun setDefaultLocationName(favoriteLocationDto: FavoriteLocation) {
         launch {
             setState { copy(showEditLocationDialog = null) }
             val locationToSave = favoriteLocationDto.copy(customName = favoriteLocationDto.cityName)
-            val updated = roomProvider.updateLocation(locationToSave)
+            val updated = locationInteractor.updateLocation(locationToSave)
             if (updated) {
                 onSuccess(ActionResultProvider.UPDATED)
             } else {
@@ -161,11 +161,9 @@ class LocationViewModel(
         queryResultFlow.emit(QueryResult(code))
     }
 
-    private fun onNewLocations(locationsList: List<FavoriteLocationDto>) {
+    private fun onNewLocations(locationsList: List<FavoriteLocation>) {
         setState { copy(locations = locationsList) }
     }
-
-    private fun collectLanguage(language: Language) = setState { copy(lang = language) }
 
     private fun collectQueryResult(queryResult: QueryResult) {
         if (shouldIgnoreError(queryResult.code)) {
@@ -186,7 +184,7 @@ class LocationViewModel(
         }
     }
 
-    private fun onFavoriteLocation(location: FavoriteLocationDto) {
+    private fun onFavoriteLocation(location: FavoriteLocation) {
         setAction(
             LocationMainAction.NavigateToWeather(
                 query = location.toQuery(),

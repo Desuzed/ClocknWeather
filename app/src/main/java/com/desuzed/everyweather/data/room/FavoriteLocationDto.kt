@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.desuzed.everyweather.domain.model.weather.Location
-import com.desuzed.everyweather.util.DecimalFormatter
 
 @Entity(tableName = "favorite_location_table")
 data class FavoriteLocationDto(
@@ -25,23 +24,19 @@ data class FavoriteLocationDto(
         } else country
     }
 
-    fun toQuery(): String = "$lat, $lon"
-
     companion object {
-        fun generateKey(location: Location): String {
-            val lat = DecimalFormatter.formatFloatWithRoundingMode(location.lat)
-            val lon = DecimalFormatter.formatFloatWithRoundingMode(location.lon)
-            return "$lat,$lon"
-        }
 
-        fun buildFavoriteLocationObj(location: Location): FavoriteLocationDto {
+        fun buildFavoriteLocationObj(
+            location: Location,
+            latLon: String,
+        ): FavoriteLocationDto {
             return FavoriteLocationDto(
-                generateKey(location),
-                location.name,
-                location.region,
-                location.country,
-                location.lat.toString(),
-                location.name,
+                latLon = latLon,
+                cityName = location.name,
+                region = location.region,
+                country = location.country,
+                lat = location.lat.toString(),
+                lon = location.name,
             )
         }
     }

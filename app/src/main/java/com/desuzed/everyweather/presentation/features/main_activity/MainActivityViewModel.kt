@@ -1,32 +1,30 @@
 package com.desuzed.everyweather.presentation.features.main_activity
 
 import androidx.lifecycle.viewModelScope
-import com.desuzed.everyweather.data.repository.local.SettingsDataStore
-import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
+import com.desuzed.everyweather.domain.interactor.SystemInteractor
+import com.desuzed.everyweather.domain.interactor.SystemSettingsInteractor
 import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.location.UserLocationResult
 import com.desuzed.everyweather.domain.model.result.ActionResult
 import com.desuzed.everyweather.domain.model.settings.DarkMode
-import com.desuzed.everyweather.domain.model.settings.DarkTheme
 import com.desuzed.everyweather.domain.model.settings.Lang
-import com.desuzed.everyweather.domain.model.settings.Language
-import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.presentation.base.UserInteraction
 import com.desuzed.everyweather.util.Constants.LANG_RU_LOWERCASE
-import com.desuzed.everyweather.util.NetworkConnection
 import com.desuzed.everyweather.util.Timer
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
 class MainActivityViewModel(
-    networkConnection: NetworkConnection,
-    private val settingsDataStore: SettingsDataStore,
-    private val sharedPrefsProvider: SharedPrefsProvider,
-    private val userLocationProvider: UserLocationProvider,
+    private val systemInteractor: SystemInteractor,
+    private val systemSettingsInteractor: SystemSettingsInteractor,
 ) : BaseViewModel<MainActivityState, MainActivityAction, UserInteraction>(MainActivityState()) {
 
     private val _isLookingForLocation = MutableSharedFlow<Boolean>(
@@ -36,7 +34,7 @@ class MainActivityViewModel(
     )
     val isLookingForLocation: Flow<Boolean> = _isLookingForLocation.asSharedFlow()
 
-    val hasInternet = networkConnection.hasInternetFlow()
+    val hasInternet = systemInteractor.hasInternetFlow()
 
     private val _userLatLng = MutableSharedFlow<UserLatLng?>(
         replay = 0,
@@ -55,9 +53,9 @@ class MainActivityViewModel(
     private var timerJob: Job? = null
 
     init {
-        collect(settingsDataStore.lang, ::collectLanguage)
-        collect(settingsDataStore.darkMode, ::collectDarkTheme)
-        collect(userLocationProvider.userLocationFlow, ::collectUserLocationResult)
+        collect(systemSettingsInteractor.lang, ::collectLanguage)
+        collect(systemSettingsInteractor.darkMode, ::collectDarkTheme)
+        collect(systemInteractor.userLocationFlow(), ::collectUserLocationResult)
     }
 
     fun onLanguage(appLanguage: String?) {
@@ -66,40 +64,36 @@ class MainActivityViewModel(
                 LANG_RU_LOWERCASE -> Lang.RU
                 else -> Lang.EN
             }
-            settingsDataStore.setLanguage(lang)
+            systemSettingsInteractor.setLanguage(lang)
         }
     }
 
     fun findUserLocation() {
-        val shouldToggle = userLocationProvider.findUserLocation()
+        val shouldToggle = systemInteractor.findUserLocation()
         toggleLookingForLocation(shouldToggle)
         if (shouldToggle) {
             timerJob = viewModelScope.launch {
                 Timer.timerFlow(TIMER_DURATION).onCompletion {
                     if (it !is CancellationException) {
-                        cancelLookingForLocation()
+                        systemInteractor.cancelLookingForLocation()
                     }
                 }.collect()
             }
         }
     }
 
-    fun areLocationPermissionsGranted(): Boolean = userLocationProvider.arePermissionsGranted()
+    fun areLocationPermissionsGranted(): Boolean = systemInteractor.arePermissionsGranted()
 
-    fun isFirstRun() = sharedPrefsProvider.isFirstRunApp()
+    fun isFirstRun() = systemInteractor.isFirstRunApp()
 
-    private fun cancelLookingForLocation() {
-        userLocationProvider.onCancel()
-    }
-
-    private fun collectLanguage(lang: Language) {
-        val lowercaseLang = lang.id.lowercase()
+    private fun collectLanguage(lang: Lang) {
+        val lowercaseLang = lang.lang.lowercase()
         setState { copy(lang = lowercaseLang) }
         setAction(MainActivityAction.ChangeLanguage(lowercaseLang))
     }
 
-    private fun collectDarkTheme(theme: DarkTheme) {
-        val mode = DarkMode.valueOf(theme.id.uppercase())
+    private fun collectDarkTheme(darkMode: DarkMode) {
+        val mode = DarkMode.valueOf(darkMode.mode.uppercase())
         setAction(MainActivityAction.ChangeDarkMode(mode))
     }
 

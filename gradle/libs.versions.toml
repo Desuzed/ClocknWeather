@@ -1,0 +1,119 @@
+[versions]
+agp = "8.2.1"
+kotlinGradlePlugin = "1.7.20"
+kotlin = "1.9.20"
+kotlinKsp = "1.9.20-1.0.14"
+compose = "1.6.7"
+androidx-activityCompose = "1.9.0"
+compose-compiler = "1.5.4"
+mapsCompose = "4.4.1"
+coilCompose = "2.4.0"
+navigation = "2.7.7"
+coroutines = "1.7.3"
+koin = "3.5.3"
+retrofit = "2.9.0"
+loggingInterceptor = "4.9.1"
+room = "2.6.1"
+datastorePreferences = "1.1.1"
+secretsGradlePlugin = "2.0.1"
+android-lifecycle = "2.7.0"
+#todo проверить старую ошибку с локалями и темной темой
+appUpdate = "2.1.0"
+
+firebaseCrashlytics = "19.0.0"
+firebaseCrashlyticsGradle = "2.9.9"
+firebaseAnalytics = "22.0.0"
+googleServices = "4.4.1"
+playServicesLocation = "21.2.0"
+playServicesMaps = "18.2.0"
+playServicesAds = "23.0.0"
+junit = "4.13.2"
+androidx-junit = "1.1.5"
+espressoCore = "3.5.1"
+
+
+[libraries]
+#Gradle
+gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePlugin" }
+#TODO Возможно можно удалить
+android-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "android-lifecycle" }
+
+#Compose
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+composeUiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+compose-maps = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+
+#Navigation (TODO удалить после миграции на компоуз)
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+
+#Coroutines
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
+#Network
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+
+#Room DB
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+#Datastore
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+
+#Koin
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+
+#Google Services
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+
+#Analytic
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
+firebase-crashlyticsGradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
+
+#Util
+app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdate" }
+secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
+
+#Test
+junit = { module = "junit:junit", version.ref = "junit" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinKsp" }
+kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+
+[bundles]
+#DI
+compose = [
+    "androidx-activity-compose",
+    "compose-material",
+    "coil-compose",
+    "compose-maps",
+    "composeUiTooling"
+]
+network = ["retrofit", "converter-gson", "logging-interceptor"]
+koin = ["koin-core", "koin-android", "koin-compose"]
+google-services = [
+    "play-services-location",
+    "play-services-maps",
+    "play-services-ads",
+    "google-services",
+]
+analytic = ["firebase-crashlytics", "firebase-analytics"]

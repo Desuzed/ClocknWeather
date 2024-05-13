@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.presentation.features.location_main.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -14,11 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.presentation.features.location_main.LocationMainState
 import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.AppAlertDialog
 import com.desuzed.everyweather.ui.elements.AppDialog
 import com.desuzed.everyweather.ui.elements.FloatingButton
@@ -27,20 +26,17 @@ import com.desuzed.everyweather.ui.elements.RegularText
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.MockWeatherObject
 
-@Preview(
-    showBackground = true,
-    widthDp = 400,
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "PreviewLocationMainContent"
-)
+@AppPreview
 @Composable
-private fun PreviewWeatherMainContent() {
-    LocationMainContent(
-        state = LocationMainState(locations = MockWeatherObject.locations),
-        onUserInteraction = {},
-        onGeoTextChanged = {},
-        onNewEditLocationText = {},
-    )
+private fun Preview() {
+    EveryweatherTheme {
+        LocationMainContent(
+            state = LocationMainState(locations = MockWeatherObject.locations),
+            onUserInteraction = {},
+            onGeoTextChanged = {},
+            onNewEditLocationText = {},
+        )
+    }
 }
 
 @Composable
@@ -51,7 +47,7 @@ fun LocationMainContent(
     onNewEditLocationText: (text: String) -> Unit,
 ) {
     EveryweatherTheme {
-        val showDeleteDialog = remember { mutableStateOf<FavoriteLocationDto?>(null) }
+        val showDeleteDialog = remember { mutableStateOf<FavoriteLocation?>(null) }
         GradientBox(
             colors = listOf(
                 EveryweatherTheme.colors.secondaryGradientStart,
@@ -59,19 +55,23 @@ fun LocationMainContent(
             )
         ) {
             LocationMainPageContent(
-                state = state,
+                locations = state.locations,
+                isLoading = state.isLoading,
+                geoText = state.geoText,
                 onUserInteraction = onUserInteraction,
                 onGeoTextChanged = onGeoTextChanged,
-                showDeleteDialog = showDeleteDialog,
+                onShowDeleteDialog = {
+                    showDeleteDialog.value = it
+                }
             )
 
-            if (state.showPickerDialog && state.geoResponses != null) {
+            if (state.showPickerDialog && state.geoData != null) {
                 AppDialog(
                     modifier = Modifier.fillMaxHeight(fraction = 0.9f),
                     onDismiss = {
                         onUserInteraction(LocationUserInteraction.DismissLocationPicker)
                     }) {
-                    GeoLocationsPickerContent(state.geoResponses, onUserInteraction)
+                    GeoLocationsPickerContent(state.geoData, onUserInteraction)
                 }
             }
             if (showDeleteDialog.value != null) {

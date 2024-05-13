@@ -9,19 +9,42 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.room.FavoriteLocationDto
+import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.AppDialog
 import com.desuzed.everyweather.ui.elements.MediumText
 import com.desuzed.everyweather.ui.elements.OutlinedIconEditText
 import com.desuzed.everyweather.ui.elements.RegularText
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.Constants.EMPTY_STRING
+
+@AppPreview
+@Composable
+private fun Preview() {
+    EveryweatherTheme {
+        EditLocationDialogContent(
+            editLocationText = EMPTY_STRING,
+            location = FavoriteLocation(
+                latLon = "11",
+                cityName = "22",
+                region = "region",
+                country = "country",
+                lat = "444",
+                lon = "555",
+                customName = "custom name",
+            ),
+            onNewEditLocationText = {},
+            onUserInteraction = {},
+        )
+    }
+}
 
 @Composable
 fun EditLocationDialogContent(
     editLocationText: String,
+    location: FavoriteLocation,
     onNewEditLocationText: (text: String) -> Unit,
-    location: FavoriteLocationDto,
     onUserInteraction: (LocationUserInteraction) -> Unit,
 ) {
     val onDismiss = {
@@ -44,8 +67,7 @@ fun EditLocationDialogContent(
             )
             OutlinedIconEditText(
                 text = editLocationText,
-                modifier = Modifier
-                    .padding(vertical = dimensionResource(id = R.dimen.dimen_20)),
+                modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.dimen_20)),
                 hint = stringResource(id = R.string.enter_name),
                 onTextChanged = onNewEditLocationText,
                 backgroundColor = EveryweatherTheme.colors.editTextBg,

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
@@ -18,6 +17,7 @@ import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainFragment
 import com.desuzed.everyweather.util.addOnBackPressedCallback
 import com.desuzed.everyweather.util.collect
+import com.desuzed.everyweather.util.collectAsStateWithLifecycle
 import com.desuzed.everyweather.util.navigate
 import com.desuzed.everyweather.util.navigateBackWithParameter
 import com.desuzed.everyweather.util.onBackClick
@@ -33,7 +33,7 @@ class LocationFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val state by viewModel.state.collectAsState()
+                val state by viewModel.state.collectAsStateWithLifecycle(LocationMainState())
                 LocationMainContent(
                     state = state,
                     onUserInteraction = viewModel::onUserInteraction,

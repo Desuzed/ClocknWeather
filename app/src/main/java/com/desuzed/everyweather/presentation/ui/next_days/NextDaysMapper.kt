@@ -1,19 +1,19 @@
 package com.desuzed.everyweather.presentation.ui.next_days
 
 import android.content.res.Resources
-import com.desuzed.everyweather.domain.model.settings.Language
-import com.desuzed.everyweather.domain.model.settings.Pressure
-import com.desuzed.everyweather.domain.model.settings.Temperature
-import com.desuzed.everyweather.domain.model.settings.WindSpeed
+import com.desuzed.everyweather.domain.model.settings.DistanceDimen
+import com.desuzed.everyweather.domain.model.settings.Lang
+import com.desuzed.everyweather.domain.model.settings.PressureDimen
+import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.presentation.ui.HourUi
 
 class NextDaysMapper(
-    private val windSpeed: WindSpeed,
-    private val temperature: Temperature,
-    private val language: Language,
+    private val windSpeed: DistanceDimen,
+    private val temperature: TempDimen,
+    private val language: Lang,
     private val resources: Resources,
-    private val pressure: Pressure,
+    private val pressure: PressureDimen,
 ) {
 
     fun mapToNextDaysList(entity: WeatherContent): List<NextDaysUi> {

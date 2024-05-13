@@ -94,5 +94,6 @@
     <string name="celcius" translatable="false">°C</string>
     <string name="retry_again">Please, retry again</string>
     <string name="update_available_update_in_background_button">Update in background</string>
+    <string name="could_not_load_hourly_weather">Could not load hourly weather</string>
 
 </resources>

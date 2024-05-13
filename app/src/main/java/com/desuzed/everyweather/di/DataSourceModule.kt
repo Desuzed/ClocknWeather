@@ -1,14 +1,13 @@
 package com.desuzed.everyweather.di
 
 import androidx.room.Room
-import com.desuzed.everyweather.data.repository.local.RoomProviderImpl
-import com.desuzed.everyweather.data.repository.local.SettingsDataStore
+import com.desuzed.everyweather.data.repository.local.LocationDbImpl
 import com.desuzed.everyweather.data.repository.local.SharedPrefsProviderImpl
-import com.desuzed.everyweather.data.repository.remote.RemoteDataSourceImpl
 import com.desuzed.everyweather.data.room.RoomDbApp
-import com.desuzed.everyweather.domain.repository.local.RoomProvider
+import com.desuzed.everyweather.domain.repository.local.LocationDb
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
-import com.desuzed.everyweather.domain.repository.remote.RemoteDataSource
+import com.desuzed.everyweather.domain.repository.settings.DatastoreApiProvider
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
@@ -23,9 +22,12 @@ val localDataSourceModule = module {
         get<RoomDbApp>().favoriteLocationDAO()
     }
 
-    single<RoomProvider> {
-        RoomProviderImpl(
-            favoriteLocationDAO = get()
+    single<LocationDb> {
+        LocationDbImpl(
+            favoriteLocationDAO = get(),
+            favoriteLocationMapper = get(),
+            latLngKeyGenerator = get(),
+            dispatcher = Dispatchers.IO,
         )
     }
 
@@ -33,12 +35,7 @@ val localDataSourceModule = module {
         SharedPrefsProviderImpl(androidApplication())
     }
 
-    single<RemoteDataSource> {
-        RemoteDataSourceImpl(weatherApi = get(), locationIqApi = get())
+    single {
+        DatastoreApiProvider(context = get())
     }
-
-    single<SettingsDataStore> {
-        SettingsDataStore(context = androidApplication())
-    }
-
 }

@@ -13,8 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.settings.BaseSettingItem
-import com.desuzed.everyweather.domain.model.settings.SettingUiItem
+import com.desuzed.everyweather.presentation.ui.settings.BaseSettingItem
+import com.desuzed.everyweather.presentation.ui.settings.SettingUiItem
 import com.desuzed.everyweather.ui.elements.AppRadioButton
 import com.desuzed.everyweather.ui.elements.MediumText
 

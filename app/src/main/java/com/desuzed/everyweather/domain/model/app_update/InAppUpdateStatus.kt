@@ -1,7 +1,7 @@
 package com.desuzed.everyweather.domain.model.app_update
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class InAppUpdateStatus : Parcelable {

@@ -17,18 +17,44 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.settings.BaseSettingItem
 import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.presentation.ui.settings.BaseSettingItem
+import com.desuzed.everyweather.presentation.ui.settings.DarkTheme
+import com.desuzed.everyweather.presentation.ui.settings.Language
+import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.MediumText
 import com.desuzed.everyweather.ui.elements.RoundedCardItem
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.Constants.EMPTY_STRING
+
+@AppPreview
+@Composable
+private fun Preview() {
+    EveryweatherTheme {
+        SettingsMenuGroupContent(
+            items = listOf(
+                DarkTheme(
+                    id = "OFF",
+                    categoryStringId = R.string.dark_mode,
+                    valueStringId = R.string.on,
+                ),
+                Language(
+                    id = "RU",
+                    categoryStringId = R.string.language,
+                    valueStringId = R.string.russian,
+                )
+            ),
+            onUserInteraction = {},
+        )
+    }
+}
 
 @Composable
 fun SettingsMenuGroupContent(
     modifier: Modifier = Modifier,
     items: List<BaseSettingItem>,
-    onUserInteraction: (SettingsUserInteraction) -> Unit
+    onUserInteraction: (SettingsUserInteraction) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     RoundedCardItem(
@@ -45,7 +71,7 @@ fun SettingsMenuGroupContent(
                     modifier = Modifier
                         .padding(
                             horizontal = dimensionResource(id = R.dimen.dimen_10),
-                            vertical = dimensionResource(id = R.dimen.dimen_8)
+                            vertical = dimensionResource(id = R.dimen.dimen_8),
                         )
                         .fillMaxWidth()
                         .clickable(
@@ -55,24 +81,22 @@ fun SettingsMenuGroupContent(
                         ),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-
-                    ) {
+                ) {
                     Column {
                         BoldText(
                             text = stringResource(id = item.categoryStringId),
-                            onClick = onItemCLick
+                            onClick = onItemCLick,
                         )
                         MediumText(text = stringResource(item.valueStringId))
                     }
                     Icon(
                         modifier = Modifier.rotate(90f),
                         painter = painterResource(id = R.drawable.ic_arrow_24),
-                        contentDescription = "",
-                        tint = EveryweatherTheme.colors.textColorPrimary
+                        contentDescription = EMPTY_STRING,
+                        tint = EveryweatherTheme.colors.textColorPrimary,
                     )
                 }
             }
-
         }
     }
 }

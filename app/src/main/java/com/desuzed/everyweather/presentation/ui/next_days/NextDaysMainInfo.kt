@@ -2,17 +2,16 @@ package com.desuzed.everyweather.presentation.ui.next_days
 
 import android.content.res.Resources
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.domain.model.settings.Language
+import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.settings.TempDimen
-import com.desuzed.everyweather.domain.model.settings.Temperature
 import com.desuzed.everyweather.domain.model.weather.ForecastDay
 import com.desuzed.everyweather.util.Constants.HTTPS_SCHEME
 import com.desuzed.everyweather.util.DateFormatter
 import kotlin.math.roundToInt
 
 class NextDaysMainInfo(
-    language: Language,
-    temperature: Temperature,
+    language: Lang,
+    temperature: TempDimen,
     forecastDay: ForecastDay,
     timeZone: String,
     res: Resources,
@@ -30,19 +29,18 @@ class NextDaysMainInfo(
             pattern = DateFormatter.fullDatePattern,
             timeInMills = forecastDay.dateEpoch,
             timeZone = timeZone,
-            lang = language.id.lowercase(),
+            lang = language.lang.lowercase(),
         )
         description = day.text
 
         val maxTemperature: Float
         val minTemperature: Float
-        val id = temperature.id.uppercase()
-        val tempDimen = TempDimen.valueOf(id)
-        when (tempDimen) {
+        when (temperature) {
             TempDimen.CELCIUS -> {
                 maxTemperature = day.maxTempC
                 minTemperature = day.minTempC
             }
+
             TempDimen.FAHRENHEIT -> {
                 maxTemperature = day.maxTempF
                 minTemperature = day.minTempF

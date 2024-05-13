@@ -11,7 +11,7 @@ class LocationMainAnalytics(context: Context) : Analytics(context = context) {
             is LocationUserInteraction.DeleteFavoriteLocation -> logEvent(DELETE_LOCATION)
             is LocationUserInteraction.UpdateFavoriteLocation -> logEvent(UPDATE_LOCATION)
             is LocationUserInteraction.SetDefaultLocationName -> logEvent(SET_DEFAULT_LOCATION)
-            is LocationUserInteraction.FavoriteLocation -> logEvent(FAVORITE_LOCATION)
+            is LocationUserInteraction.FavoriteLocationClick -> logEvent(FAVORITE_LOCATION)
             LocationUserInteraction.FindByQuery -> logEvent(FIND_BY_QUERY)
             LocationUserInteraction.FindOnMap -> logEvent(NAVIGATE_TO_MAP)
             LocationUserInteraction.MyLocation -> logEvent(MY_LOCATION)
