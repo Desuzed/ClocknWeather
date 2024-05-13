@@ -1,4 +1,10 @@
 [versions]
+appPackageName = "com.desuzed.everyweather"
+androidMinSdk = "21"
+androidTargetSdk = "34"
+androidCompileSdk = "34"
+appVersion = "8"
+appVersionName = "2.1.2"
 agp = "8.2.1"
 kotlinGradlePlugin = "1.7.20"
 kotlin = "1.9.20"
