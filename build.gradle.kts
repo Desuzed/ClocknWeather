@@ -1,10 +1,10 @@
 buildscript {
     dependencies {
-        classpath libs.secrets.gradle.plugin
-        classpath libs.google.services
-        classpath libs.firebase.crashlyticsGradle
-        classpath libs.kotlin.gradle.plugin
-        classpath libs.gradle
+        classpath(libs.secrets.gradle.plugin)
+        classpath(libs.google.services)
+        classpath(libs.firebase.crashlyticsGradle)
+        classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.gradle)
     }
 }
 plugins {
