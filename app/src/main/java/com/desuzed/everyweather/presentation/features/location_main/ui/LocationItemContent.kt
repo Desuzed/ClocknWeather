@@ -58,7 +58,7 @@ fun LocationItemContent(
         shape = RoundedCornerShape(
             dimensionResource(id = R.dimen.corner_radius_16),
         ),
-        backgroundColor = EveryweatherTheme.colors.onSurface,
+        backgroundColor = EveryweatherTheme.colors.surfacePrimary,
         elevation = dimensionResource(id = R.dimen.dimen_4)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -82,8 +82,8 @@ fun LocationItemContent(
             IconButton(onClick = { onEditClick(item) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_edit_location),
-                    tint = EveryweatherTheme.colors.textColorPrimary,
-                    contentDescription = ""
+                    tint = EveryweatherTheme.colors.onBackgroundPrimary,
+                    contentDescription = null,
                 )
             }
         }

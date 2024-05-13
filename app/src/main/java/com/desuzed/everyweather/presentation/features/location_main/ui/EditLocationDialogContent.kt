@@ -70,7 +70,7 @@ fun EditLocationDialogContent(
                 modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.dimen_20)),
                 hint = stringResource(id = R.string.enter_name),
                 onTextChanged = onNewEditLocationText,
-                backgroundColor = EveryweatherTheme.colors.editTextBg,
+                backgroundColor = EveryweatherTheme.colors.surfaceOnPrimaryBg,
                 isLoading = false,
                 iconResId = R.drawable.ic_round_save_24,
             ) {
@@ -85,7 +85,7 @@ fun EditLocationDialogContent(
                     .fillMaxWidth()
                     .padding(top = dimensionResource(id = R.dimen.dimen_10)),
                 textAlign = TextAlign.End,
-                color = EveryweatherTheme.colors.urlLinkTextColor,
+                color = EveryweatherTheme.colors.accent,
                 text = stringResource(id = R.string.set_default_name),
                 onClick = {
                     onUserInteraction(LocationUserInteraction.SetDefaultLocationName(location))

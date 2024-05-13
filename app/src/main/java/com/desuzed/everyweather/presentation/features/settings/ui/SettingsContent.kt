@@ -26,8 +26,10 @@ import com.desuzed.everyweather.presentation.features.settings.SettingsUserInter
 import com.desuzed.everyweather.presentation.ui.settings.SettingsMapper
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
+import com.desuzed.everyweather.ui.elements.GradientBox
 import com.desuzed.everyweather.ui.elements.LargeBoldText
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.Constants.EMPTY_STRING
 
 @AppPreview
 @Composable
@@ -64,11 +66,12 @@ fun SettingsContent(
         )
     }
     EveryweatherTheme {
-        Box(
+        GradientBox(
             modifier = Modifier
                 .fillMaxSize()
                 .navigationBarsPadding()
-                .padding(dimensionResource(id = R.dimen.dimen_10))
+                .padding(dimensionResource(id = R.dimen.dimen_10)),
+            colors = EveryweatherTheme.colors.primaryBackground,
         ) {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -91,8 +94,8 @@ fun SettingsContent(
                         content = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_round_arrow_back),
-                                contentDescription = "",
-                                tint = EveryweatherTheme.colors.textColorPrimary
+                                contentDescription = EMPTY_STRING,
+                                tint = EveryweatherTheme.colors.onBackgroundPrimary
                             )
                         }
                     )

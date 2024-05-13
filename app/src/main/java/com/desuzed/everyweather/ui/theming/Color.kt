@@ -5,21 +5,18 @@ import androidx.compose.ui.graphics.Color
 
 data class EveryweatherColors(
     val primary: Color,
-    val secondary: Color,
-    val tertiary: Color,
-    val onSurface: Color,
-    val textColorPrimary: Color,
-    val textColorSecondary: Color,
-    val buttonTextColor: Color,
-    val editTextStrokeColor: Color,
-    val primaryGradientStart: Color,
-    val primaryGradientEnd: Color,
-    val secondaryGradientStart: Color,
-    val secondaryGradientEnd: Color,
-    val bottomDialogBackground: Color,
-    val urlLinkTextColor: Color,
-    val editTextBg: Color,
-    val textBg: Color = Gray30Alpha,
+    val primaryBackground: List<Color>,
+    val secondaryBackground: List<Color>,
+    val tertiaryBackground: Color,
+    val surfacePrimary: Color,
+    val surfaceSecondary: Color,
+    val surfaceOnPrimaryBg: Color,
+    val surfaceOnSecondaryBg: Color = Gray30Alpha,
+    val onBackgroundPrimary: Color,
+    val onBackgroundSecondary: Color,
+    val onPrimary: Color,
+    val neutral: Color,
+    val accent: Color,
 )
 
 //MaterialColors
@@ -46,43 +43,37 @@ val BackgroundGradientLightStart = LightBlue50customized
 val BackgroundGradientLightEnd = Color(0xFF00C4DE)
 val BackgroundGradientNightStart = Indigo700customized
 val BackgroundGradientNightEnd = Color(0xFF011131)
-val SecondaryGradientNightStart = Color(0xFF000716)
-val SecondaryGradientNightEnd = Color(0xFF000E2E)
+val PrimaryGradientNightStart = Color(0xFF000716)
+val PrimaryGradientNightEnd = Color(0xFF000E2E)
 
 val LightColorPalette = EveryweatherColors(
-    primary = LightBlue50customized,
-    secondary = indigo700,
-    tertiary = Blue50customized,
-    onSurface = Blue50DarkCustomized,
-    textColorPrimary = NearDark,
-    textColorSecondary = White,
-    buttonTextColor = NearWhite,
-    editTextStrokeColor = Gray,
-    primaryGradientStart = BackgroundGradientLightStart,
-    primaryGradientEnd = BackgroundGradientLightEnd,
-    secondaryGradientStart = White,
-    secondaryGradientEnd = White,
-    bottomDialogBackground = White,
-    urlLinkTextColor = Indigo700customized,
-    editTextBg = White,
+    primary = indigo700,
+    surfacePrimary = Blue50DarkCustomized,
+    surfaceSecondary = Blue50customized,
+    onBackgroundPrimary = NearDark,
+    onBackgroundSecondary = White,
+    onPrimary = NearWhite,
+    neutral = Gray,
+    primaryBackground = listOf(White, White),
+    secondaryBackground = listOf(BackgroundGradientLightStart, BackgroundGradientLightEnd),
+    tertiaryBackground = White,
+    accent = Indigo700customized,
+    surfaceOnPrimaryBg = White,
 )
 
 val DarkColorPalette = EveryweatherColors(
-    primary = Indigo700customized,
-    secondary = lightBlue700,
-    tertiary = Indigo300DarkCustomized,
-    onSurface = Indigo400DarkCustomized,
-    textColorPrimary = NearWhite,
-    textColorSecondary = NearWhite,
-    buttonTextColor = NearWhite,
-    editTextStrokeColor = Gray,
-    primaryGradientStart = BackgroundGradientNightStart,
-    primaryGradientEnd = BackgroundGradientNightEnd,
-    secondaryGradientStart = SecondaryGradientNightStart,
-    secondaryGradientEnd = SecondaryGradientNightEnd,
-    bottomDialogBackground = AlmostBlack,
-    urlLinkTextColor = LightBlue50customized,
-    editTextBg = Indigo300DarkCustomized,
+    primary = lightBlue700,
+    surfacePrimary = Indigo400DarkCustomized,
+    surfaceSecondary = Indigo300DarkCustomized,
+    onBackgroundPrimary = NearWhite,
+    onBackgroundSecondary = NearWhite,
+    onPrimary = NearWhite,
+    neutral = Gray,
+    primaryBackground = listOf(PrimaryGradientNightStart, PrimaryGradientNightEnd),
+    secondaryBackground = listOf(BackgroundGradientNightStart, BackgroundGradientNightEnd),
+    tertiaryBackground = AlmostBlack,
+    accent = LightBlue50customized,
+    surfaceOnPrimaryBg = Indigo300DarkCustomized,
 )
 
 val LocalAppColors = staticCompositionLocalOf<EveryweatherColors> {

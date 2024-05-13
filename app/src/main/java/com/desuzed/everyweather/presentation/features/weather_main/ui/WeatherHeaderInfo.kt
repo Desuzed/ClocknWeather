@@ -43,10 +43,7 @@ fun WeatherHeaderInfo(
         modifier = Modifier.onGloballyPositioned {
             onNewHeight(it.size.height)
         },
-        colors = listOf(
-            EveryweatherTheme.colors.primaryGradientStart,
-            EveryweatherTheme.colors.primaryGradientEnd,
-        )
+        colors = EveryweatherTheme.colors.secondaryBackground,
     ) {
         Column(
             modifier = Modifier
@@ -73,12 +70,12 @@ fun WeatherHeaderInfo(
                 )
                 UltraLargeBoldText(
                     text = mainInfoUi.currentTemp,
-                    color = EveryweatherTheme.colors.textColorSecondary
+                    color = EveryweatherTheme.colors.onBackgroundSecondary
                 )
             }
             MediumText(
                 text = mainInfoUi.feelsLike,
-                color = EveryweatherTheme.colors.textColorSecondary,
+                color = EveryweatherTheme.colors.onBackgroundSecondary,
             )
             Row(
                 modifier = Modifier,
@@ -87,17 +84,17 @@ fun WeatherHeaderInfo(
             ) {
                 MediumText(
                     text = mainInfoUi.date,
-                    color = EveryweatherTheme.colors.textColorSecondary,
+                    color = EveryweatherTheme.colors.onBackgroundSecondary,
                 )
                 DelimiterText()
                 MediumBoldText(
                     text = mainInfoUi.time,
-                    color = EveryweatherTheme.colors.textColorSecondary,
+                    color = EveryweatherTheme.colors.onBackgroundSecondary,
                 )
             }
             MediumText(
                 text = mainInfoUi.description,
-                color = EveryweatherTheme.colors.textColorSecondary,
+                color = EveryweatherTheme.colors.onBackgroundSecondary,
                 maxLines = 2,
                 textAlign = TextAlign.End
             )

@@ -93,7 +93,7 @@ fun SettingsMenuGroupContent(
                         modifier = Modifier.rotate(90f),
                         painter = painterResource(id = R.drawable.ic_arrow_24),
                         contentDescription = EMPTY_STRING,
-                        tint = EveryweatherTheme.colors.textColorPrimary,
+                        tint = EveryweatherTheme.colors.onBackgroundPrimary,
                     )
                 }
             }

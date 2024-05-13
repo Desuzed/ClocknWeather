@@ -128,8 +128,8 @@ fun WeatherMainContent(
                     .padding(top = dimensionResource(id = R.dimen.dimen_20)),
                 refreshing = state.isLoading,
                 state = refreshingState,
-                backgroundColor = EveryweatherTheme.colors.secondaryGradientStart,
-                contentColor = EveryweatherTheme.colors.secondary,
+                backgroundColor = EveryweatherTheme.colors.primaryBackground.first(),
+                contentColor = EveryweatherTheme.colors.primary,
             )
         }
     }

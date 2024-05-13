@@ -24,6 +24,7 @@ import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.presentation.ui.HourUi
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.Constants.EMPTY_STRING
 import com.desuzed.everyweather.util.MockWeatherObject
 
 @AppPreview
@@ -51,7 +52,7 @@ fun HourItemContent(hourItem: HourUi) {
         shape = RoundedCornerShape(
             dimensionResource(id = R.dimen.corner_radius_16),
         ),
-        backgroundColor = EveryweatherTheme.colors.onSurface,
+        backgroundColor = EveryweatherTheme.colors.surfacePrimary,
         elevation = dimensionResource(id = R.dimen.dimen_4)
     ) {
         Column(
@@ -62,7 +63,7 @@ fun HourItemContent(hourItem: HourUi) {
             BoldText(text = hourItem.temp)
             Image(
                 painter = rememberAsyncImagePainter(hourItem.iconUrl),
-                contentDescription = "",
+                contentDescription = EMPTY_STRING,
                 modifier = Modifier.size(size = dimensionResource(id = R.dimen.dimen_34))
             )
             Row(
@@ -72,7 +73,7 @@ fun HourItemContent(hourItem: HourUi) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_wind_direction),
                     contentDescription = "",
-                    colorFilter = ColorFilter.tint(EveryweatherTheme.colors.textColorPrimary),
+                    colorFilter = ColorFilter.tint(EveryweatherTheme.colors.onBackgroundPrimary),
                     modifier = Modifier
                         .rotate(hourItem.rotation)
                         .size(size = dimensionResource(id = R.dimen.dimen_12))

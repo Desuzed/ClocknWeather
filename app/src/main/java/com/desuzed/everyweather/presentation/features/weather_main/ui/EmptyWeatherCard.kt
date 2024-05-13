@@ -2,6 +2,7 @@ package com.desuzed.everyweather.presentation.features.weather_main.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,17 +35,15 @@ fun EmptyWeatherCard(
     onUserInteraction: (WeatherUserInteraction) -> Unit,
 ) {
     GradientBox(
-        colors = listOf(
-            EveryweatherTheme.colors.secondaryGradientStart,
-            EveryweatherTheme.colors.secondaryGradientEnd,
-        )
+        modifier = Modifier.fillMaxSize(),
+        colors = EveryweatherTheme.colors.primaryBackground,
     ) {
         Card(
             modifier = modifier
                 .padding(dimensionResource(id = R.dimen.dimen_20))
                 .align(Alignment.Center),
             shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
-            backgroundColor = EveryweatherTheme.colors.onSurface,
+            backgroundColor = EveryweatherTheme.colors.surfacePrimary,
             elevation = dimensionResource(id = R.dimen.dimen_4),
         ) {
             Column(

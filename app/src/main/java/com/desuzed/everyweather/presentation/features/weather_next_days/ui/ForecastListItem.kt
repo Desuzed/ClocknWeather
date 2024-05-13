@@ -45,7 +45,7 @@ fun ForecastListItem(
             )
             .fillMaxSize(),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
-        backgroundColor = EveryweatherTheme.colors.tertiary,
+        backgroundColor = EveryweatherTheme.colors.surfaceSecondary,
         elevation = dimensionResource(id = R.dimen.dimen_8),
     ) {
         Column(
