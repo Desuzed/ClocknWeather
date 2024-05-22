@@ -17,6 +17,12 @@ import com.desuzed.everyweather.R
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
+@AppPreview
+@Composable
+private fun PreviewAppAlertDialog() {
+    AppAlertDialog("Delete", onPositiveButtonClick = {}, {})
+}
+
 @Composable
 fun AppAlertDialog(title: String, onPositiveButtonClick: () -> Unit, onDismiss: () -> Unit) {
     AppDialog(onDismiss = onDismiss) {
@@ -53,16 +59,10 @@ fun AppDialog(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             modifier = modifier,
-            color = EveryweatherTheme.colors.onSurface,
+            color = EveryweatherTheme.colors.surfacePrimary,
             shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
         ) {
             content()
         }
     }
-}
-
-@AppPreview
-@Composable
-private fun PreviewAppAlertDialog() {
-    AppAlertDialog("Delete", onPositiveButtonClick = {}, {})
 }

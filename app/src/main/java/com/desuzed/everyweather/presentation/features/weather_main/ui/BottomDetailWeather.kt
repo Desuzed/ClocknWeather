@@ -5,6 +5,7 @@ package com.desuzed.everyweather.presentation.features.weather_main.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -42,7 +43,6 @@ import com.desuzed.everyweather.ui.elements.CardDetailDayItem
 import com.desuzed.everyweather.ui.elements.GradientBox
 import com.desuzed.everyweather.ui.elements.HourItemContent
 import com.desuzed.everyweather.ui.elements.LinkText
-import com.desuzed.everyweather.ui.elements.MediumBoldText
 import com.desuzed.everyweather.ui.elements.MediumText
 import com.desuzed.everyweather.ui.elements.RoundedButton
 import com.desuzed.everyweather.ui.elements.RoundedCardItem
@@ -92,10 +92,8 @@ fun BottomDetailWeather(
     onUserInteraction: (WeatherUserInteraction) -> Unit
 ) {
     GradientBox(
-        colors = listOf(
-            EveryweatherTheme.colors.secondaryGradientStart,
-            EveryweatherTheme.colors.secondaryGradientEnd,
-        )
+        modifier = Modifier.fillMaxSize(),
+        colors = EveryweatherTheme.colors.primaryBackground,
     ) {
         Column(
             modifier = Modifier
@@ -120,13 +118,13 @@ fun BottomDetailWeather(
                 RoundedCardItem(modifier = Modifier.padding(top = 8.dp)) {
                     Column(modifier = Modifier.padding(20.dp)) {
                         MediumText(
-                            text = "Не удалось загрузить погоду по часам",
-                            color = EveryweatherTheme.colors.textColorPrimary,
+                            text = stringResource(id = R.string.could_not_load_hourly_weather),
+                            color = EveryweatherTheme.colors.onBackgroundPrimary,
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         MediumText(
-                            text = "Пожалуйста, попробуйте ещё раз",
-                            color = EveryweatherTheme.colors.textColorPrimary,
+                            text = stringResource(id = R.string.retry_again),
+                            color = EveryweatherTheme.colors.onBackgroundPrimary,
                         )
                     }
                 }

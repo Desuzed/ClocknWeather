@@ -1,12 +1,20 @@
 package com.desuzed.everyweather.presentation.features.weather_next_days.ui
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -30,7 +38,6 @@ private fun PreviewNextDaysBottomSheetContent() {
     NextDaysBottomSheetContent(state)
 }
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun NextDaysBottomSheetContent(
     state: NextDaysState,
@@ -39,16 +46,18 @@ fun NextDaysBottomSheetContent(
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
         val mappedWeatherUi = remember { mutableStateOf<List<NextDaysUi>?>(null) }
-        coroutineScope.launch {
-            mappedWeatherUi.value = withContext(Dispatchers.Default) {
-                state.weather?.let {
-                    UiMapper(
-                        context = context,
-                        selectedDistanceDimen = state.windSpeed,
-                        selectedTemperature = state.temperature,
-                        selectedLanguage = state.selectedLang,
-                        selectedPressure = state.pressure,
-                    ).mapToNextDaysUi(it)
+        LaunchedEffect(key1 = state.weather) {
+            coroutineScope.launch {
+                mappedWeatherUi.value = withContext(Dispatchers.Default) {
+                    state.weather?.let {
+                        UiMapper(
+                            context = context,
+                            selectedDistanceDimen = state.windSpeed,
+                            selectedTemperature = state.temperature,
+                            selectedLanguage = state.selectedLang,
+                            selectedPressure = state.pressure,
+                        ).mapToNextDaysUi(it)
+                    }
                 }
             }
         }
@@ -59,7 +68,7 @@ fun NextDaysBottomSheetContent(
                 topStart = dimensionResource(id = R.dimen.corner_radius_30),
                 topEnd = dimensionResource(id = R.dimen.corner_radius_30)
             ),
-            color = EveryweatherTheme.colors.bottomDialogBackground
+            color = EveryweatherTheme.colors.tertiaryBackground
         ) {
             Box(
                 modifier = Modifier

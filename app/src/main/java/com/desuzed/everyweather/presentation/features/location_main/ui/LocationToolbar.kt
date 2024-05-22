@@ -49,7 +49,7 @@ fun LocationToolbar(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_round_arrow_back),
                     contentDescription = EMPTY_STRING,
-                    tint = EveryweatherTheme.colors.textColorPrimary,
+                    tint = EveryweatherTheme.colors.onBackgroundPrimary,
                 )
             }
         )
@@ -75,7 +75,7 @@ fun LocationToolbar(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_settings),
                     contentDescription = EMPTY_STRING,
-                    tint = EveryweatherTheme.colors.secondary,
+                    tint = EveryweatherTheme.colors.primary,
                 )
             }
         )

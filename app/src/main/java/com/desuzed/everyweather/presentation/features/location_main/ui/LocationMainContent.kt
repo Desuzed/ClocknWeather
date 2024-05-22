@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.location_main.ui
 
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -49,10 +50,8 @@ fun LocationMainContent(
     EveryweatherTheme {
         val showDeleteDialog = remember { mutableStateOf<FavoriteLocation?>(null) }
         GradientBox(
-            colors = listOf(
-                EveryweatherTheme.colors.secondaryGradientStart,
-                EveryweatherTheme.colors.secondaryGradientEnd,
-            )
+            modifier = Modifier.fillMaxSize(),
+            colors = EveryweatherTheme.colors.primaryBackground,
         ) {
             LocationMainPageContent(
                 locations = state.locations,

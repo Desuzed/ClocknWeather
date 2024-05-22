@@ -3,13 +3,28 @@ package com.desuzed.everyweather.ui.elements
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldColors
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
+import com.desuzed.everyweather.util.Constants.EMPTY_STRING
 
 @Composable
 fun BoldText(
@@ -47,7 +63,7 @@ fun BoldText(
         ),
         text = text,
         style = EveryweatherTheme.typography.h3,
-        color = EveryweatherTheme.colors.textColorPrimary,
+        color = EveryweatherTheme.colors.onBackgroundPrimary,
         textAlign = textAlign,
     )
 }
@@ -57,7 +73,7 @@ fun RegularText(
     text: String,
     modifier: Modifier = Modifier,
     textAlign: TextAlign? = null,
-    color: Color = EveryweatherTheme.colors.textColorPrimary,
+    color: Color = EveryweatherTheme.colors.onBackgroundPrimary,
     overflow: TextOverflow = TextOverflow.Ellipsis,
     maxLines: Int = Int.MAX_VALUE,
     onClick: () -> Unit = {}
@@ -82,7 +98,7 @@ fun RegularText(
 fun MediumText(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = EveryweatherTheme.colors.textColorPrimary,
+    color: Color = EveryweatherTheme.colors.onBackgroundPrimary,
     overflow: TextOverflow = TextOverflow.Ellipsis,
     maxLines: Int = 1,
     textAlign: TextAlign? = null,
@@ -121,7 +137,7 @@ fun SmallText(modifier: Modifier = Modifier, text: String) {
         text = text,
         style = EveryweatherTheme.typography.textSmall,
         maxLines = 1,
-        color = EveryweatherTheme.colors.textColorPrimary
+        color = EveryweatherTheme.colors.onBackgroundPrimary
     )
 }
 
@@ -129,7 +145,7 @@ fun SmallText(modifier: Modifier = Modifier, text: String) {
 fun UltraLargeBoldText(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = EveryweatherTheme.colors.textColorPrimary
+    color: Color = EveryweatherTheme.colors.onBackgroundPrimary
 ) {
     Text(
         modifier = modifier,
@@ -144,7 +160,7 @@ fun UltraLargeBoldText(
 fun LargeBoldText(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = EveryweatherTheme.colors.textColorPrimary,
+    color: Color = EveryweatherTheme.colors.onBackgroundPrimary,
     overflow: TextOverflow = TextOverflow.Clip,
     textAlign: TextAlign? = null,
 ) {
@@ -162,8 +178,8 @@ fun LargeBoldText(
 @Composable
 fun HintEditText(
     text: String,
-    color: Color = EveryweatherTheme.colors.editTextStrokeColor,
     modifier: Modifier = Modifier,
+    color: Color = EveryweatherTheme.colors.neutral,
 ) {
     Text(
         modifier = modifier,
@@ -180,7 +196,7 @@ fun DelimiterText() {
     Text(
         text = stringResource(id = R.string.delimiter),
         style = EveryweatherTheme.typography.textLarge,
-        color = EveryweatherTheme.colors.textColorSecondary
+        color = EveryweatherTheme.colors.onBackgroundSecondary
     )
 }
 
@@ -197,7 +213,7 @@ fun LocationText(text: String, onUserInteraction: (WeatherUserInteraction) -> Un
         modifier = Modifier
             .padding(dimensionResource(id = R.dimen.dimen_4)),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_16)),
-        backgroundColor = EveryweatherTheme.colors.textBg,
+        backgroundColor = EveryweatherTheme.colors.surfaceOnSecondaryBg,
         elevation = dimensionResource(id = R.dimen.dimen_0),
     ) {
         Row(
@@ -213,19 +229,18 @@ fun LocationText(text: String, onUserInteraction: (WeatherUserInteraction) -> Un
                     onClick = { onUserInteraction(WeatherUserInteraction.Location) },
                 ),
             horizontalArrangement = Arrangement.SpaceBetween,
-
-            ) {
+        ) {
             MediumText(
                 modifier = Modifier.weight(1f),
                 text = text,
                 overflow = TextOverflow.Ellipsis,
-                color = EveryweatherTheme.colors.textColorPrimary
+                color = EveryweatherTheme.colors.onBackgroundPrimary
             )
             Image(
                 modifier = Modifier,
                 painter = painterResource(id = R.drawable.ic_edit_location),
-                colorFilter = ColorFilter.tint(EveryweatherTheme.colors.textColorPrimary),
-                contentDescription = "",
+                colorFilter = ColorFilter.tint(EveryweatherTheme.colors.onBackgroundPrimary),
+                contentDescription = EMPTY_STRING,
             )
         }
 
@@ -240,7 +255,7 @@ fun LinkText(
     startIndex: Int,
     endIndex: Int,
     style: TextStyle = EveryweatherTheme.typography.textMediumAnnotated,
-    spannableStringColor: Color = EveryweatherTheme.colors.secondary,
+    spannableStringColor: Color = EveryweatherTheme.colors.primary,
     onClick: () -> Unit
 ) {
     val mAnnotatedLinkString = buildAnnotatedString {
@@ -284,14 +299,14 @@ fun OutlinedIconEditText(
     modifier: Modifier = Modifier,
     iconResId: Int,
     maxLines: Int = 1,
-    accentColor: Color = EveryweatherTheme.colors.secondary,
-    textColor: Color = EveryweatherTheme.colors.editTextStrokeColor,
+    accentColor: Color = EveryweatherTheme.colors.primary,
+    textColor: Color = EveryweatherTheme.colors.neutral,
     backgroundColor: Color = Color.Transparent,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(
-        textColor = EveryweatherTheme.colors.textColorPrimary,
-        focusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
-        unfocusedBorderColor = EveryweatherTheme.colors.editTextStrokeColor,
-        cursorColor = EveryweatherTheme.colors.secondary,
+        textColor = EveryweatherTheme.colors.onBackgroundPrimary,
+        focusedBorderColor = EveryweatherTheme.colors.neutral,
+        unfocusedBorderColor = EveryweatherTheme.colors.neutral,
+        cursorColor = EveryweatherTheme.colors.primary,
         backgroundColor = backgroundColor
     ),
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
@@ -320,7 +335,7 @@ fun OutlinedIconEditText(
                 CircularProgressIndicator(
                     modifier = Modifier.size(dimensionResource(id = R.dimen.dimen_26)),
                     strokeWidth = dimensionResource(id = R.dimen.dimen_3),
-                    color = EveryweatherTheme.colors.secondary
+                    color = EveryweatherTheme.colors.primary
                 )
             } else {
                 IconButton(
@@ -329,11 +344,11 @@ fun OutlinedIconEditText(
                     content = {
                         Icon(
                             painter = painterResource(id = iconResId),
-                            contentDescription = "",
+                            contentDescription = null,
                             tint = if (isIconButtonEnabled) {
                                 accentColor
                             } else {
-                                EveryweatherTheme.colors.editTextStrokeColor
+                                EveryweatherTheme.colors.neutral
                             }
                         )
                     }

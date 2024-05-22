@@ -58,5 +58,5 @@ fun GeoDataItem(
             maxLines = 6,
         )
     }
-    Divider(color = EveryweatherTheme.colors.editTextStrokeColor.copy(alpha = 0.3f))
+    Divider(color = EveryweatherTheme.colors.neutral.copy(alpha = 0.3f))
 }

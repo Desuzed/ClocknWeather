@@ -59,10 +59,10 @@ fun GeoLocationsPickerContent(
             endIndex = startIndex + GEO_DATA_LINK_LENGTH,
             url = stringResource(id = R.string.location_search_url),
             style = EveryweatherTheme.typography.textSmall.copy(
-                color = EveryweatherTheme.colors.textColorPrimary,
+                color = EveryweatherTheme.colors.onBackgroundPrimary,
                 textAlign = TextAlign.Center,
             ),
-            spannableStringColor = EveryweatherTheme.colors.urlLinkTextColor,
+            spannableStringColor = EveryweatherTheme.colors.accent,
             onClick = { onUserInteraction(LocationUserInteraction.Redirection) }
         )
         BoldText(

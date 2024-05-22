@@ -48,7 +48,7 @@ fun MapLocationContent(
                 topStart = dimensionResource(id = R.dimen.corner_radius_30),
                 topEnd = dimensionResource(id = R.dimen.corner_radius_30)
             ),
-            color = EveryweatherTheme.colors.bottomDialogBackground
+            color = EveryweatherTheme.colors.tertiaryBackground
         ) {
             Box(
                 modifier = Modifier
