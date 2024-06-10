@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -20,6 +19,7 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,15 +36,17 @@ import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.features.weather_next_days.ui.NextDaysUiListContent
 import com.desuzed.everyweather.presentation.ui.UiMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
+import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
 import com.desuzed.everyweather.ui.AppPreview
+import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.CardDetailDayItem
 import com.desuzed.everyweather.ui.elements.GradientBox
 import com.desuzed.everyweather.ui.elements.HourItemContent
 import com.desuzed.everyweather.ui.elements.LinkText
 import com.desuzed.everyweather.ui.elements.MediumText
-import com.desuzed.everyweather.ui.elements.RoundedButton
 import com.desuzed.everyweather.ui.elements.RoundedCardItem
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.MockWeatherObject
@@ -72,6 +74,8 @@ private fun Preview() {
             BottomDetailWeather(
                 weatherUi = it,
                 onUserInteraction = {},
+                onNextDayClick = {},
+                nextDaysUiList = remember { mutableStateOf(null) },
                 refreshingState = rememberPullRefreshState(
                     refreshing = false,
                     onRefresh = {},
@@ -89,7 +93,9 @@ private const val WEATHER_LINK_LENGTH = 11
 fun BottomDetailWeather(
     weatherUi: WeatherMainUi,
     refreshingState: PullRefreshState,
-    onUserInteraction: (WeatherUserInteraction) -> Unit
+    nextDaysUiList: State<List<NextDaysUi>?>,
+    onNextDayClick: (NextDaysUi) -> Unit,
+    onUserInteraction: (WeatherUserInteraction) -> Unit,
 ) {
     GradientBox(
         modifier = Modifier.fillMaxSize(),
@@ -130,11 +136,20 @@ fun BottomDetailWeather(
                 }
             }
             CardDetailDayItem(detailCard = weatherUi.detailCard)
-            RoundedButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { onUserInteraction(WeatherUserInteraction.NextDays) },
-                text = stringResource(id = R.string.next_days_forecast)
+            BoldText(
+                modifier = Modifier
+                    .padding(
+                        top = dimensionResource(id = R.dimen.dimen_10),
+                        start = dimensionResource(id = R.dimen.dimen_10)
+                    )
+                    .align(Alignment.Start),
+                text = stringResource(id = R.string.next_days_forecast),
             )
+            NextDaysUiListContent(
+                nextDaysWeatherData = nextDaysUiList.value,
+                onNextDayClick = onNextDayClick,
+            )
+            //TODO: Вынести отсюда
             val inputText = stringResource(id = R.string.powered_by)
             val startIndex by remember {
                 mutableStateOf(
@@ -149,7 +164,7 @@ fun BottomDetailWeather(
                 url = stringResource(id = R.string.uri),
                 startIndex = startIndex,
                 endIndex = startIndex + WEATHER_LINK_LENGTH,
-                onClick = { onUserInteraction(WeatherUserInteraction.Redirection) }
+                onClick = { onUserInteraction(WeatherUserInteraction.Redirection) },
             )
         }
     }

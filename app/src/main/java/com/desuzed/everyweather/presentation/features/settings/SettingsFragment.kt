@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
-import com.desuzed.everyweather.presentation.features.settings.ui.SettingsContent
 import com.desuzed.everyweather.util.addOnBackPressedCallback
 import com.desuzed.everyweather.util.collect
-import com.desuzed.everyweather.util.collectAsStateWithLifecycle
 import com.desuzed.everyweather.util.onBackClick
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,11 +23,11 @@ class SettingsFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val state by viewModel.state.collectAsStateWithLifecycle(SettingsState())
-                SettingsContent(
-                    state = state,
-                    onUserInteraction = viewModel::onUserInteraction,
-                )
+                //               val state by viewModel.state.collectAsStateWithLifecycle(SettingsState())
+//                SettingsScreen(
+//                    state = state,
+//                    onUserInteraction = viewModel::onUserInteraction,
+//                )
             }
         }
     }

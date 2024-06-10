@@ -9,7 +9,7 @@ data class EveryweatherColors(
     val secondaryBackground: List<Color>,
     val tertiaryBackground: Color,
     val surfacePrimary: Color,
-    val surfaceSecondary: Color,
+    val surfaceSecondary: Color,//todo delete
     val surfaceOnPrimaryBg: Color,
     val surfaceOnSecondaryBg: Color = Gray30Alpha,
     val onBackgroundPrimary: Color,

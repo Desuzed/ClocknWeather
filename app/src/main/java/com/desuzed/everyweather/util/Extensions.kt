@@ -5,6 +5,7 @@ import android.content.res.Resources.getSystem
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar.ANIMATION_MODE_SLIDE
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.Flow
-import java.util.*
+import java.util.Locale
 
 fun Fragment.navigate(directions: Int, bundle: Bundle? = null) {
     val controller = findNavController()
@@ -92,7 +93,7 @@ inline fun <T> Fragment.collectWhenResumed(
     }
 }
 
-inline fun <T> AppCompatActivity.collect(
+inline fun <T> ComponentActivity.collect(
     source: Flow<T>,
     crossinline consumer: suspend (T) -> Unit
 ) {

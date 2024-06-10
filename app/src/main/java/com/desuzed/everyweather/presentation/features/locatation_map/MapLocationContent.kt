@@ -14,6 +14,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.domain.model.weather.Location
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.AppAlertDialog
 import com.desuzed.everyweather.ui.elements.RegularText
@@ -30,7 +31,13 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 private fun Preview() {
     EveryweatherTheme {
-        MapLocationContent(state = MapState(), onUserInteraction = {})
+        MapLocationContent(
+            location = null,
+            newPickedLocation = null,
+            loadNewLocationWeather = false,
+            shouldShowDialog = false,
+            onUserInteraction = {},
+        )
     }
 }
 
@@ -38,76 +45,77 @@ private const val INITIAL_ZOOM = 11f
 
 @Composable
 fun MapLocationContent(
-    state: MapState,
+    location: Location?,
+    newPickedLocation: LatLng?,
+    loadNewLocationWeather: Boolean,
+    shouldShowDialog: Boolean,
     onUserInteraction: (MapUserInteraction) -> Unit,
 ) {
-    EveryweatherTheme {
-        Surface(
-            modifier = Modifier.height(dimensionResource(id = R.dimen.dimen_350)),
-            shape = RoundedCornerShape(
-                topStart = dimensionResource(id = R.dimen.corner_radius_30),
-                topEnd = dimensionResource(id = R.dimen.corner_radius_30)
-            ),
-            color = EveryweatherTheme.colors.tertiaryBackground
+    Surface(
+        modifier = Modifier.height(dimensionResource(id = R.dimen.dimen_350)),
+        shape = RoundedCornerShape(
+            topStart = dimensionResource(id = R.dimen.corner_radius_30),
+            topEnd = dimensionResource(id = R.dimen.corner_radius_30)
+        ),
+        color = EveryweatherTheme.colors.tertiaryBackground
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = dimensionResource(id = R.dimen.dimen_20),
+                    start = dimensionResource(id = R.dimen.dimen_10),
+                    end = dimensionResource(id = R.dimen.dimen_10),
+                    bottom = dimensionResource(id = R.dimen.dimen_10),
+                )
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = dimensionResource(id = R.dimen.dimen_20),
-                        start = dimensionResource(id = R.dimen.dimen_10),
-                        end = dimensionResource(id = R.dimen.dimen_10),
-                        bottom = dimensionResource(id = R.dimen.dimen_10),
-                    )
-            ) {
-                val oldMarker = if (state.location != null) {
-                    LatLng(state.location.lat, state.location.lon)
-                } else null
-                val cameraPositionState = rememberCameraPositionState {
-                    if (oldMarker != null) {
-                        position = CameraPosition.fromLatLngZoom(oldMarker, INITIAL_ZOOM)
-                    }
+            val oldMarker = if (location != null) {
+                LatLng(location.lat, location.lon)
+            } else null
+            val cameraPositionState = rememberCameraPositionState {
+                if (oldMarker != null) {
+                    position = CameraPosition.fromLatLngZoom(oldMarker, INITIAL_ZOOM)
                 }
+            }
 
-                Column {
-                    RegularText(
-                        text = stringResource(id = R.string.set_place_on_map),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                    GoogleMap(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = dimensionResource(id = R.dimen.dimen_10)),
-                        cameraPositionState = cameraPositionState,
-                        onMapClick = {
-                            onUserInteraction(MapUserInteraction.NewLocationPicked(it))
-                        }
-                    ) {
-                        val showNewMarker =
-                            state.newPickedLocation != null && state.loadNewLocationWeather
-                        if (oldMarker != null)
-                            Marker(
-                                state = MarkerState(position = oldMarker),
-                                title = state.location?.name ?: EMPTY_STRING,
-                                visible = !showNewMarker,
-                            )
-                        if (showNewMarker)
-                            Marker(
-                                state = MarkerState(position = state.newPickedLocation!!),
-                            )
+            Column {
+                RegularText(
+                    text = stringResource(id = R.string.set_place_on_map),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+                GoogleMap(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = dimensionResource(id = R.dimen.dimen_10)),
+                    cameraPositionState = cameraPositionState,
+                    onMapClick = {
+                        onUserInteraction(MapUserInteraction.NewLocationPicked(it))
                     }
-                    if (state.shouldShowDialog)
-                        AppAlertDialog(
-                            title = stringResource(id = R.string.load_weather_of_this_location),
-                            onPositiveButtonClick = {
-                                onUserInteraction(MapUserInteraction.NewLocationConfirm)
-                            },
-                            onDismiss = {
-                                onUserInteraction(MapUserInteraction.DismissDialog)
-                            },
+                ) {
+                    val showNewMarker =
+                        newPickedLocation != null && loadNewLocationWeather
+                    if (oldMarker != null)
+                        Marker(
+                            state = MarkerState(position = oldMarker),
+                            title = location?.name ?: EMPTY_STRING,
+                            visible = !showNewMarker,
+                        )
+                    if (showNewMarker)
+                        Marker(
+                            state = MarkerState(position = newPickedLocation!!),
                         )
                 }
+                if (shouldShowDialog)
+                    AppAlertDialog(
+                        title = stringResource(id = R.string.load_weather_of_this_location),
+                        onPositiveButtonClick = {
+                            onUserInteraction(MapUserInteraction.NewLocationConfirm)
+                        },
+                        onDismiss = {
+                            onUserInteraction(MapUserInteraction.DismissDialog)
+                        },
+                    )
             }
         }
     }

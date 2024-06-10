@@ -201,12 +201,6 @@ fun DelimiterText() {
 }
 
 @Composable
-fun TextPair(header: String, text: String, modifier: Modifier = Modifier) {
-    SmallText(text = header)
-    BoldText(text = text)
-}
-
-@Composable
 fun LocationText(text: String, onUserInteraction: (WeatherUserInteraction) -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     Card(

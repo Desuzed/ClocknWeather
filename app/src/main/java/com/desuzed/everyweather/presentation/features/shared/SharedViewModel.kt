@@ -7,6 +7,7 @@ import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.presentation.base.UserInteraction
 import com.desuzed.everyweather.util.Constants.ZERO_LONG
 
+//TODO избавиться от общей вью модели
 class SharedViewModel(
     private val appUpdateProvider: AppUpdateProvider,
 ) : BaseViewModel<SharedState, SharedAction, UserInteraction>(SharedState()) {

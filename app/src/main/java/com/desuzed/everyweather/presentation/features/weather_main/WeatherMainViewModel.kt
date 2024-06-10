@@ -78,7 +78,6 @@ class WeatherMainViewModel(
         analytics.onUserInteraction(interaction)
         when (interaction) {
             WeatherUserInteraction.Location -> setAction(WeatherMainAction.NavigateToLocation)
-            WeatherUserInteraction.NextDays -> setAction(WeatherMainAction.NavigateToNextDaysWeather)
             WeatherUserInteraction.Refresh -> getForecast(state.value.query)
             WeatherUserInteraction.SaveLocation -> saveLocation()
             WeatherUserInteraction.Redirection -> launch {

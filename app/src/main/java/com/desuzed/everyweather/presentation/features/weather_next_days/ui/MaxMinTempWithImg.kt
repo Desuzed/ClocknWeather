@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysMainInfo
@@ -19,7 +17,7 @@ import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.RegularText
 
 @Composable
-fun MaxMinTempWithImg(nextDaysMainInfo: NextDaysMainInfo, isExpanded: Boolean) {
+fun MaxMinTempWithImg(nextDaysMainInfo: NextDaysMainInfo) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_8))
@@ -30,7 +28,7 @@ fun MaxMinTempWithImg(nextDaysMainInfo: NextDaysMainInfo, isExpanded: Boolean) {
                 .width(dimensionResource(id = R.dimen.dimen_40)),
             alignment = Alignment.CenterEnd,
             painter = rememberAsyncImagePainter(nextDaysMainInfo.iconUrl),
-            contentDescription = "",
+            contentDescription = null,
         )
 
         Column(
@@ -40,12 +38,12 @@ fun MaxMinTempWithImg(nextDaysMainInfo: NextDaysMainInfo, isExpanded: Boolean) {
             BoldText(text = nextDaysMainInfo.maxTemp)
             RegularText(text = nextDaysMainInfo.minTemp)
         }
-        Image(
-            modifier = Modifier.rotate(if (isExpanded) 0f else 180f),
-            painter = painterResource(id = R.drawable.ic_arrow_24),
-            contentDescription = "",
-            alignment = Alignment.CenterEnd,
-        )
+//        Image(
+//            modifier = Modifier.rotate(if (isExpanded) 0f else 180f),
+//            painter = painterResource(id = R.drawable.ic_arrow_24),
+//            contentDescription = null,
+//            alignment = Alignment.CenterEnd,
+//        )
     }
 
 }
