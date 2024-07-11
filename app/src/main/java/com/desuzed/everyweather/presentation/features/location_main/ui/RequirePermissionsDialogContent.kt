@@ -33,7 +33,7 @@ fun RequirePermissionsDialogContent(
     onUserInteraction: (LocationUserInteraction) -> Unit,
 ) {
     val onDismiss = {
-        onUserInteraction(LocationUserInteraction.DismissLocationPermissionsDialog)
+        onUserInteraction(LocationUserInteraction.DismissDialog)
     }
     AppDialog(
         modifier = Modifier,

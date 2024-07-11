@@ -7,10 +7,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.desuzed.everyweather.presentation.features.locatation_map.MapBottomSheetScreen
 import com.desuzed.everyweather.presentation.features.location_main.LocationMainAction
 import com.desuzed.everyweather.presentation.features.location_main.LocationMainState
 import com.desuzed.everyweather.presentation.features.location_main.LocationViewModel
+import com.desuzed.everyweather.presentation.features.location_main.ui.map.MapBottomSheetScreen
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.extensions.CollectAction
 import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
@@ -51,34 +51,35 @@ fun LocationMainScreen(
             is LocationMainAction.NavigateToWeather -> navController.popBackStack()// TODO()
             is LocationMainAction.NavigateToWeatherWithLatLng -> navController.popBackStack() //TODO()
             LocationMainAction.RequestLocationPermissions -> TODO()
-            LocationMainAction.ShowMapFragment -> {
+            is LocationMainAction.ToggleMap -> {
                 coroutineScope.launch {
-                    sheetState.show()
+                    if (it.isVisible) {
+                        sheetState.show()
+                    } else {
+                        sheetState.hide()
+                    }
                 }
-            } // TODO()
+            }
+
             is LocationMainAction.ShowSnackbar -> {} //TODO()
         }
     }
     LocationMainBody(
         locations = state.locations,
         isLoading = state.isLoading,
-        editLocationText = state.editLocationText,
         geoText = state.geoText,
-        geoData = state.geoData,
-        showPickerDialog = state.showPickerDialog,
-        showEditLocationDialog = state.showEditLocationDialog,
-        showRequireLocationPermissionsDialog = state.showRequireLocationPermissionsDialog,
         onUserInteraction = viewModel::onUserInteraction,
-        onGeoTextChanged = viewModel::onNewGeoText,
-        onNewEditLocationText = viewModel::onNewEditLocationText,
     )
     MapBottomSheetScreen(
         sheetState = sheetState,
-        onBackClick = {
-            coroutineScope.launch {
-                sheetState.hide()
-            }
-        }
+        state = state,
+        onUserInteraction = viewModel::onUserInteraction,
+    )
+    LocationDialogContent(
+        dialog = state.locationDialog,
+        geoData = state.geoData,
+        editLocationText = state.editLocationText,
+        onUserInteraction = viewModel::onUserInteraction,
     )
 }
 

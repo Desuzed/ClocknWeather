@@ -1,4 +1,4 @@
-package com.desuzed.everyweather.presentation.features.locatation_map
+package com.desuzed.everyweather.presentation.features.location_main.ui.map
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,9 +14,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.weather.Location
+import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
 import com.desuzed.everyweather.ui.AppPreview
-import com.desuzed.everyweather.ui.elements.AppAlertDialog
 import com.desuzed.everyweather.ui.elements.RegularText
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
@@ -35,7 +36,6 @@ private fun Preview() {
             location = null,
             newPickedLocation = null,
             loadNewLocationWeather = false,
-            shouldShowDialog = false,
             onUserInteraction = {},
         )
     }
@@ -46,10 +46,9 @@ private const val INITIAL_ZOOM = 11f
 @Composable
 fun MapLocationContent(
     location: Location?,
-    newPickedLocation: LatLng?,
+    newPickedLocation: UserLatLng?,
     loadNewLocationWeather: Boolean,
-    shouldShowDialog: Boolean,
-    onUserInteraction: (MapUserInteraction) -> Unit,
+    onUserInteraction: (LocationUserInteraction) -> Unit,
 ) {
     Surface(
         modifier = Modifier.height(dimensionResource(id = R.dimen.dimen_350)),
@@ -90,7 +89,15 @@ fun MapLocationContent(
                         .padding(top = dimensionResource(id = R.dimen.dimen_10)),
                     cameraPositionState = cameraPositionState,
                     onMapClick = {
-                        onUserInteraction(MapUserInteraction.NewLocationPicked(it))
+                        onUserInteraction(
+                            LocationUserInteraction.NewLocationPicked(
+                                location = UserLatLng(
+                                    lat = it.latitude,
+                                    lon = it.longitude,
+                                    time = System.currentTimeMillis(),
+                                )
+                            )
+                        )
                     }
                 ) {
                     val showNewMarker =
@@ -103,19 +110,14 @@ fun MapLocationContent(
                         )
                     if (showNewMarker)
                         Marker(
-                            state = MarkerState(position = newPickedLocation!!),
+                            state = MarkerState(
+                                position = LatLng(
+                                    newPickedLocation!!.lat,
+                                    newPickedLocation.lon,
+                                )
+                            ),
                         )
                 }
-                if (shouldShowDialog)
-                    AppAlertDialog(
-                        title = stringResource(id = R.string.load_weather_of_this_location),
-                        onPositiveButtonClick = {
-                            onUserInteraction(MapUserInteraction.NewLocationConfirm)
-                        },
-                        onDismiss = {
-                            onUserInteraction(MapUserInteraction.DismissDialog)
-                        },
-                    )
             }
         }
     }

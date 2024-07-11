@@ -1,7 +1,6 @@
 package com.desuzed.everyweather.di
 
 import com.desuzed.everyweather.presentation.features.in_app_update.InAppUpdateViewModel
-import com.desuzed.everyweather.presentation.features.locatation_map.MapLocationViewModel
 import com.desuzed.everyweather.presentation.features.location_main.LocationViewModel
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivityViewModel
 import com.desuzed.everyweather.presentation.features.settings.SettingsViewModel
@@ -13,12 +12,6 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel {
-        MapLocationViewModel(
-            sharedPrefsProvider = get(),
-            analytics = get(),
-        )
-    }
-    viewModel {
         MainActivityViewModel(
             systemSettingsInteractor = get(),
             systemInteractor = get(),
@@ -29,6 +22,7 @@ val viewModelModule = module {
             locationInteractor = get(),
             userLocationProvider = get(),
             analytics = get(),
+            sharedPrefsProvider = get(),
         )
     }
     viewModel {

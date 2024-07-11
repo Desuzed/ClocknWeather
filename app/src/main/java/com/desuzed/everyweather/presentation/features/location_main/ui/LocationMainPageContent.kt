@@ -90,7 +90,7 @@ fun LocationMainPageContent(
                 .padding(horizontal = dimensionResource(id = R.dimen.dimen_10))
                 .navigationBarsPadding()
                 .imePadding(),
-            onClick = { onUserInteraction(LocationUserInteraction.FindOnMap) },
+            onClick = { onUserInteraction(LocationUserInteraction.ToggleMap(true)) },
             text = stringResource(id = R.string.find_on_map)
         )
     }

@@ -13,9 +13,13 @@ class LocationMainAnalytics(context: Context) : Analytics(context = context) {
             is LocationUserInteraction.SetDefaultLocationName -> logEvent(SET_DEFAULT_LOCATION)
             is LocationUserInteraction.FavoriteLocationClick -> logEvent(FAVORITE_LOCATION)
             LocationUserInteraction.FindByQuery -> logEvent(FIND_BY_QUERY)
-            LocationUserInteraction.FindOnMap -> logEvent(NAVIGATE_TO_MAP)
+            is LocationUserInteraction.ToggleMap -> if (interaction.isVisible) {
+                logEvent(NAVIGATE_TO_MAP)
+            }
+
             LocationUserInteraction.MyLocation -> logEvent(MY_LOCATION)
             LocationUserInteraction.Settings -> logEvent(NAVIGATE_TO_SETTINGS)
+            LocationUserInteraction.NewLocationConfirm -> logEvent(CONFIRM_MAP_LOCATION)
             else -> {}
         }
     }
@@ -30,6 +34,7 @@ class LocationMainAnalytics(context: Context) : Analytics(context = context) {
         private const val FAVORITE_LOCATION = "loc_main_favorite"
         private const val NAVIGATE_TO_MAP = "loc_main_nav_to_map"
         private const val NAVIGATE_TO_SETTINGS = "loc_main_nav_to_settings"
+        private const val CONFIRM_MAP_LOCATION = "map_loc_confirm"
 
     }
 }

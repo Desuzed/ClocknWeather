@@ -47,12 +47,11 @@ fun EditLocationDialogContent(
     onNewEditLocationText: (text: String) -> Unit,
     onUserInteraction: (LocationUserInteraction) -> Unit,
 ) {
-    val onDismiss = {
-        onUserInteraction(LocationUserInteraction.ToggleEditFavoriteLocationDialog(null))
-    }
     AppDialog(
         modifier = Modifier,
-        onDismiss = onDismiss,
+        onDismiss = {
+            onUserInteraction(LocationUserInteraction.DismissDialog)
+        },
     ) {
         Column(
             modifier = Modifier

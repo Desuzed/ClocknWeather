@@ -1,23 +1,21 @@
-package com.desuzed.everyweather.presentation.features.locatation_map
+package com.desuzed.everyweather.presentation.features.location_main.ui.map
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
-import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
+import com.desuzed.everyweather.presentation.features.location_main.LocationMainState
+import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapBottomSheetScreen(
+    state: LocationMainState,
     sheetState: SheetState,
-    viewModel: MapLocationViewModel = koinViewModel(),
-    onBackClick: () -> Unit,
+    onUserInteraction: (LocationUserInteraction) -> Unit,
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle(initialState = MapState())
     if (sheetState.isVisible) {
         ModalBottomSheet(
             sheetState = sheetState,
@@ -25,14 +23,13 @@ fun MapBottomSheetScreen(
             dragHandle = null,
 //            containerColor = getBackgroundColor(),
 //            contentColor = getOnBackgroundColor(),
-            onDismissRequest = onBackClick,
+            onDismissRequest = { onUserInteraction(LocationUserInteraction.ToggleMap(false)) },
             content = {
                 MapLocationContent(
-                    location = state.location,
+                    location = state.mapPinLocation,
                     newPickedLocation = state.newPickedLocation,
                     loadNewLocationWeather = state.loadNewLocationWeather,
-                    shouldShowDialog = state.shouldShowDialog,
-                    onUserInteraction = viewModel::onUserInteraction,
+                    onUserInteraction = onUserInteraction,
                 )
             }
         )

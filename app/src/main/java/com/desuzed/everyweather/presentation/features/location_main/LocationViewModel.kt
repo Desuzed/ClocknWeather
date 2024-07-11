@@ -8,6 +8,7 @@ import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.location.geo.GeoData
 import com.desuzed.everyweather.domain.model.result.QueryResult
+import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
@@ -19,6 +20,7 @@ class LocationViewModel(
     private val locationInteractor: LocationInteractor,
     private val userLocationProvider: UserLocationProvider,
     private val analytics: LocationMainAnalytics,
+    private val sharedPrefsProvider: SharedPrefsProvider,
 ) : BaseViewModel<LocationMainState, LocationMainAction, LocationUserInteraction>(LocationMainState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
@@ -30,14 +32,7 @@ class LocationViewModel(
     init {
         collect(locationInteractor.getAllLocations(), ::onNewLocations)
         collect(queryResultFlow, ::collectQueryResult)
-    }
-
-    fun onNewGeoText(text: String) {
-        setState { copy(geoText = text) }
-    }
-
-    fun onNewEditLocationText(text: String) {
-        setState { copy(editLocationText = text) }
+        initMapPin()
     }
 
     override fun onUserInteraction(interaction: LocationUserInteraction) {
@@ -52,33 +47,30 @@ class LocationViewModel(
             is LocationUserInteraction.NavigateToWeather -> navigateToWeatherWithDelay(interaction.latLng)
             LocationUserInteraction.Redirection -> redirectToLocationApiPage()
             LocationUserInteraction.FindByQuery -> findTypedLocation()
-            LocationUserInteraction.FindOnMap -> setAction(LocationMainAction.ShowMapFragment)
+            is LocationUserInteraction.ToggleMap -> toggleMap(interaction.isVisible)
             LocationUserInteraction.MyLocation -> setAction(LocationMainAction.MyLocation)
             LocationUserInteraction.Settings -> setAction(LocationMainAction.NavigateToSettings)
             LocationUserInteraction.OnBackClick -> setAction(LocationMainAction.NavigateBack)
-            LocationUserInteraction.DismissLocationPicker -> setState { copy(showPickerDialog = false) }
-            LocationUserInteraction.DismissLocationPermissionsDialog -> setState {
-                copy(showRequireLocationPermissionsDialog = false)
-            }
-
             LocationUserInteraction.RequestLocationPermissions -> onRequestPermissions()
             is LocationUserInteraction.UpdateFavoriteLocation -> updateFavoriteLocation(interaction.favoriteLocationDto)
-            is LocationUserInteraction.ToggleEditFavoriteLocationDialog -> setState {
-                copy(
-                    showEditLocationDialog = interaction.item,
-                    editLocationText = interaction.item?.customName
-                        ?.ifEmpty { interaction.item.cityName } ?: EMPTY_STRING,
-                )
-            }
-
+            is LocationUserInteraction.ToggleEditFavoriteLocationDialog -> onToggle(interaction.item)
             is LocationUserInteraction.SetDefaultLocationName -> setDefaultLocationName(interaction.item)
+            LocationUserInteraction.DismissConfirmPinDialog -> onDismissConfirmPinDialog()
+            LocationUserInteraction.NewLocationConfirm -> onNewLocationConfirm()
+            is LocationUserInteraction.NewLocationPicked -> onNewLocationPicked(interaction.location)
+            LocationUserInteraction.DismissDialog -> onDismissDialog()
+            is LocationUserInteraction.EditLocationText -> onNewEditLocationText(interaction.input)
+            is LocationUserInteraction.GeoInputQuery -> onNewGeoText(interaction.input)
+            is LocationUserInteraction.ShowDeleteFavoriteLocation -> onShowDeleteFavoriteLocation(
+                interaction.item
+            )
         }
     }
 
     fun areLocationPermissionsGranted(): Boolean = userLocationProvider.arePermissionsGranted()
 
     fun launchRequireLocationPermissionsDialog() {
-        setState { copy(showRequireLocationPermissionsDialog = true) }
+        setState { copy(locationDialog = LocationDialog.RequireLocationPermissions) }
     }
 
     private fun findTypedLocation() {
@@ -91,7 +83,7 @@ class LocationViewModel(
                 copy(
                     geoData = resultGeo.geoData,
                     isLoading = false,
-                    showPickerDialog = true
+                    locationDialog = LocationDialog.GeoPickerData,
                 )
             }
             val resultAction = resultGeo.queryResult
@@ -102,9 +94,22 @@ class LocationViewModel(
 
     }
 
+    private fun onDismissDialog() {
+        setState { copy(locationDialog = null) }
+    }
+
+    private fun onToggle(item: FavoriteLocation) {
+        setState {
+            copy(
+                locationDialog = LocationDialog.EditLocation(item),
+                editLocationText = item.customName.ifEmpty { item.cityName },
+            )
+        }
+    }
+
     private fun onRequestPermissions() {
         setAction(LocationMainAction.RequestLocationPermissions)
-        setState { copy(showRequireLocationPermissionsDialog = false) }
+        onDismissDialog()
     }
 
     private fun onConfirmLocation(geoData: GeoData) {
@@ -118,6 +123,7 @@ class LocationViewModel(
 
     private fun deleteFavoriteLocation(favoriteLocationDto: FavoriteLocation) =
         launch {
+            onDismissDialog()
             val deleted = locationInteractor.deleteFavoriteLocation(favoriteLocationDto)
             if (deleted) {
                 onSuccess(ActionResultProvider.DELETED)
@@ -128,7 +134,7 @@ class LocationViewModel(
 
     private fun updateFavoriteLocation(favoriteLocationDto: FavoriteLocation) {
         launch {
-            setState { copy(showEditLocationDialog = null) }
+            onDismissDialog()
             val inputText = state.value.editLocationText
             val locationToSave = favoriteLocationDto.copy(customName = inputText)
             val updated = locationInteractor.updateLocation(locationToSave)
@@ -142,7 +148,7 @@ class LocationViewModel(
 
     private fun setDefaultLocationName(favoriteLocationDto: FavoriteLocation) {
         launch {
-            setState { copy(showEditLocationDialog = null) }
+            onDismissDialog()
             val locationToSave = favoriteLocationDto.copy(customName = favoriteLocationDto.cityName)
             val updated = locationInteractor.updateLocation(locationToSave)
             if (updated) {
@@ -202,5 +208,58 @@ class LocationViewModel(
         code == GeoActionResultProvider.RATE_LIMIT
                 || code == GeoActionResultProvider.ACCESS_RESTRICTED
                 || code == GeoActionResultProvider.INVALID_TOKEN
+
+    private fun onNewLocationPicked(newLocation: UserLatLng) {
+        setState {
+            copy(
+                newPickedLocation = newLocation,
+                locationDialog = LocationDialog.ConfirmPickedLocation,
+            )
+        }
+    }
+
+    private fun onDismissConfirmPinDialog() {
+        setState { copy(newPickedLocation = null) }
+        onDismissDialog()
+    }
+
+    private fun onShowDeleteFavoriteLocation(item: FavoriteLocation) {
+        setState { copy(locationDialog = LocationDialog.DeleteLocation(item)) }
+    }
+
+    //todo доработать чтобы маркер перемещался
+    private fun onNewLocationConfirm() {
+        launch {
+            onDismissDialog()
+            delay(ONE_SEC)
+            val latLng = state.value.newPickedLocation
+            if (latLng != null) {
+                val userLatLng = latLng.copy(time = System.currentTimeMillis())
+                toggleMap(false)
+                setAction(LocationMainAction.NavigateToWeatherWithLatLng(userLatLng))
+            }
+            setState { copy(newPickedLocation = null, loadNewLocationWeather = false) }
+        }
+    }
+
+    private fun initMapPin() {
+        setState { copy(mapPinLocation = sharedPrefsProvider.loadForecastFromCache()?.location) }
+    }
+
+    private fun toggleMap(isShown: Boolean) {
+        setAction(LocationMainAction.ToggleMap(isShown))
+    }
+
+    private fun onNewGeoText(text: String) {
+        setState { copy(geoText = text) }
+    }
+
+    private fun onNewEditLocationText(text: String) {
+        setState { copy(editLocationText = text) }
+    }
+
+    companion object {
+        private const val ONE_SEC = 1000L
+    }
 
 }

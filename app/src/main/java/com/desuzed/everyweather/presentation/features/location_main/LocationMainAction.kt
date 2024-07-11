@@ -7,9 +7,9 @@ sealed interface LocationMainAction {
     class ShowSnackbar(val queryResult: QueryResult) : LocationMainAction
     class NavigateToWeather(val query: String) : LocationMainAction
     class NavigateToWeatherWithLatLng(val latLng: UserLatLng) : LocationMainAction
-    object MyLocation : LocationMainAction
-    object ShowMapFragment : LocationMainAction
-    object NavigateToSettings : LocationMainAction
-    object NavigateBack : LocationMainAction
-    object RequestLocationPermissions : LocationMainAction
+    data object MyLocation : LocationMainAction
+    class ToggleMap(val isVisible: Boolean) : LocationMainAction
+    data object NavigateToSettings : LocationMainAction
+    data object NavigateBack : LocationMainAction
+    data object RequestLocationPermissions : LocationMainAction
 }
