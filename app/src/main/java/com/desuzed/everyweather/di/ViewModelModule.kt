@@ -6,7 +6,6 @@ import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
 import com.desuzed.everyweather.presentation.features.settings.SettingsViewModel
 import com.desuzed.everyweather.presentation.features.shared.SharedViewModel
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainViewModel
-import com.desuzed.everyweather.presentation.features.weather_next_days.NextDaysViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -32,13 +31,6 @@ val viewModelModule = module {
             systemSettingsRepository = get(),
             locationInteractor = get(),
             analytics = get(),
-        )
-    }
-    viewModel {
-        NextDaysViewModel(
-            sharedPrefsProvider = get(),
-            weatherSettingsInteractor = get(),
-            systemSettingsRepository = get(),
         )
     }
 

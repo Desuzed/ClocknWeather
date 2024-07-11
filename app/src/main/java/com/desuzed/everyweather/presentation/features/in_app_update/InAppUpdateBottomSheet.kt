@@ -39,7 +39,7 @@ class InAppUpdateBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        collect(viewModel.action, ::onNewAction)
+        collect(viewModel.sideEffect, ::onNewAction)
         viewModel.resolveStatus(status)
     }
 
@@ -49,11 +49,11 @@ class InAppUpdateBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-    private fun onNewAction(action: InAppUpdateAction) {
+    private fun onNewAction(action: InAppUpdateEffect) {
         when (action) {
-            InAppUpdateAction.Dismiss -> dismiss()
-            InAppUpdateAction.InstallUpdate -> installUpdate()
-            InAppUpdateAction.UpdateApplication -> startDownloadingUpdate()
+            InAppUpdateEffect.Dismiss -> dismiss()
+            InAppUpdateEffect.InstallUpdate -> installUpdate()
+            InAppUpdateEffect.UpdateApplication -> startDownloadingUpdate()
         }
     }
 

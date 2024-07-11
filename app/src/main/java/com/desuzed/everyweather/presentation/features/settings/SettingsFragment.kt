@@ -35,14 +35,14 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addOnBackPressedCallback()
-        collect(viewModel.action, ::onNewAction)
+        collect(viewModel.sideEffect, ::onNewAction)
     }
 
-    private fun onNewAction(action: SettingsAction) {
+    private fun onNewAction(action: SettingsEffect) {
         when (action) {
-            SettingsAction.NavigateBack -> onBackClick()
-            is SettingsAction.ShowReadyToInstallDialog -> showReadyToInstallDialog(action.status)
-            is SettingsAction.ShowUpdateDialog -> showReadyToInstallDialog(action.status)
+            SettingsEffect.NavigateBack -> onBackClick()
+            is SettingsEffect.ShowReadyToInstallDialog -> showReadyToInstallDialog(action.status)
+            is SettingsEffect.ShowUpdateDialog -> showReadyToInstallDialog(action.status)
         }
     }
 

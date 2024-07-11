@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.desuzed.everyweather.presentation.features.settings.SettingsAction
+import com.desuzed.everyweather.presentation.features.settings.SettingsEffect
 import com.desuzed.everyweather.presentation.features.settings.SettingsState
 import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
 import com.desuzed.everyweather.presentation.features.settings.SettingsViewModel
@@ -49,11 +49,11 @@ fun SettingsScreen(
             selectedPressureDimen = state.selectedPressure,
         )
     }
-    CollectAction(source = viewModel.action) {
+    CollectAction(source = viewModel.sideEffect) {
         when (it) {
-            SettingsAction.NavigateBack -> navController.popBackStack()
-            is SettingsAction.ShowReadyToInstallDialog -> TODO()
-            is SettingsAction.ShowUpdateDialog -> TODO()
+            SettingsEffect.NavigateBack -> navController.popBackStack()
+            is SettingsEffect.ShowReadyToInstallDialog -> TODO()
+            is SettingsEffect.ShowUpdateDialog -> TODO()
         }
     }
     SettingsScreenBody(
@@ -73,7 +73,7 @@ fun SettingsScreen(
         temperatureDialogItems = settingsParams.weatherUiList.temperatureSettingsList,
         distanceDialogItems = settingsParams.weatherUiList.distanceSettingsList,
         pressureDialogItems = settingsParams.weatherUiList.pressureSettingsList,
-        onUserInteraction =  viewModel::onUserInteraction,
+        onUserInteraction = viewModel::onUserInteraction,
         onDismiss = {
             viewModel.onUserInteraction(SettingsUserInteraction.DismissDialog)
         }

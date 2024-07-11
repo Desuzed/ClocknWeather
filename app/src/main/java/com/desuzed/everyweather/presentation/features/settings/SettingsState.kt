@@ -7,6 +7,7 @@ import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.SettingsType
 import com.desuzed.everyweather.domain.model.settings.TempDimen
+import com.desuzed.everyweather.presentation.base.State
 
 data class SettingsState(
     val selectedLang: Lang = Lang.EN,
@@ -21,4 +22,4 @@ data class SettingsState(
     val distanceDialogItems: List<DistanceDimen> = DistanceDimen.entries,
     val pressureDialogItems: List<PressureDimen> = PressureDimen.entries,
     val updateStatus: InAppUpdateStatus? = null,
-)
+) : State

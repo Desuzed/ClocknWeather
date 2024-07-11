@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.desuzed.everyweather.domain.model.location.UserLatLng
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainAction
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainEffect
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainViewModel
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherState
 import com.desuzed.everyweather.presentation.features.weather_next_days.ui.NextDaysWeatherBottomSheet
@@ -90,16 +90,16 @@ fun WeatherMainScreen(
             }
         }
     }
-    CollectAction(source = viewModel.action) {
+    CollectAction(source = viewModel.sideEffect) {
         when (it) {
-            WeatherMainAction.NavigateToLocation -> navController.navigate(
+            WeatherMainEffect.NavigateToLocation -> navController.navigate(
                 Destination.LocationScreen.route,
             )
 
-            WeatherMainAction.NavigateToNextDaysWeather -> {
+            WeatherMainEffect.NavigateToNextDaysWeather -> {
 
             } // todo
-            is WeatherMainAction.ShowSnackbar -> {} // todo
+            is WeatherMainEffect.ShowSnackbar -> {} // todo
         }
     }
     //TODO избавиться от этого костыля

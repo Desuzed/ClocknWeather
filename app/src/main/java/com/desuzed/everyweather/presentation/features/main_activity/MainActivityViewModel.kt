@@ -25,7 +25,7 @@ import kotlin.coroutines.cancellation.CancellationException
 class MainActivityViewModel(
     private val systemInteractor: SystemInteractor,
     private val systemSettingsInteractor: SystemSettingsInteractor,
-) : BaseViewModel<MainActivityState, MainActivityAction, UserInteraction>(MainActivityState()) {
+) : BaseViewModel<MainActivityState, MainActivitySideEffect, UserInteraction>(MainActivityState()) {
 
     private val _isLookingForLocation = MutableSharedFlow<Boolean>(
         replay = 0,
@@ -89,12 +89,12 @@ class MainActivityViewModel(
     private fun collectLanguage(lang: Lang) {
         val lowercaseLang = lang.lang.lowercase()
         setState { copy(lang = lowercaseLang) }
-        setAction(MainActivityAction.ChangeLanguage(lowercaseLang))
+        setSideEffect(MainActivitySideEffect.ChangeLanguage(lowercaseLang))
     }
 
     private fun collectDarkTheme(darkMode: DarkMode) {
         val mode = DarkMode.valueOf(darkMode.mode.uppercase())
-        setAction(MainActivityAction.ChangeDarkMode(mode))
+        setSideEffect(MainActivitySideEffect.ChangeDarkMode(mode))
     }
 
     private fun collectUserLocationResult(result: UserLocationResult?) {

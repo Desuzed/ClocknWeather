@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.desuzed.everyweather.presentation.features.location_main.LocationMainAction
+import com.desuzed.everyweather.presentation.features.location_main.LocationMainEffect
 import com.desuzed.everyweather.presentation.features.location_main.LocationMainState
 import com.desuzed.everyweather.presentation.features.location_main.LocationViewModel
 import com.desuzed.everyweather.presentation.features.location_main.ui.map.MapBottomSheetScreen
@@ -40,18 +40,18 @@ fun LocationMainScreen(
         skipPartiallyExpanded = true,
     )
     val coroutineScope = rememberCoroutineScope()
-    CollectAction(source = viewModel.action) {
+    CollectAction(source = viewModel.sideEffect) {
         when (it) {
-            LocationMainAction.MyLocation -> {} //TODO
-            LocationMainAction.NavigateBack -> navController.popBackStack() //TODO()
-            LocationMainAction.NavigateToSettings -> navController.navigate(
+            LocationMainEffect.MyLocation -> {} //TODO
+            LocationMainEffect.NavigateBack -> navController.popBackStack() //TODO()
+            LocationMainEffect.NavigateToSettings -> navController.navigate(
                 route = Destination.SettingsScreen.route,
             )
 
-            is LocationMainAction.NavigateToWeather -> navController.popBackStack()// TODO()
-            is LocationMainAction.NavigateToWeatherWithLatLng -> navController.popBackStack() //TODO()
-            LocationMainAction.RequestLocationPermissions -> TODO()
-            is LocationMainAction.ToggleMap -> {
+            is LocationMainEffect.NavigateToWeather -> navController.popBackStack()// TODO()
+            is LocationMainEffect.NavigateToWeatherWithLatLng -> navController.popBackStack() //TODO()
+            LocationMainEffect.RequestLocationPermissions -> TODO()
+            is LocationMainEffect.ToggleMap -> {
                 coroutineScope.launch {
                     if (it.isVisible) {
                         sheetState.show()
@@ -61,7 +61,7 @@ fun LocationMainScreen(
                 }
             }
 
-            is LocationMainAction.ShowSnackbar -> {} //TODO()
+            is LocationMainEffect.ShowSnackbar -> {} //TODO()
         }
     }
     LocationMainBody(

@@ -6,20 +6,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<S, A, I : UserInteraction>(initState: S) : ViewModel() {
+abstract class BaseViewModel<S : State, E : SideEffect, A : UserInteraction>(
+    initState: S,
+) : ViewModel() {
     private val _state = MutableStateFlow(initState)
     val state: StateFlow<S> = _state.asStateFlow()
 
-    private val _action = MutableSharedFlow<A>()
-    val action: SharedFlow<A> = _action.asSharedFlow()
+    private val _sideEffect = MutableSharedFlow<E>()
+    val sideEffect: SharedFlow<E> = _sideEffect.asSharedFlow()
 
     protected fun setState(reducer: S.() -> S) {
         _state.value = reducer(_state.value)
     }
 
-    protected fun setAction(action: A) {
+    protected fun setSideEffect(effect: E) {
         viewModelScope.launch {
-            _action.emit(action)
+            _sideEffect.emit(effect)
         }
     }
 
@@ -29,7 +31,7 @@ abstract class BaseViewModel<S, A, I : UserInteraction>(initState: S) : ViewMode
         }
     }
 
-    open fun onUserInteraction(interaction: I) {}
+    open fun onUserInteraction(interaction: A) {}
 
     inline fun <T> collect(source: Flow<T>, crossinline consumer: suspend (T) -> Unit) {
         viewModelScope.launch {

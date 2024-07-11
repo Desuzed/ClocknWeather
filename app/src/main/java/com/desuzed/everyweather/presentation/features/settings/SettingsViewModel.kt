@@ -22,7 +22,7 @@ class SettingsViewModel(
     private val systemSettingsInteractor: SystemSettingsInteractor,
     private val analytics: SettingsAnalytics,
     private val appUpdateProvider: AppUpdateProvider,
-) : BaseViewModel<SettingsState, SettingsAction, SettingsUserInteraction>(SettingsState()) {
+) : BaseViewModel<SettingsState, SettingsEffect, SettingsUserInteraction>(SettingsState()) {
 
     init {
         collect(systemSettingsInteractor.darkMode, ::collectDarkTheme)
@@ -43,7 +43,7 @@ class SettingsViewModel(
             is SettingsUserInteraction.ChangePressureDimension -> onPressureDimen(interaction.pressureDimen)
             is SettingsUserInteraction.ShowSettingDialog -> showSettingsDialog(interaction.type)
             SettingsUserInteraction.DismissDialog -> hideDialog()
-            SettingsUserInteraction.OnBackClick -> setAction(SettingsAction.NavigateBack)
+            SettingsUserInteraction.OnBackClick -> setSideEffect(SettingsEffect.NavigateBack)
             SettingsUserInteraction.ReadyToLaunchUpdate -> showUpdateDialog()
             SettingsUserInteraction.ReadyToInstall -> showInstallDialog()
         }
@@ -58,14 +58,14 @@ class SettingsViewModel(
     }
 
     private fun showUpdateDialog() {
-        setAction(
-            SettingsAction.ShowUpdateDialog(InAppUpdateStatus.READY_TO_LAUNCH_UPDATE)
+        setSideEffect(
+            SettingsEffect.ShowUpdateDialog(InAppUpdateStatus.READY_TO_LAUNCH_UPDATE)
         )
     }
 
     private fun showInstallDialog() {
-        setAction(
-            SettingsAction.ShowReadyToInstallDialog(InAppUpdateStatus.READY_TO_INSTALL)
+        setSideEffect(
+            SettingsEffect.ShowReadyToInstallDialog(InAppUpdateStatus.READY_TO_INSTALL)
         )
     }
 

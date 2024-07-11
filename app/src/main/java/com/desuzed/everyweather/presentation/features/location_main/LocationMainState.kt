@@ -4,6 +4,7 @@ import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.location.geo.GeoData
 import com.desuzed.everyweather.domain.model.weather.Location
+import com.desuzed.everyweather.presentation.base.State
 
 data class LocationMainState(
     val geoText: String = "",
@@ -17,4 +18,4 @@ data class LocationMainState(
     val loadNewLocationWeather: Boolean = false,
     //TODO: Перенести
     val locationDialog: LocationDialog? = null,
-)
+) : State

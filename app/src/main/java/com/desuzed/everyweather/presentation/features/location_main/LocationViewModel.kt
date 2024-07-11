@@ -21,7 +21,7 @@ class LocationViewModel(
     private val userLocationProvider: UserLocationProvider,
     private val analytics: LocationMainAnalytics,
     private val sharedPrefsProvider: SharedPrefsProvider,
-) : BaseViewModel<LocationMainState, LocationMainAction, LocationUserInteraction>(LocationMainState()) {
+) : BaseViewModel<LocationMainState, LocationMainEffect, LocationUserInteraction>(LocationMainState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
         replay = 0,
@@ -48,9 +48,9 @@ class LocationViewModel(
             LocationUserInteraction.Redirection -> redirectToLocationApiPage()
             LocationUserInteraction.FindByQuery -> findTypedLocation()
             is LocationUserInteraction.ToggleMap -> toggleMap(interaction.isVisible)
-            LocationUserInteraction.MyLocation -> setAction(LocationMainAction.MyLocation)
-            LocationUserInteraction.Settings -> setAction(LocationMainAction.NavigateToSettings)
-            LocationUserInteraction.OnBackClick -> setAction(LocationMainAction.NavigateBack)
+            LocationUserInteraction.MyLocation -> setSideEffect(LocationMainEffect.MyLocation)
+            LocationUserInteraction.Settings -> setSideEffect(LocationMainEffect.NavigateToSettings)
+            LocationUserInteraction.OnBackClick -> setSideEffect(LocationMainEffect.NavigateBack)
             LocationUserInteraction.RequestLocationPermissions -> onRequestPermissions()
             is LocationUserInteraction.UpdateFavoriteLocation -> updateFavoriteLocation(interaction.favoriteLocationDto)
             is LocationUserInteraction.ToggleEditFavoriteLocationDialog -> onToggle(interaction.item)
@@ -108,13 +108,13 @@ class LocationViewModel(
     }
 
     private fun onRequestPermissions() {
-        setAction(LocationMainAction.RequestLocationPermissions)
+        setSideEffect(LocationMainEffect.RequestLocationPermissions)
         onDismissDialog()
     }
 
     private fun onConfirmLocation(geoData: GeoData) {
-        setAction(
-            LocationMainAction.NavigateToWeather(
+        setSideEffect(
+            LocationMainEffect.NavigateToWeather(
                 query = "${geoData.lat},${geoData.lon}",
             )
         )
@@ -173,26 +173,26 @@ class LocationViewModel(
 
     private fun collectQueryResult(queryResult: QueryResult) {
         if (shouldIgnoreError(queryResult.code)) {
-            setAction(
-                LocationMainAction.NavigateToWeather(
+            setSideEffect(
+                LocationMainEffect.NavigateToWeather(
                     query = queryResult.query,
                 )
             )
         } else {
-            setAction(LocationMainAction.ShowSnackbar(queryResult))
+            setSideEffect(LocationMainEffect.ShowSnackbar(queryResult))
         }
     }
 
     private fun navigateToWeatherWithDelay(latLng: UserLatLng) {
         launch {
             delay(200)
-            setAction(LocationMainAction.NavigateToWeatherWithLatLng(latLng))
+            setSideEffect(LocationMainEffect.NavigateToWeatherWithLatLng(latLng))
         }
     }
 
     private fun onFavoriteLocation(location: FavoriteLocation) {
-        setAction(
-            LocationMainAction.NavigateToWeather(
+        setSideEffect(
+            LocationMainEffect.NavigateToWeather(
                 query = location.toQuery(),
             )
         )
@@ -236,7 +236,7 @@ class LocationViewModel(
             if (latLng != null) {
                 val userLatLng = latLng.copy(time = System.currentTimeMillis())
                 toggleMap(false)
-                setAction(LocationMainAction.NavigateToWeatherWithLatLng(userLatLng))
+                setSideEffect(LocationMainEffect.NavigateToWeatherWithLatLng(userLatLng))
             }
             setState { copy(newPickedLocation = null, loadNewLocationWeather = false) }
         }
@@ -247,7 +247,7 @@ class LocationViewModel(
     }
 
     private fun toggleMap(isShown: Boolean) {
-        setAction(LocationMainAction.ToggleMap(isShown))
+        setSideEffect(LocationMainEffect.ToggleMap(isShown))
     }
 
     private fun onNewGeoText(text: String) {

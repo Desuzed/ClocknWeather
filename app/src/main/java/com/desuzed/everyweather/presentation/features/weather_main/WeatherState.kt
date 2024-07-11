@@ -5,6 +5,7 @@ import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
+import com.desuzed.everyweather.presentation.base.State
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
 
 data class WeatherState(
@@ -16,4 +17,4 @@ data class WeatherState(
     val windSpeed: DistanceDimen = DistanceDimen.METRIC_KMH,
     val temperature: TempDimen = TempDimen.CELCIUS,
     val pressure: PressureDimen = PressureDimen.MILLIMETERS,
-)
+) : State

@@ -24,7 +24,7 @@ class WeatherMainViewModel(
     private val analytics: WeatherMainAnalytics,
     private val weatherSettingsInteractor: WeatherSettingsInteractor,
     private val systemSettingsRepository: SystemSettingsRepository,
-) : BaseViewModel<WeatherState, WeatherMainAction, WeatherUserInteraction>(WeatherState()) {
+) : BaseViewModel<WeatherState, WeatherMainEffect, WeatherUserInteraction>(WeatherState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
         replay = 0,
@@ -77,7 +77,7 @@ class WeatherMainViewModel(
     override fun onUserInteraction(interaction: WeatherUserInteraction) {
         analytics.onUserInteraction(interaction)
         when (interaction) {
-            WeatherUserInteraction.Location -> setAction(WeatherMainAction.NavigateToLocation)
+            WeatherUserInteraction.Location -> setSideEffect(WeatherMainEffect.NavigateToLocation)
             WeatherUserInteraction.Refresh -> getForecast(state.value.query)
             WeatherUserInteraction.SaveLocation -> saveLocation()
             WeatherUserInteraction.Redirection -> launch {
@@ -141,7 +141,7 @@ class WeatherMainViewModel(
     }
 
     private fun collectActionResult(queryResult: QueryResult) =
-        setAction(WeatherMainAction.ShowSnackbar(queryResult))
+        setSideEffect(WeatherMainEffect.ShowSnackbar(queryResult))
 
     private fun collectWindSpeed(windSpeed: DistanceDimen) =
         setState { copy(windSpeed = windSpeed) }

@@ -10,7 +10,7 @@ import com.desuzed.everyweather.util.Constants.ZERO_LONG
 //TODO избавиться от общей вью модели
 class SharedViewModel(
     private val appUpdateProvider: AppUpdateProvider,
-) : BaseViewModel<SharedState, SharedAction, UserInteraction>(SharedState()) {
+) : BaseViewModel<SharedState, SharedEffect, UserInteraction>(SharedState()) {
 
     init {
         collect(appUpdateProvider.appUpdateState, ::onAppUpdateState)
@@ -29,7 +29,7 @@ class SharedViewModel(
     }
 
     private fun showUpdateReadyToInstallDialog() {
-        setAction(SharedAction.UpdateReadyToInstallDialog)
+        setSideEffect(SharedEffect.UpdateReadyToInstallDialog)
     }
 
     private fun onAppUpdateState(appUpdateState: AppUpdateState?) {
@@ -63,7 +63,7 @@ class SharedViewModel(
     }
 
     private fun showUpdateAvailableDialog() {
-        setAction(SharedAction.UpdateAvailableDialog)
+        setSideEffect(SharedEffect.UpdateAvailableDialog)
     }
 
 }

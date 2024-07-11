@@ -7,16 +7,16 @@ import com.desuzed.everyweather.presentation.base.BaseViewModel
 class InAppUpdateViewModel(
     private val analytics: InAppUpdateAnalytics,
 ) :
-    BaseViewModel<InAppUpdateState, InAppUpdateAction, InAppUpdateUserInteraction>(InAppUpdateState()) {
+    BaseViewModel<InAppUpdateState, InAppUpdateEffect, InAppUpdateUserInteraction>(InAppUpdateState()) {
 
     override fun onUserInteraction(interaction: InAppUpdateUserInteraction) {
         analytics.onUserInteraction(interaction)
         val action = when (interaction) {
-            InAppUpdateUserInteraction.Dismiss -> InAppUpdateAction.Dismiss
-            InAppUpdateUserInteraction.AgreedToInstallUpdate -> InAppUpdateAction.InstallUpdate
-            InAppUpdateUserInteraction.AgreedToUpdate -> InAppUpdateAction.UpdateApplication
+            InAppUpdateUserInteraction.Dismiss -> InAppUpdateEffect.Dismiss
+            InAppUpdateUserInteraction.AgreedToInstallUpdate -> InAppUpdateEffect.InstallUpdate
+            InAppUpdateUserInteraction.AgreedToUpdate -> InAppUpdateEffect.UpdateApplication
         }
-        setAction(action)
+        setSideEffect(action)
     }
 
     fun resolveStatus(status: InAppUpdateStatus) {

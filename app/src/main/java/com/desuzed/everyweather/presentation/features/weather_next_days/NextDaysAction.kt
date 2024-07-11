@@ -1,3 +1,0 @@
-package com.desuzed.everyweather.presentation.features.weather_next_days
-
-sealed interface NextDaysAction

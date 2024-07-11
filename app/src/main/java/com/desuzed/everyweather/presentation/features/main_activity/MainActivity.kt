@@ -23,7 +23,7 @@ import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.ActionResult
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.settings.DarkMode
-import com.desuzed.everyweather.presentation.features.shared.SharedAction
+import com.desuzed.everyweather.presentation.features.shared.SharedEffect
 import com.desuzed.everyweather.presentation.features.shared.SharedState
 import com.desuzed.everyweather.presentation.features.shared.SharedViewModel
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
@@ -119,12 +119,12 @@ class MainActivity : ComponentActivity() {
         collect(viewModel.hasInternet, ::onNewNetworkState)
         collect(viewModel.isLookingForLocation, ::isLookingForLocation)
         collect(viewModel.messageFlow, ::onNewActionResult)
-        collect(viewModel.action, ::onNewAction)
+        collect(viewModel.sideEffect, ::onNewAction)
         collect(sharedViewModel.state, ::onDownloadingUpdateProgress)
-        collect(sharedViewModel.action) {
+        collect(sharedViewModel.sideEffect) {
             when (it) {
-                SharedAction.UpdateAvailableDialog -> showUpdateDialog(InAppUpdateStatus.READY_TO_LAUNCH_UPDATE)
-                SharedAction.UpdateReadyToInstallDialog -> showUpdateDialog(InAppUpdateStatus.READY_TO_INSTALL)
+                SharedEffect.UpdateAvailableDialog -> showUpdateDialog(InAppUpdateStatus.READY_TO_LAUNCH_UPDATE)
+                SharedEffect.UpdateReadyToInstallDialog -> showUpdateDialog(InAppUpdateStatus.READY_TO_INSTALL)
             }
         }
     }
@@ -173,10 +173,10 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-    private fun onNewAction(action: MainActivityAction) {
+    private fun onNewAction(action: MainActivitySideEffect) {
         when (action) {
-            is MainActivityAction.ChangeLanguage -> changeAppLanguage(action.lang)
-            is MainActivityAction.ChangeDarkMode -> changeDarkMode(action.mode)
+            is MainActivitySideEffect.ChangeLanguage -> changeAppLanguage(action.lang)
+            is MainActivitySideEffect.ChangeDarkMode -> changeDarkMode(action.mode)
         }
     }
 
