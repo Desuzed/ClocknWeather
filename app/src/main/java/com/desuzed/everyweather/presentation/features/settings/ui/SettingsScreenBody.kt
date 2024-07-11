@@ -53,7 +53,6 @@ private fun Preview() {
             selectedPressureDimen = PressureDimen.INCHES,
         ),
         updateStatus = null,
-        showDialogType = null,
         onUserInteraction = {},
     )
 }
@@ -62,7 +61,6 @@ private fun Preview() {
 fun SettingsScreenBody(
     settingsParams: SettingsUiParams,
     updateStatus: InAppUpdateStatus?,
-    showDialogType: SettingsType?,
     onUserInteraction: (SettingsUserInteraction) -> Unit,
 ) {
     GradientBox(
@@ -129,23 +127,6 @@ fun SettingsScreenBody(
                 ),
             )
             SettingsAppUpdateContent(updateStatus, onUserInteraction)
-            SettingDialog(
-                showDialogType = showDialogType,
-                language = settingsParams.selectedLang,
-                windSpeed = settingsParams.selectedDistance,
-                temperature = settingsParams.selectedTemp,
-                darkTheme = settingsParams.selectedMode,
-                pressure = settingsParams.selectedPressure,
-                langDialogItems = settingsParams.systemSettingsList.languageList,
-                darkModeDialogItems = settingsParams.systemSettingsList.darkModeList,
-                temperatureDialogItems = settingsParams.weatherUiList.temperatureSettingsList,
-                distanceDialogItems = settingsParams.weatherUiList.distanceSettingsList,
-                pressureDialogItems = settingsParams.weatherUiList.pressureSettingsList,
-                onUserInteraction = onUserInteraction,
-                onDismiss = {
-                    onUserInteraction(SettingsUserInteraction.DismissDialog)
-                }
-            )
         }
     }
 }

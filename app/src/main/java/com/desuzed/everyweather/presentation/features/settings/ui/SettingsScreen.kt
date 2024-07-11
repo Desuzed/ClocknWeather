@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.desuzed.everyweather.presentation.features.settings.SettingsAction
 import com.desuzed.everyweather.presentation.features.settings.SettingsState
+import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
 import com.desuzed.everyweather.presentation.features.settings.SettingsViewModel
 import com.desuzed.everyweather.presentation.ui.settings.SettingsMapper
 import com.desuzed.everyweather.ui.AppPreview
@@ -58,7 +59,23 @@ fun SettingsScreen(
     SettingsScreenBody(
         settingsParams = settingsParams,
         updateStatus = state.updateStatus,
-        showDialogType = state.showDialogType,
         onUserInteraction = viewModel::onUserInteraction,
+    )
+    SettingDialog(
+        showDialogType = state.showDialogType,
+        language = settingsParams.selectedLang,
+        windSpeed = settingsParams.selectedDistance,
+        temperature = settingsParams.selectedTemp,
+        darkTheme = settingsParams.selectedMode,
+        pressure = settingsParams.selectedPressure,
+        langDialogItems = settingsParams.systemSettingsList.languageList,
+        darkModeDialogItems = settingsParams.systemSettingsList.darkModeList,
+        temperatureDialogItems = settingsParams.weatherUiList.temperatureSettingsList,
+        distanceDialogItems = settingsParams.weatherUiList.distanceSettingsList,
+        pressureDialogItems = settingsParams.weatherUiList.pressureSettingsList,
+        onUserInteraction =  viewModel::onUserInteraction,
+        onDismiss = {
+            viewModel.onUserInteraction(SettingsUserInteraction.DismissDialog)
+        }
     )
 }
