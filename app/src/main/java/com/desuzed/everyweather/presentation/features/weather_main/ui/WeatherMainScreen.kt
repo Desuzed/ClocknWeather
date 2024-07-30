@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.weather_main.ui
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,7 +13,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import com.desuzed.everyweather.data.repository.providers.action_result.WeatherActionResultProvider
 import com.desuzed.everyweather.domain.model.location.UserLatLng
+import com.desuzed.everyweather.domain.model.result.QueryResult
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherAction
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainEffect
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainViewModel
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherState
@@ -20,6 +24,8 @@ import com.desuzed.everyweather.presentation.features.weather_next_days.ui.NextD
 import com.desuzed.everyweather.presentation.ui.UiMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
+import com.desuzed.everyweather.ui.elements.AppSnackbar
+import com.desuzed.everyweather.ui.elements.CollectSnackbar
 import com.desuzed.everyweather.ui.extensions.CollectSideEffect
 import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
 import com.desuzed.everyweather.ui.navigation.Destination
@@ -47,6 +53,9 @@ fun WeatherMainScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val mappedWeatherUi = remember { mutableStateOf<WeatherMainUi?>(null) }
+    //TODO рефакторинг снекбаров на новую архитектуру
+    val snackbarHostState = remember { SnackbarHostState() }
+    var snackData: QueryResult? by remember { mutableStateOf(null) }
     //todo сделать передачу с locationScreen, а лучше избавиться от этого костыля
     navBackStackEntry.getResult<String>(QUERY_KEY)?.let {
         if (it.isNotBlank()) {
@@ -99,15 +108,27 @@ fun WeatherMainScreen(
             WeatherMainEffect.NavigateToNextDaysWeather -> {
 
             } // todo
-            is WeatherMainEffect.ShowSnackbar -> {} // todo
+            is WeatherMainEffect.ShowSnackbar -> {
+                snackData = it.queryResult
+            }
         }
     }
+
     //TODO избавиться от этого костыля
     CollectSideEffect(getMainActivity().getUserLatLngFlow()) { location ->
         if (location != null) {
             viewModel.getForecast(location.toString())
         }
     }
+    CollectSnackbar(
+        queryResult = snackData,
+        snackbarState = snackbarHostState,
+        providerClass = WeatherActionResultProvider::class,
+        onRetryClick = {
+            viewModel.onAction(WeatherAction.Refresh)
+        },
+    )
+
     WeatherMainBody(
         weatherData = mappedWeatherUi,
         nextDaysUiList = nextDaysUiList,
@@ -120,6 +141,11 @@ fun WeatherMainScreen(
                 selectedDayItem = it
                 sheetState.show()
             }
+        },
+        boxScopeContent = {
+            AppSnackbar(
+                snackbarState = snackbarHostState,
+            )
         },
     )
     NextDaysWeatherBottomSheet(

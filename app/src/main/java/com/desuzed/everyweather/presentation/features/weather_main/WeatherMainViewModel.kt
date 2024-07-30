@@ -14,9 +14,7 @@ import com.desuzed.everyweather.domain.model.weather.WeatherContent
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
 import com.desuzed.everyweather.presentation.base.BaseViewModel
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 class WeatherMainViewModel(
     private val weatherInteractor: WeatherInteractor,
@@ -26,12 +24,6 @@ class WeatherMainViewModel(
     private val systemSettingsRepository: SystemSettingsRepository,
 ) : BaseViewModel<WeatherState, WeatherMainEffect, WeatherAction>(WeatherState()) {
 
-    private val queryResultFlow = MutableSharedFlow<QueryResult>(
-        replay = 0,
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
     init {
         getCachedForecast()
         loadCachedQuery()
@@ -40,7 +32,6 @@ class WeatherMainViewModel(
         collect(weatherSettingsInteractor.tempDimen, ::collectTemperature)
         collect(systemSettingsRepository.lang, ::collectLanguage)
         collect(weatherSettingsInteractor.pressureDimen, ::collectPressure)
-        collect(queryResultFlow, ::collectActionResult)
         onAction(WeatherAction.Refresh)
     }
 
@@ -63,7 +54,7 @@ class WeatherMainViewModel(
                 )
             }
             if (actionResult != null) {
-                queryResultFlow.emit(actionResult)
+                setSideEffect(WeatherMainEffect.ShowSnackbar(actionResult))
                 setState {
                     copy(
                         isLoading = false,
@@ -80,9 +71,7 @@ class WeatherMainViewModel(
             WeatherAction.Location -> setSideEffect(WeatherMainEffect.NavigateToLocation)
             WeatherAction.Refresh -> getForecast(state.value.query)
             WeatherAction.SaveLocation -> saveLocation()
-            WeatherAction.Redirection -> launch {
-                queryResultFlow.emit(QueryResult(ActionResultProvider.REDIRECTION))
-            }
+            WeatherAction.Redirection -> onRedirection()
         }
     }
 
@@ -98,19 +87,14 @@ class WeatherMainViewModel(
     }
 
     private fun onError(code: Int) {
-        launch {
-            queryResultFlow.emit(QueryResult(code = code))
-        }
+        setSideEffect(WeatherMainEffect.ShowSnackbar(QueryResult(code = code)))
     }
 
     private fun onSuccess(code: Int) {
-        launch {
-            queryResultFlow.emit(QueryResult(code = code))
-            setState {
-                copy(isAddButtonEnabled = false)
-            }
+        setSideEffect(WeatherMainEffect.ShowSnackbar(QueryResult(code = code)))
+        setState {
+            copy(isAddButtonEnabled = false)
         }
-
     }
 
     private suspend fun isLocationSaved(weatherContent: WeatherContent): Boolean {
@@ -140,8 +124,13 @@ class WeatherMainViewModel(
         setState { copy(query = query) }
     }
 
-    private fun collectActionResult(queryResult: QueryResult) =
-        setSideEffect(WeatherMainEffect.ShowSnackbar(queryResult))
+    private fun onRedirection() {
+        setSideEffect(
+            WeatherMainEffect.ShowSnackbar(
+                queryResult = QueryResult(ActionResultProvider.REDIRECTION),
+            )
+        )
+    }
 
     private fun collectWindSpeed(windSpeed: DistanceDimen) =
         setState { copy(windSpeed = windSpeed) }

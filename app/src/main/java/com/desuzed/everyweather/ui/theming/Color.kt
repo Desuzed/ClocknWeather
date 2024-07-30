@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 
 data class EveryweatherColors(
     val primary: Color,
+    val primaryInvariant: Color,
     val primaryBackground: List<Color>,
     val secondaryBackground: List<Color>,
     val tertiaryBackground: Color,
@@ -14,6 +15,7 @@ data class EveryweatherColors(
     val surfaceOnSecondaryBg: Color = Gray30Alpha,
     val onBackgroundPrimary: Color,
     val onBackgroundSecondary: Color,
+    val onBackgroundInvariant: Color,
     val onPrimary: Color,
     val neutral: Color,
     val accent: Color,
@@ -48,10 +50,12 @@ val PrimaryGradientNightEnd = Color(0xFF000E2E)
 
 val LightColorPalette = EveryweatherColors(
     primary = indigo700,
+    primaryInvariant = lightBlue700,
     surfacePrimary = Blue50DarkCustomized,
     surfaceSecondary = Blue50customized,
     onBackgroundPrimary = NearDark,
     onBackgroundSecondary = White,
+    onBackgroundInvariant = White,
     onPrimary = NearWhite,
     neutral = Gray,
     primaryBackground = listOf(White, White),
@@ -63,10 +67,12 @@ val LightColorPalette = EveryweatherColors(
 
 val DarkColorPalette = EveryweatherColors(
     primary = lightBlue700,
+    primaryInvariant = indigo700,
     surfacePrimary = Indigo400DarkCustomized,
     surfaceSecondary = Indigo300DarkCustomized,
     onBackgroundPrimary = NearWhite,
     onBackgroundSecondary = NearWhite,
+    onBackgroundInvariant = NearDark,
     onPrimary = NearWhite,
     neutral = Gray,
     primaryBackground = listOf(PrimaryGradientNightStart, PrimaryGradientNightEnd),

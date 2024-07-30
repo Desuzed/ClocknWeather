@@ -1,6 +1,7 @@
 package com.desuzed.everyweather.presentation.features.weather_main.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,6 +43,7 @@ private fun Preview() {
         isAddButtonEnabled = false,
         onAction = {},
         onNextDayClick = {},
+        boxScopeContent = {},
     )
 }
 
@@ -54,6 +56,7 @@ fun WeatherMainBody(
     isAddButtonEnabled: Boolean,
     onAction: (WeatherAction) -> Unit,
     onNextDayClick: (NextDaysUi) -> Unit,
+    boxScopeContent: @Composable BoxScope. () -> Unit,
 ) {
     val refreshingState = rememberPullRefreshState(
         refreshing = isLoading,
@@ -118,6 +121,7 @@ fun WeatherMainBody(
             backgroundColor = EveryweatherTheme.colors.primaryBackground.first(),
             contentColor = EveryweatherTheme.colors.primary,
         )
+        boxScopeContent.invoke(this)
     }
 
 }

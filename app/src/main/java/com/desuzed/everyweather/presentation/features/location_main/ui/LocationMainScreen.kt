@@ -1,17 +1,26 @@
 package com.desuzed.everyweather.presentation.features.location_main.ui
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.desuzed.everyweather.data.repository.providers.action_result.WeatherActionResultProvider
+import com.desuzed.everyweather.domain.model.result.QueryResult
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.presentation.features.location_main.LocationMainEffect
 import com.desuzed.everyweather.presentation.features.location_main.LocationMainState
 import com.desuzed.everyweather.presentation.features.location_main.LocationViewModel
 import com.desuzed.everyweather.presentation.features.location_main.ui.map.MapBottomSheetScreen
 import com.desuzed.everyweather.ui.AppPreview
+import com.desuzed.everyweather.ui.elements.AppSnackbar
+import com.desuzed.everyweather.ui.elements.CollectSnackbar
 import com.desuzed.everyweather.ui.extensions.CollectSideEffect
 import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
 import com.desuzed.everyweather.ui.navigation.Destination
@@ -40,6 +49,9 @@ fun LocationMainScreen(
         skipPartiallyExpanded = true,
     )
     val coroutineScope = rememberCoroutineScope()
+    //TODO рефакторинг снекбаров на новую архитектуру
+    var snackData: QueryResult? by remember { mutableStateOf(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
     CollectSideEffect(source = viewModel.sideEffect) {
         when (it) {
             LocationMainEffect.MyLocation -> {} //TODO
@@ -61,14 +73,29 @@ fun LocationMainScreen(
                 }
             }
 
-            is LocationMainEffect.ShowSnackbar -> {} //TODO()
+            is LocationMainEffect.ShowSnackbar -> {
+                snackData = it.queryResult
+            }
         }
     }
+    CollectSnackbar(
+        queryResult = snackData,
+        snackbarState = snackbarHostState,
+        providerClass = WeatherActionResultProvider::class,
+        onRetryClick = {
+            viewModel.onAction(LocationAction.FindByQuery)
+        },
+    )
     LocationMainBody(
         locations = state.locations,
         isLoading = state.isLoading,
         geoText = state.geoText,
         onAction = viewModel::onAction,
+        boxScopeContent = {
+            AppSnackbar(
+                snackbarState = snackbarHostState,
+            )
+        }
     )
     MapBottomSheetScreen(
         sheetState = sheetState,

@@ -12,9 +12,7 @@ import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 class LocationViewModel(
     private val locationInteractor: LocationInteractor,
@@ -23,15 +21,8 @@ class LocationViewModel(
     private val sharedPrefsProvider: SharedPrefsProvider,
 ) : BaseViewModel<LocationMainState, LocationMainEffect, LocationAction>(LocationMainState()) {
 
-    private val queryResultFlow = MutableSharedFlow<QueryResult>(
-        replay = 0,
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
     init {
         collect(locationInteractor.getAllLocations(), ::onNewLocations)
-        collect(queryResultFlow, ::collectQueryResult)
         initMapPin()
     }
 
@@ -88,10 +79,22 @@ class LocationViewModel(
             }
             val resultAction = resultGeo.queryResult
             if (resultAction != null) {
-                queryResultFlow.emit(resultAction)
+                handleGeoError(resultAction)
             }
         }
 
+    }
+
+    private fun handleGeoError(queryResult: QueryResult) {
+        if (shouldIgnoreError(queryResult.code)) {
+            setSideEffect(
+                LocationMainEffect.NavigateToWeather(
+                    query = queryResult.query,
+                )
+            )
+        } else {
+            setSideEffect(LocationMainEffect.ShowSnackbar(queryResult))
+        }
     }
 
     private fun onDismissDialog() {
@@ -159,28 +162,16 @@ class LocationViewModel(
         }
     }
 
-    private suspend fun onSuccess(code: Int) {
-        queryResultFlow.emit(QueryResult(code))
+    private fun onSuccess(code: Int) {
+        setSideEffect(LocationMainEffect.ShowSnackbar(QueryResult(code)))
     }
 
-    private suspend fun onError(code: Int) {
-        queryResultFlow.emit(QueryResult(code))
+    private fun onError(code: Int) {
+        setSideEffect(LocationMainEffect.ShowSnackbar(QueryResult(code)))
     }
 
     private fun onNewLocations(locationsList: List<FavoriteLocation>) {
         setState { copy(locations = locationsList) }
-    }
-
-    private fun collectQueryResult(queryResult: QueryResult) {
-        if (shouldIgnoreError(queryResult.code)) {
-            setSideEffect(
-                LocationMainEffect.NavigateToWeather(
-                    query = queryResult.query,
-                )
-            )
-        } else {
-            setSideEffect(LocationMainEffect.ShowSnackbar(queryResult))
-        }
     }
 
     private fun navigateToWeatherWithDelay(latLng: UserLatLng) {
@@ -199,11 +190,16 @@ class LocationViewModel(
     }
 
     private fun redirectToLocationApiPage() {
-        launch {
-            queryResultFlow.emit(QueryResult(code = ActionResultProvider.REDIRECTION))
-        }
+        setSideEffect(
+            LocationMainEffect.ShowSnackbar(
+                QueryResult(ActionResultProvider.REDIRECTION)
+            )
+        )
     }
 
+    /**
+     * Нужен для того, чтобы игнорить ошибки Geo API и подсовывать query в Weather Api
+     * */
     private fun shouldIgnoreError(code: Int): Boolean =
         code == GeoActionResultProvider.RATE_LIMIT
                 || code == GeoActionResultProvider.ACCESS_RESTRICTED
