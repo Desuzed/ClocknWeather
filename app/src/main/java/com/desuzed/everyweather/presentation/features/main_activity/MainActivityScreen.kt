@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.desuzed.everyweather.ui.navigation.Destination
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainScreen
 import com.desuzed.everyweather.ui.navigation.appNavGraph
 
 @Composable
@@ -17,7 +17,7 @@ fun MainActivityScreen() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = Destination.WeatherMainScreen.route,
+            startDestination = WeatherMainScreen.route,
         ) {
             appNavGraph(navController)
         }

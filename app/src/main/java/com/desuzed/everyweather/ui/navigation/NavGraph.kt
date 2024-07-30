@@ -3,9 +3,10 @@ package com.desuzed.everyweather.ui.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.desuzed.everyweather.presentation.features.location_main.ui.LocationMainScreen
+import com.desuzed.everyweather.presentation.base.composeScreenDestination
+import com.desuzed.everyweather.presentation.features.location_main.LocationMainScreen
 import com.desuzed.everyweather.presentation.features.settings.ui.SettingsScreen
-import com.desuzed.everyweather.presentation.features.weather_main.ui.WeatherMainScreen
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainScreen
 
 fun NavGraphBuilder.appNavGraph(
     navController: NavHostController,
@@ -17,18 +18,9 @@ fun NavGraphBuilder.appNavGraph(
 //        )
 //    }
 
-    composable(Destination.WeatherMainScreen.route) { navEntry ->
-        WeatherMainScreen(
-            navController = navController,
-            navBackStackEntry = navEntry,
-        )
-    }
+    composeScreenDestination(WeatherMainScreen, navController)
 
-    composable(Destination.LocationScreen.route) {
-        LocationMainScreen(
-            navController = navController,
-        )
-    }
+    composeScreenDestination(LocationMainScreen, navController)
 
     composable(Destination.SettingsScreen.route) {
         SettingsScreen(
