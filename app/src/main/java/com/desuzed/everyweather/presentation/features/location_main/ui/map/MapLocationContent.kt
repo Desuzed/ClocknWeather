@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.weather.Location
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.RegularText
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
@@ -36,7 +36,7 @@ private fun Preview() {
             location = null,
             newPickedLocation = null,
             loadNewLocationWeather = false,
-            onUserInteraction = {},
+            onAction = {},
         )
     }
 }
@@ -48,7 +48,7 @@ fun MapLocationContent(
     location: Location?,
     newPickedLocation: UserLatLng?,
     loadNewLocationWeather: Boolean,
-    onUserInteraction: (LocationUserInteraction) -> Unit,
+    onAction: (LocationAction) -> Unit,
 ) {
     Surface(
         modifier = Modifier.height(dimensionResource(id = R.dimen.dimen_350)),
@@ -89,8 +89,8 @@ fun MapLocationContent(
                         .padding(top = dimensionResource(id = R.dimen.dimen_10)),
                     cameraPositionState = cameraPositionState,
                     onMapClick = {
-                        onUserInteraction(
-                            LocationUserInteraction.NewLocationPicked(
+                        onAction(
+                            LocationAction.NewLocationPicked(
                                 location = UserLatLng(
                                     lat = it.latitude,
                                     lon = it.longitude,

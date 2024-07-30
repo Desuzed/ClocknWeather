@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherAction
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
 import com.desuzed.everyweather.ui.AppPreview
@@ -40,7 +40,7 @@ private fun Preview() {
         nextDaysUiList = remember { mutableStateOf(null) },
         isLoading = false,
         isAddButtonEnabled = false,
-        onUserInteraction = {},
+        onAction = {},
         onNextDayClick = {},
     )
 }
@@ -52,12 +52,12 @@ fun WeatherMainBody(
     nextDaysUiList: State<List<NextDaysUi>?>,
     isLoading: Boolean,
     isAddButtonEnabled: Boolean,
-    onUserInteraction: (WeatherUserInteraction) -> Unit,
+    onAction: (WeatherAction) -> Unit,
     onNextDayClick: (NextDaysUi) -> Unit,
 ) {
     val refreshingState = rememberPullRefreshState(
         refreshing = isLoading,
-        onRefresh = { onUserInteraction(WeatherUserInteraction.Refresh) },
+        onRefresh = { onAction(WeatherAction.Refresh) },
     )
     val fabSize = dimensionResource(id = R.dimen.dimen_50)
     Box(
@@ -71,7 +71,7 @@ fun WeatherMainBody(
             ) {
                 WeatherHeaderInfo(
                     mainInfoUi = weatherUi.mainInfo,
-                    onUserInteraction = onUserInteraction,
+                    onAction = onAction,
                     refreshingState = refreshingState,
                 ) { headerHeight ->
                     fabPadding = headerHeight.toIntDp.dp - fabSize / 2
@@ -81,7 +81,7 @@ fun WeatherMainBody(
                     refreshingState = refreshingState,
                     nextDaysUiList = nextDaysUiList,
                     onNextDayClick = onNextDayClick,
-                    onUserInteraction = onUserInteraction,
+                    onAction = onAction,
                 )
 
             }
@@ -94,7 +94,7 @@ fun WeatherMainBody(
                         )
                         .size(size = fabSize),
                     id = R.drawable.ic_round_add_location_24,
-                    onClick = { onUserInteraction(WeatherUserInteraction.SaveLocation) }
+                    onClick = { onAction(WeatherAction.SaveLocation) }
                 )
             }
         } else {
@@ -104,7 +104,7 @@ fun WeatherMainBody(
                         .align(Alignment.Center)
                         .pullRefresh(refreshingState)
                         .verticalScroll(rememberScrollState()),
-                    onUserInteraction = onUserInteraction,
+                    onAction = onAction,
                 )
             }
         }

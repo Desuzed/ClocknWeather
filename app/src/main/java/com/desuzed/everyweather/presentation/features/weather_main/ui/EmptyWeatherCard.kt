@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.GradientBox
@@ -32,7 +32,7 @@ private fun Preview() {
 @Composable
 fun EmptyWeatherCard(
     modifier: Modifier = Modifier,
-    onUserInteraction: (WeatherUserInteraction) -> Unit,
+    onAction: (WeatherAction) -> Unit,
 ) {
     GradientBox(
         modifier = Modifier.fillMaxSize(),
@@ -59,7 +59,7 @@ fun EmptyWeatherCard(
                 )
                 RegularText(text = stringResource(id = R.string.no_weather_data_is_loaded))
                 RoundedButton(
-                    onClick = { onUserInteraction(WeatherUserInteraction.Location) },
+                    onClick = { onAction(WeatherAction.Location) },
                     text = stringResource(id = R.string.choose_location)
                 )
             }

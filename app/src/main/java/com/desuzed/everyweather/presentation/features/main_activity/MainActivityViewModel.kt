@@ -8,8 +8,8 @@ import com.desuzed.everyweather.domain.model.location.UserLocationResult
 import com.desuzed.everyweather.domain.model.result.ActionResult
 import com.desuzed.everyweather.domain.model.settings.DarkMode
 import com.desuzed.everyweather.domain.model.settings.Lang
+import com.desuzed.everyweather.presentation.base.Action
 import com.desuzed.everyweather.presentation.base.BaseViewModel
-import com.desuzed.everyweather.presentation.base.UserInteraction
 import com.desuzed.everyweather.util.Constants.LANG_RU_LOWERCASE
 import com.desuzed.everyweather.util.Timer
 import kotlinx.coroutines.Job
@@ -25,7 +25,7 @@ import kotlin.coroutines.cancellation.CancellationException
 class MainActivityViewModel(
     private val systemInteractor: SystemInteractor,
     private val systemSettingsInteractor: SystemSettingsInteractor,
-) : BaseViewModel<MainActivityState, MainActivitySideEffect, UserInteraction>(MainActivityState()) {
+) : BaseViewModel<MainActivityState, MainActivitySideEffect, Action>(MainActivityState()) {
 
     private val _isLookingForLocation = MutableSharedFlow<Boolean>(
         replay = 0,

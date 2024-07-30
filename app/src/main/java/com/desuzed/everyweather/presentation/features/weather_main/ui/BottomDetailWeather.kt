@@ -35,7 +35,7 @@ import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.TempDimen
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherAction
 import com.desuzed.everyweather.presentation.features.weather_next_days.ui.NextDaysUiListContent
 import com.desuzed.everyweather.presentation.ui.UiMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
@@ -73,7 +73,7 @@ private fun Preview() {
         mappedWeatherUi.value?.let {
             BottomDetailWeather(
                 weatherUi = it,
-                onUserInteraction = {},
+                onAction = {},
                 onNextDayClick = {},
                 nextDaysUiList = remember { mutableStateOf(null) },
                 refreshingState = rememberPullRefreshState(
@@ -95,7 +95,7 @@ fun BottomDetailWeather(
     refreshingState: PullRefreshState,
     nextDaysUiList: State<List<NextDaysUi>?>,
     onNextDayClick: (NextDaysUi) -> Unit,
-    onUserInteraction: (WeatherUserInteraction) -> Unit,
+    onAction: (WeatherAction) -> Unit,
 ) {
     GradientBox(
         modifier = Modifier.fillMaxSize(),
@@ -164,7 +164,7 @@ fun BottomDetailWeather(
                 url = stringResource(id = R.string.uri),
                 startIndex = startIndex,
                 endIndex = startIndex + WEATHER_LINK_LENGTH,
-                onClick = { onUserInteraction(WeatherUserInteraction.Redirection) },
+                onClick = { onAction(WeatherAction.Redirection) },
             )
         }
     }

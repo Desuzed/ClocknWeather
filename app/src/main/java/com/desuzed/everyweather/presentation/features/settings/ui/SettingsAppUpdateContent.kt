@@ -9,7 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
-import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.presentation.features.settings.SettingsAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.MediumText
 import com.desuzed.everyweather.ui.elements.RoundedButton
@@ -21,7 +21,7 @@ private fun Preview() {
     EveryweatherTheme {
         SettingsAppUpdateContent(
             updateStatus = InAppUpdateStatus.READY_TO_INSTALL,
-            onUserInteraction = {},
+            onAction = {},
         )
     }
 }
@@ -29,7 +29,7 @@ private fun Preview() {
 @Composable
 fun SettingsAppUpdateContent(
     updateStatus: InAppUpdateStatus?,
-    onUserInteraction: (SettingsUserInteraction) -> Unit,
+    onAction: (SettingsAction) -> Unit,
 ) {
     if (updateStatus != null) {
         val inAppUpdateUiParams = SettingsInAppUpdateUiParams.fromInAppUpdateStatus(updateStatus)
@@ -49,7 +49,7 @@ fun SettingsAppUpdateContent(
                 .fillMaxWidth()
                 .padding(vertical = dimensionResource(id = R.dimen.dimen_10)),
             onClick = {
-                onUserInteraction(inAppUpdateUiParams.userInteraction)
+                onAction(inAppUpdateUiParams.action)
             },
             text = stringResource(id = inAppUpdateUiParams.buttonTextId),
         )

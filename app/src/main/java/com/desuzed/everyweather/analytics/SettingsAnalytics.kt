@@ -1,19 +1,19 @@
 package com.desuzed.everyweather.analytics
 
 import android.content.Context
-import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.presentation.features.settings.SettingsAction
 
 class SettingsAnalytics(context: Context) : Analytics(context = context) {
 
-    fun onUserInteraction(interaction: SettingsUserInteraction) {
-        when (interaction) {
-            is SettingsUserInteraction.ChangeDarkMode -> logEvent(CHANGE_DARK_MODE)
-            is SettingsUserInteraction.ChangeDistanceDimension -> logEvent(CHANGE_DISTANCE)
-            is SettingsUserInteraction.ChangeLanguage -> logEvent(CHANGE_LANG)
-            is SettingsUserInteraction.ChangePressureDimension -> logEvent(CHANGE_PRESSURE)
-            is SettingsUserInteraction.ChangeTemperatureDimension -> logEvent(CHANGE_TEMPERATURE)
-            is SettingsUserInteraction.ReadyToLaunchUpdate -> logEvent(LAUNCH_UPDATE)
-            is SettingsUserInteraction.ReadyToInstall -> logEvent(INSTALL_UPDATE)
+    fun onAction(action: SettingsAction) {
+        when (action) {
+            is SettingsAction.ChangeDarkMode -> logEvent(CHANGE_DARK_MODE)
+            is SettingsAction.ChangeDistanceDimension -> logEvent(CHANGE_DISTANCE)
+            is SettingsAction.ChangeLanguage -> logEvent(CHANGE_LANG)
+            is SettingsAction.ChangePressureDimension -> logEvent(CHANGE_PRESSURE)
+            is SettingsAction.ChangeTemperatureDimension -> logEvent(CHANGE_TEMPERATURE)
+            is SettingsAction.ReadyToLaunchUpdate -> logEvent(LAUNCH_UPDATE)
+            is SettingsAction.ReadyToInstall -> logEvent(INSTALL_UPDATE)
             else -> {}
         }
     }

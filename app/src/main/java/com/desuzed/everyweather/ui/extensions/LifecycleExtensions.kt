@@ -28,7 +28,7 @@ fun <S> Flow<S>.collectAsStateWithLifecycle(
 }
 
 @Composable
-inline fun <T> CollectAction(
+inline fun <T> CollectSideEffect(
     source: Flow<T>?,
     crossinline consumer: (T) -> Unit,
 ) {

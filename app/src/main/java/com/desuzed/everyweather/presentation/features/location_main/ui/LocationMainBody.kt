@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.location.FavoriteLocation
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.FloatingButton
 import com.desuzed.everyweather.ui.elements.GradientBox
@@ -28,7 +28,7 @@ private fun Preview() {
             locations = emptyList(),
             isLoading = false,
             geoText = "",
-            onUserInteraction = {},
+            onAction = {},
         )
     }
 }
@@ -38,7 +38,7 @@ fun LocationMainBody(
     locations: List<FavoriteLocation>,
     isLoading: Boolean,
     geoText: String,
-    onUserInteraction: (LocationUserInteraction) -> Unit,
+    onAction: (LocationAction) -> Unit,
 ) {
     GradientBox(
         modifier = Modifier.fillMaxSize(),
@@ -48,12 +48,12 @@ fun LocationMainBody(
             locations = locations,
             isLoading = isLoading,
             geoText = geoText,
-            onUserInteraction = onUserInteraction,
+            onAction = onAction,
             onGeoTextChanged = {
-                onUserInteraction(LocationUserInteraction.GeoInputQuery(it))
+                onAction(LocationAction.GeoInputQuery(it))
             },
             onShowDeleteDialog = {
-                onUserInteraction(LocationUserInteraction.ShowDeleteFavoriteLocation(it))
+                onAction(LocationAction.ShowDeleteFavoriteLocation(it))
             }
         )
         if (locations.isEmpty()) {
@@ -76,7 +76,7 @@ fun LocationMainBody(
                 .navigationBarsPadding()
                 .imePadding()
                 .align(Alignment.BottomEnd),
-            onClick = { onUserInteraction(LocationUserInteraction.MyLocation) },
+            onClick = { onAction(LocationAction.MyLocation) },
         )
     }
 

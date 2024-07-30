@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.location.geo.GeoData
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.MediumText
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
@@ -29,7 +29,7 @@ private fun Preview() {
                 name = "name",
                 importance = 0f,
             ),
-            onUserInteraction = {},
+            onAction = {},
         )
     }
 }
@@ -37,7 +37,7 @@ private fun Preview() {
 @Composable
 fun GeoDataItem(
     geoData: GeoData,
-    onUserInteraction: (LocationUserInteraction) -> Unit,
+    onAction: (LocationAction) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -45,7 +45,7 @@ fun GeoDataItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(interactionSource = interactionSource, indication = null) {
-                onUserInteraction(LocationUserInteraction.ConfirmFoundLocation(geoData))
+                onAction(LocationAction.ConfirmFoundLocation(geoData))
             },
         verticalAlignment = Alignment.CenterVertically
     ) {

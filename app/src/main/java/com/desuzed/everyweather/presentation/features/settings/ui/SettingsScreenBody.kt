@@ -24,9 +24,8 @@ import com.desuzed.everyweather.domain.model.settings.DarkMode
 import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
-import com.desuzed.everyweather.domain.model.settings.SettingsType
 import com.desuzed.everyweather.domain.model.settings.TempDimen
-import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.presentation.features.settings.SettingsAction
 import com.desuzed.everyweather.presentation.ui.settings.SettingsMapper
 import com.desuzed.everyweather.presentation.ui.settings.SettingsUiParams
 import com.desuzed.everyweather.ui.AppPreview
@@ -53,7 +52,7 @@ private fun Preview() {
             selectedPressureDimen = PressureDimen.INCHES,
         ),
         updateStatus = null,
-        onUserInteraction = {},
+        onAction = {},
     )
 }
 
@@ -61,7 +60,7 @@ private fun Preview() {
 fun SettingsScreenBody(
     settingsParams: SettingsUiParams,
     updateStatus: InAppUpdateStatus?,
-    onUserInteraction: (SettingsUserInteraction) -> Unit,
+    onAction: (SettingsAction) -> Unit,
 ) {
     GradientBox(
         modifier = Modifier
@@ -87,7 +86,7 @@ fun SettingsScreenBody(
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.dimen_34))
                         .padding(start = dimensionResource(id = R.dimen.dimen_10)),
-                    onClick = { onUserInteraction(SettingsUserInteraction.OnBackClick) },
+                    onClick = { onAction(SettingsAction.OnBackClick) },
                     content = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_round_arrow_back),
@@ -105,7 +104,7 @@ fun SettingsScreenBody(
                 ),
             )
             SettingsMenuGroupContent(
-                onUserInteraction = onUserInteraction,
+                onAction = onAction,
                 items = listOf(
                     settingsParams.selectedLang,
                     settingsParams.selectedMode,
@@ -119,14 +118,14 @@ fun SettingsScreenBody(
                 ),
             )
             SettingsMenuGroupContent(
-                onUserInteraction = onUserInteraction,
+                onAction = onAction,
                 items = listOf(
                     settingsParams.selectedTemp,
                     settingsParams.selectedDistance,
                     settingsParams.selectedPressure,
                 ),
             )
-            SettingsAppUpdateContent(updateStatus, onUserInteraction)
+            SettingsAppUpdateContent(updateStatus, onAction)
         }
     }
 }

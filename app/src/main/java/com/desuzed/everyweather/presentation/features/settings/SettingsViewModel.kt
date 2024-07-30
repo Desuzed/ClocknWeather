@@ -22,7 +22,7 @@ class SettingsViewModel(
     private val systemSettingsInteractor: SystemSettingsInteractor,
     private val analytics: SettingsAnalytics,
     private val appUpdateProvider: AppUpdateProvider,
-) : BaseViewModel<SettingsState, SettingsEffect, SettingsUserInteraction>(SettingsState()) {
+) : BaseViewModel<SettingsState, SettingsEffect, SettingsAction>(SettingsState()) {
 
     init {
         collect(systemSettingsInteractor.darkMode, ::collectDarkTheme)
@@ -33,19 +33,19 @@ class SettingsViewModel(
         collect(appUpdateProvider.appUpdateState, ::onAppUpdateState)
     }
 
-    override fun onUserInteraction(interaction: SettingsUserInteraction) {
-        analytics.onUserInteraction(interaction)
-        when (interaction) {
-            is SettingsUserInteraction.ChangeLanguage -> onLanguage(interaction.lang)
-            is SettingsUserInteraction.ChangeDarkMode -> onDarkMode(interaction.darkMode)
-            is SettingsUserInteraction.ChangeDistanceDimension -> onDistanceDimen(interaction.distanceDimen)
-            is SettingsUserInteraction.ChangeTemperatureDimension -> onTemperatureDimen(interaction.tempDimen)
-            is SettingsUserInteraction.ChangePressureDimension -> onPressureDimen(interaction.pressureDimen)
-            is SettingsUserInteraction.ShowSettingDialog -> showSettingsDialog(interaction.type)
-            SettingsUserInteraction.DismissDialog -> hideDialog()
-            SettingsUserInteraction.OnBackClick -> setSideEffect(SettingsEffect.NavigateBack)
-            SettingsUserInteraction.ReadyToLaunchUpdate -> showUpdateDialog()
-            SettingsUserInteraction.ReadyToInstall -> showInstallDialog()
+    override fun onAction(action: SettingsAction) {
+        analytics.onAction(action)
+        when (action) {
+            is SettingsAction.ChangeLanguage -> onLanguage(action.lang)
+            is SettingsAction.ChangeDarkMode -> onDarkMode(action.darkMode)
+            is SettingsAction.ChangeDistanceDimension -> onDistanceDimen(action.distanceDimen)
+            is SettingsAction.ChangeTemperatureDimension -> onTemperatureDimen(action.tempDimen)
+            is SettingsAction.ChangePressureDimension -> onPressureDimen(action.pressureDimen)
+            is SettingsAction.ShowSettingDialog -> showSettingsDialog(action.type)
+            SettingsAction.DismissDialog -> hideDialog()
+            SettingsAction.OnBackClick -> setSideEffect(SettingsEffect.NavigateBack)
+            SettingsAction.ReadyToLaunchUpdate -> showUpdateDialog()
+            SettingsAction.ReadyToInstall -> showInstallDialog()
         }
     }
 

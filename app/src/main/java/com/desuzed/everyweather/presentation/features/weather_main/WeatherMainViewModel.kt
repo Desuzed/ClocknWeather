@@ -24,7 +24,7 @@ class WeatherMainViewModel(
     private val analytics: WeatherMainAnalytics,
     private val weatherSettingsInteractor: WeatherSettingsInteractor,
     private val systemSettingsRepository: SystemSettingsRepository,
-) : BaseViewModel<WeatherState, WeatherMainEffect, WeatherUserInteraction>(WeatherState()) {
+) : BaseViewModel<WeatherState, WeatherMainEffect, WeatherAction>(WeatherState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
         replay = 0,
@@ -41,7 +41,7 @@ class WeatherMainViewModel(
         collect(systemSettingsRepository.lang, ::collectLanguage)
         collect(weatherSettingsInteractor.pressureDimen, ::collectPressure)
         collect(queryResultFlow, ::collectActionResult)
-        onUserInteraction(WeatherUserInteraction.Refresh)
+        onAction(WeatherAction.Refresh)
     }
 
     fun getForecast(query: String, userLatLng: UserLatLng? = null) {
@@ -74,13 +74,13 @@ class WeatherMainViewModel(
         }
     }
 
-    override fun onUserInteraction(interaction: WeatherUserInteraction) {
-        analytics.onUserInteraction(interaction)
-        when (interaction) {
-            WeatherUserInteraction.Location -> setSideEffect(WeatherMainEffect.NavigateToLocation)
-            WeatherUserInteraction.Refresh -> getForecast(state.value.query)
-            WeatherUserInteraction.SaveLocation -> saveLocation()
-            WeatherUserInteraction.Redirection -> launch {
+    override fun onAction(action: WeatherAction) {
+        analytics.onAction(action)
+        when (action) {
+            WeatherAction.Location -> setSideEffect(WeatherMainEffect.NavigateToLocation)
+            WeatherAction.Refresh -> getForecast(state.value.query)
+            WeatherAction.SaveLocation -> saveLocation()
+            WeatherAction.Redirection -> launch {
                 queryResultFlow.emit(QueryResult(ActionResultProvider.REDIRECTION))
             }
         }

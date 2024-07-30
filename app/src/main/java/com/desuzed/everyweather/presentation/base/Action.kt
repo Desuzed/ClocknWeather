@@ -1,3 +1,3 @@
 package com.desuzed.everyweather.presentation.base
 
-interface UserInteraction
+interface Action

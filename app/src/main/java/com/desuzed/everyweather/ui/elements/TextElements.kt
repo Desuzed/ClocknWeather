@@ -43,7 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherAction
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
 
@@ -201,7 +201,7 @@ fun DelimiterText() {
 }
 
 @Composable
-fun LocationText(text: String, onUserInteraction: (WeatherUserInteraction) -> Unit) {
+fun LocationText(text: String, onAction: (WeatherAction) -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     Card(
         modifier = Modifier
@@ -220,7 +220,7 @@ fun LocationText(text: String, onUserInteraction: (WeatherUserInteraction) -> Un
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,
-                    onClick = { onUserInteraction(WeatherUserInteraction.Location) },
+                    onClick = { onAction(WeatherAction.Location) },
                 ),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {

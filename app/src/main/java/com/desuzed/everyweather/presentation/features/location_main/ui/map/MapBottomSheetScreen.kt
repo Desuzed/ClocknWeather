@@ -6,15 +6,15 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.presentation.features.location_main.LocationMainState
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapBottomSheetScreen(
     state: LocationMainState,
     sheetState: SheetState,
-    onUserInteraction: (LocationUserInteraction) -> Unit,
+    onAction: (LocationAction) -> Unit,
 ) {
     if (sheetState.isVisible) {
         ModalBottomSheet(
@@ -23,13 +23,13 @@ fun MapBottomSheetScreen(
             dragHandle = null,
 //            containerColor = getBackgroundColor(),
 //            contentColor = getOnBackgroundColor(),
-            onDismissRequest = { onUserInteraction(LocationUserInteraction.ToggleMap(false)) },
+            onDismissRequest = { onAction(LocationAction.ToggleMap(false)) },
             content = {
                 MapLocationContent(
                     location = state.mapPinLocation,
                     newPickedLocation = state.newPickedLocation,
                     loadNewLocationWeather = state.loadNewLocationWeather,
-                    onUserInteraction = onUserInteraction,
+                    onAction = onAction,
                 )
             }
         )

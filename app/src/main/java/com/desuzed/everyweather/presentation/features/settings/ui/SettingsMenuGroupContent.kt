@@ -17,7 +17,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.presentation.features.settings.SettingsAction
 import com.desuzed.everyweather.presentation.ui.settings.BaseSettingItem
 import com.desuzed.everyweather.presentation.ui.settings.DarkTheme
 import com.desuzed.everyweather.presentation.ui.settings.Language
@@ -45,16 +45,15 @@ private fun Preview() {
                     valueStringId = R.string.russian,
                 )
             ),
-            onUserInteraction = {},
+            onAction = {},
         )
     }
 }
 
 @Composable
 fun SettingsMenuGroupContent(
-    modifier: Modifier = Modifier,
     items: List<BaseSettingItem>,
-    onUserInteraction: (SettingsUserInteraction) -> Unit,
+    onAction: (SettingsAction) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     RoundedCardItem(
@@ -63,8 +62,8 @@ fun SettingsMenuGroupContent(
         Column(modifier = Modifier.padding(dimensionResource(id = R.dimen.dimen_10))) {
             items.forEach { item ->
                 val onItemCLick: () -> Unit = {
-                    onUserInteraction(
-                        SettingsUserInteraction.ShowSettingDialog(item.type)
+                    onAction(
+                        SettingsAction.ShowSettingDialog(item.type)
                     )
                 }
                 Row(

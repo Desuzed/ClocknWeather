@@ -29,7 +29,7 @@ class WeatherMainFragment : Fragment() {
 //                val state by viewModel.state.collectAsStateWithLifecycle(WeatherState())
 //                WeatherMainScreen(
 //                    state = state,
-//                    onUserInteraction = viewModel::onUserInteraction,
+//                    onAction = viewModel::onAction,
 //                )
             }
         }
@@ -85,7 +85,7 @@ class WeatherMainFragment : Fragment() {
             ActionType.RETRY -> {
                 buttonTextId = R.string.retry
                 onClick = {
-                    viewModel.onUserInteraction(WeatherUserInteraction.Refresh)
+                    viewModel.onAction(WeatherAction.Refresh)
                 }
             }
         }

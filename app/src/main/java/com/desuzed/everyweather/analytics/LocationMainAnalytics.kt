@@ -1,25 +1,25 @@
 package com.desuzed.everyweather.analytics
 
 import android.content.Context
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 
 class LocationMainAnalytics(context: Context) : Analytics(context = context) {
 
-    fun onUserInteraction(interaction: LocationUserInteraction) {
-        when (interaction) {
-            is LocationUserInteraction.ConfirmFoundLocation -> logEvent(CONFIRM_FOUND_LOCATION)
-            is LocationUserInteraction.DeleteFavoriteLocation -> logEvent(DELETE_LOCATION)
-            is LocationUserInteraction.UpdateFavoriteLocation -> logEvent(UPDATE_LOCATION)
-            is LocationUserInteraction.SetDefaultLocationName -> logEvent(SET_DEFAULT_LOCATION)
-            is LocationUserInteraction.FavoriteLocationClick -> logEvent(FAVORITE_LOCATION)
-            LocationUserInteraction.FindByQuery -> logEvent(FIND_BY_QUERY)
-            is LocationUserInteraction.ToggleMap -> if (interaction.isVisible) {
+    fun onAction(action: LocationAction) {
+        when (action) {
+            is LocationAction.ConfirmFoundLocation -> logEvent(CONFIRM_FOUND_LOCATION)
+            is LocationAction.DeleteFavoriteLocation -> logEvent(DELETE_LOCATION)
+            is LocationAction.UpdateFavoriteLocation -> logEvent(UPDATE_LOCATION)
+            is LocationAction.SetDefaultLocationName -> logEvent(SET_DEFAULT_LOCATION)
+            is LocationAction.FavoriteLocationClick -> logEvent(FAVORITE_LOCATION)
+            LocationAction.FindByQuery -> logEvent(FIND_BY_QUERY)
+            is LocationAction.ToggleMap -> if (action.isVisible) {
                 logEvent(NAVIGATE_TO_MAP)
             }
 
-            LocationUserInteraction.MyLocation -> logEvent(MY_LOCATION)
-            LocationUserInteraction.Settings -> logEvent(NAVIGATE_TO_SETTINGS)
-            LocationUserInteraction.NewLocationConfirm -> logEvent(CONFIRM_MAP_LOCATION)
+            LocationAction.MyLocation -> logEvent(MY_LOCATION)
+            LocationAction.Settings -> logEvent(NAVIGATE_TO_SETTINGS)
+            LocationAction.NewLocationConfirm -> logEvent(CONFIRM_MAP_LOCATION)
             else -> {}
         }
     }

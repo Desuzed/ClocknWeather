@@ -12,7 +12,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.AppDialog
 import com.desuzed.everyweather.ui.elements.BoldText
@@ -24,16 +24,16 @@ import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 @Composable
 private fun Preview() {
     EveryweatherTheme {
-        RequirePermissionsDialogContent(onUserInteraction = {})
+        RequirePermissionsDialogContent(onAction = {})
     }
 }
 
 @Composable
 fun RequirePermissionsDialogContent(
-    onUserInteraction: (LocationUserInteraction) -> Unit,
+    onAction: (LocationAction) -> Unit,
 ) {
     val onDismiss = {
-        onUserInteraction(LocationUserInteraction.DismissDialog)
+        onAction(LocationAction.DismissDialog)
     }
     AppDialog(
         modifier = Modifier,
@@ -68,7 +68,7 @@ fun RequirePermissionsDialogContent(
                 RoundedButton(
                     text = stringResource(id = R.string.allow),
                     onClick = {
-                        onUserInteraction(LocationUserInteraction.RequestLocationPermissions)
+                        onAction(LocationAction.RequestLocationPermissions)
                     },
                 )
             }

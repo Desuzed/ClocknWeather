@@ -17,8 +17,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
+import com.desuzed.everyweather.presentation.features.in_app_update.InAppUpdateAction
 import com.desuzed.everyweather.presentation.features.in_app_update.InAppUpdateState
-import com.desuzed.everyweather.presentation.features.in_app_update.InAppUpdateUserInteraction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.RegularText
@@ -37,7 +37,7 @@ private fun Preview() {
 @Composable
 fun InAppUpdateContent(
     state: InAppUpdateState,
-    onUserInteraction: (InAppUpdateUserInteraction) -> Unit,
+    onAction: (InAppUpdateAction) -> Unit,
 ) {
     EveryweatherTheme {
         Surface(
@@ -80,7 +80,7 @@ fun InAppUpdateContent(
                             vertical = dimensionResource(id = R.dimen.dimen_10)
                         )
                 )
-                InAppUpdateButtonsRow(inAppUpdateUiParams, onUserInteraction)
+                InAppUpdateButtonsRow(inAppUpdateUiParams, onAction)
             }
         }
     }

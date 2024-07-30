@@ -33,7 +33,7 @@ fun InAppUpdateBottomSheetScreen(
             content = {
                 InAppUpdateContent(
                     state = state,
-                    onUserInteraction = viewModel::onUserInteraction,
+                    onAction = viewModel::onAction,
                 )
             }
         )

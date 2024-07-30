@@ -21,7 +21,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import coil.compose.rememberAsyncImagePainter
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherAction
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainInfoUi
 import com.desuzed.everyweather.ui.elements.DelimiterText
 import com.desuzed.everyweather.ui.elements.GradientBox
@@ -36,7 +36,7 @@ import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 fun WeatherHeaderInfo(
     mainInfoUi: WeatherMainInfoUi,
     refreshingState: PullRefreshState,
-    onUserInteraction: (WeatherUserInteraction) -> Unit,
+    onAction: (WeatherAction) -> Unit,
     onNewHeight: (Int) -> Unit,
 ) {
     GradientBox(
@@ -54,7 +54,7 @@ fun WeatherHeaderInfo(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_10))
         ) {
-            LocationText(text = mainInfoUi.geoText, onUserInteraction)
+            LocationText(text = mainInfoUi.geoText, onAction)
             Row(
                 modifier = Modifier,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_16)),

@@ -6,8 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.location.geo.GeoData
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.presentation.features.location_main.LocationDialog
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
 import com.desuzed.everyweather.ui.elements.AppAlertDialog
 import com.desuzed.everyweather.ui.elements.AppDialog
 
@@ -16,7 +16,7 @@ fun LocationDialogContent(
     dialog: LocationDialog?,
     geoData: List<GeoData>?,
     editLocationText: String,
-    onUserInteraction: (LocationUserInteraction) -> Unit,
+    onAction: (LocationAction) -> Unit,
 ) {
     dialog?.let {
         when (dialog) {
@@ -24,10 +24,10 @@ fun LocationDialogContent(
                 AppAlertDialog(
                     title = stringResource(id = R.string.load_weather_of_this_location),
                     onPositiveButtonClick = {
-                        onUserInteraction(LocationUserInteraction.NewLocationConfirm)
+                        onAction(LocationAction.NewLocationConfirm)
                     },
                     onDismiss = {
-                        onUserInteraction(LocationUserInteraction.DismissConfirmPinDialog)
+                        onAction(LocationAction.DismissConfirmPinDialog)
                     },
                 )
             }
@@ -36,10 +36,10 @@ fun LocationDialogContent(
                 EditLocationDialogContent(
                     editLocationText = editLocationText,
                     onNewEditLocationText = {
-                        onUserInteraction(LocationUserInteraction.EditLocationText(it))
+                        onAction(LocationAction.EditLocationText(it))
                     },
                     location = dialog.favoriteLocation,
-                    onUserInteraction = onUserInteraction,
+                    onAction = onAction,
                 )
             }
 
@@ -48,26 +48,26 @@ fun LocationDialogContent(
                     AppDialog(
                         modifier = Modifier.fillMaxHeight(fraction = 0.9f),
                         onDismiss = {
-                            onUserInteraction(LocationUserInteraction.DismissDialog)
+                            onAction(LocationAction.DismissDialog)
                         }
                     ) {
-                        GeoLocationsPickerContent(geoData, onUserInteraction)
+                        GeoLocationsPickerContent(geoData, onAction)
                     }
                 }
             }
 
             LocationDialog.RequireLocationPermissions -> {
-                RequirePermissionsDialogContent(onUserInteraction)
+                RequirePermissionsDialogContent(onAction)
             }
 
             is LocationDialog.DeleteLocation -> {
                 AppAlertDialog(title = stringResource(id = R.string.delete),
                     onPositiveButtonClick = {
-                        onUserInteraction(
-                            LocationUserInteraction.DeleteFavoriteLocation(dialog.favoriteLocation)
+                        onAction(
+                            LocationAction.DeleteFavoriteLocation(dialog.favoriteLocation)
                         )
                     }, onDismiss = {
-                        onUserInteraction(LocationUserInteraction.DismissDialog)
+                        onAction(LocationAction.DismissDialog)
                     }
                 )
             }

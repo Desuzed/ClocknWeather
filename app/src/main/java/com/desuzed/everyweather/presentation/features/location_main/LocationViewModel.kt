@@ -21,7 +21,7 @@ class LocationViewModel(
     private val userLocationProvider: UserLocationProvider,
     private val analytics: LocationMainAnalytics,
     private val sharedPrefsProvider: SharedPrefsProvider,
-) : BaseViewModel<LocationMainState, LocationMainEffect, LocationUserInteraction>(LocationMainState()) {
+) : BaseViewModel<LocationMainState, LocationMainEffect, LocationAction>(LocationMainState()) {
 
     private val queryResultFlow = MutableSharedFlow<QueryResult>(
         replay = 0,
@@ -35,34 +35,34 @@ class LocationViewModel(
         initMapPin()
     }
 
-    override fun onUserInteraction(interaction: LocationUserInteraction) {
-        analytics.onUserInteraction(interaction)
-        when (interaction) {
-            is LocationUserInteraction.DeleteFavoriteLocation -> deleteFavoriteLocation(
-                interaction.favoriteLocationDto
+    override fun onAction(action: LocationAction) {
+        analytics.onAction(action)
+        when (action) {
+            is LocationAction.DeleteFavoriteLocation -> deleteFavoriteLocation(
+                action.favoriteLocationDto
             )
 
-            is LocationUserInteraction.ConfirmFoundLocation -> onConfirmLocation(interaction.geo)
-            is LocationUserInteraction.FavoriteLocationClick -> onFavoriteLocation(interaction.favoriteLocationDto)
-            is LocationUserInteraction.NavigateToWeather -> navigateToWeatherWithDelay(interaction.latLng)
-            LocationUserInteraction.Redirection -> redirectToLocationApiPage()
-            LocationUserInteraction.FindByQuery -> findTypedLocation()
-            is LocationUserInteraction.ToggleMap -> toggleMap(interaction.isVisible)
-            LocationUserInteraction.MyLocation -> setSideEffect(LocationMainEffect.MyLocation)
-            LocationUserInteraction.Settings -> setSideEffect(LocationMainEffect.NavigateToSettings)
-            LocationUserInteraction.OnBackClick -> setSideEffect(LocationMainEffect.NavigateBack)
-            LocationUserInteraction.RequestLocationPermissions -> onRequestPermissions()
-            is LocationUserInteraction.UpdateFavoriteLocation -> updateFavoriteLocation(interaction.favoriteLocationDto)
-            is LocationUserInteraction.ToggleEditFavoriteLocationDialog -> onToggle(interaction.item)
-            is LocationUserInteraction.SetDefaultLocationName -> setDefaultLocationName(interaction.item)
-            LocationUserInteraction.DismissConfirmPinDialog -> onDismissConfirmPinDialog()
-            LocationUserInteraction.NewLocationConfirm -> onNewLocationConfirm()
-            is LocationUserInteraction.NewLocationPicked -> onNewLocationPicked(interaction.location)
-            LocationUserInteraction.DismissDialog -> onDismissDialog()
-            is LocationUserInteraction.EditLocationText -> onNewEditLocationText(interaction.input)
-            is LocationUserInteraction.GeoInputQuery -> onNewGeoText(interaction.input)
-            is LocationUserInteraction.ShowDeleteFavoriteLocation -> onShowDeleteFavoriteLocation(
-                interaction.item
+            is LocationAction.ConfirmFoundLocation -> onConfirmLocation(action.geo)
+            is LocationAction.FavoriteLocationClick -> onFavoriteLocation(action.favoriteLocationDto)
+            is LocationAction.NavigateToWeather -> navigateToWeatherWithDelay(action.latLng)
+            LocationAction.Redirection -> redirectToLocationApiPage()
+            LocationAction.FindByQuery -> findTypedLocation()
+            is LocationAction.ToggleMap -> toggleMap(action.isVisible)
+            LocationAction.MyLocation -> setSideEffect(LocationMainEffect.MyLocation)
+            LocationAction.Settings -> setSideEffect(LocationMainEffect.NavigateToSettings)
+            LocationAction.OnBackClick -> setSideEffect(LocationMainEffect.NavigateBack)
+            LocationAction.RequestLocationPermissions -> onRequestPermissions()
+            is LocationAction.UpdateFavoriteLocation -> updateFavoriteLocation(action.favoriteLocationDto)
+            is LocationAction.ToggleEditFavoriteLocationDialog -> onToggle(action.item)
+            is LocationAction.SetDefaultLocationName -> setDefaultLocationName(action.item)
+            LocationAction.DismissConfirmPinDialog -> onDismissConfirmPinDialog()
+            LocationAction.NewLocationConfirm -> onNewLocationConfirm()
+            is LocationAction.NewLocationPicked -> onNewLocationPicked(action.location)
+            LocationAction.DismissDialog -> onDismissDialog()
+            is LocationAction.EditLocationText -> onNewEditLocationText(action.input)
+            is LocationAction.GeoInputQuery -> onNewGeoText(action.input)
+            is LocationAction.ShowDeleteFavoriteLocation -> onShowDeleteFavoriteLocation(
+                action.item
             )
         }
     }

@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
-import com.desuzed.everyweather.presentation.features.in_app_update.InAppUpdateUserInteraction
+import com.desuzed.everyweather.presentation.features.in_app_update.InAppUpdateAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.RegularText
 import com.desuzed.everyweather.ui.elements.RoundedButton
@@ -22,7 +22,7 @@ private fun Preview() {
             inAppUpdateUiParams = InAppUpdateUiParams.fromInAppUpdateStatus(
                 status = InAppUpdateStatus.READY_TO_INSTALL,
             ),
-            onUserInteraction = {},
+            onAction = {},
         )
     }
 }
@@ -30,7 +30,7 @@ private fun Preview() {
 @Composable
 fun InAppUpdateButtonsRow(
     inAppUpdateUiParams: InAppUpdateUiParams,
-    onUserInteraction: (InAppUpdateUserInteraction) -> Unit,
+    onAction: (InAppUpdateAction) -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -39,15 +39,15 @@ fun InAppUpdateButtonsRow(
     ) {
         RegularText(
             onClick = {
-                onUserInteraction(
-                    InAppUpdateUserInteraction.Dismiss
+                onAction(
+                    InAppUpdateAction.Dismiss
                 )
             },
             text = stringResource(id = inAppUpdateUiParams.negativeButtonTextId)
         )
         RoundedButton(
             onClick = {
-                onUserInteraction(inAppUpdateUiParams.positiveButtonInteraction)
+                onAction(inAppUpdateUiParams.positiveButtonInteraction)
             },
             text = stringResource(id = inAppUpdateUiParams.positiveButtonTextId)
         )

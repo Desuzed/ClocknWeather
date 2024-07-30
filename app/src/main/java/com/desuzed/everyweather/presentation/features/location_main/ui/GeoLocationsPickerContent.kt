@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.location.geo.GeoData
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.LinkText
@@ -31,7 +31,7 @@ private fun Preview() {
                     importance = 0f,
                 )
             ),
-            onUserInteraction = {},
+            onAction = {},
         )
     }
 }
@@ -42,7 +42,7 @@ private const val GEO_DATA_LINK_LENGTH = 14
 @Composable
 fun GeoLocationsPickerContent(
     geoList: List<GeoData>,
-    onUserInteraction: (LocationUserInteraction) -> Unit,
+    onAction: (LocationAction) -> Unit,
 ) {
     Column {
         val inputText = stringResource(id = R.string.search_by)
@@ -63,7 +63,7 @@ fun GeoLocationsPickerContent(
                 textAlign = TextAlign.Center,
             ),
             spannableStringColor = EveryweatherTheme.colors.accent,
-            onClick = { onUserInteraction(LocationUserInteraction.Redirection) }
+            onClick = { onAction(LocationAction.Redirection) }
         )
         BoldText(
             text = stringResource(id = R.string.results_were_found, geoList.size),
@@ -74,7 +74,7 @@ fun GeoLocationsPickerContent(
         )
         LazyColumn(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.dimen_8))) {
             items(items = geoList) { geoItem ->
-                GeoDataItem(geoData = geoItem, onUserInteraction)
+                GeoDataItem(geoData = geoItem, onAction)
             }
         }
     }

@@ -31,7 +31,7 @@ class LocationFragment : Fragment() {
                 // val state by viewModel.state.collectAsStateWithLifecycle(LocationMainState())
 //                LocationMainScreen(
 //                    state = state,
-//                    onUserInteraction = viewModel::onUserInteraction,
+//                    onAction = viewModel::onAction,
 //                    onGeoTextChanged = viewModel::onNewGeoText,
 //                    onNewEditLocationText = viewModel::onNewEditLocationText,
 //                )
@@ -45,7 +45,7 @@ class LocationFragment : Fragment() {
         //collect(viewModel.action, ::onNewAction)
         setArgumentObserver<UserLatLng>(MAP_LOCATION_ARGS) {
             //todo: back with result https://medium.com/@desilio/navigate-back-with-result-with-jetpack-compose-e91e6a6847c9
-            viewModel.onUserInteraction(LocationUserInteraction.NavigateToWeather(it))
+            viewModel.onAction(LocationAction.NavigateToWeather(it))
         }
     }
 
@@ -97,7 +97,7 @@ class LocationFragment : Fragment() {
             ActionType.RETRY -> {
                 buttonTextId = R.string.retry
                 onClick = {
-                    viewModel.onUserInteraction(LocationUserInteraction.FindByQuery)
+                    viewModel.onAction(LocationAction.FindByQuery)
                 }
             }
         }

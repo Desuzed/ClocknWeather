@@ -20,7 +20,7 @@ import com.desuzed.everyweather.presentation.features.weather_next_days.ui.NextD
 import com.desuzed.everyweather.presentation.ui.UiMapper
 import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
-import com.desuzed.everyweather.ui.extensions.CollectAction
+import com.desuzed.everyweather.ui.extensions.CollectSideEffect
 import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
 import com.desuzed.everyweather.ui.navigation.Destination
 import com.desuzed.everyweather.ui.navigation.getMainActivity
@@ -90,7 +90,7 @@ fun WeatherMainScreen(
             }
         }
     }
-    CollectAction(source = viewModel.sideEffect) {
+    CollectSideEffect(source = viewModel.sideEffect) {
         when (it) {
             WeatherMainEffect.NavigateToLocation -> navController.navigate(
                 Destination.LocationScreen.route,
@@ -103,7 +103,7 @@ fun WeatherMainScreen(
         }
     }
     //TODO избавиться от этого костыля
-    CollectAction(getMainActivity().getUserLatLngFlow()) { location ->
+    CollectSideEffect(getMainActivity().getUserLatLngFlow()) { location ->
         if (location != null) {
             viewModel.getForecast(location.toString())
         }
@@ -113,7 +113,7 @@ fun WeatherMainScreen(
         nextDaysUiList = nextDaysUiList,
         isLoading = state.isLoading,
         isAddButtonEnabled = state.isAddButtonEnabled,
-        onUserInteraction = viewModel::onUserInteraction,
+        onAction = viewModel::onAction,
         onNextDayClick = {
             //todo переместить в эффект
             coroutineScope.launch {

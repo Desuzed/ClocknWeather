@@ -12,7 +12,7 @@ import com.desuzed.everyweather.presentation.features.location_main.LocationMain
 import com.desuzed.everyweather.presentation.features.location_main.LocationViewModel
 import com.desuzed.everyweather.presentation.features.location_main.ui.map.MapBottomSheetScreen
 import com.desuzed.everyweather.ui.AppPreview
-import com.desuzed.everyweather.ui.extensions.CollectAction
+import com.desuzed.everyweather.ui.extensions.CollectSideEffect
 import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
 import com.desuzed.everyweather.ui.navigation.Destination
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
@@ -40,7 +40,7 @@ fun LocationMainScreen(
         skipPartiallyExpanded = true,
     )
     val coroutineScope = rememberCoroutineScope()
-    CollectAction(source = viewModel.sideEffect) {
+    CollectSideEffect(source = viewModel.sideEffect) {
         when (it) {
             LocationMainEffect.MyLocation -> {} //TODO
             LocationMainEffect.NavigateBack -> navController.popBackStack() //TODO()
@@ -68,18 +68,18 @@ fun LocationMainScreen(
         locations = state.locations,
         isLoading = state.isLoading,
         geoText = state.geoText,
-        onUserInteraction = viewModel::onUserInteraction,
+        onAction = viewModel::onAction,
     )
     MapBottomSheetScreen(
         sheetState = sheetState,
         state = state,
-        onUserInteraction = viewModel::onUserInteraction,
+        onAction = viewModel::onAction,
     )
     LocationDialogContent(
         dialog = state.locationDialog,
         geoData = state.geoData,
         editLocationText = state.editLocationText,
-        onUserInteraction = viewModel::onUserInteraction,
+        onAction = viewModel::onAction,
     )
 }
 

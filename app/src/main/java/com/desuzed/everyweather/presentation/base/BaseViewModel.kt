@@ -3,10 +3,16 @@ package com.desuzed.everyweather.presentation.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<S : State, E : SideEffect, A : UserInteraction>(
+abstract class BaseViewModel<S : State, E : SideEffect, A : Action>(
     initState: S,
 ) : ViewModel() {
     private val _state = MutableStateFlow(initState)
@@ -31,7 +37,7 @@ abstract class BaseViewModel<S : State, E : SideEffect, A : UserInteraction>(
         }
     }
 
-    open fun onUserInteraction(interaction: A) {}
+    open fun onAction(action: A) {}
 
     inline fun <T> collect(source: Flow<T>, crossinline consumer: suspend (T) -> Unit) {
         viewModelScope.launch {

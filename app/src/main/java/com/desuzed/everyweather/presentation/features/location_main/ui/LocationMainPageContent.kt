@@ -14,7 +14,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.location.FavoriteLocation
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.RoundedButton
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
@@ -30,7 +30,7 @@ private fun Preview() {
             locations = MockWeatherObject.locations,
             isLoading = false,
             geoText = EMPTY_STRING,
-            onUserInteraction = {},
+            onAction = {},
             onGeoTextChanged = {},
             onShowDeleteDialog = {},
         )
@@ -43,7 +43,7 @@ fun LocationMainPageContent(
     isLoading: Boolean,
     geoText: String,
     onGeoTextChanged: (text: String) -> Unit,
-    onUserInteraction: (LocationUserInteraction) -> Unit,
+    onAction: (LocationAction) -> Unit,
     onShowDeleteDialog: (FavoriteLocation) -> Unit,
 ) {
     Column(
@@ -55,7 +55,7 @@ fun LocationMainPageContent(
             isLoading = isLoading,
             geoText = geoText,
             onGeoTextChanged = onGeoTextChanged,
-            onUserInteraction = onUserInteraction,
+            onAction = onAction,
         )
         LazyColumn(
             modifier = Modifier
@@ -69,16 +69,16 @@ fun LocationMainPageContent(
                 LocationItemContent(
                     item = locationItem,
                     onClick = {
-                        onUserInteraction(
-                            LocationUserInteraction.FavoriteLocationClick(
+                        onAction(
+                            LocationAction.FavoriteLocationClick(
                                 locationItem
                             )
                         )
                     },
                     onLongClick = { onShowDeleteDialog(it) },
                     onEditClick = {
-                        onUserInteraction(
-                            LocationUserInteraction.ToggleEditFavoriteLocationDialog(it)
+                        onAction(
+                            LocationAction.ToggleEditFavoriteLocationDialog(it)
                         )
                     }
                 )
@@ -90,7 +90,7 @@ fun LocationMainPageContent(
                 .padding(horizontal = dimensionResource(id = R.dimen.dimen_10))
                 .navigationBarsPadding()
                 .imePadding(),
-            onClick = { onUserInteraction(LocationUserInteraction.ToggleMap(true)) },
+            onClick = { onAction(LocationAction.ToggleMap(true)) },
             text = stringResource(id = R.string.find_on_map)
         )
     }

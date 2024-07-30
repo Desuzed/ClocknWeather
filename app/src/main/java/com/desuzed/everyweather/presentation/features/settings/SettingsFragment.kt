@@ -26,7 +26,7 @@ class SettingsFragment : Fragment() {
                 //               val state by viewModel.state.collectAsStateWithLifecycle(SettingsState())
 //                SettingsScreen(
 //                    state = state,
-//                    onUserInteraction = viewModel::onUserInteraction,
+//                    onAction = viewModel::onAction,
 //                )
             }
         }

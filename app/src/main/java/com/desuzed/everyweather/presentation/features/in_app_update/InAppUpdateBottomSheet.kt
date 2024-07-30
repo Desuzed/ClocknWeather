@@ -31,7 +31,7 @@ class InAppUpdateBottomSheet : BottomSheetDialogFragment() {
             val state by viewModel.state.collectAsStateWithLifecycle(InAppUpdateState())
             InAppUpdateContent(
                 state = state,
-                onUserInteraction = viewModel::onUserInteraction,
+                onAction = viewModel::onAction,
             )
         }
         isNestedScrollingEnabled = true

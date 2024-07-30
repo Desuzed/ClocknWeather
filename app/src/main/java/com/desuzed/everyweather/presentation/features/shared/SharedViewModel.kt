@@ -3,14 +3,14 @@ package com.desuzed.everyweather.presentation.features.shared
 import android.app.Activity
 import com.desuzed.everyweather.data.repository.providers.app_update.AppUpdateProvider
 import com.desuzed.everyweather.domain.model.app_update.AppUpdateState
+import com.desuzed.everyweather.presentation.base.Action
 import com.desuzed.everyweather.presentation.base.BaseViewModel
-import com.desuzed.everyweather.presentation.base.UserInteraction
 import com.desuzed.everyweather.util.Constants.ZERO_LONG
 
 //TODO избавиться от общей вью модели
 class SharedViewModel(
     private val appUpdateProvider: AppUpdateProvider,
-) : BaseViewModel<SharedState, SharedEffect, UserInteraction>(SharedState()) {
+) : BaseViewModel<SharedState, SharedEffect, Action>(SharedState()) {
 
     init {
         collect(appUpdateProvider.appUpdateState, ::onAppUpdateState)

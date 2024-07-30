@@ -1,14 +1,14 @@
 package com.desuzed.everyweather.analytics
 
 import android.content.Context
-import com.desuzed.everyweather.presentation.features.weather_main.WeatherUserInteraction
+import com.desuzed.everyweather.presentation.features.weather_main.WeatherAction
 
 class WeatherMainAnalytics(context: Context) : Analytics(context = context) {
 
-    fun onUserInteraction(interaction: WeatherUserInteraction) {
-        when (interaction) {
-            WeatherUserInteraction.Location -> logEvent(NAVIGATE_TO_LOCATION)
-            WeatherUserInteraction.SaveLocation -> logEvent(SAVE_LOCATION)
+    fun onAction(action: WeatherAction) {
+        when (action) {
+            WeatherAction.Location -> logEvent(NAVIGATE_TO_LOCATION)
+            WeatherAction.SaveLocation -> logEvent(SAVE_LOCATION)
             else -> {}
         }
     }

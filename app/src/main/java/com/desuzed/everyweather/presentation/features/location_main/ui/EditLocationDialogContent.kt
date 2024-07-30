@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.domain.model.location.FavoriteLocation
-import com.desuzed.everyweather.presentation.features.location_main.LocationUserInteraction
+import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.AppDialog
 import com.desuzed.everyweather.ui.elements.MediumText
@@ -35,7 +35,7 @@ private fun Preview() {
                 customName = "custom name",
             ),
             onNewEditLocationText = {},
-            onUserInteraction = {},
+            onAction = {},
         )
     }
 }
@@ -45,12 +45,12 @@ fun EditLocationDialogContent(
     editLocationText: String,
     location: FavoriteLocation,
     onNewEditLocationText: (text: String) -> Unit,
-    onUserInteraction: (LocationUserInteraction) -> Unit,
+    onAction: (LocationAction) -> Unit,
 ) {
     AppDialog(
         modifier = Modifier,
         onDismiss = {
-            onUserInteraction(LocationUserInteraction.DismissDialog)
+            onAction(LocationAction.DismissDialog)
         },
     ) {
         Column(
@@ -73,8 +73,8 @@ fun EditLocationDialogContent(
                 isLoading = false,
                 iconResId = R.drawable.ic_round_save_24,
             ) {
-                onUserInteraction(
-                    LocationUserInteraction.UpdateFavoriteLocation(
+                onAction(
+                    LocationAction.UpdateFavoriteLocation(
                         favoriteLocationDto = location,
                     )
                 )
@@ -87,7 +87,7 @@ fun EditLocationDialogContent(
                 color = EveryweatherTheme.colors.accent,
                 text = stringResource(id = R.string.set_default_name),
                 onClick = {
-                    onUserInteraction(LocationUserInteraction.SetDefaultLocationName(location))
+                    onAction(LocationAction.SetDefaultLocationName(location))
                 }
             )
         }

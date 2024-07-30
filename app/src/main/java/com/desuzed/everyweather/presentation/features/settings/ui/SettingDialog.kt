@@ -7,7 +7,7 @@ import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.SettingsType
 import com.desuzed.everyweather.domain.model.settings.TempDimen
-import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
+import com.desuzed.everyweather.presentation.features.settings.SettingsAction
 import com.desuzed.everyweather.presentation.ui.settings.DarkTheme
 import com.desuzed.everyweather.presentation.ui.settings.Language
 import com.desuzed.everyweather.presentation.ui.settings.Pressure
@@ -29,7 +29,7 @@ fun SettingDialog(
     temperatureDialogItems: List<SettingUiItem<TempDimen>>,
     distanceDialogItems: List<SettingUiItem<DistanceDimen>>,
     pressureDialogItems: List<SettingUiItem<PressureDimen>>,
-    onUserInteraction: (SettingsUserInteraction) -> Unit,
+    onAction: (SettingsAction) -> Unit,
     onDismiss: () -> Unit,
 ) {
 
@@ -40,8 +40,8 @@ fun SettingDialog(
                     selectedItem = language,
                     radioOptions = langDialogItems
                 ) {
-                    onUserInteraction(
-                        SettingsUserInteraction.ChangeLanguage(lang = it)
+                    onAction(
+                        SettingsAction.ChangeLanguage(lang = it)
                     )
                 }
             }
@@ -53,8 +53,8 @@ fun SettingDialog(
                     selectedItem = temperature,
                     radioOptions = temperatureDialogItems
                 ) {
-                    onUserInteraction(
-                        SettingsUserInteraction.ChangeTemperatureDimension(tempDimen = it)
+                    onAction(
+                        SettingsAction.ChangeTemperatureDimension(tempDimen = it)
                     )
                 }
             }
@@ -66,8 +66,8 @@ fun SettingDialog(
                     selectedItem = windSpeed,
                     radioOptions = distanceDialogItems
                 ) {
-                    onUserInteraction(
-                        SettingsUserInteraction.ChangeDistanceDimension(distanceDimen = it)
+                    onAction(
+                        SettingsAction.ChangeDistanceDimension(distanceDimen = it)
                     )
                 }
             }
@@ -79,8 +79,8 @@ fun SettingDialog(
                     selectedItem = darkTheme,
                     radioOptions = darkModeDialogItems
                 ) {
-                    onUserInteraction(
-                        SettingsUserInteraction.ChangeDarkMode(darkMode = it)
+                    onAction(
+                        SettingsAction.ChangeDarkMode(darkMode = it)
                     )
                 }
             }
@@ -92,8 +92,8 @@ fun SettingDialog(
                     selectedItem = pressure,
                     radioOptions = pressureDialogItems
                 ) {
-                    onUserInteraction(
-                        SettingsUserInteraction.ChangePressureDimension(
+                    onAction(
+                        SettingsAction.ChangePressureDimension(
                             pressureDimen = it
                         )
                     )

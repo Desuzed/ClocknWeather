@@ -5,13 +5,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.desuzed.everyweather.presentation.features.settings.SettingsAction
 import com.desuzed.everyweather.presentation.features.settings.SettingsEffect
 import com.desuzed.everyweather.presentation.features.settings.SettingsState
-import com.desuzed.everyweather.presentation.features.settings.SettingsUserInteraction
 import com.desuzed.everyweather.presentation.features.settings.SettingsViewModel
 import com.desuzed.everyweather.presentation.ui.settings.SettingsMapper
 import com.desuzed.everyweather.ui.AppPreview
-import com.desuzed.everyweather.ui.extensions.CollectAction
+import com.desuzed.everyweather.ui.extensions.CollectSideEffect
 import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 
@@ -49,7 +49,7 @@ fun SettingsScreen(
             selectedPressureDimen = state.selectedPressure,
         )
     }
-    CollectAction(source = viewModel.sideEffect) {
+    CollectSideEffect(source = viewModel.sideEffect) {
         when (it) {
             SettingsEffect.NavigateBack -> navController.popBackStack()
             is SettingsEffect.ShowReadyToInstallDialog -> TODO()
@@ -59,7 +59,7 @@ fun SettingsScreen(
     SettingsScreenBody(
         settingsParams = settingsParams,
         updateStatus = state.updateStatus,
-        onUserInteraction = viewModel::onUserInteraction,
+        onAction = viewModel::onAction,
     )
     SettingDialog(
         showDialogType = state.showDialogType,
@@ -73,9 +73,9 @@ fun SettingsScreen(
         temperatureDialogItems = settingsParams.weatherUiList.temperatureSettingsList,
         distanceDialogItems = settingsParams.weatherUiList.distanceSettingsList,
         pressureDialogItems = settingsParams.weatherUiList.pressureSettingsList,
-        onUserInteraction = viewModel::onUserInteraction,
+        onAction = viewModel::onAction,
         onDismiss = {
-            viewModel.onUserInteraction(SettingsUserInteraction.DismissDialog)
+            viewModel.onAction(SettingsAction.DismissDialog)
         }
     )
 }
