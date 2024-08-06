@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.presentation.features.location_main.ui
 
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -30,7 +29,6 @@ private fun Preview() {
             isLoading = false,
             geoText = "",
             onAction = {},
-            boxScopeContent = {},
         )
     }
 }
@@ -41,7 +39,6 @@ fun LocationMainBody(
     isLoading: Boolean,
     geoText: String,
     onAction: (LocationAction) -> Unit,
-    boxScopeContent: @Composable BoxScope.() -> Unit
 ) {
     GradientBox(
         modifier = Modifier.fillMaxSize(),
@@ -81,7 +78,5 @@ fun LocationMainBody(
                 .align(Alignment.BottomEnd),
             onClick = { onAction(LocationAction.MyLocation) },
         )
-        boxScopeContent.invoke(this)
     }
-
 }

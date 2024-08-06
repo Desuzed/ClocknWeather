@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.presentation.features.location_main.ui
 
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
@@ -24,14 +23,12 @@ fun LocationMain(
     state: LocationMainState,
     sheetState: SheetState,
     onAction: (LocationAction) -> Unit,
-    snackbarContent: @Composable BoxScope. () -> Unit,
 ) {
     LocationMainBody(
         locations = state.locations,
         isLoading = state.isLoading,
         geoText = state.geoText,
         onAction = onAction,
-        boxScopeContent = snackbarContent
     )
     MapBottomSheetScreen(
         sheetState = sheetState,

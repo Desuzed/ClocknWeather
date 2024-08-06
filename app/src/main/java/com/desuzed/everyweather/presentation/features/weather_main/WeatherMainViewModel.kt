@@ -54,7 +54,7 @@ class WeatherMainViewModel(
                 )
             }
             if (actionResult != null) {
-                setSideEffect(WeatherMainEffect.ShowSnackbar(actionResult))
+                setSideEffect(WeatherMainEffect.ShowSnackBar(actionResult))
                 setState {
                     copy(
                         isLoading = false,
@@ -87,11 +87,11 @@ class WeatherMainViewModel(
     }
 
     private fun onError(code: Int) {
-        setSideEffect(WeatherMainEffect.ShowSnackbar(QueryResult(code = code)))
+        setSideEffect(WeatherMainEffect.ShowSnackBar(QueryResult(code = code)))
     }
 
     private fun onSuccess(code: Int) {
-        setSideEffect(WeatherMainEffect.ShowSnackbar(QueryResult(code = code)))
+        setSideEffect(WeatherMainEffect.ShowSnackBar(QueryResult(code = code)))
         setState {
             copy(isAddButtonEnabled = false)
         }
@@ -126,8 +126,8 @@ class WeatherMainViewModel(
 
     private fun onRedirection() {
         setSideEffect(
-            WeatherMainEffect.ShowSnackbar(
-                queryResult = QueryResult(ActionResultProvider.REDIRECTION),
+            WeatherMainEffect.ShowSnackBar(
+                data = QueryResult(ActionResultProvider.REDIRECTION),
             )
         )
     }

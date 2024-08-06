@@ -2,9 +2,10 @@ package com.desuzed.everyweather.presentation.features.weather_main
 
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.base.SideEffect
+import com.desuzed.everyweather.presentation.base.SnackBarEffect
 
 sealed interface WeatherMainEffect : SideEffect {
-    class ShowSnackbar(val queryResult: QueryResult) : WeatherMainEffect
+    class ShowSnackBar(override val data: QueryResult) : WeatherMainEffect, SnackBarEffect
     data object NavigateToLocation : WeatherMainEffect
     data object NavigateToNextDaysWeather : WeatherMainEffect
 }

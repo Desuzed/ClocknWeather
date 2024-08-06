@@ -20,8 +20,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
-import com.desuzed.everyweather.data.repository.providers.action_result.WeatherActionResultProvider
+import com.desuzed.everyweather.data.repository.providers.ActionResultProviderFactory
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
@@ -151,9 +150,6 @@ fun <P : ActionResultProvider> CollectSnackbar(
 @Composable
 private fun <P : ActionResultProvider> getProvider(providerClass: KClass<P>): ActionResultProvider {
     val resources = LocalContext.current.resources
-    return when (providerClass) {
-        WeatherActionResultProvider::class -> WeatherActionResultProvider(resources)
-        GeoActionResultProvider::class -> GeoActionResultProvider(resources)
-        else -> throw IllegalStateException("ActionResultProvider not provided")
-    }
+
+    return ActionResultProviderFactory.provide(providerClass, resources)
 }

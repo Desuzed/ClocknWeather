@@ -1,6 +1,5 @@
 package com.desuzed.everyweather.presentation.features.weather_main.ui
 
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -30,7 +29,6 @@ fun WeatherMain(
     // navBackStackEntry: NavBackStackEntry,
     state: WeatherState,
     onAction: (WeatherAction) -> Unit,
-    snackbarContent: @Composable BoxScope. () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
@@ -102,7 +100,6 @@ fun WeatherMain(
                 sheetState.show()
             }
         },
-        boxScopeContent = snackbarContent,
     )
     NextDaysWeatherBottomSheet(
         sheetState = sheetState,
