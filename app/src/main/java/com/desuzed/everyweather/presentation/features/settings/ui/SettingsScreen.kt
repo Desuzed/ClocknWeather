@@ -1,34 +1,26 @@
 package com.desuzed.everyweather.presentation.features.settings.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
 import com.desuzed.everyweather.presentation.features.settings.SettingsAction
-import com.desuzed.everyweather.presentation.features.settings.SettingsEffect
 import com.desuzed.everyweather.presentation.features.settings.SettingsState
-import com.desuzed.everyweather.presentation.features.settings.SettingsViewModel
 import com.desuzed.everyweather.presentation.ui.settings.SettingsMapper
 import com.desuzed.everyweather.ui.AppPreview
-import com.desuzed.everyweather.ui.extensions.CollectSideEffect
-import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
 
 @AppPreview
 @Composable
 private fun Preview() {
     SettingsScreen(
-        navController = NavController(LocalContext.current)
+        state = SettingsState(),
+        onAction = {},
     )
 }
 
 @Composable
 fun SettingsScreen(
-    navController: NavController,
-    viewModel: SettingsViewModel = koinViewModel()
+    state: SettingsState,
+    onAction: (SettingsAction) -> Unit,
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle(initialState = SettingsState())
     val settingsParams = remember(
         state.selectedLang,
         state.selectedMode,
@@ -49,17 +41,10 @@ fun SettingsScreen(
             selectedPressureDimen = state.selectedPressure,
         )
     }
-    CollectSideEffect(source = viewModel.sideEffect) {
-        when (it) {
-            SettingsEffect.NavigateBack -> navController.popBackStack()
-            is SettingsEffect.ShowReadyToInstallDialog -> TODO()
-            is SettingsEffect.ShowUpdateDialog -> TODO()
-        }
-    }
     SettingsScreenBody(
         settingsParams = settingsParams,
         updateStatus = state.updateStatus,
-        onAction = viewModel::onAction,
+        onAction = onAction,
     )
     SettingDialog(
         showDialogType = state.showDialogType,
@@ -73,9 +58,9 @@ fun SettingsScreen(
         temperatureDialogItems = settingsParams.weatherUiList.temperatureSettingsList,
         distanceDialogItems = settingsParams.weatherUiList.distanceSettingsList,
         pressureDialogItems = settingsParams.weatherUiList.pressureSettingsList,
-        onAction = viewModel::onAction,
+        onAction = onAction,
         onDismiss = {
-            viewModel.onAction(SettingsAction.DismissDialog)
+            onAction(SettingsAction.DismissDialog)
         }
     )
 }

@@ -16,6 +16,7 @@ import com.desuzed.everyweather.presentation.ui.settings.Temperature
 import com.desuzed.everyweather.presentation.ui.settings.WindSpeed
 import com.desuzed.everyweather.ui.elements.AppDialog
 
+//TODO: Переделать на боттомшиты
 @Composable
 fun SettingDialog(
     showDialogType: SettingsType?,
