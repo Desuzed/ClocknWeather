@@ -60,8 +60,6 @@ fun LocationMainScreen(
                 route = Destination.SettingsScreen.route,
             )
 
-            is LocationMainEffect.NavigateToWeather -> navController.popBackStack()// TODO()
-            is LocationMainEffect.NavigateToWeatherWithLatLng -> navController.popBackStack() //TODO()
             LocationMainEffect.RequestLocationPermissions -> TODO()
             is LocationMainEffect.ToggleMap -> {
                 coroutineScope.launch {

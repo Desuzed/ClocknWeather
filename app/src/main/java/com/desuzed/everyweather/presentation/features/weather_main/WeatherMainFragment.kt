@@ -8,12 +8,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.repository.providers.action_result.WeatherActionResultProvider
-import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.features.main_activity.MainActivity
-import com.desuzed.everyweather.util.collect
-import com.desuzed.everyweather.util.setArgumentObserver
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WeatherMainFragment : Fragment() {
@@ -35,41 +32,13 @@ class WeatherMainFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        resolveArguments()
-        collect((activity as MainActivity).getUserLatLngFlow(), ::onNewLocation)
-        //      collect(viewModel.action, ::onNewAction)
-    }
-
-    private fun resolveArguments() {
-        setArgumentObserver<String>(QUERY_KEY) {
-            if (it.isNotBlank()) {
-                getQueryForecast(it)
-            }
-        }
-        setArgumentObserver<UserLatLng>(LAT_LNG_KEY) {
-            viewModel.getForecast(it.toString(), it)
-        }
-    }
-
-    private fun getQueryForecast(query: String) {
-        viewModel.getForecast(query)
-    }
-
-//    private fun onNewAction(action: WeatherMainAction) {
+    //    private fun onNewAction(action: WeatherMainAction) {
 //        when (action) {
 //            is WeatherMainAction.ShowSnackbar -> showSnackbar(action.queryResult)
 //            WeatherMainAction.NavigateToLocation -> navigate(R.id.action_weatherFragment_to_locationFragment)
 //            WeatherMainAction.NavigateToNextDaysWeather -> navigate(R.id.action_weatherFragment_to_nextDaysBottomSheet)
 //        }
 //    }
-
-    private fun onNewLocation(location: UserLatLng?) {
-        if (location != null) {
-            getQueryForecast(location.toString())
-        }
-    }
 
     private fun showSnackbar(queryResult: QueryResult) {
         val provider = WeatherActionResultProvider(resources)

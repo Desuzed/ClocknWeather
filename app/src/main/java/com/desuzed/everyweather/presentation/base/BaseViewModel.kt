@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<S : State, E : SideEffect, A : Action>(
@@ -44,6 +45,12 @@ abstract class BaseViewModel<S : State, E : SideEffect, A : Action>(
             source.collect {
                 consumer(it)
             }
+        }
+    }
+
+    inline fun <T> collect(source: Flow<T>, crossinline consumer: suspend (Int, T) -> Unit) {
+        viewModelScope.launch {
+            source.collectIndexed(consumer)
         }
     }
 }

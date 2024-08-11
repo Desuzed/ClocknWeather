@@ -10,7 +10,6 @@ import com.desuzed.everyweather.domain.model.network.NetworkResponse
 import com.desuzed.everyweather.domain.model.result.FetchResult
 import com.desuzed.everyweather.domain.model.weather.Error
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
-import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.NO_INTERNET
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.UNKNOWN
 import com.desuzed.everyweather.domain.repository.remote.RemoteDataRepository
@@ -24,7 +23,6 @@ class RemoteDataRepositoryImpl(
     private val weatherResponseMapper: WeatherResponseMapper,
     private val locationResponseMapper: LocationResponseMapper,
     private val apiErrorMapper: ApiErrorMapper,
-    private val sharedPrefsProvider: SharedPrefsProvider,
     private val dispatcher: CoroutineDispatcher,
 ) : RemoteDataRepository {
 
@@ -32,7 +30,6 @@ class RemoteDataRepositoryImpl(
         query: String,
         lang: String,
     ): FetchResult<WeatherContent, Error> = withContext(dispatcher) {
-        sharedPrefsProvider.saveQuery(query)
         when (val response = weatherApi.getForecast(query, lang)) {
             is NetworkResponse.Success -> {
                 val weatherContent = weatherResponseMapper.mapFromEntity(response.body)
@@ -59,8 +56,7 @@ class RemoteDataRepositoryImpl(
         query: String,
         lang: String,
     ): FetchResult<List<GeoData>, Error> = withContext(dispatcher) {
-        val response = locationIqApi.forwardGeocoding(query = query, lang = lang)
-        when (response) {
+        when (val response = locationIqApi.forwardGeocoding(query = query, lang = lang)) {
             is NetworkResponse.Success -> {
                 val mappedResult = locationResponseMapper.mapFromEntity(response.body)
                 FetchResult.Success(mappedResult)

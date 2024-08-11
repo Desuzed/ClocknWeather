@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlinParcelize)
+    alias(libs.plugins.kotlinSerialization)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
@@ -109,6 +110,7 @@ dependencies {
 
     //Util
     implementation(libs.app.update)
+    implementation(libs.kotlinx.serialization)
 
     //Пришлось добавить зависимость lifecycle т.к appCompat 1.5.1 без неё не работает
     implementation(libs.android.viewmodel)

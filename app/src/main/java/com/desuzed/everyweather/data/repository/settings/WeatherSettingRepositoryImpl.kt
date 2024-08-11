@@ -4,13 +4,13 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.desuzed.everyweather.domain.model.settings.DistanceDimen
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.TempDimen
-import com.desuzed.everyweather.domain.repository.settings.DatastoreApiProvider
+import com.desuzed.everyweather.domain.repository.settings.SettingsDatastoreApiProvider
 import com.desuzed.everyweather.domain.repository.settings.WeatherSettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class WeatherSettingRepositoryImpl(
-    private val datastoreProvider: DatastoreApiProvider,
+    private val datastoreProvider: SettingsDatastoreApiProvider,
 ) : WeatherSettingsRepository {
 
     override suspend fun setDistanceDimension(dimension: DistanceDimen) =

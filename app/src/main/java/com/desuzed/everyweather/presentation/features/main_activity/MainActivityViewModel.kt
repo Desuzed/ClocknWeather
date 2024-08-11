@@ -3,11 +3,11 @@ package com.desuzed.everyweather.presentation.features.main_activity
 import androidx.lifecycle.viewModelScope
 import com.desuzed.everyweather.domain.interactor.SystemInteractor
 import com.desuzed.everyweather.domain.interactor.SystemSettingsInteractor
-import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.location.UserLocationResult
 import com.desuzed.everyweather.domain.model.result.ActionResult
 import com.desuzed.everyweather.domain.model.settings.DarkMode
 import com.desuzed.everyweather.domain.model.settings.Lang
+import com.desuzed.everyweather.domain.repository.local.WeatherDataRepository
 import com.desuzed.everyweather.presentation.base.Action
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.util.Constants.LANG_RU_LOWERCASE
@@ -25,6 +25,7 @@ import kotlin.coroutines.cancellation.CancellationException
 class MainActivityViewModel(
     private val systemInteractor: SystemInteractor,
     private val systemSettingsInteractor: SystemSettingsInteractor,
+    private val weatherDataRepository: WeatherDataRepository,
 ) : BaseViewModel<MainActivityState, MainActivitySideEffect, Action>(MainActivityState()) {
 
     private val _isLookingForLocation = MutableSharedFlow<Boolean>(
@@ -35,13 +36,6 @@ class MainActivityViewModel(
     val isLookingForLocation: Flow<Boolean> = _isLookingForLocation.asSharedFlow()
 
     val hasInternet = systemInteractor.hasInternetFlow()
-
-    private val _userLatLng = MutableSharedFlow<UserLatLng?>(
-        replay = 0,
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val userLatLng: Flow<UserLatLng?> = _userLatLng.asSharedFlow()
 
     private val _messageFlow = MutableSharedFlow<ActionResult>(
         replay = 0,
@@ -98,9 +92,13 @@ class MainActivityViewModel(
     }
 
     private fun collectUserLocationResult(result: UserLocationResult?) {
-        viewModelScope.launch {
+        launch {
             if (result?.userLatLng != null) {
-                _userLatLng.emit(result.userLatLng)
+                weatherDataRepository.saveQuery(
+                    query = result.userLatLng.toString(),
+                    shouldTriggerWeatherRequest = true,
+                    userLatLng = result.userLatLng,
+                )
             } else if (result?.actionResult != null) {
                 postMessage(result.actionResult)
             }

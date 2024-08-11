@@ -10,9 +10,9 @@ import org.koin.dsl.module
 val interactorModule = module {
     single {
         WeatherInteractor(
-            sharedPrefsProvider = get(),
             remoteDataRepository = get(),
             systemSettingsRepository = get(),
+            weatherDataRepository = get(),
         )
     }
     single {

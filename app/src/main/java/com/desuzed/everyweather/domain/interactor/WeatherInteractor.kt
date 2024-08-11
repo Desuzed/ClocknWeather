@@ -8,23 +8,23 @@ import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.weather.Error
 import com.desuzed.everyweather.domain.model.weather.ResultForecast
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
-import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
+import com.desuzed.everyweather.domain.repository.local.WeatherDataRepository
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.domain.repository.remote.RemoteDataRepository
 import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
 import kotlinx.coroutines.flow.firstOrNull
 
 class WeatherInteractor(
-    private val sharedPrefsProvider: SharedPrefsProvider,
     private val remoteDataRepository: RemoteDataRepository,
     private val systemSettingsRepository: SystemSettingsRepository,
+    private val weatherDataRepository: WeatherDataRepository,
 ) {
 
     suspend fun fetchForecastOrErrorMessage(
         query: String,
         userLatLng: UserLatLng? = null,
     ): ResultForecast {
-        if (query.isEmpty()) {
+        if (query.isBlank()) {
             return ResultForecast(
                 weatherContent = null,
                 queryResult = QueryResult(code = ActionResultProvider.NO_DATA, query = query),
@@ -34,6 +34,9 @@ class WeatherInteractor(
             .lang
             .firstOrNull()?.lang?.lowercase()
             ?: Lang.EN.lang.lowercase()
+
+        weatherDataRepository.updateQueryShouldNotBeTriggered()
+
         return when (val resultData = getForecast(query, lang)) {
             is FetchResult.Success -> {
                 val resultContent = handleLatLonAndSaveForecast(resultData.body, userLatLng, query)
@@ -42,7 +45,7 @@ class WeatherInteractor(
 
             is FetchResult.Failure -> {
                 ResultForecast(
-                    weatherContent = sharedPrefsProvider.loadForecastFromCache(),
+                    weatherContent = weatherDataRepository.getWeatherContentFlow().firstOrNull(),
                     queryResult = QueryResult(
                         code = resultData.error.code,
                         query = query,
@@ -53,16 +56,12 @@ class WeatherInteractor(
         }
     }
 
-    fun getCachedForecast() = sharedPrefsProvider.loadForecastFromCache()
-
-    fun loadCachedQuery() = sharedPrefsProvider.loadQuery()
-
     /**
      * Пофиксил баг из отзывов гугл плей маркета: маркер на карте отображался на неправильном месте
      * при загрузке погоды, а был сдвинут. Это было связано с тем, что брались координаты местоположения
      * от апи, и они очень неточные, 2 числа после запятой. Пришлось прокидывать полные координаты с карты
      * */
-    private fun handleLatLonAndSaveForecast(
+    private suspend fun handleLatLonAndSaveForecast(
         weatherContent: WeatherContent,
         userLatLng: UserLatLng?,
         query: String,
@@ -89,7 +88,7 @@ class WeatherInteractor(
         } catch (e: Exception) {
             weatherContent
         }
-        sharedPrefsProvider.saveForecastToCache(resultContent)
+        weatherDataRepository.saveForecastToCache(resultContent)
         return resultContent
     }
 

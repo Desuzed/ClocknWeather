@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.desuzed.everyweather.data.repository.providers.action_result.WeatherActionResultProvider
-import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherAction
 import com.desuzed.everyweather.presentation.features.weather_main.WeatherMainEffect
@@ -29,15 +28,10 @@ import com.desuzed.everyweather.ui.elements.CollectSnackbar
 import com.desuzed.everyweather.ui.extensions.CollectSideEffect
 import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
 import com.desuzed.everyweather.ui.navigation.Destination
-import com.desuzed.everyweather.ui.navigation.getMainActivity
-import com.desuzed.everyweather.ui.navigation.getResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
-
-const val QUERY_KEY = "QUERY"
-const val LAT_LNG_KEY = "LAT_LNG"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,15 +50,6 @@ fun WeatherMainScreen(
     //TODO рефакторинг снекбаров на новую архитектуру
     val snackbarHostState = remember { SnackbarHostState() }
     var snackData: QueryResult? by remember { mutableStateOf(null) }
-    //todo сделать передачу с locationScreen, а лучше избавиться от этого костыля
-    navBackStackEntry.getResult<String>(QUERY_KEY)?.let {
-        if (it.isNotBlank()) {
-            viewModel.getForecast(it)
-        }
-    }
-    navBackStackEntry.getResult<UserLatLng>(LAT_LNG_KEY)?.let {
-        viewModel.getForecast(it.toString(), it)
-    }
     var selectedDayItem by remember {
         mutableStateOf<NextDaysUi?>(null)
     }
@@ -114,12 +99,6 @@ fun WeatherMainScreen(
         }
     }
 
-    //TODO избавиться от этого костыля
-    CollectSideEffect(getMainActivity().getUserLatLngFlow()) { location ->
-        if (location != null) {
-            viewModel.getForecast(location.toString())
-        }
-    }
     CollectSnackbar(
         queryResult = snackData,
         snackbarState = snackbarHostState,

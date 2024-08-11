@@ -3,12 +3,12 @@ package com.desuzed.everyweather.data.repository.settings
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.desuzed.everyweather.domain.model.settings.DarkMode
 import com.desuzed.everyweather.domain.model.settings.Lang
-import com.desuzed.everyweather.domain.repository.settings.DatastoreApiProvider
+import com.desuzed.everyweather.domain.repository.settings.SettingsDatastoreApiProvider
 import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class SystemSettingsRepositoryImpl(private val datastoreProvider: DatastoreApiProvider) :
+class SystemSettingsRepositoryImpl(private val datastoreProvider: SettingsDatastoreApiProvider) :
     SystemSettingsRepository {
 
     override suspend fun setLanguage(lang: Lang) = datastoreProvider.edit { preferences ->

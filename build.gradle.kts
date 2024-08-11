@@ -13,4 +13,5 @@ plugins {
     alias(libs.plugins.kotlinAndroid).apply(false)
     alias(libs.plugins.kotlin.ksp).apply(false)
     alias(libs.plugins.kotlinParcelize).apply(false)
+    alias(libs.plugins.kotlinSerialization).apply(false)
 }
