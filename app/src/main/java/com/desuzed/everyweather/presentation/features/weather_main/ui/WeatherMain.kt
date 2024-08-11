@@ -20,9 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-const val QUERY_KEY = "QUERY"
-const val LAT_LNG_KEY = "LAT_LNG"
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherMain(
@@ -36,15 +33,6 @@ fun WeatherMain(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val mappedWeatherUi = remember { mutableStateOf<WeatherMainUi?>(null) }
-//    //todo сделать передачу с locationScreen, а лучше избавиться от этого костыля
-//    navBackStackEntry.getResult<String>(QUERY_KEY)?.let {
-//        if (it.isNotBlank()) {
-//            viewModel.getForecast(it)
-//        }
-//    }
-//    navBackStackEntry.getResult<UserLatLng>(LAT_LNG_KEY)?.let {
-//        viewModel.getForecast(it.toString(), it)
-//    }
     var selectedDayItem by remember {
         mutableStateOf<NextDaysUi?>(null)
     }
@@ -79,13 +67,6 @@ fun WeatherMain(
             }
         }
     }
-
-//    //TODO избавиться от этого костыля
-//    CollectSideEffect(getMainActivity().getUserLatLngFlow()) { location ->
-//        if (location != null) {
-//            viewModel.getForecast(location.toString())
-//        }
-//    }
 
     WeatherMainBody(
         weatherData = mappedWeatherUi,

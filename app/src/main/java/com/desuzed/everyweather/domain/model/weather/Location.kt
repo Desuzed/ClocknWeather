@@ -1,5 +1,8 @@
 package com.desuzed.everyweather.domain.model.weather
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Location(
     val name: String,
     val region: String,

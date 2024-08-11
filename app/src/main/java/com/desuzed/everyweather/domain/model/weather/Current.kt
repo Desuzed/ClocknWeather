@@ -1,5 +1,8 @@
 package com.desuzed.everyweather.domain.model.weather
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Current(
     val tempC: Float,
     val tempF: Float,

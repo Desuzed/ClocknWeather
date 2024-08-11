@@ -9,6 +9,7 @@ import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.location.geo.GeoData
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.repository.local.SharedPrefsProvider
+import com.desuzed.everyweather.domain.repository.local.WeatherDataRepository
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.presentation.base.BaseViewModel
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
@@ -19,6 +20,7 @@ class LocationViewModel(
     private val userLocationProvider: UserLocationProvider,
     private val analytics: LocationMainAnalytics,
     private val sharedPrefsProvider: SharedPrefsProvider,
+    private val weatherDataRepository: WeatherDataRepository,
 ) : BaseViewModel<LocationMainState, LocationMainEffect, LocationAction>(LocationMainState()) {
 
     init {
@@ -87,11 +89,7 @@ class LocationViewModel(
 
     private fun handleGeoError(queryResult: QueryResult) {
         if (shouldIgnoreError(queryResult.code)) {
-            setSideEffect(
-                LocationMainEffect.NavigateToWeather(
-                    query = queryResult.query,
-                )
-            )
+            saveQueryAndNavigateBackToWeather(queryResult.query)
         } else {
             setSideEffect(LocationMainEffect.ShowSnackbar(queryResult))
         }
@@ -116,12 +114,8 @@ class LocationViewModel(
     }
 
     private fun onConfirmLocation(geoData: GeoData) {
-        setSideEffect(
-            LocationMainEffect.NavigateToWeather(
-                query = "${geoData.lat},${geoData.lon}",
-            )
-        )
         setState { copy(geoText = EMPTY_STRING, geoData = null) }
+        saveQueryAndNavigateBackToWeather("${geoData.lat},${geoData.lon}")
     }
 
     private fun deleteFavoriteLocation(favoriteLocationDto: FavoriteLocation) =
@@ -177,16 +171,12 @@ class LocationViewModel(
     private fun navigateToWeatherWithDelay(latLng: UserLatLng) {
         launch {
             delay(200)
-            setSideEffect(LocationMainEffect.NavigateToWeatherWithLatLng(latLng))
+            saveQueryAndNavigateBackToWeather(latLng.toString(), latLng)
         }
     }
 
     private fun onFavoriteLocation(location: FavoriteLocation) {
-        setSideEffect(
-            LocationMainEffect.NavigateToWeather(
-                query = location.toQuery(),
-            )
-        )
+        saveQueryAndNavigateBackToWeather(location.toQuery())
     }
 
     private fun redirectToLocationApiPage() {
@@ -229,12 +219,26 @@ class LocationViewModel(
             onDismissDialog()
             delay(ONE_SEC)
             val latLng = state.value.newPickedLocation
+            setState { copy(newPickedLocation = null, loadNewLocationWeather = false) }
             if (latLng != null) {
                 val userLatLng = latLng.copy(time = System.currentTimeMillis())
                 toggleMap(false)
-                setSideEffect(LocationMainEffect.NavigateToWeatherWithLatLng(userLatLng))
+                saveQueryAndNavigateBackToWeather(
+                    query = userLatLng.toString(),
+                    userLatLng = userLatLng,
+                )
             }
-            setState { copy(newPickedLocation = null, loadNewLocationWeather = false) }
+        }
+    }
+
+    private fun saveQueryAndNavigateBackToWeather(query: String, userLatLng: UserLatLng? = null) {
+        launch {
+            weatherDataRepository.saveQuery(
+                query = query,
+                shouldTriggerWeatherRequest = true,
+                userLatLng = userLatLng,
+            )
+            setSideEffect(LocationMainEffect.NavigateBack)
         }
     }
 

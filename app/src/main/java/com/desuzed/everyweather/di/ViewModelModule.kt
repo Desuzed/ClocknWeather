@@ -14,6 +14,7 @@ val viewModelModule = module {
         MainActivityViewModel(
             systemSettingsInteractor = get(),
             systemInteractor = get(),
+            weatherDataRepository = get(),
         )
     }
     viewModel {
@@ -22,6 +23,7 @@ val viewModelModule = module {
             userLocationProvider = get(),
             analytics = get(),
             sharedPrefsProvider = get(),
+            weatherDataRepository = get(),
         )
     }
     viewModel {
@@ -31,6 +33,7 @@ val viewModelModule = module {
             systemSettingsRepository = get(),
             locationInteractor = get(),
             analytics = get(),
+            weatherDataRepository = get(),
         )
     }
 

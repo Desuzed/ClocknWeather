@@ -1,5 +1,8 @@
 package com.desuzed.everyweather.domain.model.weather
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Hour(
     val timeEpoch: Long,
     val tempC: Float,

@@ -11,13 +11,16 @@ import com.desuzed.everyweather.domain.model.settings.Lang
 import com.desuzed.everyweather.domain.model.settings.PressureDimen
 import com.desuzed.everyweather.domain.model.settings.TempDimen
 import com.desuzed.everyweather.domain.model.weather.WeatherContent
+import com.desuzed.everyweather.domain.model.weather.WeatherQuery
+import com.desuzed.everyweather.domain.repository.local.WeatherDataRepository
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
+import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider.Companion.UNKNOWN
 import com.desuzed.everyweather.domain.repository.settings.SystemSettingsRepository
 import com.desuzed.everyweather.presentation.base.BaseViewModel
-import kotlinx.coroutines.delay
 
 class WeatherMainViewModel(
     private val weatherInteractor: WeatherInteractor,
+    private val weatherDataRepository: WeatherDataRepository,
     private val locationInteractor: LocationInteractor,
     private val analytics: WeatherMainAnalytics,
     private val weatherSettingsInteractor: WeatherSettingsInteractor,
@@ -25,30 +28,29 @@ class WeatherMainViewModel(
 ) : BaseViewModel<WeatherState, WeatherMainEffect, WeatherAction>(WeatherState()) {
 
     init {
-        getCachedForecast()
-        loadCachedQuery()
-
         collect(weatherSettingsInteractor.distanceDimen, ::collectWindSpeed)
         collect(weatherSettingsInteractor.tempDimen, ::collectTemperature)
         collect(systemSettingsRepository.lang, ::collectLanguage)
         collect(weatherSettingsInteractor.pressureDimen, ::collectPressure)
+        collect(weatherDataRepository.getQueryFlow(), ::onNewQuery)
         onAction(WeatherAction.Refresh)
+        collect(weatherDataRepository.getWeatherContentFlow(), ::onNewWeatherContent)
     }
 
-    fun getForecast(query: String, userLatLng: UserLatLng? = null) {
+    private fun getForecast(query: String, userLatLng: UserLatLng? = null) {
         launch {
             setState { copy(isLoading = true, query = query) }
-            val fetchedForecast =
-                weatherInteractor.fetchForecastOrErrorMessage(
-                    query = query,
-                    userLatLng = userLatLng,
-                )
-            val weatherResponse = fetchedForecast.weatherContent
+            val fetchedForecast = weatherInteractor.fetchForecastOrErrorMessage(
+                query = query,
+                userLatLng = userLatLng,
+            )
+
             val actionResult = fetchedForecast.queryResult
-            val isLocationSaved = weatherResponse?.let { isLocationSaved(it) }
+            val isLocationSaved = fetchedForecast.weatherContent?.let {
+                isLocationSaved(it)
+            }
             setState {
                 copy(
-                    weatherData = weatherResponse,
                     isLoading = false,
                     isAddButtonEnabled = isLocationSaved?.not() ?: false,
                 )
@@ -107,27 +109,22 @@ class WeatherMainViewModel(
         return locationInteractor.isLocationSaved(weatherContent.location)
     }
 
-    private fun getCachedForecast() {
-        launch {
-            setState { copy(isLoading = true) }
-            val result = weatherInteractor.getCachedForecast()
-            if (result != null) {
-                val isLocationSaved = isLocationSaved(result)
-                setState {
-                    copy(
-                        isAddButtonEnabled = !isLocationSaved,
-                        weatherData = result,
-                    )
-                }
-                delay(300)
-            }
-            setState { copy(isLoading = false) }
+    private fun onNewQuery(index: Int, weatherQuery: WeatherQuery) {
+        setState { copy(query = weatherQuery.query) }
+        if (weatherQuery.shouldTriggerWeatherRequest || index == INDEX_OF_FIRST_QUERY) {
+            getForecast(
+                query = weatherQuery.query,
+                userLatLng = weatherQuery.userChosenMapPoint,
+            )
         }
     }
 
-    private fun loadCachedQuery() {
-        val query = weatherInteractor.loadCachedQuery()
-        setState { copy(query = query) }
+    private fun onNewWeatherContent(weatherContent: WeatherContent?) {
+        if (state.value.weatherData != null && weatherContent == null) {
+            setSideEffect(WeatherMainEffect.ShowSnackBar(QueryResult(UNKNOWN)))
+        } else {
+            setState { copy(weatherData = weatherContent) }
+        }
     }
 
     private fun onRedirection() {
@@ -149,5 +146,9 @@ class WeatherMainViewModel(
 
     private fun collectPressure(pressure: PressureDimen) = setState {
         copy(pressure = pressure)
+    }
+
+    companion object {
+        private const val INDEX_OF_FIRST_QUERY = 0
     }
 }

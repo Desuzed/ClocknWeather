@@ -19,7 +19,6 @@ import com.desuzed.everyweather.Config
 import com.desuzed.everyweather.R
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
 import com.desuzed.everyweather.domain.model.app_update.InAppUpdateStatus
-import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.result.ActionResult
 import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.settings.DarkMode
@@ -29,7 +28,6 @@ import com.desuzed.everyweather.presentation.features.shared.SharedViewModel
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.setAppLocaleAndReturnContext
-import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
@@ -51,8 +49,6 @@ class MainActivity : ComponentActivity() {
         collectData()
         sharedViewModel.startListeningForUpdates()
     }
-
-    fun getUserLatLngFlow(): Flow<UserLatLng?> = viewModel.userLatLng
 
     fun showSnackbar(
         message: String,

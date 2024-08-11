@@ -26,6 +26,7 @@ secretsGradlePlugin = "2.0.1"
 android-lifecycle = "2.7.0"
 #todo проверить старую ошибку с локалями и темной темой
 appUpdate = "2.1.0"
+kotlinxSerialization = "1.6.3"
 
 firebaseCrashlytics = "19.0.0"
 firebaseCrashlyticsGradle = "2.9.9"
@@ -94,6 +95,7 @@ firebase-crashlyticsGradle = { module = "com.google.firebase:firebase-crashlytic
 #Util
 app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdate" }
 secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 #Test
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -106,6 +108,7 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinKsp" }
 kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
 #DI
