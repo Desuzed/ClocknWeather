@@ -21,8 +21,8 @@ object LocationMainScreen : BaseComposeScreen<
     initialState = LocationMainState()
 ) {
 
-    override val route: String
-        get() = Destination.LocationScreen.route
+    override val destination: Destination
+        get() = Destination.LocationScreen
 
     @Composable
     override fun ProvideScreenForNavGraph(
@@ -48,6 +48,7 @@ object LocationMainScreen : BaseComposeScreen<
         )
         ComposeScreen(
             viewModel = viewModel,
+            backAction = LocationAction.OnBackClick,
             snackBarParams = SnackBarParams(
                 snackBarProviderClass = GeoActionResultProvider::class,
                 snackBarRetryAction = LocationAction.FindByQuery,

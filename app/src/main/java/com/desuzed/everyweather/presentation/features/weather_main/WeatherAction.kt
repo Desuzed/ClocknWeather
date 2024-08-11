@@ -7,4 +7,5 @@ sealed interface WeatherAction : Action {
     data object SaveLocation : WeatherAction
     data object Refresh : WeatherAction
     data object Redirection : WeatherAction
+    data object BackClick : WeatherAction
 }

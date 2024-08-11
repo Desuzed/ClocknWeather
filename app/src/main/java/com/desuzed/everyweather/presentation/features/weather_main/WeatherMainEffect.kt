@@ -8,4 +8,5 @@ sealed interface WeatherMainEffect : SideEffect {
     class ShowSnackBar(override val data: QueryResult) : WeatherMainEffect, SnackBarEffect
     data object NavigateToLocation : WeatherMainEffect
     data object NavigateToNextDaysWeather : WeatherMainEffect
+    data object ExitApp : WeatherMainEffect
 }

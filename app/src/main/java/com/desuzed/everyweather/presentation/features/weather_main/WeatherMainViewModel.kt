@@ -72,7 +72,13 @@ class WeatherMainViewModel(
             WeatherAction.Refresh -> getForecast(state.value.query)
             WeatherAction.SaveLocation -> saveLocation()
             WeatherAction.Redirection -> onRedirection()
+            WeatherAction.BackClick -> onBackClick()
         }
+    }
+
+    private fun onBackClick() {
+        //TODO: Таймер + снекбар "Повторите/нажмите ещё раз, чтобы выйти"
+        setSideEffect(WeatherMainEffect.ExitApp)
     }
 
     private fun saveLocation() {

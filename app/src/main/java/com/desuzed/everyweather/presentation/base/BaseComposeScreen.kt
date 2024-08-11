@@ -1,5 +1,6 @@
 package com.desuzed.everyweather.presentation.base
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
@@ -17,6 +18,7 @@ import com.desuzed.everyweather.ui.elements.AppSnackbar
 import com.desuzed.everyweather.ui.elements.CollectSnackbar
 import com.desuzed.everyweather.ui.extensions.CollectSideEffect
 import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
+import com.desuzed.everyweather.ui.navigation.Destination
 import kotlin.reflect.KClass
 
 abstract class BaseComposeScreen<
@@ -25,11 +27,12 @@ abstract class BaseComposeScreen<
         A : Action,
         VM : BaseViewModel<S, E, A>>(private val initialState: S) {
 
-    abstract val route: String
+    abstract val destination: Destination
 
     @Composable
     protected fun ComposeScreen(
         viewModel: VM,
+        backAction: A? = null,
         onEffect: (E) -> Unit,
         content: @Composable (S) -> Unit,
     ) {
@@ -40,17 +43,19 @@ abstract class BaseComposeScreen<
             consumer = { onEffect(it) },
         )
         content(state)
+        if (backAction != null) {
+            BackHandler {
+                viewModel.onAction(backAction)
+            }
+        }
         //TODO onLifecycleEvent с КММ, где в параметры функции будут передаваться енамы лайфсайклов, соответствующие платформе
-//        BackHandler {
-//            //TODO null? Или сделать наследника, но тогда все экшены должны лежать в одном пакете
-//            //  viewModel.onUserInteraction(null)
-//        }
     }
 
     @Composable
     protected fun <P : ActionResultProvider, B : SnackBarEffect> ComposeScreen(
         viewModel: VM,
         snackBarParams: SnackBarParams<P, B>,
+        backAction: A? = null,
         onEffect: (E) -> Unit,
         content: @Composable (S) -> Unit,
     ) {
@@ -82,6 +87,11 @@ abstract class BaseComposeScreen<
                 snackbarState = snackBarHostState,
             )
         }
+        if (backAction != null) {
+            BackHandler {
+                viewModel.onAction(backAction)
+            }
+        }
     }
 
     @Composable
@@ -106,10 +116,3 @@ abstract class BaseComposeScreen<
     )
 
 }
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@ fun <S, A, I, VM, Screen : BaseComposeScreen<S, A, I, VM>> NavGraphBuilder.compo
     deepLinks: List<NavDeepLink> = emptyList(),
 ) {
     composable(
-        route = screen.route,
+        route = screen.destination.route,
         arguments = arguments,
         deepLinks = deepLinks,
 //TODO animations
@@ -27,5 +27,5 @@ fun <S, A, I, VM, Screen : BaseComposeScreen<S, A, I, VM>> NavGraphBuilder.compo
 fun <S, A, I, VM, Screen : BaseComposeScreen<S, A, I, VM>> NavController.navigate(
     screen: Screen,
 ) {
-    this.navigate(screen.route)
+    this.navigate(screen.destination.route)
 }

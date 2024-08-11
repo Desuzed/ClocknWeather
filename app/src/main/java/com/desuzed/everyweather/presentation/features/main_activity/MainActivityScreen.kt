@@ -17,7 +17,7 @@ fun MainActivityScreen() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = WeatherMainScreen.route,
+            startDestination = WeatherMainScreen.destination.route,
         ) {
             appNavGraph(navController)
         }

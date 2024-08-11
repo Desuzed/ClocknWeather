@@ -9,6 +9,7 @@ import com.desuzed.everyweather.presentation.base.navigate
 import com.desuzed.everyweather.presentation.features.location_main.LocationMainScreen
 import com.desuzed.everyweather.presentation.features.weather_main.ui.WeatherMain
 import com.desuzed.everyweather.ui.navigation.Destination
+import com.desuzed.everyweather.ui.navigation.getMainActivity
 import org.koin.androidx.compose.koinViewModel
 
 object WeatherMainScreen : BaseComposeScreen<
@@ -19,8 +20,8 @@ object WeatherMainScreen : BaseComposeScreen<
     initialState = WeatherState()
 ) {
 
-    override val route: String
-        get() = Destination.WeatherMainScreen.route
+    override val destination: Destination
+        get() = Destination.WeatherMainScreen
 
     @Composable
     override fun ProvideScreenForNavGraph(
@@ -39,9 +40,11 @@ object WeatherMainScreen : BaseComposeScreen<
         navBackStackEntry: NavBackStackEntry,
         viewModel: WeatherMainViewModel = koinViewModel()
     ) {
+        val activity = getMainActivity()
 
         ComposeScreen(
             viewModel = viewModel,
+            backAction = WeatherAction.BackClick,
             snackBarParams = SnackBarParams(
                 snackBarProviderClass = WeatherActionResultProvider::class,
                 snackBarRetryAction = WeatherAction.Refresh,
@@ -60,6 +63,8 @@ object WeatherMainScreen : BaseComposeScreen<
                     is WeatherMainEffect.ShowSnackBar -> {
                         /** Эффект обрабатывается в обёртке ComposeScreen **/
                     }
+
+                    WeatherMainEffect.ExitApp -> activity.finish()
                 }
             },
             content = { state ->
