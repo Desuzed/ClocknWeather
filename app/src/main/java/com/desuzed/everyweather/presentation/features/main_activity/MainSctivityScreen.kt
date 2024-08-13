@@ -21,7 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.desuzed.everyweather.R
-import com.desuzed.everyweather.presentation.features.main_activity.ui.LookingForLocationWidget
+import com.desuzed.everyweather.presentation.features.main_activity.ui.BottomContentWidget
+import com.desuzed.everyweather.presentation.features.main_activity.ui.DownloadingInAppUpdateWidget
 import com.desuzed.everyweather.presentation.features.shared.SharedState
 import com.desuzed.everyweather.ui.elements.RegularText
 import com.desuzed.everyweather.ui.navigation.Destination
@@ -78,12 +79,18 @@ fun MainActivityScreen(
                     appNavGraph(navController)
                 }
             }
-            if (mainActivityState.isLookingForLocation) {
+            if (mainActivityState.isLookingForLocation || sharedState.isUpdateLoading) {
                 localEdgeToEdgePaddingsProvided = addInsetToSet(
                     inset = EdgeToEdgeInset.Bottom,
                     set = localEdgeToEdgePaddingsProvided,
                 )
-                LookingForLocationWidget()
+                BottomContentWidget(isLookingForLocation = mainActivityState.isLookingForLocation) {
+                    DownloadingInAppUpdateWidget(
+                        isDownloadingInProgress = sharedState.isUpdateLoading,
+                        totalBytes = sharedState.totalBytes,
+                        bytesDownloaded = sharedState.bytesDownloaded,
+                    )
+                }
             } else {
                 localEdgeToEdgePaddingsProvided = deleteInsetFromSet(
                     inset = EdgeToEdgeInset.Bottom,
