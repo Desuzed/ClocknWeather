@@ -20,10 +20,10 @@ val viewModelModule = module {
     viewModel {
         LocationViewModel(
             locationInteractor = get(),
-            userLocationProvider = get(),
             analytics = get(),
             sharedPrefsProvider = get(),
             weatherDataRepository = get(),
+            systemInteractor = get(),
         )
     }
     viewModel {

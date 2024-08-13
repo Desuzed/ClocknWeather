@@ -10,6 +10,7 @@ import com.desuzed.everyweather.data.repository.providers.action_result.GeoActio
 import com.desuzed.everyweather.presentation.base.BaseComposeScreen
 import com.desuzed.everyweather.presentation.features.location_main.ui.LocationMain
 import com.desuzed.everyweather.ui.navigation.Destination
+import com.desuzed.everyweather.ui.navigation.getMainActivity
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -46,6 +47,7 @@ object LocationMainScreen : BaseComposeScreen<
         val sheetState = rememberModalBottomSheetState(
             skipPartiallyExpanded = true,
         )
+        val activity = getMainActivity()
         ComposeScreen(
             viewModel = viewModel,
             backAction = LocationAction.OnBackClick,
@@ -56,12 +58,21 @@ object LocationMainScreen : BaseComposeScreen<
             ),
             onEffect = {
                 when (it) {
-                    LocationMainEffect.MyLocation -> {} //TODO
+                    LocationMainEffect.FindUserLocation -> {
+                        //TODO refactor
+                        activity.findUserLocation()
+                    }
+
                     LocationMainEffect.NavigateBack -> navController.popBackStack() //TODO()
                     LocationMainEffect.NavigateToSettings -> navController.navigate(
                         route = Destination.SettingsScreen.route,
                     )
-                    LocationMainEffect.RequestLocationPermissions -> TODO()
+
+                    LocationMainEffect.RequestLocationPermissions -> {
+                        //todo refactor
+                        activity.requestLocationPermissions()
+                    }
+
                     is LocationMainEffect.ToggleMap -> {
                         coroutineScope.launch {
                             if (it.isVisible) {

@@ -28,15 +28,6 @@ class MainActivityViewModel(
     private val weatherDataRepository: WeatherDataRepository,
 ) : BaseViewModel<MainActivityState, MainActivitySideEffect, Action>(MainActivityState()) {
 
-    private val _isLookingForLocation = MutableSharedFlow<Boolean>(
-        replay = 0,
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val isLookingForLocation: Flow<Boolean> = _isLookingForLocation.asSharedFlow()
-
-    val hasInternet = systemInteractor.hasInternetFlow()
-
     private val _messageFlow = MutableSharedFlow<ActionResult>(
         replay = 0,
         extraBufferCapacity = 1,
@@ -50,6 +41,7 @@ class MainActivityViewModel(
         collect(systemSettingsInteractor.lang, ::collectLanguage)
         collect(systemSettingsInteractor.darkMode, ::collectDarkTheme)
         collect(systemInteractor.userLocationFlow(), ::collectUserLocationResult)
+        collect(systemInteractor.hasInternetFlow(), ::onHasInternet)
     }
 
     fun onLanguage(appLanguage: String?) {
@@ -119,10 +111,12 @@ class MainActivityViewModel(
         timerJob = null
     }
 
-    private fun toggleLookingForLocation(state: Boolean) {
-        viewModelScope.launch {
-            _isLookingForLocation.emit(state)
-        }
+    private fun toggleLookingForLocation(isLookingForLocation: Boolean) {
+        setState { copy(isLookingForLocation = isLookingForLocation) }
+    }
+
+    private fun onHasInternet(hasInternet: Boolean) {
+        setState { copy(isInternetUnavailable = !hasInternet) }
     }
 
     private companion object {

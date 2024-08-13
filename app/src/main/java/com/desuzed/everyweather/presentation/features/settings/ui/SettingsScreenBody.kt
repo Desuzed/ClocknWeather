@@ -4,10 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -32,6 +30,7 @@ import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.BoldText
 import com.desuzed.everyweather.ui.elements.GradientBox
 import com.desuzed.everyweather.ui.elements.LargeBoldText
+import com.desuzed.everyweather.ui.extensions.topEdgeToEdgePadding
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
 
@@ -63,19 +62,18 @@ fun SettingsScreenBody(
     onAction: (SettingsAction) -> Unit,
 ) {
     GradientBox(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .padding(dimensionResource(id = R.dimen.dimen_10)),
+        modifier = Modifier.fillMaxSize(),
         colors = EveryweatherTheme.colors.primaryBackground,
     ) {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .fillMaxSize()
+                .topEdgeToEdgePadding()
+                .padding(dimensionResource(id = R.dimen.dimen_10))
+                .verticalScroll(rememberScrollState()),
         ) {
             Box(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(vertical = dimensionResource(id = R.dimen.dimen_10))
+                modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.dimen_10))
             ) {
                 LargeBoldText(
                     text = stringResource(id = R.string.settings),

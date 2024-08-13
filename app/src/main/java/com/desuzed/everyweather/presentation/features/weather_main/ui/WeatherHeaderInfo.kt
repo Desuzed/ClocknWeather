@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -29,6 +28,7 @@ import com.desuzed.everyweather.ui.elements.LocationText
 import com.desuzed.everyweather.ui.elements.MediumBoldText
 import com.desuzed.everyweather.ui.elements.MediumText
 import com.desuzed.everyweather.ui.elements.UltraLargeBoldText
+import com.desuzed.everyweather.ui.extensions.topEdgeToEdgePadding
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -47,10 +47,10 @@ fun WeatherHeaderInfo(
     ) {
         Column(
             modifier = Modifier
+                .topEdgeToEdgePadding()
                 .padding(dimensionResource(id = R.dimen.dimen_20))
                 .pullRefresh(refreshingState)
-                .verticalScroll(rememberScrollState())
-                .statusBarsPadding(),
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dimen_10))
         ) {

@@ -2,7 +2,6 @@ package com.desuzed.everyweather.ui.elements
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Snackbar
@@ -25,6 +24,7 @@ import com.desuzed.everyweather.domain.model.result.ActionType
 import com.desuzed.everyweather.domain.model.result.QueryResult
 import com.desuzed.everyweather.domain.repository.provider.ActionResultProvider
 import com.desuzed.everyweather.ui.AppPreview
+import com.desuzed.everyweather.ui.extensions.bottomEdgeToEdgeImePadding
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
 import kotlinx.coroutines.launch
@@ -64,7 +64,7 @@ fun BoxScope.AppSnackbar(
 ) {
     SnackbarHost(
         modifier = modifier
-            .imePadding()
+            .bottomEdgeToEdgeImePadding()
             .align(Alignment.BottomCenter),
         hostState = snackbarState,
     ) { snackbarData ->

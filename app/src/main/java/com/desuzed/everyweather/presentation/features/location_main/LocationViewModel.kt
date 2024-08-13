@@ -1,9 +1,9 @@
 package com.desuzed.everyweather.presentation.features.location_main
 
 import com.desuzed.everyweather.analytics.LocationMainAnalytics
-import com.desuzed.everyweather.data.repository.providers.UserLocationProvider
 import com.desuzed.everyweather.data.repository.providers.action_result.GeoActionResultProvider
 import com.desuzed.everyweather.domain.interactor.LocationInteractor
+import com.desuzed.everyweather.domain.interactor.SystemInteractor
 import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.domain.model.location.UserLatLng
 import com.desuzed.everyweather.domain.model.location.geo.GeoData
@@ -17,10 +17,10 @@ import kotlinx.coroutines.delay
 
 class LocationViewModel(
     private val locationInteractor: LocationInteractor,
-    private val userLocationProvider: UserLocationProvider,
     private val analytics: LocationMainAnalytics,
     private val sharedPrefsProvider: SharedPrefsProvider,
     private val weatherDataRepository: WeatherDataRepository,
+    private val systemInteractor: SystemInteractor,
 ) : BaseViewModel<LocationMainState, LocationMainEffect, LocationAction>(LocationMainState()) {
 
     init {
@@ -41,9 +41,9 @@ class LocationViewModel(
             LocationAction.Redirection -> redirectToLocationApiPage()
             LocationAction.FindByQuery -> findTypedLocation()
             is LocationAction.ToggleMap -> toggleMap(action.isVisible)
-            LocationAction.MyLocation -> setSideEffect(LocationMainEffect.MyLocation)
+            LocationAction.MyLocation -> onMyLocationClick()
             LocationAction.Settings -> setSideEffect(LocationMainEffect.NavigateToSettings)
-            LocationAction.OnBackClick -> setSideEffect(LocationMainEffect.NavigateBack)
+            LocationAction.OnBackClick -> navigateBack()
             LocationAction.RequestLocationPermissions -> onRequestPermissions()
             is LocationAction.UpdateFavoriteLocation -> updateFavoriteLocation(action.favoriteLocationDto)
             is LocationAction.ToggleEditFavoriteLocationDialog -> onToggle(action.item)
@@ -60,10 +60,17 @@ class LocationViewModel(
         }
     }
 
-    fun areLocationPermissionsGranted(): Boolean = userLocationProvider.arePermissionsGranted()
-
-    fun launchRequireLocationPermissionsDialog() {
+    private fun launchRequireLocationPermissionsDialog() {
         setState { copy(locationDialog = LocationDialog.RequireLocationPermissions) }
+    }
+
+    private fun onMyLocationClick() {
+        if (systemInteractor.arePermissionsGranted()) {
+            setSideEffect(LocationMainEffect.FindUserLocation)
+            navigateBack()
+        } else {
+            launchRequireLocationPermissionsDialog()
+        }
     }
 
     private fun findTypedLocation() {
@@ -106,6 +113,10 @@ class LocationViewModel(
                 editLocationText = item.customName.ifEmpty { item.cityName },
             )
         }
+    }
+
+    private fun navigateBack() {
+        setSideEffect(LocationMainEffect.NavigateBack)
     }
 
     private fun onRequestPermissions() {
@@ -238,7 +249,7 @@ class LocationViewModel(
                 shouldTriggerWeatherRequest = true,
                 userLatLng = userLatLng,
             )
-            setSideEffect(LocationMainEffect.NavigateBack)
+            navigateBack()
         }
     }
 
