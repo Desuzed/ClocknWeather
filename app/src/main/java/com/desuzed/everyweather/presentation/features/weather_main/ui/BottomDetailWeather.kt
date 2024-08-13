@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -48,6 +47,7 @@ import com.desuzed.everyweather.ui.elements.HourItemContent
 import com.desuzed.everyweather.ui.elements.LinkText
 import com.desuzed.everyweather.ui.elements.MediumText
 import com.desuzed.everyweather.ui.elements.RoundedCardItem
+import com.desuzed.everyweather.ui.extensions.bottomEdgeToEdgePadding
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.MockWeatherObject
 import kotlinx.coroutines.launch
@@ -158,7 +158,7 @@ fun BottomDetailWeather(
             }
             LinkText(
                 modifier = Modifier
-                    .navigationBarsPadding()
+                    .bottomEdgeToEdgePadding()
                     .padding(bottom = dimensionResource(id = R.dimen.dimen_20)),
                 inputText = inputText,
                 url = stringResource(id = R.string.uri),

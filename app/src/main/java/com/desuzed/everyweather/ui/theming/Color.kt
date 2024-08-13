@@ -9,6 +9,7 @@ data class EveryweatherColors(
     val primaryBackground: List<Color>,
     val secondaryBackground: List<Color>,
     val tertiaryBackground: Color,
+    val errorBackground: Color,
     val surfacePrimary: Color,
     val surfaceSecondary: Color,//todo delete
     val surfaceOnPrimaryBg: Color,
@@ -16,6 +17,7 @@ data class EveryweatherColors(
     val onBackgroundPrimary: Color,
     val onBackgroundSecondary: Color,
     val onBackgroundInvariant: Color,
+    val onErrorBackground: Color,
     val onPrimary: Color,
     val neutral: Color,
     val accent: Color,
@@ -39,6 +41,8 @@ val AlmostBlack = Color(0xFF121212)
 val White = Color(0xFFFFFFFF)
 val Gray = Color(0x99999999)
 val Gray30Alpha = Color(0x4DFFFFFF)
+val LightAlertRed = Color(0xFFE04844)
+val DarkAlertRed = Color(0xFFA61A1A)
 
 // Gradient
 val BackgroundGradientLightStart = LightBlue50customized
@@ -56,11 +60,13 @@ val LightColorPalette = EveryweatherColors(
     onBackgroundPrimary = NearDark,
     onBackgroundSecondary = White,
     onBackgroundInvariant = White,
+    onErrorBackground = White,
     onPrimary = NearWhite,
     neutral = Gray,
     primaryBackground = listOf(White, White),
     secondaryBackground = listOf(BackgroundGradientLightStart, BackgroundGradientLightEnd),
     tertiaryBackground = White,
+    errorBackground = LightAlertRed,
     accent = Indigo700customized,
     surfaceOnPrimaryBg = White,
 )
@@ -73,11 +79,13 @@ val DarkColorPalette = EveryweatherColors(
     onBackgroundPrimary = NearWhite,
     onBackgroundSecondary = NearWhite,
     onBackgroundInvariant = NearDark,
+    onErrorBackground = NearWhite,
     onPrimary = NearWhite,
     neutral = Gray,
     primaryBackground = listOf(PrimaryGradientNightStart, PrimaryGradientNightEnd),
     secondaryBackground = listOf(BackgroundGradientNightStart, BackgroundGradientNightEnd),
     tertiaryBackground = AlmostBlack,
+    errorBackground = DarkAlertRed,
     accent = LightBlue50customized,
     surfaceOnPrimaryBg = Indigo300DarkCustomized,
 )

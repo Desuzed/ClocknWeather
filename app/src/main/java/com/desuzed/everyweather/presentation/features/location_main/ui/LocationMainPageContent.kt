@@ -2,10 +2,7 @@ package com.desuzed.everyweather.presentation.features.location_main.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -17,6 +14,9 @@ import com.desuzed.everyweather.domain.model.location.FavoriteLocation
 import com.desuzed.everyweather.presentation.features.location_main.LocationAction
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.RoundedButton
+import com.desuzed.everyweather.ui.extensions.bottomEdgeToEdgeImePadding
+import com.desuzed.everyweather.ui.extensions.bottomEdgeToEdgePadding
+import com.desuzed.everyweather.ui.extensions.topEdgeToEdgePadding
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.Constants.EMPTY_STRING
 import com.desuzed.everyweather.util.Constants.ONE_FLOAT
@@ -48,10 +48,10 @@ fun LocationMainPageContent(
 ) {
     Column(
         modifier = Modifier
-            .statusBarsPadding()
             .padding(dimensionResource(id = R.dimen.dimen_10))
     ) {
         LocationToolbar(
+            modifier = Modifier.topEdgeToEdgePadding(),
             isLoading = isLoading,
             geoText = geoText,
             onGeoTextChanged = onGeoTextChanged,
@@ -87,9 +87,9 @@ fun LocationMainPageContent(
         RoundedButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = dimensionResource(id = R.dimen.dimen_10))
-                .navigationBarsPadding()
-                .imePadding(),
+                .bottomEdgeToEdgeImePadding()
+                .bottomEdgeToEdgePadding()
+                .padding(horizontal = dimensionResource(id = R.dimen.dimen_10)),
             onClick = { onAction(LocationAction.ToggleMap(true)) },
             text = stringResource(id = R.string.find_on_map)
         )

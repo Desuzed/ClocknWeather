@@ -12,6 +12,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.compose.runtime.getValue
 import androidx.core.app.ActivityCompat
 import androidx.core.os.ConfigurationCompat
 import androidx.core.view.WindowCompat
@@ -25,6 +26,7 @@ import com.desuzed.everyweather.domain.model.settings.DarkMode
 import com.desuzed.everyweather.presentation.features.shared.SharedEffect
 import com.desuzed.everyweather.presentation.features.shared.SharedState
 import com.desuzed.everyweather.presentation.features.shared.SharedViewModel
+import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.collect
 import com.desuzed.everyweather.util.setAppLocaleAndReturnContext
@@ -41,7 +43,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EveryweatherTheme {
-                MainActivityScreen()
+                val activityState by viewModel.state.collectAsStateWithLifecycle(
+                    initialState = MainActivityState()
+                )
+                val sharedState by sharedViewModel.state.collectAsStateWithLifecycle(
+                    initialState = SharedState()
+                )
+
+                MainActivityScreen(activityState, sharedState)
             }
         }
         handleEdgeToEdge()
@@ -84,6 +93,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    //todo
     private fun changeDarkMode(darkMode: DarkMode) {
         val mode = when (darkMode) {
             DarkMode.ON -> MODE_NIGHT_YES
@@ -112,8 +122,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun collectData() {
-        collect(viewModel.hasInternet, ::onNewNetworkState)
-        collect(viewModel.isLookingForLocation, ::isLookingForLocation)
         collect(viewModel.messageFlow, ::onNewActionResult)
         collect(viewModel.sideEffect, ::onNewAction)
         collect(sharedViewModel.state, ::onDownloadingUpdateProgress)
@@ -123,16 +131,6 @@ class MainActivity : ComponentActivity() {
                 SharedEffect.UpdateReadyToInstallDialog -> showUpdateDialog(InAppUpdateStatus.READY_TO_INSTALL)
             }
         }
-    }
-
-    private fun onNewNetworkState(networkState: Boolean) {
-        //binding.tvInternetConnection.isVisible = !networkState
-    }
-
-    private fun isLookingForLocation(isLooking: Boolean) {
-//        with(binding) {
-//            geoLayout.isVisible = isLooking
-//        }
     }
 
     fun showUpdateDialog(status: InAppUpdateStatus) {

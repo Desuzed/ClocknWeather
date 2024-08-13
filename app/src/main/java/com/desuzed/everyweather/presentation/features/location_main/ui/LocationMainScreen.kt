@@ -24,6 +24,7 @@ import com.desuzed.everyweather.ui.elements.CollectSnackbar
 import com.desuzed.everyweather.ui.extensions.CollectSideEffect
 import com.desuzed.everyweather.ui.extensions.collectAsStateWithLifecycle
 import com.desuzed.everyweather.ui.navigation.Destination
+import com.desuzed.everyweather.ui.navigation.getMainActivity
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -52,15 +53,25 @@ fun LocationMainScreen(
     //TODO рефакторинг снекбаров на новую архитектуру
     var snackData: QueryResult? by remember { mutableStateOf(null) }
     val snackbarHostState = remember { SnackbarHostState() }
+
+    val activity = getMainActivity()
     CollectSideEffect(source = viewModel.sideEffect) {
         when (it) {
-            LocationMainEffect.MyLocation -> {} //TODO
+            LocationMainEffect.FindUserLocation -> {
+                //TODO refactor
+                activity.findUserLocation()
+            }
+
             LocationMainEffect.NavigateBack -> navController.popBackStack() //TODO()
             LocationMainEffect.NavigateToSettings -> navController.navigate(
                 route = Destination.SettingsScreen.route,
             )
 
-            LocationMainEffect.RequestLocationPermissions -> TODO()
+            LocationMainEffect.RequestLocationPermissions -> {
+                //todo refactor
+                activity.requestLocationPermissions()
+            }
+
             is LocationMainEffect.ToggleMap -> {
                 coroutineScope.launch {
                     if (it.isVisible) {

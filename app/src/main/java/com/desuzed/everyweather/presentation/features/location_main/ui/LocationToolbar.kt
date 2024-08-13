@@ -36,12 +36,13 @@ private fun Preview() {
 
 @Composable
 fun LocationToolbar(
+    modifier: Modifier = Modifier,
     isLoading: Boolean,
     geoText: String,
     onGeoTextChanged: (text: String) -> Unit,
     onAction: (LocationAction) -> Unit,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         IconButton(
             modifier = Modifier.size(dimensionResource(id = R.dimen.dimen_33)),
             onClick = { onAction(LocationAction.OnBackClick) },

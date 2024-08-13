@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -30,6 +29,7 @@ import com.desuzed.everyweather.presentation.ui.main.WeatherMainUi
 import com.desuzed.everyweather.presentation.ui.next_days.NextDaysUi
 import com.desuzed.everyweather.ui.AppPreview
 import com.desuzed.everyweather.ui.elements.FloatingButton
+import com.desuzed.everyweather.ui.extensions.topEdgeToEdgePadding
 import com.desuzed.everyweather.ui.theming.EveryweatherTheme
 import com.desuzed.everyweather.util.toIntDp
 
@@ -114,7 +114,7 @@ fun WeatherMainBody(
         PullRefreshIndicator(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .statusBarsPadding()
+                .topEdgeToEdgePadding()
                 .padding(top = dimensionResource(id = R.dimen.dimen_20)),
             refreshing = isLoading,
             state = refreshingState,
